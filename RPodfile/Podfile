@@ -1,0 +1,328 @@
+#source 'https://cdn.cocoapods.org/'
+#source 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/wiworkspecs.git'
+#source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git’
+source 'git@gitlab.it.5i5j.com:fnd/base_modularization/third/aj-cocoapods-specs.git'
+source 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/wiworkspecs.git'
+source 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentspec.git'
+source 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajbasespecs.git'
+
+#非ssh备用
+#source 'git@gitlab.it.5i5j.com:fnd/official/modularization/ajspec.git'
+
+source 'git@gitlab.it.5i5j.com:fnd/official/modularization/ajspec.git'
+
+#AB测试及灰度发布添加字节source
+#source 'https://github.com/volcengine/volcengine-specs.git'
+#source 'https://github.com/bytedance/cocoapods_sdk_source_repo.git'
+
+platform :ios, '12.0'
+install! 'cocoapods', :disable_input_output_paths => true
+
+
+#use_frameworks!
+use_frameworks! :linkage => :static
+# SDK分类 start
+def dataAnalysis
+  
+  pod 'SwiftyJSON', '~> 5.0.0'
+  #针对15.0崩溃的bug
+  pod 'HandyJSON', '~> 5.0.4-beta'
+end
+
+
+def rp
+  pod 'RxCocoa', '6.6.0'
+  pod 'RxSwift', '6.6.0'
+  pod 'RxDataSources'
+end
+
+def layout
+  pod 'Masonry', '~> 1.1.0'
+  pod 'SnapKit'
+end
+
+def ui
+ #swift中使用后这个版本的MJRefresh,mj_footer,升级到MJRefresh最新版本后会报错
+  pod 'MJRefresh','3.1.15.3'
+  pod 'PGDatePicker'
+  #先暂时关闭会sdwebimage/webp 与 yykit会冲突
+#  pod 'SDWebImage/WebP'
+#  pod 'SDWebImage','5.15.2'
+
+#  pod 'EAIntroView', '~> 2.8.1'
+  #iOS14.2+无效，手动在IQKeyboardManager.m改动
+  pod 'IQKeyboardManager', '6.5.10'
+  pod 'M80AttributedLabel', '~> 1.9.9'#多行图文混排、可放自定义view、自动布局，有方法算高。
+
+end
+
+
+# SDK分类 end
+
+target 'cbs_new5iwork' do
+
+
+#'~> 3.1.0'
+pod 'CHTCollectionViewWaterfallLayout', '= 0.9.10'
+
+pod 'IGListKit', '= 5.0.0'
+pod 'Bugly', '2.6.1'
+pod 'JhtMarquee'  #跑马灯
+pod 'Moya', '15.0.0'
+pod 'Moya/RxSwift'
+pod 'Kingfisher', '~> 6.2.1'
+pod 'Result'
+pod 'Alamofire'
+pod 'LookinServer', :configurations => ['Sit', 'Debug']   #只在debug下生效 Lookin
+pod 'CYLTabBarController', '~> 1.29.0'
+pod 'JPImageresizerView', '= 1.13.0' #图片裁剪
+pod 'TPNS-iOS', '= 1.3.9.8' #腾讯推送
+pod 'MMWormhole', '~> 2.0.0'
+#防止兼容问题
+pod 'SensorsAdvertising', '0.1.8'
+
+#pod 'DoraemonKit'
+
+#AB测试第三方SDK
+#pod 'RangersAppLog','6.3.0',:subspecs => ['Host/CN','Core','Unique','UITracker','Log','Picker','OneKit']
+#基础jsonkit后续探究能否用pod集成
+pod 'CBSJSONKit'
+#基础宏定义
+#pod 'CBSMacrosModules', :path => '../../../../我家经纪人通用组件/CBSMacrosModules'
+
+#pod "CBSMacrosModules",'0.6.05.121'
+pod 'CBSMacrosModules', :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/cbsmacrosmodules.git',:branch => 'develop'#,:commit=>'d1df47a70f03f51067fb9c7e6d80d285ea52e65c'
+
+
+#基础组件
+#pod 'AJAgentFoundation','0.6.05.122'
+#pod 'AJAgentFoundation', :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentfoundation.git',:branch => 'develop'
+pod 'AJAgentFoundation', :path =>'../../../../ajagentfoundation'
+#pod 'AJAgentFoundation', :path => '../../../../我家经纪人通用组件/AJAgentFoundation'
+
+#爱聊组件
+#pod 'AJAgentChat','26.05.121'
+pod 'AJAgentChat', :path =>'../../../../AJAgentChat'
+
+#pod 'AJAgentChat', :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentchat.git',:branch => 'feature-im-20260609'
+
+#pod 'AJThirdPartyModule/TZImagePickerController', :git => 'git@gitlab.it.5i5j.com:fnd/official/modularization/ajthirdpartymodule.git',:branch => 'feature-szw-xcode16'
+#pod 'AJThirdPartyModule/TZImagePickerController', '25.03.251'
+
+pod 'AJThirdPartyModule/TZImagePickerController', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajthirdparty.git',:tag => '25.12.181'
+
+#UI组件 经纪人只使用了AJToastView AJLinkView 两个组件 每次发版修改指向 不引用tag防止pod报错
+#pod 'AJUIKit', '0.1.4'
+pod 'AJUIKit/AJToastView', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajuikit.git',:branch => 'develop_linkViewMulitColor'#,:commit=>'5525bc46e62a3bf1ac91cca430b75ec214462bdf'
+pod 'AJUIKit/AJLinkView', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajuikit.git',:branch => 'develop_linkViewMulitColor'#,:commit=>'5525bc46e62a3bf1ac91cca430b75ec214462bdf'
+pod 'AJUIKit/AJArchCutter', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajuikit.git',:branch => 'develop_linkViewMulitColor'#,:commit=>'5525bc46e62a3bf1ac91cca430b75ec214462bdf'
+
+#登录组件
+#pod 'AJAgentLogin', '0.5.11.251'
+#pod 'AJAgentLogin', :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentlogin.git',:branch => 'develop'#,:commit=>'d740e5407b7abebe297621ad36ff6db8bdfead13'
+pod 'AJAgentLogin', :path =>'../../../../ajagentlogin'
+#pod 'AJAgentLogin', :path => '../../../../我家经纪人通用组件/AJAgentLogin'
+
+
+#官网核心业务组件:（官网客源、官网看房、官网二手房、官网接单、官网店铺、接单开关、我的爱豆、官网房源发布）
+#pod 'AJAgentCenter','0.5.06.101'
+pod "AJAgentCenter", :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentcenter.git',:branch => 'feature-broker-20260609'#,:commit=>'ff529df8bc921170a8bf5ae81572b059376bce9a'
+#pod 'AJAgentCenter', :path =>'../../../../ajagentcenter'
+#pod 'AJAgentCenter', :path => '../../../../我家经纪人通用组件/AJAgentCenter'
+
+#官网新房业务组件:（业主接单、官网新房、写字楼报备）
+pod 'AJAgentNewHouse','0.5.09.231'
+#pod 'AJAgentNewHouse', :path => '../../../../ajagentnewhouse'
+#pod "AJAgentNewHouse", :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentnewhouse.git',:branch => 'develop'
+#,:commit=>'3c87371f692ca3eaa16acf34619af7a68f4e2693'
+
+#官网分享业务组件：（官网二手房（可售列表）、官网租房（可租列表）、官网战绩榜、爱客多）
+#防护组件
+pod 'AJSafeModule', '0.5.06.242'
+#pod 'AJSafeModule',:git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajsafemodule.git',:branch => 'feature-bugly-update'
+
+
+#pod 'AJAPM','1.3.1'
+pod 'AJAPM', :git => 'git@gitlab.it.5i5j.com:fnd/apm/ios.git',:branch => 'dev-cbs'#,:commit=>"4d04908c1422036b0629decaa8dd4e169b6eca9a"
+#pod 'AJAPM', :path => '../../../../AJAPM'
+
+#分享组件
+#pod 'AJAgentShare','0.6.05.122'
+pod 'AJAgentShare', :path => '../../../../ajagentshare'
+#pod 'AJAgentShare', :path => '../../../../我家经纪人通用组件/AJAgentShare'
+#pod "AJAgentShare", :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/ajagentshare.git',:branch => 'feature-broker-20260609'
+#,:commit=>"3c11e28dd3015a1d4d6ab52011cdd8940f34301a"
+
+
+pod 'AJUIResourceModule'
+
+pod 'JWT','=3.0.0-beta.14' #JWT加密 2.2.0
+
+# 缓存组件
+pod 'AJRequestCacheModule', '0.3.3.9'
+#pod 'AJRequestCacheModule', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajrequestcachemodule.git',:branch => 'develop'
+#pod 'AJRequestCacheModule', '0.1.0'
+
+# 服务器时间组件  ---- 经纪人只使用了AJServerTime组件 每次发版修改指向 不引用tag防止pod报错
+#pod 'AJToolModule', '0.1.45'
+pod 'AJToolModule/AJServerTime',:git => 'git@gitlab.it.5i5j.com:fnd/official/modularization/ajtoolmodule.git',:branch => 'develop'
+#pod 'AJToolModule/AJServerTime'
+
+
+#CBS业务组件
+#pod'CBSAgentCenter','0.5.03.251'
+pod'CBSAgentCenter', :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/cbsagentcenter.git',:branch => 'develop-20260414'#,:commit=>'a5591e7da4affbc83d5230960fc47d5deb12235b'
+#pod 'CBSAgentCenter', :path =>'../../../../cbsagentcenter'
+#pod 'CBSAgentCenter', :path => '../../../../我家经纪人通用组件/CBSAgentCenter'
+
+
+#CBS工具组件po
+#pod'CBSAgentToolModule','0.6.01.201'
+#pod 'CBSAgentToolModule', :path => '../../../../我家经纪人通用组件/CBSAgentToolModule'
+pod "CBSAgentToolModule", :git => 'git@gitlab.it.5i5j.com:fnd/wiwork/wiworkmodulesios/cbsagenttoolmodule.git',:branch => 'develop'
+
+#交易 3.0
+pod 'AJTransaction/Agent',:git => 'git@gitlab.it.5i5j.com:fnd/official/modularization/ajtransaction.git',:branch => 'develop'
+#pod 'AJPlayMediaModule', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajplaymediamodule.git',:branch => 'develop',:commit=>'d0275a4ac3cadad448872c746fff1759a4fa4f6e'
+pod 'AJCommonToolModule/Video', '0.5.05.261'
+#pod 'AJCommonToolModule', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/ios/ajcommontoolmodule.git',:branch => 'develop',:commit=>'ef9577ca6665a5428d852cd0071cc01fc370d48e'
+dataAnalysis
+rp
+layout
+ui
+pod 'YYKit', :git => 'git@gitlab.it.5i5j.com:fnd/base_modularization/third/yykit.git', :tag => '1.0.13'
+
+end
+
+pre_install do |installer|
+  # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+  remove_swiftui()
+end
+
+def remove_swiftui
+  # 解决 xcode13 Release模式下SwiftUI报错问题
+  system('rm -rf ./Pods/Kingfisher/Sources/SwiftUI')
+  code_file = './Pods/Kingfisher/Sources/General/KFOptionsSetter.swift'
+  code_text = File.read(code_file)
+  code_text.gsub!(/#if canImport\(SwiftUI\) \&\& canImport\(Combine\)(.|\n)+#endif/,'')
+  system('rm -rf ' + code_file)
+  aFile = File.new(code_file, 'w+')
+  aFile.syswrite(code_text)
+  aFile.close()
+end
+
+target 'NotificationService' do
+     platform:ios,'12.0'
+     pod 'TPNS-iOS-Extension' , '= 1.3.9.8'
+     pod 'MMWormhole', '~> 2.0.0'
+end
+
+post_install do |installer|
+  
+  #处理Xcode 16上传包报错
+  bitcode_strip_path = `xcrun --find bitcode_strip`.chop!
+      
+      def strip_bitcode_from_framework(bitcode_strip_path, framework_relative_path)
+            framework_path = File.join(Dir.pwd, framework_relative_path)
+            command = "#{bitcode_strip_path} #{framework_path} -r -o #{framework_path}"
+            puts "Stripping bitcode: #{command}"
+            system(command)
+      end
+
+      RongCloudIM_Frameworks = [
+      "Pods/AJAgentFoundation/AJAgentFoundation/AJAgentFoundation/AgentThirdParty/SDKS/WIWJWaterMark.framework/WIWJWaterMark",
+      "Pods/AJCommonToolModule/AJCommonToolModule/SDK/FreeStreamer.framework/FreeStreamer"
+      ]
+
+      RongCloudIM_Frameworks.each do |framework_name|
+        strip_bitcode_from_framework(bitcode_strip_path, framework_name)
+      end
+  
+  installer.pods_project.build_configurations.each do |config|
+      # 编译配置
+      if config.name == 'Release'
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'RELEASE=1'
+          config.build_settings['GCC_OPTIMIZATION_LEVEL'] ='0'
+      end
+      if config.name == 'Debug'
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'DEBUG=1'
+          config.build_settings['GCC_OPTIMIZATION_LEVEL'] ='0'
+      end
+      if config.name == 'Uat'
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'UAT=1'<< 'DEBUG=1'
+          config.build_settings['GCC_OPTIMIZATION_LEVEL'] ='0'
+      end
+      if config.name == 'Sit'
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'SIT=1'<< 'DEBUG=1'
+          config.build_settings['GCC_OPTIMIZATION_LEVEL'] ='0'
+      end
+      
+#      problematic_pods = [
+#          'SensorsAnalyticsSDK',
+#          'AFNetworking',
+#          'AJAgentChat',
+#          'AJCommonToolModule',
+#          'AJNetworkModule'
+#      ]
+#        
+#      # 调用方法
+#      remove_in6_header_from_pods(installer, problematic_pods)
+
+  end
+  
+  installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+          config.build_settings['ENABLE_BITCODE'] = 'NO'
+          #解决 xcode 14 中Pod工程中的Bundle target签名报错
+          config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ''
+          config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          if target.name == 'HandyJSON'
+                   config.build_settings['SWIFT_COMPILATION_MODE'] = 'incremental'
+                   end
+#          if target.name == 'Kingfisher'
+#            config.build_settings['SWIFT_PRECOMPILE_BRIDGING_HEADER'] = 'NO'
+#          end
+      end
+  end
+
+end
+
+def remove_in6_header_from_pods(installer, pod_names)
+  # 确保 pod_names 始终是数组，方便后续处理
+  pod_names = Array(pod_names)
+  
+  pod_names.each do |target_pod_name|
+    puts "Checking for private header issues in #{target_pod_name}..."
+    
+    pod_dir = installer.sandbox.pod_dir(target_pod_name)
+    
+    if File.exist?(pod_dir)
+      Dir.glob(File.join(pod_dir, "**/*.{h,m,mm,c,cpp}")).each do |file_path|
+        next if File.directory?(file_path)
+        
+        content = File.read(file_path)
+        target_pattern = /#(include|import)\s+<netinet6\/in6\.h>/
+        
+        if content =~ target_pattern
+          puts "Found target line in: #{file_path}. Changing permissions and commenting out..."
+          
+          # 强制解除只读权限
+          File.chmod(0644, file_path)
+          
+          new_content = content.gsub(target_pattern, "// [Fixed by Podfile] \\0")
+          
+          begin
+            File.open(file_path, "w") { |f| f.puts new_content }
+          rescue => e
+            puts "Failed to write to #{file_path}: #{e.message}"
+          end
+        end
+      end
+    else
+      puts "Warning: Could not find directory for Pod: #{target_pod_name}"
+    end
+  end
+end
