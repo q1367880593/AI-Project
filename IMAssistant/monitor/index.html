@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IM 留资窗口监控</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #17202a;
+      --muted: #697386;
+      --line: #d9dee7;
+      --green: #16794c;
+      --amber: #a15c00;
+      --red: #b42318;
+      --blue: #1f5eff;
+      --shadow: 0 8px 24px rgba(25, 31, 40, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+    }
+
+    aside {
+      background: #111827;
+      color: #fff;
+      padding: 18px;
+      overflow: auto;
+    }
+
+    main {
+      padding: 22px;
+      overflow: auto;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .sub {
+      color: #aeb7c6;
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .search {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin: 18px 0;
+    }
+
+    input, button, textarea {
+      font: inherit;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 11px;
+      outline: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    button.secondary {
+      background: #303b4f;
+    }
+
+    .conv-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .conv-item {
+      width: 100%;
+      text-align: left;
+      background: #1f2937;
+      border: 1px solid #2d3748;
+      color: #fff;
+      padding: 11px;
+    }
+
+    .conv-item.active {
+      border-color: #6ea8ff;
+      background: #24324a;
+    }
+
+    .conv-meta {
+      margin-top: 6px;
+      color: #aeb7c6;
+      font-size: 12px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+
+    .dot.on {
+      background: var(--green);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .span-4 {
+      grid-column: span 4;
+    }
+
+    .span-6 {
+      grid-column: span 6;
+    }
+
+    .span-8 {
+      grid-column: span 8;
+    }
+
+    .span-12 {
+      grid-column: span 12;
+    }
+
+    .kpi {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .kpi-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kpi-value {
+      margin-top: 8px;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: #eef2ff;
+      color: #243d99;
+      font-size: 12px;
+    }
+
+    .badge.strong {
+      background: #e8f5ee;
+      color: var(--green);
+    }
+
+    .badge.warning {
+      background: #fff3e0;
+      color: var(--amber);
+    }
+
+    .progress {
+      height: 8px;
+      background: #edf0f4;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: var(--blue);
+      transition: width 180ms ease;
+    }
+
+    .section-title {
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px 12px;
+      color: var(--muted);
+    }
+
+    .kv b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #e5edf8;
+      overflow: auto;
+      max-height: 360px;
+      line-height: 1.55;
+      font-size: 12px;
+    }
+
+    .reply {
+      line-height: 1.7;
+      color: #263241;
+      background: #f8fafc;
+      border: 1px solid #e1e7ef;
+      border-radius: 6px;
+      padding: 12px;
+      min-height: 72px;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .log-item {
+      border-bottom: 1px solid #edf0f4;
+      padding-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chat {
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow: auto;
+      padding: 4px;
+    }
+
+    .msg {
+      display: grid;
+      gap: 4px;
+      max-width: 78%;
+    }
+
+    .msg.user {
+      justify-self: start;
+    }
+
+    .msg.agent {
+      justify-self: end;
+    }
+
+    .msg-role {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .msg.agent .msg-role {
+      text-align: right;
+    }
+
+    .bubble {
+      border: 1px solid #dce3ed;
+      border-radius: 8px;
+      padding: 10px 12px;
+      line-height: 1.55;
+      background: #f8fafc;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .msg.agent .bubble {
+      background: #eaf1ff;
+      border-color: #cadbff;
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 30px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        min-height: auto;
+      }
+
+      .span-4, .span-6, .span-8 {
+        grid-column: span 12;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <h1>IM 留资窗口监控</h1>
+      <p class="sub">实时查看会话画像、轨迹和窗口期判断</p>
+
+      <div class="search">
+        <input id="conversationInput" placeholder="输入 conversation_id">
+        <button id="watchBtn">监看</button>
+      </div>
+
+      <button class="secondary" id="refreshBtn">刷新会话列表</button>
+      <div class="conv-list" id="conversationList" style="margin-top:14px;"></div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h2 id="title">未选择会话</h2>
+          <p class="sub" id="subtitle">输入或选择一个 conversation_id 开始监看</p>
+        </div>
+        <div class="status">
+          <span class="dot" id="connDot"></span>
+          <span id="connText">未连接</span>
+        </div>
+      </div>
+
+      <div class="grid" id="dashboard" style="display:none;">
+        <section class="panel span-4">
+          <div class="kpi">
+            <div>
+              <div class="kpi-label">留资分</div>
+              <div class="kpi-value" id="leadScore">-</div>
+            </div>
+            <span class="badge" id="promptLevel">none</span>
+          </div>
+          <div class="progress"><div class="bar" id="leadBar"></div></div>
+        </section>
+
+        <section class="panel span-4">
+          <div class="kpi">
+            <div>
+              <div class="kpi-label">置信度</div>
+              <div class="kpi-value" id="confidence">-</div>
+            </div>
+            <span class="badge" id="source">source</span>
+          </div>
+          <div class="progress"><div class="bar" id="confidenceBar"></div></div>
+        </section>
+
+        <section class="panel span-4">
+          <div class="kpi">
+            <div>
+              <div class="kpi-label">当前阶段</div>
+              <div class="kpi-value" id="stage" style="font-size:24px;">-</div>
+            </div>
+            <span class="badge" id="shouldPrompt">未提示</span>
+          </div>
+        </section>
+
+        <section class="panel span-8">
+          <h3 class="section-title">窗口判断</h3>
+          <div class="kv">
+            <span>判断原因</span><b id="reason">-</b>
+            <span>沟通策略</span><b id="strategy">-</b>
+            <span>缺失信息</span><b id="missingInfo">-</b>
+            <span>风险标记</span><b id="riskFlags">-</b>
+          </div>
+        </section>
+
+        <section class="panel span-4">
+          <h3 class="section-title">累计上下文</h3>
+          <div class="kv">
+            <span>版本</span><b id="version">-</b>
+            <span>行为数</span><b id="behaviorCount">-</b>
+            <span>消息数</span><b id="messageCount">-</b>
+          </div>
+        </section>
+
+        <section class="panel span-6">
+          <h3 class="section-title">建议话术</h3>
+          <div class="reply" id="suggestedReply">-</div>
+        </section>
+
+        <section class="panel span-6">
+          <h3 class="section-title">聊天记录</h3>
+          <div class="chat" id="chatHistory"></div>
+        </section>
+
+        <section class="panel span-6">
+          <h3 class="section-title">用户画像</h3>
+          <pre id="userProfile">{}</pre>
+        </section>
+
+        <section class="panel span-6">
+          <h3 class="section-title">房源上下文</h3>
+          <pre id="propertyContext">{}</pre>
+        </section>
+
+        <section class="panel span-6">
+          <h3 class="section-title">实时事件</h3>
+          <div class="log" id="eventLog"></div>
+        </section>
+      </div>
+
+      <div class="panel empty" id="emptyState">暂无监看的会话</div>
+    </main>
+  </div>
+
+  <script>
+    let eventSource = null;
+    let currentConversationId = "";
+
+    const $ = (id) => document.getElementById(id);
+
+    function jsonPretty(value) {
+      return JSON.stringify(value || {}, null, 2);
+    }
+
+    function setConnection(connected, text) {
+      $("connDot").classList.toggle("on", connected);
+      $("connText").textContent = text;
+    }
+
+    function logEvent(text) {
+      const item = document.createElement("div");
+      item.className = "log-item";
+      item.textContent = `${new Date().toLocaleTimeString()}  ${text}`;
+      $("eventLog").prepend(item);
+    }
+
+    async function refreshConversations() {
+      const res = await fetch("/agent/conversations");
+      const data = await res.json();
+      const list = $("conversationList");
+      list.innerHTML = "";
+      (data.items || []).forEach((item) => {
+        const btn = document.createElement("button");
+        btn.className = "conv-item" + (item.conversation_id === currentConversationId ? " active" : "");
+        btn.innerHTML = `
+          <div>${item.conversation_id}</div>
+          <div class="conv-meta">${item.stage || "no analysis"} · score ${item.lead_score ?? "-"} · msg ${item.message_count}</div>
+        `;
+        btn.onclick = () => watchConversation(item.conversation_id);
+        list.appendChild(btn);
+      });
+    }
+
+    async function loadState(conversationId) {
+      const res = await fetch(`/agent/conversation/state?conversation_id=${encodeURIComponent(conversationId)}`);
+      const state = await res.json();
+      renderState(state);
+    }
+
+    function renderState(state) {
+      $("dashboard").style.display = "grid";
+      $("emptyState").style.display = "none";
+      $("title").textContent = state.conversation_id || currentConversationId;
+      $("subtitle").textContent = `version ${state.version ?? 0}`;
+
+      $("version").textContent = state.version ?? "-";
+      $("behaviorCount").textContent = state.behavior_count ?? 0;
+      $("messageCount").textContent = state.message_count ?? 0;
+      $("userProfile").textContent = jsonPretty(state.user_profile);
+      $("propertyContext").textContent = jsonPretty(state.property_context);
+      renderChat(state.conversation_history || []);
+
+      if (state.latest_analysis) {
+        renderAnalysis(state.latest_analysis);
+      }
+    }
+
+    function renderChat(messages) {
+      const wrap = $("chatHistory");
+      wrap.innerHTML = "";
+      if (!messages.length) {
+        const empty = document.createElement("div");
+        empty.className = "log-item";
+        empty.textContent = "暂无聊天消息";
+        wrap.appendChild(empty);
+        return;
+      }
+
+      messages.forEach((message) => {
+        const sender = message.sender === "agent" ? "agent" : "user";
+        const item = document.createElement("div");
+        item.className = `msg ${sender}`;
+
+        const role = document.createElement("div");
+        role.className = "msg-role";
+        role.textContent = sender === "agent" ? "经纪人" : "用户";
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = message.content || "";
+
+        item.appendChild(role);
+        item.appendChild(bubble);
+        wrap.appendChild(item);
+      });
+
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    function renderAnalysis(analysis) {
+      const leadScore = Number(analysis.lead_score || 0);
+      const confidence = Number(analysis.confidence || 0);
+      const promptLevel = analysis.prompt_level || "none";
+
+      $("leadScore").textContent = leadScore;
+      $("leadBar").style.width = `${Math.max(0, Math.min(100, leadScore))}%`;
+      $("confidence").textContent = confidence ? `${Math.round(confidence * 100)}%` : "-";
+      $("confidenceBar").style.width = `${Math.max(0, Math.min(100, confidence * 100))}%`;
+      $("stage").textContent = analysis.stage || "-";
+      $("source").textContent = analysis.source || "rules";
+      $("promptLevel").textContent = promptLevel;
+      $("promptLevel").className = `badge ${promptLevel}`;
+      $("shouldPrompt").textContent = analysis.should_prompt_agent ? "建议提示" : "暂不提示";
+      $("shouldPrompt").className = `badge ${analysis.should_prompt_agent ? "strong" : ""}`;
+      $("reason").textContent = analysis.reason || "-";
+      $("strategy").textContent = analysis.agent_strategy || "-";
+      $("missingInfo").textContent = (analysis.missing_info || []).join("、") || "-";
+      $("riskFlags").textContent = (analysis.risk_flags || []).join("、") || "-";
+      $("suggestedReply").textContent = analysis.suggested_reply || "-";
+    }
+
+    function watchConversation(conversationId) {
+      if (!conversationId) return;
+      currentConversationId = conversationId;
+      $("conversationInput").value = conversationId;
+      $("eventLog").innerHTML = "";
+      setConnection(false, "连接中");
+
+      if (eventSource) {
+        eventSource.close();
+      }
+
+      loadState(conversationId).catch((err) => logEvent(`状态加载失败：${err.message}`));
+      eventSource = new EventSource(`/agent/window/stream?conversation_id=${encodeURIComponent(conversationId)}`);
+
+      eventSource.addEventListener("connected", (event) => {
+        setConnection(true, "已连接");
+        logEvent(`已连接 ${event.data}`);
+      });
+
+      eventSource.addEventListener("analysis", (event) => {
+        const analysis = JSON.parse(event.data);
+        renderAnalysis(analysis);
+        logEvent(`收到分析：${analysis.stage} / score ${analysis.lead_score} / ${analysis.prompt_level}`);
+        loadState(conversationId).catch(() => {});
+        refreshConversations().catch(() => {});
+      });
+
+      eventSource.onerror = () => {
+        setConnection(false, "连接异常");
+        logEvent("SSE 连接异常，浏览器会自动重连");
+      };
+
+      refreshConversations().catch(() => {});
+    }
+
+    $("watchBtn").onclick = () => watchConversation($("conversationInput").value.trim());
+    $("refreshBtn").onclick = () => refreshConversations().catch((err) => logEvent(`刷新失败：${err.message}`));
+    $("conversationInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        watchConversation(event.target.value.trim());
+      }
+    });
+
+    refreshConversations().catch(() => {});
+    setInterval(refreshConversations, 5000);
+  </script>
+</body>
+</html>
