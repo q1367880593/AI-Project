@@ -1,0 +1,151 @@
+{
+  "total_conversations": 10,
+  "lead_conversations": 3,
+  "overall_lead_rate": "30.00%",
+  "by_conversation_round_bucket": [
+    {
+      "bucket": "1-2",
+      "conversation_count": 3,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "11-20",
+      "conversation_count": 2,
+      "lead_count": 1,
+      "lead_rate": "50.00%"
+    },
+    {
+      "bucket": "3-5",
+      "conversation_count": 4,
+      "lead_count": 1,
+      "lead_rate": "25.00%"
+    },
+    {
+      "bucket": "6-10",
+      "conversation_count": 1,
+      "lead_count": 1,
+      "lead_rate": "100.00%"
+    }
+  ],
+  "by_first_lead_attempt_bucket": [
+    {
+      "bucket": "1-2",
+      "conversation_count": 5,
+      "lead_count": 1,
+      "lead_rate": "20.00%"
+    },
+    {
+      "bucket": "3-5",
+      "conversation_count": 3,
+      "lead_count": 2,
+      "lead_rate": "66.67%"
+    },
+    {
+      "bucket": "6-10",
+      "conversation_count": 1,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "none",
+      "conversation_count": 1,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    }
+  ],
+  "by_lead_reason_type": [
+    {
+      "bucket": "confirm_property",
+      "conversation_count": 1,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "follow_up_contact",
+      "conversation_count": 2,
+      "lead_count": 1,
+      "lead_rate": "50.00%"
+    },
+    {
+      "bucket": "help_find_house",
+      "conversation_count": 3,
+      "lead_count": 2,
+      "lead_rate": "66.67%"
+    },
+    {
+      "bucket": "none",
+      "conversation_count": 1,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "send_report",
+      "conversation_count": 2,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "wechat_contact",
+      "conversation_count": 1,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    }
+  ],
+  "by_has_visit_signal": [
+    {
+      "bucket": "False",
+      "conversation_count": 8,
+      "lead_count": 3,
+      "lead_rate": "37.50%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 2,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    }
+  ],
+  "by_has_concern_signal": [
+    {
+      "bucket": "False",
+      "conversation_count": 8,
+      "lead_count": 3,
+      "lead_rate": "37.50%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 2,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    }
+  ],
+  "by_has_report_card": [
+    {
+      "bucket": "False",
+      "conversation_count": 8,
+      "lead_count": 3,
+      "lead_rate": "37.50%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 2,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    }
+  ],
+  "by_has_property_card": [
+    {
+      "bucket": "False",
+      "conversation_count": 1,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 9,
+      "lead_count": 3,
+      "lead_rate": "33.33%"
+    }
+  ]
+}

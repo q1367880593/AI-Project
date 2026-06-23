@@ -1,0 +1,11 @@
+﻿conversation_id,is_phone_left,message_count_total,message_count_user,message_count_agent,conversation_round_count,conversation_round_bucket,first_agent_response_seconds,has_lead_attempt,first_lead_attempt_turn_index,first_lead_attempt_bucket,lead_reason_type,lead_turn_index,minutes_to_lead,has_visit_signal,has_concern_signal,has_churn_signal,has_property_card,has_lead_card,has_report_card,has_visit_card
+1177644032_8428422_2026-03-02_145412,False,44,14,30,14,11-20,39,True,6,6-10,wechat_contact,,,False,True,False,True,False,False,False
+1187775616_705816_2026-03-02_181452,False,11,2,9,2,1-2,20,True,2,1-2,send_report,,,False,False,False,True,True,True,False
+1176660864_593787_2026-03-03_193809,False,16,5,11,5,3-5,15,True,2,1-2,confirm_property,,,True,False,False,True,True,False,False
+1182275840_282803_2026-03-05_205009,False,5,2,3,2,1-2,13,True,2,1-2,help_find_house,,,False,False,False,True,True,False,False
+1185215104_652763_2026-03-07_185808,False,41,4,37,4,3-5,10,True,3,3-5,follow_up_contact,,,True,True,False,True,True,False,False
+3494784_662796_2026-03-08_124652,True,8,3,5,3,3-5,25,True,2,1-2,help_find_house,3,21.55,False,False,False,True,True,False,False
+1190159744_641699_2026-03-09_191549,False,27,2,25,2,1-2,19,True,2,1-2,send_report,,,False,False,False,True,True,True,False
+1178326016_616882_2026-03-09_220300,True,30,12,18,12,11-20,29,True,4,3-5,follow_up_contact,5,1.45,False,False,False,True,False,False,False
+1189076736_8205670_2026-03-10_154133,False,7,3,4,3,3-5,6,False,,none,none,,,False,False,True,False,False,False,False
+1190265088_8436682_2026-03-11_193219,True,13,6,7,6,6-10,16,True,3,3-5,help_find_house,6,7.37,False,False,False,True,True,False,False
