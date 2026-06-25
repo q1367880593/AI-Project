@@ -1,0 +1,193 @@
+{
+  "total_conversations": 153737,
+  "lead_conversations": 35252,
+  "overall_lead_rate": "22.93%",
+  "by_conversation_round_bucket": [
+    {
+      "bucket": "1-2",
+      "conversation_count": 41448,
+      "lead_count": 10,
+      "lead_rate": "0.02%"
+    },
+    {
+      "bucket": "11-20",
+      "conversation_count": 18295,
+      "lead_count": 8354,
+      "lead_rate": "45.66%"
+    },
+    {
+      "bucket": "21-30",
+      "conversation_count": 2830,
+      "lead_count": 1252,
+      "lead_rate": "44.24%"
+    },
+    {
+      "bucket": "3-5",
+      "conversation_count": 51962,
+      "lead_count": 10176,
+      "lead_rate": "19.58%"
+    },
+    {
+      "bucket": "30+",
+      "conversation_count": 1116,
+      "lead_count": 480,
+      "lead_rate": "43.01%"
+    },
+    {
+      "bucket": "6-10",
+      "conversation_count": 38086,
+      "lead_count": 14980,
+      "lead_rate": "39.33%"
+    }
+  ],
+  "by_first_lead_attempt_bucket": [
+    {
+      "bucket": "1-2",
+      "conversation_count": 46406,
+      "lead_count": 8198,
+      "lead_rate": "17.67%"
+    },
+    {
+      "bucket": "11-20",
+      "conversation_count": 3914,
+      "lead_count": 1689,
+      "lead_rate": "43.15%"
+    },
+    {
+      "bucket": "21-30",
+      "conversation_count": 296,
+      "lead_count": 133,
+      "lead_rate": "44.93%"
+    },
+    {
+      "bucket": "3-5",
+      "conversation_count": 50077,
+      "lead_count": 15746,
+      "lead_rate": "31.44%"
+    },
+    {
+      "bucket": "30+",
+      "conversation_count": 63,
+      "lead_count": 29,
+      "lead_rate": "46.03%"
+    },
+    {
+      "bucket": "6-10",
+      "conversation_count": 14804,
+      "lead_count": 6162,
+      "lead_rate": "41.62%"
+    },
+    {
+      "bucket": "none",
+      "conversation_count": 38177,
+      "lead_count": 3295,
+      "lead_rate": "8.63%"
+    }
+  ],
+  "by_lead_reason_type": [
+    {
+      "bucket": "confirm_property",
+      "conversation_count": 531,
+      "lead_count": 120,
+      "lead_rate": "22.60%"
+    },
+    {
+      "bucket": "follow_up_contact",
+      "conversation_count": 45926,
+      "lead_count": 10150,
+      "lead_rate": "22.10%"
+    },
+    {
+      "bucket": "help_find_house",
+      "conversation_count": 44075,
+      "lead_count": 13956,
+      "lead_rate": "31.66%"
+    },
+    {
+      "bucket": "no_clear_reason",
+      "conversation_count": 4073,
+      "lead_count": 994,
+      "lead_rate": "24.40%"
+    },
+    {
+      "bucket": "none",
+      "conversation_count": 38177,
+      "lead_count": 3295,
+      "lead_rate": "8.63%"
+    },
+    {
+      "bucket": "send_report",
+      "conversation_count": 6,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    },
+    {
+      "bucket": "visit_arrangement",
+      "conversation_count": 3697,
+      "lead_count": 1058,
+      "lead_rate": "28.62%"
+    },
+    {
+      "bucket": "wechat_contact",
+      "conversation_count": 17252,
+      "lead_count": 5679,
+      "lead_rate": "32.92%"
+    }
+  ],
+  "by_has_visit_signal": [
+    {
+      "bucket": "False",
+      "conversation_count": 131964,
+      "lead_count": 23889,
+      "lead_rate": "18.10%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 21773,
+      "lead_count": 11363,
+      "lead_rate": "52.19%"
+    }
+  ],
+  "by_has_concern_signal": [
+    {
+      "bucket": "False",
+      "conversation_count": 144499,
+      "lead_count": 32304,
+      "lead_rate": "22.36%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 9238,
+      "lead_count": 2948,
+      "lead_rate": "31.91%"
+    }
+  ],
+  "by_has_report_card": [
+    {
+      "bucket": "False",
+      "conversation_count": 153727,
+      "lead_count": 35252,
+      "lead_rate": "22.93%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 10,
+      "lead_count": 0,
+      "lead_rate": "0.00%"
+    }
+  ],
+  "by_has_property_card": [
+    {
+      "bucket": "False",
+      "conversation_count": 64,
+      "lead_count": 24,
+      "lead_rate": "37.50%"
+    },
+    {
+      "bucket": "True",
+      "conversation_count": 153673,
+      "lead_count": 35228,
+      "lead_rate": "22.92%"
+    }
+  ]
+}
