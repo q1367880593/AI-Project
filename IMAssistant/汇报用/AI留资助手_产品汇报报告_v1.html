@@ -1354,31 +1354,31 @@
   <div class="section" id="s-analysis">
     <div class="section-header">
       <div class="section-number">02</div>
-      <div class="section-title">全量爱聊数据分析：留资窗口确实存在</div>
+      <div class="section-title">历史爱聊数据分析：留资窗口确实存在</div>
     </div>
 
     <div class="card">
       <div class="card-title">分析口径</div>
       <p style="color:var(--text-secondary);line-height:1.9;">
-        我们对 <span class="highlight-text">6 月 1 日至 6 月 21 日</span>租房业务线全量爱聊会话做了规则预处理和结构化统计，分析对象为 <span class="highlight-text">153,737 组会话</span>，其中成功留资 <span class="highlight-text">35,252 组</span>，整体会话留资率为 <span class="highlight-text">22.93%</span>。本次分析重点观察：会话轮次、首次索要手机号时机、用户看房信号、留资理由和物料发送对留资结果的影响。
+        我们对历史爱聊会话做了规则预处理和结构化统计，分析对象为 <span class="highlight-text">50,411 组会话样本</span>，其中成功留资样本约 <span class="highlight-text">1 万组</span>，未留资样本约 <span class="highlight-text">4 万组</span>。这批数据是为了对比成功与未成功会话的差异而构建的分析样本，不代表整体爱聊会话留资率；本次分析重点观察：会话轮次、首次索要手机号时机、用户看房信号、留资理由和物料发送对留资结果的影响。
       </p>
 
       <div class="insight-grid">
         <div class="insight-card">
-          <div class="insight-value">153,737</div>
-          <div class="insight-label">全量爱聊会话</div>
+          <div class="insight-value">50,411</div>
+          <div class="insight-label">历史爱聊会话样本</div>
         </div>
         <div class="insight-card">
-          <div class="insight-value">35,252</div>
+          <div class="insight-value">10,053</div>
           <div class="insight-label">成功留资会话</div>
         </div>
         <div class="insight-card">
-          <div class="insight-value">22.93%</div>
-          <div class="insight-label">整体会话留资率</div>
+          <div class="insight-value">1:4</div>
+          <div class="insight-label">已留资与未留资样本比例</div>
         </div>
         <div class="insight-card">
-          <div class="insight-value">52.19%</div>
-          <div class="insight-label">有看房信号会话留资率</div>
+          <div class="insight-value">40.72%</div>
+          <div class="insight-label">有看房信号样本已留资占比</div>
         </div>
       </div>
     </div>
@@ -1472,24 +1472,23 @@
     </div>
 
     <div class="card">
-      <div class="card-title">发现一：会话需要进入一定深度，留资率才明显提升</div>
+      <div class="card-title">发现一：会话需要进入一定深度，成功样本占比才明显提升</div>
       <div class="analysis-table">
         <table>
           <thead>
-            <tr><th>会话总轮次</th><th>会话数</th><th>留资数</th><th>留资率</th></tr>
+            <tr><th>会话总轮次</th><th>会话数</th><th>留资数</th><th>已留资样本占比</th></tr>
           </thead>
           <tbody>
-            <tr><td>1-2 轮</td><td>41,448</td><td>10</td><td class="analysis-rate low">0.02%</td></tr>
-            <tr><td>3-5 轮</td><td>51,962</td><td>10,176</td><td class="analysis-rate">19.58%</td></tr>
-            <tr><td>6-10 轮</td><td>38,086</td><td>14,980</td><td class="analysis-rate good">39.33%</td></tr>
-            <tr><td>11-20 轮</td><td>18,295</td><td>8,354</td><td class="analysis-rate good">45.66%</td></tr>
-            <tr><td>21-30 轮</td><td>2,830</td><td>1,252</td><td class="analysis-rate good">44.24%</td></tr>
-            <tr><td>30 轮以上</td><td>1,116</td><td>480</td><td class="analysis-rate good">43.01%</td></tr>
+            <tr><td>1-2 轮</td><td>16,181</td><td>215</td><td class="analysis-rate low">1.33%</td></tr>
+            <tr><td>3-5 轮</td><td>16,022</td><td>2,884</td><td class="analysis-rate">18.00%</td></tr>
+            <tr><td>6-10 轮</td><td>10,694</td><td>3,874</td><td class="analysis-rate good">36.23%</td></tr>
+            <tr><td>11-20 轮</td><td>5,747</td><td>2,344</td><td class="analysis-rate good">40.79%</td></tr>
+            <tr><td>21-30 轮</td><td>1,159</td><td>485</td><td class="analysis-rate good">41.85%</td></tr>
           </tbody>
         </table>
       </div>
       <div class="analysis-conclusion">
-        <strong>结论：</strong>留资不是越早越好。全量会话中，1-2 轮会话留资率仅 0.02%，说明用户刚进入对话时大多还未建立信任或需求尚不明确；当会话进入 6 轮以上，留资率提升到 39% 以上，说明“窗口期”往往出现在需求被澄清、问题被回答之后。
+        <strong>结论：</strong>留资不是越早越好。在这批对照样本中，1-2 轮会话的已留资样本占比仅 1.33%，说明用户刚进入对话时大多还未建立信任或需求尚不明确；当会话进入 6 轮以上，成功样本占比明显提升，说明“窗口期”往往出现在需求被澄清、问题被回答之后。
       </div>
     </div>
 
@@ -1498,20 +1497,19 @@
       <div class="analysis-table">
         <table>
           <thead>
-            <tr><th>首次索要手机号轮次</th><th>会话数</th><th>留资数</th><th>留资率</th></tr>
+            <tr><th>首次索要手机号轮次</th><th>会话数</th><th>留资数</th><th>已留资样本占比</th></tr>
           </thead>
           <tbody>
-            <tr><td>未索要</td><td>38,177</td><td>3,295</td><td class="analysis-rate low">8.63%</td></tr>
-            <tr><td>1-2 轮</td><td>46,406</td><td>8,198</td><td class="analysis-rate">17.67%</td></tr>
-            <tr><td>3-5 轮</td><td>50,077</td><td>15,746</td><td class="analysis-rate">31.44%</td></tr>
-            <tr><td>6-10 轮</td><td>14,804</td><td>6,162</td><td class="analysis-rate good">41.62%</td></tr>
-            <tr><td>11-20 轮</td><td>3,914</td><td>1,689</td><td class="analysis-rate good">43.15%</td></tr>
-            <tr><td>21-30 轮</td><td>296</td><td>133</td><td class="analysis-rate good">44.93%</td></tr>
+            <tr><td>未索要</td><td>11,573</td><td>864</td><td class="analysis-rate low">7.47%</td></tr>
+            <tr><td>1-2 轮</td><td>20,851</td><td>3,816</td><td class="analysis-rate">18.30%</td></tr>
+            <tr><td>3-5 轮</td><td>12,726</td><td>3,498</td><td class="analysis-rate">27.49%</td></tr>
+            <tr><td>6-10 轮</td><td>3,914</td><td>1,389</td><td class="analysis-rate good">35.49%</td></tr>
+            <tr><td>11-20 轮</td><td>1,190</td><td>433</td><td class="analysis-rate good">36.39%</td></tr>
           </tbody>
         </table>
       </div>
       <div class="analysis-conclusion">
-        <strong>结论：</strong>未索要手机号的会话留资率只有 8.63%，说明可能存在漏机会；但 1-2 轮过早索要的效果也不理想。3-10 轮开始明显提升，尤其 6-10 轮留资率达到 41.62%，说明经纪人需要在“用户意向变强但尚未流失”的中间窗口进行承接。
+        <strong>结论：</strong>未索要手机号的会话中，已留资样本占比只有 7.47%，说明可能存在漏机会；但 1-2 轮过早索要的成功占比也不理想。3-10 轮开始明显提升，说明经纪人需要在“用户意向变强但尚未流失”的中间窗口进行承接。
       </div>
     </div>
 
@@ -1520,59 +1518,53 @@
       <div class="analysis-table">
         <table>
           <thead>
-            <tr><th>用户是否出现看房信号</th><th>会话数</th><th>留资数</th><th>留资率</th></tr>
+            <tr><th>用户是否出现看房信号</th><th>会话数</th><th>留资数</th><th>已留资样本占比</th></tr>
           </thead>
           <tbody>
-            <tr><td>无看房信号</td><td>131,964</td><td>23,889</td><td class="analysis-rate">18.10%</td></tr>
-            <tr><td>有看房信号</td><td>21,773</td><td>11,363</td><td class="analysis-rate good">52.19%</td></tr>
+            <tr><td>无看房信号</td><td>42,929</td><td>7,006</td><td class="analysis-rate">16.32%</td></tr>
+            <tr><td>有看房信号</td><td>7,482</td><td>3,047</td><td class="analysis-rate good">40.72%</td></tr>
           </tbody>
         </table>
       </div>
       <div class="analysis-table" style="margin-top:14px;">
         <table>
           <thead>
-            <tr><th>看房信号 + 首次索要手机号轮次</th><th>会话数</th><th>留资数</th><th>留资率</th></tr>
+            <tr><th>看房信号 + 首次索要轮次</th><th>会话数</th><th>留资数</th><th>已留资样本占比</th></tr>
           </thead>
           <tbody>
-            <tr><td>有看房信号，未索要</td><td>3,051</td><td>1,413</td><td class="analysis-rate">46.31%</td></tr>
-            <tr><td>有看房信号，1-2 轮索要</td><td>4,013</td><td>1,845</td><td class="analysis-rate">45.98%</td></tr>
-            <tr><td>有看房信号，3-5 轮索要</td><td>9,008</td><td>4,929</td><td class="analysis-rate good">54.72%</td></tr>
-            <tr><td>有看房信号，6-10 轮索要</td><td>4,126</td><td>2,340</td><td class="analysis-rate good">56.71%</td></tr>
-            <tr><td>有看房信号，11-20 轮索要</td><td>1,404</td><td>746</td><td class="analysis-rate good">53.13%</td></tr>
-            <tr><td>有看房信号，21-30 轮索要</td><td>129</td><td>70</td><td class="analysis-rate good">54.26%</td></tr>
+            <tr><td>有看房信号，1-2 轮索要</td><td>2,371</td><td>849</td><td class="analysis-rate">35.81%</td></tr>
+            <tr><td>有看房信号，3-5 轮索要</td><td>2,475</td><td>1,183</td><td class="analysis-rate good">47.80%</td></tr>
+            <tr><td>有看房信号，6-10 轮索要</td><td>1,062</td><td>499</td><td class="analysis-rate good">46.99%</td></tr>
+            <tr><td>有看房信号，11-20 轮索要</td><td>411</td><td>187</td><td class="analysis-rate good">45.50%</td></tr>
           </tbody>
         </table>
       </div>
       <div class="analysis-conclusion">
-        <strong>结论：</strong>用户出现“能不能看、什么时候看、周末看”等看房信号后，留资率从 18.10% 提升到 52.19%，是最强的窗口期信号。进一步看，看房信号出现后在 3-10 轮自然引导留资效果最好，其中 6-10 轮留资率达到 56.71%，说明 AI 应重点识别“看房信号 + 中段沟通轮次”的强窗口组合。
+        <strong>结论：</strong>用户出现“能不能看、什么时候看、周末看”等看房信号后，样本内已留资占比从 16.32% 提升到 40.72%。如果此时经纪人在 3-10 轮内自然引导留资，成功样本占比接近 47%，说明“看房信号 + 合适轮次”是值得重点识别的窗口组合。
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">发现四：留资理由影响承接效果，需要匹配租房场景动作</div>
+      <div class="card-title">发现四：物料不是越早发越好，需要 AI 判断时机</div>
       <div class="analysis-table">
         <table>
           <thead>
-            <tr><th>留资理由类型</th><th>会话数</th><th>留资数</th><th>留资率</th></tr>
+            <tr><th>是否发送报告物料</th><th>会话数</th><th>留资数</th><th>已留资样本占比</th></tr>
           </thead>
           <tbody>
-            <tr><td>加微信 / 后续联系</td><td>17,252</td><td>5,679</td><td class="analysis-rate good">32.92%</td></tr>
-            <tr><td>帮用户继续找房</td><td>44,075</td><td>13,956</td><td class="analysis-rate good">31.66%</td></tr>
-            <tr><td>约看房 / 安排带看</td><td>3,697</td><td>1,058</td><td class="analysis-rate">28.62%</td></tr>
-            <tr><td>确认房源状态</td><td>531</td><td>120</td><td class="analysis-rate">22.60%</td></tr>
-            <tr><td>无明确留资理由</td><td>4,073</td><td>994</td><td class="analysis-rate">24.40%</td></tr>
-            <tr><td>未索要手机号</td><td>38,177</td><td>3,295</td><td class="analysis-rate low">8.63%</td></tr>
+            <tr><td>未发送报告物料</td><td>44,205</td><td>9,044</td><td class="analysis-rate">20.46%</td></tr>
+            <tr><td>发送报告物料</td><td>6,206</td><td>1,009</td><td class="analysis-rate low">16.26%</td></tr>
           </tbody>
         </table>
       </div>
       <div class="analysis-conclusion">
-        <strong>结论：</strong>“帮用户继续找房”“加微信/后续联系”“约看房”等服务型理由的留资率明显更高，说明留资不是单纯索要手机号，而是要给用户一个自然、可信的服务理由。租房业务线更适合围绕约看、继续找房、确认房源状态等动作承接，后续可补齐留资卡、约看卡、房源卡、相似房源推荐等工具埋点，再让 AI 判断“什么用户、什么阶段、什么理由”适合发送对应工具。
+        <strong>结论：</strong>报告物料本身不是万能抓手。如果用户问题尚未被回答、信任尚未建立，过早发送报告或要求授权手机号，可能无法提升留资。因此后续需要 AI 判断“什么用户、什么阶段、什么理由”适合发送留资卡片、房源报告或户型报告。
       </div>
     </div>
 
     <div class="one-liner">
       <div class="one-liner-label">数据推导出的项目价值</div>
-      <div class="one-liner-text">大盘房源详情访问到留资转化率约 5%，而全量爱聊会话显示：当用户阶段成熟、轮次合适、出现看房信号且留资理由自然时，会话留资率可显著高于整体 22.93%。因此，AI 的价值是把这些更容易促成留资的窗口实时识别出来。</div>
+      <div class="one-liner-text">大盘留资转化率约 5%，而历史爱聊对照样本显示：当用户阶段成熟、轮次合适、出现看房信号且留资理由自然时，成功留资样本占比明显更高。因此，AI 的价值是把这些更容易促成留资的窗口实时识别出来。</div>
     </div>
   </div>
 
@@ -1968,26 +1960,20 @@
             <tr>
               <td>租房详情访问 → 留资转化率</td>
               <td>5.03%</td>
-              <td class="metric-highlight">5.28%</td>
-              <td>核心业务指标，对应 5% 相对提升，约提升 0.25 个百分点，提升整体业务转化率</td>
+              <td class="metric-highlight">5.149%</td>
+              <td>核心业务指标，对应 5% 相对提升，约提升 0.12 个百分点，提升整体业务转化率</td>
             </tr>
             <tr>
               <td>有效线索 → 留资转化率</td>
               <td>37.84%</td>
-              <td class="metric-highlight">39.76%</td>
+              <td class="metric-highlight">39.76%</strong></td>
               <td>核心业务指标，对应 5% 相对提升，约提升 2 个百分点，验证有效沟通后的承接效率</td>
             </tr>
             <tr>
-              <td>全量爱聊会话 → 留资转化率</td>
-              <td>22.93%</td>
-              <td class="metric-highlight">24.08%</td>
-              <td>核心过程指标，对应 5% 相对提升，约提升 1.15 个百分点，验证 AI 是否提升会话内留资效率</td>
-            </tr>
-            <tr>
               <td>留资窗口提示采纳率</td>
-              <td>35%</td>
+              <td>参考小爱话术建议</td>
               <td><strong>35%</strong></td>
-              <td>参考小爱话术采纳率，经纪人点击填入、发送或参考改写均计入采纳，当前小爱话术采纳率单日波动32% - 38%</td>
+              <td>经纪人点击填入、发送或参考改写均计入采纳，单日波动32% - 38%</td>
             </tr>
             <tr>
               <td>提示后 10 分钟内的留资转化</td>
@@ -1995,12 +1981,17 @@
               <td><strong>高于对照组 5%</strong></td>
               <td>衡量提示是否命中真实留资窗口期</td>
             </tr>
-            
+            <tr>
+              <td>用户拒绝率 / 沉默率 / 投诉率</td>
+              <td>以对照组为准</td>
+              <td><strong>不高于对照组</strong></td>
+              <td>体验保护指标，避免为了转化牺牲用户体验</td>
+            </tr>
           </tbody>
         </table>
       </div>
       <p style="margin-top:14px;font-size:13.5px;color:var(--text-light);">
-        按日均 15,603 名租房详情访问用户估算，若整体转化率从 5.03% 提升 5% 至约 5.28%，对应日均可多产生约 40 个留资用户。实验周期建议至少 2-4 周，覆盖工作日和周末，确保数据有代表性。
+        按日均 15,603 名租房详情访问用户估算，若整体转化率从 5.03% 提升 2.5% 至约 5.16%，对应日均可多产生约 20 个留资用户。实验周期建议至少 2-4 周，覆盖工作日和周末，确保数据有代表性。
       </p>
     </div>
   </div>
@@ -2036,15 +2027,15 @@
 
       <div class="future-card card-tool">
         <div class="future-step">规划二</div>
-        <div class="future-title">留资卡片与租房工具推荐</div>
+        <div class="future-title">留资卡片与物料推荐</div>
         <div class="future-desc">
-          将现有留资卡片、约看卡片、房源卡片、相似房源推荐等租房工具提供给 AI，由 AI 判断在合适时机建议经纪人发送对应工具。
+          将现有留资卡片、房源报告、户型报告等物料提供给 AI，由 AI 判断在合适时机建议经纪人发送对应工具。
         </div>
         <ul class="future-list">
-          <li>用户想看房：推荐约看卡片或留资卡片</li>
-          <li>用户想继续找房：推荐留资卡片，承接后续找房服务</li>
-          <li>用户对当前房源感兴趣：推荐房源卡片，便于确认房源信息</li>
-          <li>用户嫌贵或正在比较：推荐相似房源卡片</li>
+          <li>用户想看房：推荐留资卡片或约看卡片</li>
+          <li>用户关心真实性：推荐房源报告</li>
+          <li>用户关心户型采光：推荐户型报告</li>
+          <li>用户嫌贵或比较：推荐相似房源卡片</li>
         </ul>
       </div>
 
