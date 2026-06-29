@@ -179,3 +179,5 @@ local.properties
 
 .godot/
 bulid/
+conversation_features.csv
+*.mov
