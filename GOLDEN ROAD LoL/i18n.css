@@ -1,0 +1,45 @@
+.lang-toggle {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid rgba(200, 170, 110, 0.55);
+  border-radius: 999px;
+  background: rgba(10, 14, 26, 0.86);
+  color: #f0e6d2;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.lang-toggle span {
+  min-width: 38px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  font: 800 11px/1 "Segoe UI", Roboto, Arial, system-ui, sans-serif;
+  letter-spacing: 0;
+  text-align: center;
+  color: #8a93a8;
+}
+
+.lang-toggle .active {
+  background: linear-gradient(180deg, #f0d28a, #c8aa6e);
+  color: #20170a;
+}
+
+@media (max-width: 560px) {
+  .lang-toggle {
+    top: max(8px, env(safe-area-inset-top, 0px));
+    right: max(8px, env(safe-area-inset-right, 0px));
+  }
+
+  .lang-toggle span {
+    min-width: 34px;
+    padding: 5px 7px;
+    font-size: 10px;
+  }
+}
