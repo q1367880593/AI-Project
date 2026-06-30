@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Golden Road LoL</title>
+  <meta name="description" content="Learn how Golden Road LoL works, including its roster draft rules, hidden ratings, tournament simulation and League esports data." />
+  <meta name="robots" content="index,follow" />
+  
+  <style>
+    :root { --bg:#0a0e1a; --panel:#141b2e; --line:#25304b; --gold:#c8aa6e; --blue:#5bc0de; --cream:#f0e6d2; --muted:#8a93a8; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--cream); font-family:"Segoe UI",Roboto,Arial,system-ui,sans-serif; line-height:1.6; }
+    .wrap { max-width:820px; margin:0 auto; padding:28px 18px 60px; }
+    a { color:var(--blue); }
+    h1 { color:var(--gold); font-size:30px; line-height:1.2; margin:0 0 10px; }
+    h2 { color:var(--gold); font-size:18px; margin-top:30px; }
+    p, li { color:#d6dce9; font-size:15px; }
+    .lead { color:var(--cream); font-size:17px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .back { display:inline-block; margin-bottom:18px; color:var(--gold); text-decoration:none; font-weight:700; letter-spacing:.04em; }
+    .nav { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+    .nav a { color:var(--blue); font-size:13px; font-weight:700; text-decoration:none; }
+    .nav a:hover, .back:hover { text-decoration:underline; }
+    .fact-grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); margin:18px 0 6px; }
+    .fact { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:13px 14px; }
+    .fact b { display:block; color:var(--gold); font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+    .fact span { color:#d6dce9; font-size:14px; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; overflow:hidden; border:1px solid var(--line); }
+    th, td { padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; font-size:14px; color:#d6dce9; }
+    th { color:var(--gold); background:#101729; }
+    tr:last-child td { border-bottom:0; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin-top:22px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">‹ Back to Golden Road LoL</a>
+    <nav class="nav" aria-label="Site navigation">
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+
+    <h1>About Golden Road LoL</h1>
+    <p class="lead">Golden Road LoL is a free browser game for League esports fans who like roster debates, historical what-ifs and impossible tournament runs.</p>
+    <p>The game keeps the rules simple: the wheels choose a region, team and year; you choose one player from that roster. After five picks, the lineup is simulated through the season. Your goal is to win every stage and complete the Golden Road.</p>
+
+    <div class="fact-grid" aria-label="Game facts">
+      <div class="fact"><b>Cost</b><span>Free to play, no account required.</span></div>
+      <div class="fact"><b>Data range</b><span>Historical rosters from 2011 through 2025.</span></div>
+      <div class="fact"><b>Draft size</b><span>Five roles: Top, Jungle, Mid, ADC and Support.</span></div>
+      <div class="fact"><b>Results</b><span>Fictional simulation for entertainment.</span></div>
+    </div>
+
+    <h2>How the draft works</h2>
+    <p>Each pick starts with a random team-season. If the roll lands on 2019 G2, for example, the available choices are that roster's players. You can only fill an open role, and a player can only be used once per run.</p>
+    <p>Rerolls are limited because the game is meant to reward judgment. Region, Team and Year rerolls each solve a different problem, and using one too early can make the final two roles harder.</p>
+
+    <h2>Scoring and simulation</h2>
+    <p>Every player-season has a hidden rating from 1 to 99. The game averages your five players to create a Team Rating, then compares that roster against simulated fields for regional and international events. Better ratings improve your odds, but tournament noise means the strongest roster can still miss the perfect run.</p>
+    <table>
+      <thead>
+        <tr><th>Stage</th><th>Field</th><th>What matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Split 1</td><td>Regional</td><td>Top 2 qualifies for First Stand.</td></tr>
+        <tr><td>First Stand</td><td>International</td><td>Win to keep the Golden Road alive.</td></tr>
+        <tr><td>Split 2</td><td>Regional</td><td>Top 2 qualifies for MSI.</td></tr>
+        <tr><td>MSI</td><td>International</td><td>A tougher field than a regional split.</td></tr>
+        <tr><td>Split 3</td><td>Regional</td><td>Top 4 qualifies for Worlds.</td></tr>
+        <tr><td>Worlds</td><td>International</td><td>The largest and hardest field in the simulation.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Data and editorial choices</h2>
+    <p>The roster list focuses on notable championship, playoff and international teams from League esports history. Ratings are subjective estimates for gameplay only, not official statistics or claims about players.</p>
+    <p>Player names, team names, regions and years are used as factual references to public esports history. Golden Road LoL is unofficial and not affiliated with Riot Games.</p>
+
+    <div class="card">
+      <p class="muted" style="margin:0">Golden Road LoL isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc.</p>
+    </div>
+  </div>
+</body>
+</html>

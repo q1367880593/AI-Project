@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI留资窗口判断助手 - 数据清理与分数权重设计</title>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --paper: #ffffff;
+    --ink: #1f2a3d;
+    --muted: #667487;
+    --line: #dfe5ee;
+    --blue: #1a56a8;
+    --blue-dark: #0d3b7a;
+    --blue-soft: #eaf2ff;
+    --orange: #c98025;
+    --orange-soft: #fff4df;
+    --green: #2f7a55;
+    --green-soft: #e8f7ef;
+    --shadow: 0 10px 30px rgba(27, 43, 68, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+
+  .page {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    padding: 48px 28px 72px;
+  }
+
+  .top {
+    background: var(--paper);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 34px 38px;
+    margin-bottom: 22px;
+    border-left: 8px solid var(--blue);
+  }
+
+  .kicker {
+    color: var(--blue);
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 34px;
+    line-height: 1.28;
+    color: var(--blue-dark);
+    margin-bottom: 12px;
+  }
+
+  .scope {
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .section {
+    background: var(--paper);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .badge.blue { background: var(--blue); }
+  .badge.orange { background: var(--orange); }
+
+  h2 {
+    color: var(--blue-dark);
+    font-size: 24px;
+  }
+
+  .block {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    background: #fbfcff;
+  }
+
+  .block:last-child {
+    margin-bottom: 0;
+  }
+
+  .block h3 {
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .block p {
+    color: var(--muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .tag {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--blue-soft);
+    color: var(--blue-dark);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .tag.orange {
+    background: var(--orange-soft);
+    color: #7b4b10;
+  }
+
+  .wide {
+    margin-top: 22px;
+    background: var(--paper);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+  }
+
+  .wide h2 {
+    margin-bottom: 18px;
+  }
+
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .step {
+    border: 1px solid var(--line);
+    background: #fbfcff;
+    border-radius: 14px;
+    padding: 18px 16px;
+    min-height: 130px;
+  }
+
+  .step strong {
+    display: block;
+    color: var(--blue-dark);
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .step span {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 13px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--blue-soft);
+    color: var(--blue-dark);
+    font-weight: 800;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .formula {
+    margin-top: 16px;
+    background: #162235;
+    color: #edf3ff;
+    border-radius: 16px;
+    padding: 20px 22px;
+    font-family: Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .footer {
+    color: var(--muted);
+    text-align: center;
+    margin-top: 28px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 900px) {
+    .layout, .pipeline {
+      grid-template-columns: 1fr;
+    }
+    .page {
+      padding: 28px 16px 54px;
+    }
+    .top, .section, .wide {
+      padding: 24px 20px;
+    }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+    <section class="top">
+      <div class="kicker">AI留资窗口判断助手</div>
+      <h1>数据清理与分数权重设计</h1>
+      <p class="scope">适用范围：租房业务线爱聊会话、C端用户画像、C端浏览轨迹、B端经纪人承接动作、留资结果数据。</p>
+    </section>
+
+    <div class="layout">
+      <section class="section">
+        <div class="section-title">
+          <div class="badge blue">01</div>
+          <h2>数据清理</h2>
+        </div>
+
+        <div class="block">
+          <h3>会话样本清理</h3>
+          <p>按会话 ID、用户 ID、经纪人 ID、房源 ID、会话开始时间合并同一沟通链路，剔除重复会话、测试会话、异常空会话。</p>
+          <div class="tags">
+            <span class="tag">去重</span>
+            <span class="tag">合并</span>
+            <span class="tag">异常剔除</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>消息内容清理</h3>
+          <p>过滤系统通知、发送失败、纯占位文本、无业务含义的自动消息；保留用户文本、经纪人文本、有效卡片和关键动作。</p>
+          <div class="tags">
+            <span class="tag">用户消息</span>
+            <span class="tag">经纪人消息</span>
+            <span class="tag">有效卡片</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>角色与时间归一</h3>
+          <p>统一 sender 字段为 user、agent、system、tool；所有消息按毫秒时间戳排序，保证模型回放时与真实聊天顺序一致。</p>
+          <div class="tags">
+            <span class="tag">sender归一</span>
+            <span class="tag">时间排序</span>
+            <span class="tag">上下文回放</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>会话轮次计算</h3>
+          <p>以用户和经纪人的有效发言计算业务轮次；系统消息、工具消息、卡片消息单独标记，不直接计入普通对话轮次。</p>
+          <div class="tags">
+            <span class="tag">有效轮次</span>
+            <span class="tag">首次索要轮次</span>
+            <span class="tag">首个看房信号轮次</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>留资结果归一</h3>
+          <p>统一手机号、微信、留资卡、约看联系方式等留资事件口径，记录留资发生时间、发生轮次、触发方式和承接经纪人。</p>
+          <div class="tags">
+            <span class="tag">手机号</span>
+            <span class="tag">微信</span>
+            <span class="tag">留资卡</span>
+            <span class="tag">约看联系方式</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <div class="badge orange">02</div>
+          <h2>分数权重设计</h2>
+        </div>
+
+        <div class="block">
+          <h3>用户意向分</h3>
+          <p>识别用户是否表达真实租房意向，包括问价格、问位置、问是否还在、问入住时间、表达想看房等。</p>
+          <div class="tags">
+            <span class="tag orange">强意向 +</span>
+            <span class="tag orange">弱意向 +</span>
+            <span class="tag orange">无意向 0</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>需求明确分</h3>
+          <p>根据预算、区域、户型、入住时间、通勤、租期等信息完整度加权，需求越明确，越接近可留资窗口。</p>
+          <div class="tags">
+            <span class="tag orange">预算</span>
+            <span class="tag orange">区域</span>
+            <span class="tag orange">户型</span>
+            <span class="tag orange">入住时间</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>看房信号分</h3>
+          <p>用户出现约看、询问看房时间、确认房源状态、表达到店或到现场意愿时，提高窗口分。</p>
+          <div class="tags">
+            <span class="tag orange">约看</span>
+            <span class="tag orange">看房时间</span>
+            <span class="tag orange">房源还在吗</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>时机轮次分</h3>
+          <p>结合会话总轮次、首次索要手机号轮次、用户最近一次强意向轮次判断时机。过早索要降权，需求成熟后加权。</p>
+          <div class="tags">
+            <span class="tag orange">1-2轮谨慎</span>
+            <span class="tag orange">3-10轮观察</span>
+            <span class="tag orange">6-10轮重点</span>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>负向与打扰风险分</h3>
+          <p>用户明确拒绝、已租到、预算不符、区域不符、长时间未回复、经纪人刚索要未回应时，降低窗口分或暂停提示。</p>
+          <div class="tags">
+            <span class="tag orange">拒绝</span>
+            <span class="tag orange">已租到</span>
+            <span class="tag orange">沉默</span>
+            <span class="tag orange">重复索要</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="wide">
+      <h2>处理链路</h2>
+      <div class="pipeline">
+        <div class="step">
+          <strong>原始数据</strong>
+          <span>爱聊消息、浏览轨迹、用户画像、房源信息、留资结果。</span>
+        </div>
+        <div class="step">
+          <strong>清洗归一</strong>
+          <span>去重、过滤、角色归一、时间排序、轮次计算。</span>
+        </div>
+        <div class="step">
+          <strong>信号抽取</strong>
+          <span>意向、需求、看房、顾虑、承接动作、负向表达。</span>
+        </div>
+        <div class="step">
+          <strong>分数计算</strong>
+          <span>按不同信号权重计算留资窗口分与置信度。</span>
+        </div>
+        <div class="step">
+          <strong>B端提示</strong>
+          <span>达到阈值后提示经纪人留资时机、原因和建议动作。</span>
+        </div>
+      </div>
+      <div class="formula">
+        lead_window_score = 用户意向分 + 需求明确分 + 看房信号分 + 时机轮次分 + 经纪人承接分 - 负向意向分 - 打扰风险分
+      </div>
+    </section>
+
+    <div class="footer">AI留资窗口判断助手 · 数据清理与分数权重设计</div>
+  </main>
+</body>
+</html>
