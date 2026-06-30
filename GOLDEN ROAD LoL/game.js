@@ -52,6 +52,7 @@
     result: null,
     teamRating: null
   };
+  var cheatConfig = loadCheatConfig();
   function isMSI() { return state.mode === "msi"; }
   function activeIndex() { return isMSI() ? state.msiIndex : state.index; }
 
@@ -72,6 +73,76 @@
   function openRolesArr() { return ROLES.filter(function (r, i) { return !state.roster[i]; }); }
   function openRolesSet() { return new Set(openRolesArr()); }
   function picksMade() { return state.roster.filter(Boolean).length; }
+
+  function defaultCheatConfig() {
+    return {
+      rerolls: { region: 1, team: 1, year: 1 },
+      msiRerolls: { team: 1, year: 1 },
+      regions: {}
+    };
+  }
+  function loadCheatConfig() {
+    var cfg = defaultCheatConfig();
+    try {
+      var saved = JSON.parse(localStorage.getItem("golden-road-cheats") || "{}");
+      ["region", "team", "year"].forEach(function (k) {
+        if (saved.rerolls && saved.rerolls[k] != null) cfg.rerolls[k] = clampInt(saved.rerolls[k], 0, 99);
+      });
+      ["team", "year"].forEach(function (k) {
+        if (saved.msiRerolls && saved.msiRerolls[k] != null) cfg.msiRerolls[k] = clampInt(saved.msiRerolls[k], 0, 99);
+      });
+      if (saved.regions) cfg.regions = saved.regions;
+    } catch (e) {}
+    return cfg;
+  }
+  function saveCheatConfig() {
+    localStorage.setItem("golden-road-cheats", JSON.stringify(cheatConfig));
+  }
+  function clampInt(value, min, max) {
+    value = parseInt(value, 10);
+    if (isNaN(value)) value = min;
+    return Math.max(min, Math.min(max, value));
+  }
+  function allowedRegionSet() {
+    var selected = E.REGIONS.filter(function (r) { return cheatConfig.regions[r]; });
+    return selected.length ? new Set(selected) : null;
+  }
+  function filterCombosByCheatRegion(combos) {
+    if (isMSI()) return combos;
+    var allowed = allowedRegionSet();
+    if (!allowed) return combos;
+    return combos.filter(function (c) { return allowed.has(c.region); });
+  }
+  function usableCombosCheat(open, used) {
+    return filterCombosByCheatRegion(E.usableCombos(activeIndex(), open, used));
+  }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function spinInitialCheat() {
+    var pool = usableCombosCheat(openRolesSet(), state.used);
+    if (pool.length) return pick(pool);
+    flash("No valid team-years in the selected region filter. Using all regions.");
+    return E.spinInitial(activeIndex(), openRolesSet(), state.used);
+  }
+  function rerollOptionsCheat(kind, open, cur) {
+    if (!cur) return [];
+    var all = usableCombosCheat(open, state.used);
+    if (kind === "region") {
+      var other = all.filter(function (c) { return c.region !== cur.region; });
+      var sameYear = other.filter(function (c) { return c.year === cur.year; });
+      return sameYear.length ? sameYear : other;
+    }
+    if (kind === "team") {
+      return all.filter(function (c) { return c.region === cur.region && c.year === cur.year && c.teamId !== cur.teamId; });
+    }
+    if (kind === "year") {
+      return all.filter(function (c) { return c.region === cur.region && c.teamId === cur.teamId && c.year !== cur.year; });
+    }
+    return [];
+  }
+  function canRerollCheat(kind, open, cur) {
+    if (isMSI()) return msiRerollOptions(kind, open, cur).length > 0;
+    return rerollOptionsCheat(kind, open, cur).length > 0;
+  }
 
   function fitWheelValue(el) {
     if (!el) return;
@@ -105,7 +176,9 @@
     state.mode = (mode === "msi") ? "msi" : "golden";
     state.roster = [null, null, null, null, null];
     state.used = new Set();
-    state.rerolls = isMSI() ? { team: 1, year: 1 } : { region: 1, team: 1, year: 1 };
+    state.rerolls = isMSI()
+      ? { team: cheatConfig.msiRerolls.team, year: cheatConfig.msiRerolls.year }
+      : { region: cheatConfig.rerolls.region, team: cheatConfig.rerolls.team, year: cheatConfig.rerolls.year };
     state.result = null;
     state.teamRating = null;
     state.phase = "draft";
@@ -113,7 +186,7 @@
   }
 
   function spinNext() {
-    state.spin = E.spinInitial(activeIndex(), openRolesSet(), state.used);
+    state.spin = spinInitialCheat();
     state.spinning = true;
     renderDraft();
     if (isMSI()) runSpinAnimationMSI(["team", "year"]);
@@ -125,7 +198,7 @@
        Year reroll -> the same MSI organization in another year. */
   function msiRerollOptions(kind, open, cur) {
     if (!cur) return [];
-    return E.usableCombos(activeIndex(), open, state.used).filter(function (c) {
+    return usableCombosCheat(open, state.used).filter(function (c) {
       if (kind === "team") return c.year === cur.year && c.teamId !== cur.teamId;
       if (kind === "year") return c.teamId === cur.teamId && c.year !== cur.year;
       return false;
@@ -154,9 +227,8 @@
     }
 
     var next = null;
-    if (kind === "region") next = E.rerollRegion(state.index, open, state.used, cur);
-    else if (kind === "team") next = E.rerollTeam(state.index, open, state.used, cur);
-    else if (kind === "year") next = E.rerollYear(state.index, open, state.used, cur);
+    var pool = rerollOptionsCheat(kind, open, cur);
+    next = pool.length ? pick(pool) : null;
     if (!next) { flash("No other option available for that reroll."); return; }
     // Spin only the wheels that actually changed (a Region reroll keeps the year).
     var wheels = [];
@@ -200,7 +272,9 @@
   /* --------------------------- spin animation ----------------------------- */
   function runSpinAnimation(wheels) {
     var target = state.spin;
-    var regionPool = E.REGIONS;
+    var allowed = allowedRegionSet();
+    var regionPool = allowed ? E.REGIONS.filter(function (r) { return allowed.has(r); }) : E.REGIONS;
+    if (!regionPool.length) regionPool = E.REGIONS;
     var teamPool = state.index.teamsByRegion[target.region].map(function (t) { return t.name; });
     var yearPool = []; for (var y = 2011; y <= 2025; y++) yearPool.push(y);
 
@@ -310,7 +384,7 @@
     var rr = state.rerolls;
     function rrBtn(kind, label) {
       var n = rr[kind];
-      var noOption = !spinning && !E.canReroll(state.index, kind, open, state.used, spin);
+      var noOption = !spinning && !canRerollCheat(kind, open, spin);
       var dis = (n <= 0 || spinning || noOption) ? " disabled" : "";
       return '<button class="reroll-btn" data-action="reroll" data-kind="' + kind + '"' + dis + '>' +
         '🎲 Reroll ' + label + ' <span class="rr-count">' + n + '</span></button>';
@@ -416,6 +490,74 @@
       '<div class="wheel-label">' + label + '</div>' +
       '<div class="wheel-window"><div class="wheel-value">' + esc(value) + '</div></div>' +
       '</div>';
+  }
+
+  function cheatPanel() {
+    var regions = E.REGIONS.map(function (r) {
+      var checked = cheatConfig.regions[r] ? " checked" : "";
+      return '<label class="cheat-region"><input type="checkbox" data-cheat-region="' + r + '"' + checked + '> ' +
+        '<span>' + r + '</span><small>' + esc(regionName(r).replace(r + " · ", "")) + '</small></label>';
+    }).join("");
+    return '<details class="cheat-panel">' +
+      '<summary>Cheat Options</summary>' +
+      '<div class="cheat-body">' +
+        '<div class="cheat-section">' +
+          '<h3>Reroll Counts</h3>' +
+          '<div class="cheat-grid">' +
+            cheatNumber("region", "Region", cheatConfig.rerolls.region) +
+            cheatNumber("team", "Team", cheatConfig.rerolls.team) +
+            cheatNumber("year", "Year", cheatConfig.rerolls.year) +
+            cheatNumber("msi-team", "MSI Team", cheatConfig.msiRerolls.team) +
+            cheatNumber("msi-year", "MSI Year", cheatConfig.msiRerolls.year) +
+          '</div>' +
+        '</div>' +
+        '<div class="cheat-section">' +
+          '<h3>Region Filter</h3>' +
+          '<p>Checked regions are allowed in Golden Road mode. Leave all unchecked to allow every region.</p>' +
+          '<div class="cheat-actions">' +
+            '<button class="mini-btn" type="button" data-action="cheatRegionsAll">All</button>' +
+            '<button class="mini-btn" type="button" data-action="cheatRegionsNone">Clear</button>' +
+          '</div>' +
+          '<div class="cheat-regions">' + regions + '</div>' +
+        '</div>' +
+        '<div class="cheat-actions">' +
+          '<button class="btn primary" type="button" data-action="cheatSave">Save Cheats</button>' +
+        '</div>' +
+        '<p class="cheat-note">Cheats apply when you start a new run.</p>' +
+      '</div>' +
+    '</details>';
+  }
+
+  function cheatNumber(key, label, value) {
+    return '<label class="cheat-field"><span>' + label + '</span>' +
+      '<input type="number" min="0" max="99" step="1" value="' + value + '" data-cheat-reroll="' + key + '">' +
+      '</label>';
+  }
+
+  function readCheatPanel() {
+    document.querySelectorAll("[data-cheat-reroll]").forEach(function (input) {
+      var key = input.getAttribute("data-cheat-reroll");
+      var value = clampInt(input.value, 0, 99);
+      input.value = value;
+      if (key === "msi-team") cheatConfig.msiRerolls.team = value;
+      else if (key === "msi-year") cheatConfig.msiRerolls.year = value;
+      else cheatConfig.rerolls[key] = value;
+    });
+    var regions = {};
+    document.querySelectorAll("[data-cheat-region]").forEach(function (input) {
+      regions[input.getAttribute("data-cheat-region")] = input.checked;
+    });
+    cheatConfig.regions = regions;
+  }
+
+  function setAllCheatRegions(checked) {
+    document.querySelectorAll("[data-cheat-region]").forEach(function (input) { input.checked = checked; });
+  }
+
+  function saveCheatsFromPanel() {
+    readCheatPanel();
+    saveCheatConfig();
+    flash("Cheats saved. Start a new run to apply them.");
   }
 
   /* ------------------------------- result --------------------------------- */
@@ -847,6 +989,7 @@
             '<button class="btn primary big" data-action="start" data-mode="golden">▸ Start Run</button>' +
             '<button class="btn msi big" data-action="start" data-mode="msi">🔥 MSI Challenge</button>' +
           '</div>' +
+          cheatPanel() +
         '</div>' +
         '<div class="howto">' +
           '<div class="howto-title">How to Play</div>' +
@@ -926,6 +1069,9 @@
     else if (a === "share") shareScore();
     else if (a === "download") downloadImage();
     else if (a === "tweet") tweet();
+    else if (a === "cheatSave") saveCheatsFromPanel();
+    else if (a === "cheatRegionsAll") setAllCheatRegions(true);
+    else if (a === "cheatRegionsNone") setAllCheatRegions(false);
     else if (a === "home") { if (confirm("Leave this run and return to the home screen?")) renderStart(); }
   });
 
