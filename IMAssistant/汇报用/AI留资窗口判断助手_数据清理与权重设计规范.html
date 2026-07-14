@@ -261,7 +261,7 @@
 
         <div class="block">
           <h3>会话样本清理</h3>
-          <p>按会话 ID、用户 ID、经纪人 ID、房源 ID、会话开始时间合并同一沟通链路，剔除重复会话、测试会话、异常空会话。</p>
+          <p>选取一个月窗口，租赁场景全部会话，按特定规则剔除无效会话(如只有一轮的会话，包含语音、媒体的会话)，按7日窗口拆分长会话。</p>
           <div class="tags">
             <span class="tag">去重</span>
             <span class="tag">合并</span>
@@ -270,28 +270,28 @@
         </div>
 
         <div class="block">
-          <h3>消息内容清理</h3>
-          <p>过滤系统通知、发送失败、纯占位文本、无业务含义的自动消息；保留用户文本、经纪人文本、有效卡片和关键动作。</p>
+          <h3>会话时间归一</h3>
+          <p>单组会话从对话开始最多选取7自然日聊天内容；所有消息按毫秒时间戳排序，保证模型回放时与真实聊天顺序一致。</p>
           <div class="tags">
-            <span class="tag">用户消息</span>
-            <span class="tag">经纪人消息</span>
-            <span class="tag">有效卡片</span>
-          </div>
-        </div>
-
-        <div class="block">
-          <h3>角色与时间归一</h3>
-          <p>统一 sender 字段为 user、agent、system、tool；所有消息按毫秒时间戳排序，保证模型回放时与真实聊天顺序一致。</p>
-          <div class="tags">
-            <span class="tag">sender归一</span>
+            <span class="tag">时间归一</span>
             <span class="tag">时间排序</span>
             <span class="tag">上下文回放</span>
           </div>
         </div>
 
         <div class="block">
+          <h3>消息内容清理</h3>
+          <p>过滤系统通知、已读回执等系统消息；保留会话文本，卡片内容需要转义为自然语言可解读的内容，房源卡片需要携带房源上下文，语音消息转文字</p>
+          <div class="tags">
+            <span class="tag">消息过滤</span>
+            <span class="tag">卡片上下文</span>
+            <span class="tag">卡片转义</span>
+          </div>
+        </div>
+
+        <div class="block">
           <h3>会话轮次计算</h3>
-          <p>以用户和经纪人的有效发言计算业务轮次；系统消息、工具消息、卡片消息单独标记，不直接计入普通对话轮次。</p>
+          <p>以用户和经纪人的有效发言计算业务轮次：用户n条+经纪人n条算一轮</p>
           <div class="tags">
             <span class="tag">有效轮次</span>
             <span class="tag">首次索要轮次</span>
@@ -301,12 +301,11 @@
 
         <div class="block">
           <h3>留资结果归一</h3>
-          <p>统一手机号、微信、留资卡、约看联系方式等留资事件口径，记录留资发生时间、发生轮次、触发方式和承接经纪人。</p>
+          <p>借助大模型能力进行会话分析，计算留资标签分布占比</p>
           <div class="tags">
-            <span class="tag">手机号</span>
+            <span class="tag">预约看房</span>
             <span class="tag">微信</span>
-            <span class="tag">留资卡</span>
-            <span class="tag">约看联系方式</span>
+            <span class="tag">相似房源</span>
           </div>
         </div>
       </section>
@@ -319,7 +318,7 @@
 
         <div class="block">
           <h3>用户意向分</h3>
-          <p>识别用户是否表达真实租房意向，包括问价格、问位置、问是否还在、问入住时间、表达想看房等。</p>
+          <p>A 根据用户浏览轨迹，浏览房源时长，收藏，查看地图，浏览VR模型等行为综合判断；B 识别用户是否表达真实租房意向，包括问价格、问位置、问是否还在、问入住时间、表达想看房等。</p>
           <div class="tags">
             <span class="tag orange">强意向 +</span>
             <span class="tag orange">弱意向 +</span>
@@ -339,8 +338,8 @@
         </div>
 
         <div class="block">
-          <h3>看房信号分</h3>
-          <p>用户出现约看、询问看房时间、确认房源状态、表达到店或到现场意愿时，提高窗口分。</p>
+          <h3>核心留资理由分</h3>
+          <p>核心判断项：用户出现约看、询问看房时间、确认房源状态、表达到店或到现场意愿时，提高窗口分。</p>
           <div class="tags">
             <span class="tag orange">约看</span>
             <span class="tag orange">看房时间</span>
@@ -350,7 +349,7 @@
 
         <div class="block">
           <h3>时机轮次分</h3>
-          <p>结合会话总轮次、首次索要手机号轮次、用户最近一次强意向轮次判断时机。过早索要降权，需求成熟后加权。</p>
+          <p>时机轮次分	结合会话总轮次、首次索要手机号轮次、用户最近一次强意向轮次判断时机。过早索要降权，需求成熟后加权。1-3轮谨慎，4-10重点</p>
           <div class="tags">
             <span class="tag orange">1-2轮谨慎</span>
             <span class="tag orange">3-10轮观察</span>
@@ -360,7 +359,7 @@
 
         <div class="block">
           <h3>负向与打扰风险分</h3>
-          <p>用户明确拒绝、已租到、预算不符、区域不符、长时间未回复、经纪人刚索要未回应时，降低窗口分或暂停提示。</p>
+          <p>用户明确拒绝、已租到、长时间未回复、经纪人刚索要未回应时，降低窗口分或暂停提示。</p>
           <div class="tags">
             <span class="tag orange">拒绝</span>
             <span class="tag orange">已租到</span>
@@ -371,6 +370,61 @@
       </section>
     </div>
 
+    <section class="wide">
+      <h2>数据指标计算</h2>
+      <div class="pipeline">
+        <div class="step">
+          <strong>留资率</strong>
+          <span>留资会话数 / 总会话数 * 100%</span>
+        </div>
+        <div class="step">
+          <strong>750s会话留资率</strong>
+          <span>留资会话数 / 750s内结束会话数 * 100%</span>
+        </div>
+        <div class="step">
+          <strong>留资时间分布</strong>
+          <span>留资在会话时间的分布情况，按分钟。</span>
+        </div>
+        <div class="step">
+          <strong>留资轮次分布</strong>
+          <span>留资在会话轮次的分布情况，按轮次。</span>
+        </div>
+        <div class="step">
+          <strong>留资理由分布</strong>
+          <span>以留资结果反推留资理由的分布情况。</span>
+        </div>
+        
+      </div>
+    </section>
+    <section class="wide">
+      <h2>数据指标收集</h2>
+      <div class="pipeline">
+        <div class="step">
+          <strong>AI留资窗口采纳率</strong>
+          <span> 用户成功留资 / AI推荐留资窗口 * 100% </span>
+        </div>
+        <div class="step">
+          <strong>AI留资话术采纳率</strong>
+          <span>经纪人采纳AI话术 / AI推送留资窗口话术 * 100%</span>
+        </div>
+          <div class="step">
+          <strong>AI留资话术满意度</strong>
+          <span>经纪人未修改话术 / 经纪人采纳留资窗口话术 * 100%</span>
+        </div>
+        <div class="step">
+          <strong>AI策略话术采纳率</strong>
+          <span>经纪人采纳AI话术 / AI推送非窗口话术 * 100%</span>
+        </div>
+        <div class="step">
+          <strong>响应时效</strong>
+          <span>分数更新到B端的时间 - 用户发送消息的时间</span>
+        </div>
+        <div class="step">
+          <strong>AB覆盖率</strong>
+          <span>灰度开放经纪人比例; </br>灰度命中会话占总会话的比例</span>
+        </div>
+      </div>
+    </section>
     <section class="wide">
       <h2>处理链路</h2>
       <div class="pipeline">

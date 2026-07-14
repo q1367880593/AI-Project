@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>租房经纪人 AI 陪练系统技术设计演示稿</title>
+  <style>
+    :root {
+      --bg: #f3f6fa;
+      --paper: #ffffff;
+      --ink: #17202a;
+      --muted: #5d6b7a;
+      --line: #d8e0ea;
+      --blue: #1d5fa7;
+      --teal: #16806a;
+      --amber: #b77618;
+      --red: #be3b35;
+      --soft-blue: #eaf3ff;
+      --soft-green: #e8f6f2;
+      --soft-amber: #fff5df;
+      --shadow: 0 18px 50px rgba(25, 39, 60, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    .deck {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 18px;
+      background: #111923;
+      color: #fff;
+      overflow: auto;
+    }
+
+    .nav h1 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .nav p {
+      margin: 0 0 22px;
+      color: #b8c4d2;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .nav a {
+      display: block;
+      color: #dbe7f4;
+      text-decoration: none;
+      border-radius: 6px;
+      padding: 9px 10px;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .slides {
+      padding: 28px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .slide {
+      min-height: calc(100vh - 56px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.14;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+
+    .lead {
+      margin: 18px 0 0;
+      max-width: 880px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: #fff;
+    }
+
+    .card.blue {
+      background: var(--soft-blue);
+      border-color: #bfd8f2;
+    }
+
+    .card.green {
+      background: var(--soft-green);
+      border-color: #b7ded4;
+    }
+
+    .card.amber {
+      background: var(--soft-amber);
+      border-color: #eed092;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .card p {
+      margin: 0;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .flow {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+      min-height: 138px;
+    }
+
+    .step::after {
+      content: "→";
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 18px;
+      z-index: 2;
+    }
+
+    .step:last-child::after {
+      content: "";
+    }
+
+    .step em {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-style: normal;
+      font-weight: 800;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .arch {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .layer {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+
+    .layer strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--blue);
+    }
+
+    .layer span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .center-stack {
+      padding: 18px;
+      border-radius: 8px;
+      border: 2px solid var(--blue);
+      background: var(--soft-blue);
+    }
+
+    .center-stack h3 {
+      color: var(--blue);
+    }
+
+    .architecture-map {
+      margin-top: 28px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .architecture-row {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .row-label {
+      border-radius: 8px;
+      background: #162231;
+      color: #fff;
+      padding: 14px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .row-content {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .row-content.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .row-content.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .arch-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #f9fbfd;
+      min-height: 86px;
+    }
+
+    .arch-box.blue {
+      background: var(--soft-blue);
+      border-color: #bfd8f2;
+    }
+
+    .arch-box.green {
+      background: var(--soft-green);
+      border-color: #b7ded4;
+    }
+
+    .arch-box.amber {
+      background: var(--soft-amber);
+      border-color: #eed092;
+    }
+
+    .arch-box strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .arch-box span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .architecture-arrow {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .architecture-arrow div:last-child {
+      text-align: center;
+      padding: 2px 0;
+    }
+
+    .code {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 8px;
+      background: #111923;
+      color: #dce8f5;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow: auto;
+      white-space: pre;
+    }
+
+    .matrix {
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    th {
+      background: #eef3f8;
+      color: #334155;
+      font-size: 13px;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #eef3f8;
+      color: #3a4a5d;
+    }
+
+    .badge.red {
+      color: var(--red);
+      background: #fff1ef;
+    }
+
+    .badge.amber {
+      color: var(--amber);
+      background: var(--soft-amber);
+    }
+
+    .badge.green {
+      color: var(--teal);
+      background: var(--soft-green);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+      margin-top: 28px;
+      align-items: start;
+    }
+
+    .big-number {
+      font-size: 46px;
+      font-weight: 850;
+      color: var(--blue);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .footer-note {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1100px) {
+      .deck {
+        display: block;
+      }
+
+      .nav {
+        position: static;
+        height: auto;
+      }
+
+      .nav a {
+        display: inline-block;
+      }
+
+      .slide {
+        min-height: auto;
+      }
+
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .arch,
+      .architecture-row,
+      .split,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .row-content,
+      .row-content.three,
+      .row-content.two {
+        grid-template-columns: 1fr;
+      }
+
+      .step::after {
+        content: "";
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .deck {
+        display: block;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .slides {
+        padding: 0;
+        gap: 0;
+      }
+
+      .slide {
+        page-break-after: always;
+        min-height: 100vh;
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <nav class="nav" aria-label="演示稿目录">
+      <h1>AI 陪练系统技术设计</h1>
+      <p>租房经纪人训练场景，基于留资窗口数据分析，支持持续对聊、实时复盘、窗口识别与红黄线诊断。</p>
+      <a href="#s1">01 目标与边界</a>
+      <a href="#s2">02 数据分析结论</a>
+      <a href="#s3">03 总体架构</a>
+      <a href="#s4">04 数据加工链路</a>
+      <a href="#s5">05 Agent 编排</a>
+      <a href="#s6">06 会话状态机</a>
+      <a href="#s7">07 难度控制</a>
+      <a href="#s8">08 实时复盘</a>
+      <a href="#s9">09 留资窗口分</a>
+      <a href="#s10">10 红黄线规则</a>
+      <a href="#s11">11 评分与评测</a>
+      <a href="#s12">12 工程落地</a>
+    </nav>
+
+    <section class="slides">
+      <article class="slide" id="s1">
+        <p class="kicker">01 / Product Scope</p>
+        <h2>从“话术闯关”升级为“数据驱动的留资窗口陪练系统”</h2>
+        <p class="lead">
+          系统不是替经纪人自动代聊，而是把历史会话里的留资窗口、有效理由、最佳轮次和风险信号沉淀成训练引擎，帮助新人学会“什么时候该推进、为什么能推进、怎么说不打扰”。
+        </p>
+        <div class="grid-4">
+          <div class="card blue">
+            <strong>窗口识别</strong>
+            <p>用用户意向、需求明确、留资理由、时机轮次和负向风险，判断当前是否适合索要联系方式。</p>
+          </div>
+          <div class="card green">
+            <strong>持续陪练</strong>
+            <p>客户画像、偏好、顾虑、历史表达保持一致，留资后继续推进看房、复访和防爽约。</p>
+          </div>
+          <div class="card amber">
+            <strong>实时复盘</strong>
+            <p>经纪人点击后，系统输出客户状态、窗口分、红黄线、问题定位和下一句建议。</p>
+          </div>
+          <div class="card">
+            <strong>数据闭环</strong>
+            <p>从 30w 历史会话提炼典型场景、有效理由、轮次窗口、失败话术和质检规则。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" id="s2">
+        <p class="kicker">02 / Data Insights</p>
+        <h2>核心数据结论：留资成功依赖“理由 + 时机 + 风险抑制”</h2>
+        <p class="lead">
+          数据分析不只是用来做报表，而是直接转化为训练系统里的窗口分、Agent 状态、提示策略和复盘口径。
+        </p>
+        <div class="grid-3">
+          <div class="card blue">
+            <strong>最强理由：看房约看</strong>
+            <p>用户表达看房、约看或询问看房时间，经纪人索要联系方式用于约看，留资率约 41.1%。</p>
+          </div>
+          <div class="card green">
+            <strong>稳定理由：后续跟进/继续推荐</strong>
+            <p>有效沟通后用于后续跟进约 31.51%；用户提出找房需求后用于推荐更多匹配房源约 31.88%。</p>
+          </div>
+          <div class="card amber">
+            <strong>辅助理由：微信沟通/房源确认</strong>
+            <p>明确提到微信沟通约 29.46%；确认房源状态、价格、位置、入住时间后进一步确认约 33.33%。</p>
+          </div>
+        </div>
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>分析结论</th>
+                <th>产品/技术转化</th>
+                <th>训练价值</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1-3 轮索要电话留资率较低，从第 4 轮开始相对稳定</td>
+                <td>时机轮次分：1-3 轮谨慎，4-10 轮重点捕捉</td>
+                <td>训练新人避免开场强推电话</td>
+              </tr>
+              <tr>
+                <td>10 轮内结束比例更高，不及时把握会流失</td>
+                <td>实时复盘提示“当前强窗口”并给下一句</td>
+                <td>训练新人在窗口出现时及时推进</td>
+              </tr>
+              <tr>
+                <td>2 分钟到 12 分半区间留资率相对较高</td>
+                <td>会话时长作为 timing_score 特征</td>
+                <td>训练节奏感，而不是无限闲聊</td>
+              </tr>
+              <tr>
+                <td>明确拒绝、已租到、刚索要未回应时继续提示会造成打扰</td>
+                <td>负向风险分最高可扣 100，触发后暂停提示</td>
+                <td>训练经纪人识别停止推进和降噪时机</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="slide" id="s3">
+        <p class="kicker">03 / 总体架构</p>
+        <h2>总体架构：从真实数据到陪练、复盘和评分的完整链路</h2>
+        <p class="lead">
+          整体可以理解为五层：先把真实会话和用户行为加工成知识与特征，再由会话编排层驱动客户模拟、实时复盘和阶段评分，最后在经纪人工作台和教练后台里呈现。
+        </p>
+        <div class="architecture-map">
+          <div class="architecture-row">
+            <div class="row-label">数据输入层</div>
+            <div class="row-content">
+              <div class="arch-box"><strong>历史会话</strong><span>客户消息、经纪人回复、轮次、时间戳、是否留资、是否约看。</span></div>
+              <div class="arch-box"><strong>用户行为</strong><span>浏览时长、收藏、查看地图、VR 浏览、房源卡点击。</span></div>
+              <div class="arch-box"><strong>房源信息</strong><span>价格、位置、户型、入住时间、看房状态、通勤信息。</span></div>
+              <div class="arch-box"><strong>质检规则</strong><span>隐私合规、虚假承诺、骚扰风险、平台禁止话术。</span></div>
+            </div>
+          </div>
+
+          <div class="architecture-arrow"><span></span><div>清洗脱敏、角色识别、会话切片、行为对齐、结果回标</div></div>
+
+          <div class="architecture-row">
+            <div class="row-label">知识与特征层</div>
+            <div class="row-content">
+              <div class="arch-box blue"><strong>场景库</strong><span>预算敏感、强防备、急租、通勤顾虑、砍价、沉默流失。</span></div>
+              <div class="arch-box blue"><strong>客户画像库</strong><span>意向强弱、隐私顾虑、价格敏感、需求清晰度、回复风格。</span></div>
+              <div class="arch-box blue"><strong>话术与案例库</strong><span>成功留资路径、有效回复、失败话术、可复用表达。</span></div>
+              <div class="arch-box blue"><strong>窗口特征库</strong><span>强意向轮次、首次索要轮次、留资理由、会话时长、负向风险。</span></div>
+            </div>
+          </div>
+
+          <div class="architecture-arrow"><span></span><div>读取场景配置、难度参数、客户画像、房源上下文和窗口特征</div></div>
+
+          <div class="architecture-row">
+            <div class="row-label">会话编排层</div>
+            <div class="row-content three">
+              <div class="arch-box green"><strong>会话运行器</strong><span>保存当前对话、客户记忆、训练目标、阶段状态和历史动作。</span></div>
+              <div class="arch-box green"><strong>任务路由器</strong><span>根据用户动作分发到客户模拟、实时复盘、阶段评分或红黄线检查。</span></div>
+              <div class="arch-box green"><strong>安全与规则拦截</strong><span>检查隐私诱导、虚假承诺、重复打扰和房源真实性风险。</span></div>
+            </div>
+          </div>
+
+          <div class="architecture-arrow"><span></span><div>根据“继续对聊 / 点击复盘 / 阶段结束”触发不同 Agent</div></div>
+
+          <div class="architecture-row">
+            <div class="row-label">Agent 能力层</div>
+            <div class="row-content">
+              <div class="arch-box amber"><strong>场景导演</strong><span>生成本局客户、隐藏顾虑、训练目标、失败条件和难度参数。</span></div>
+              <div class="arch-box amber"><strong>客户模拟</strong><span>扮演客户持续对聊，保持画像稳定，不输出教练建议。</span></div>
+              <div class="arch-box amber"><strong>实时复盘</strong><span>包含状态跟踪子 Agent 和留资窗口评分子 Agent，输出诊断和建议。</span></div>
+              <div class="arch-box amber"><strong>评分教练</strong><span>阶段结束后输出能力评分、问题片段、训练建议和下一关推荐。</span></div>
+            </div>
+          </div>
+
+          <div class="architecture-arrow"><span></span><div>输出可解释结果：客户状态、窗口分、红黄线、下一句建议、阶段评分</div></div>
+
+          <div class="architecture-row">
+            <div class="row-label">应用输出层</div>
+            <div class="row-content three">
+              <div class="arch-box"><strong>经纪人陪练工作台</strong><span>场景选择、难度选择、持续聊天、快捷话术、房源卡。</span></div>
+              <div class="arch-box"><strong>AI 实时复盘面板</strong><span>当前诊断、留资窗口分、红黄线、下一步建议、阶段评分。</span></div>
+              <div class="arch-box"><strong>教练与管理后台</strong><span>场景配置、规则配置、学员报告、团队能力看板、效果追踪。</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" id="s4">
+        <p class="kicker">04 / Data Pipeline</p>
+        <h2>数据加工链路：把会话、行为轨迹和留资结果转成窗口特征</h2>
+        <div class="flow">
+          <div class="step">
+            <em>1</em>
+            <strong>清洗脱敏</strong>
+            <span>去除手机号、姓名、地址、微信号，统一客户/经纪人角色和时间戳。</span>
+          </div>
+          <div class="step">
+            <em>2</em>
+            <strong>多源对齐</strong>
+            <span>对齐浏览时长、收藏、地图、VR、房源卡曝光和聊天消息。</span>
+          </div>
+          <div class="step">
+            <em>3</em>
+            <strong>会话切片</strong>
+            <span>按业务阶段切分：开场、需求、异议、留资、约看、复访。</span>
+          </div>
+          <div class="step">
+            <em>4</em>
+            <strong>标签标注</strong>
+            <span>标注客户意图、强意向轮次、需求字段、留资理由和负向风险。</span>
+          </div>
+          <div class="step">
+            <em>5</em>
+            <strong>窗口挖掘</strong>
+            <span>提取首次索要轮次、最近强意向轮次、会话时长和最终留资结果。</span>
+          </div>
+          <div class="step">
+            <em>6</em>
+            <strong>资产入库</strong>
+            <span>形成场景库、画像库、话术库、窗口规则库、红黄线库和评测集。</span>
+          </div>
+        </div>
+        <div class="code">ConversationAsset {
+  scenario: "预算敏感客户",
+  stage: "留资前异议处理",
+  customer_intent: ["问价格", "压预算"],
+  behavior_signals: ["浏览VR", "查看地图", "收藏房源"],
+  strong_intent_turn: 4,
+  first_contact_request_turn: 5,
+  agent_action: ["解释价值", "提供备选", "软性留资"],
+  lead_reason_type: "继续推荐更多匹配房源",
+  outcome: "留手机号",
+  risk_labels: ["过早要电话"],
+  success_pattern: "承接顾虑 -> 解释用途 -> 提供低价备选 -> 请求联系方式"
+}</div>
+      </article>
+
+      <article class="slide" id="s5">
+        <p class="kicker">05 / Agent Orchestration</p>
+        <h2>Agent 分工要清楚：客户扮演和复盘评估必须隔离</h2>
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>输入</th>
+                <th>输出</th>
+                <th>关键约束</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>场景导演 Agent</strong></td>
+                <td>场景、难度、训练目标、历史案例</td>
+                <td>客户画像、隐藏任务、异议脚本、失败条件</td>
+                <td>保证每局可控、可复现、可评分</td>
+              </tr>
+              <tr>
+                <td><strong>客户模拟 Agent</strong></td>
+                <td>画像、状态、最近对话、房源信息</td>
+                <td>客户下一句回复</td>
+                <td>不能泄露隐藏状态，不能主动教经纪人</td>
+              </tr>
+              <tr>
+                <td><strong>实时复盘 Agent</strong></td>
+                <td>会话、窗口分、红黄线、成功路径、用户点击触发</td>
+                <td>诊断、问题定位、补救话术、下一步建议</td>
+                <td>只在经纪人点击时出现，避免干扰训练</td>
+              </tr>
+              <tr>
+                <td><strong>&nbsp;&nbsp;状态跟踪子 Agent</strong></td>
+                <td>完整会话、经纪人最新回复、客户反馈</td>
+                <td>阶段、信任度、意向度、需求完整度、强意向轮次、风险事件</td>
+                <td>输出结构化 JSON，作为复盘和评分输入</td>
+              </tr>
+              <tr>
+                <td><strong>&nbsp;&nbsp;留资窗口评分子 Agent</strong></td>
+                <td>行为轨迹、会话状态、留资理由、轮次时机、负向风险</td>
+                <td>0-100 窗口分、分层、触发/暂停提示、证据轮次</td>
+                <td>按数据分析规则计算，避免纯大模型主观判断</td>
+              </tr>
+              <tr>
+                <td><strong>评分教练 Agent</strong></td>
+                <td>阶段会话、通关目标、规则命中、状态轨迹</td>
+                <td>分数、复盘、能力标签、下一关建议</td>
+                <td>结合规则分和模型评估，避免纯主观</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="slide" id="s6">
+        <p class="kicker">06 / Conversation State</p>
+        <h2>会话状态机：留资只是阶段节点，不是对话终点</h2>
+        <div class="flow">
+          <div class="step">
+            <em>1</em>
+            <strong>首次咨询</strong>
+            <span>目标：回应问题，建立基本服务感。</span>
+          </div>
+          <div class="step">
+            <em>2</em>
+            <strong>需求挖掘</strong>
+            <span>目标：预算、区域、通勤、入住时间、人数。</span>
+          </div>
+          <div class="step">
+            <em>3</em>
+            <strong>异议处理</strong>
+            <span>目标：承接价格、距离、房况、隐私顾虑。</span>
+          </div>
+          <div class="step">
+            <em>4</em>
+            <strong>留资</strong>
+            <span>目标：说明用途，获得手机号或微信。</span>
+          </div>
+          <div class="step">
+            <em>5</em>
+            <strong>约看</strong>
+            <span>目标：确认时间、地点、备选方案。</span>
+          </div>
+          <div class="step">
+            <em>6</em>
+            <strong>复访推进</strong>
+            <span>目标：防爽约、看后跟进、二次推荐。</span>
+          </div>
+        </div>
+        <div class="split">
+          <div class="card blue">
+            <h3>隐藏状态</h3>
+            <ul>
+              <li>trust_score：信任度</li>
+              <li>intent_score：租房意向</li>
+              <li>need_completeness：需求完整度</li>
+              <li>lead_window_score：留资窗口分</li>
+              <li>lead_reason_type：当前留资理由</li>
+              <li>last_strong_intent_turn：最近强意向轮次</li>
+              <li>annoyance_score：烦躁度</li>
+              <li>privacy_concern：隐私顾虑</li>
+              <li>lead_captured：是否已留资</li>
+            </ul>
+          </div>
+          <div class="code">TransitionRule {
+  from: "异议处理",
+  to: "留资",
+  condition: {
+    lead_window_score: ">= 75",
+    lead_reason_type: "约看/继续推荐/房源确认",
+    timing_score: ">= 60",
+    privacy_concern: "<= 50",
+    agent_has_explained_contact_usage: true
+  }
+}</div>
+        </div>
+      </article>
+
+      <article class="slide" id="s7">
+        <p class="kicker">07 / Difficulty Control</p>
+        <h2>难度不是一句“客户更难搞”，而是一组可调参数</h2>
+        <div class="grid-3">
+          <div class="card green">
+            <div class="big-number">L1</div>
+            <strong>初级</strong>
+            <p>需求明确、回复积极、1 个主要异议、容错高。训练标准流程。</p>
+          </div>
+          <div class="card blue">
+            <div class="big-number">L2</div>
+            <strong>中级</strong>
+            <p>需求部分模糊、2-3 个异议、需要合理解释留资用途。训练节奏和承接。</p>
+          </div>
+          <div class="card amber">
+            <div class="big-number">L3</div>
+            <strong>高级</strong>
+            <p>客户防备强、回复短、需求摇摆、过早推进会失败。训练复杂判断。</p>
+          </div>
+        </div>
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>参数</th>
+                <th>控制方式</th>
+                <th>对客户模拟的影响</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>初始意向</td>
+                <td>intent_score 初值</td>
+                <td>决定客户是否主动补充需求、是否愿意继续聊</td>
+              </tr>
+              <tr>
+                <td>隐私防备</td>
+                <td>privacy_concern 初值和触发阈值</td>
+                <td>决定客户是否抗拒留电话，以及需要怎样的解释</td>
+              </tr>
+              <tr>
+                <td>异议密度</td>
+                <td>objection_count 和 objection_script</td>
+                <td>控制价格、距离、押付、真实性等问题出现频率</td>
+              </tr>
+              <tr>
+                <td>容错率</td>
+                <td>annoyance_score 增长系数</td>
+                <td>控制经纪人答非所问、强推后客户是否流失</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="slide" id="s8">
+        <p class="kicker">08 / Real-time Review</p>
+        <h2>AI 实时复盘：由状态跟踪和窗口评分两个子 Agent 驱动</h2>
+        <div class="split">
+          <div>
+            <div class="card blue">
+              <h3>触发方式</h3>
+              <p>经纪人点击“AI 实时复盘”后，实时复盘 Agent 先调用状态跟踪子 Agent 和留资窗口评分子 Agent，再读取当前会话、隐藏状态、规则命中和成功路径，生成当下诊断。</p>
+            </div>
+            <div class="card" style="margin-top: 16px;">
+              <h3>输出结构</h3>
+              <ul>
+                <li>当前客户状态</li>
+                <li>留资窗口分和触发证据</li>
+                <li>经纪人已经完成的动作</li>
+                <li>缺失动作和不合理回复</li>
+                <li>红黄线命中说明</li>
+              <li>下一步 2-3 条可发送话术</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code">RealTimeReviewAgent {
+  sub_agents: [
+    "StateTrackingAgent",
+    "LeadWindowScoringAgent"
+  ],
+  flow: "会话更新 -> 状态抽取 -> 窗口打分 -> 证据汇总 -> 复盘输出"
+}
+
+ReviewOutput {
+  customer_state: {
+    stage: "看房邀约",
+    intent_level: "中高",
+    main_objection: "价格",
+    privacy_concern: "仍存在"
+  },
+  lead_window: {
+    score: 82,
+    level: "强窗口",
+    reason_type: "用户询问看房时间",
+    evidence: ["第4轮表达今天可看", "第5轮询问是否能约"]
+  },
+  issues: [
+    {
+      level: "yellow",
+      turn_id: 2,
+      reason: "客户还在表达预算顾虑，经纪人过早要求留电话"
+    }
+  ],
+  next_best_actions: [
+    "确认看房时间",
+    "承诺联系方式使用边界",
+    "补充 4200-4500 备选房源"
+  ]
+}</div>
+        </div>
+      </article>
+
+      <article class="slide" id="s9">
+        <p class="kicker">09 / Lead Window Score</p>
+        <h2>留资窗口评分引擎：把数据结论落成可计算的分层规则</h2>
+        <p class="lead">
+          将用户行为、会话意图、需求成熟度、核心留资理由和时机轮次合并成 0-100 分。分数不是替代经纪人判断，而是实时复盘里的触发依据和提示阈值。
+        </p>
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>子分项</th>
+                <th>权重</th>
+                <th>核心输入</th>
+                <th>评分逻辑</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>用户意向分</strong></td>
+                <td>25%</td>
+                <td>浏览时长、收藏、查看地图/VR、问价格/位置/是否还在/入住时间/想看房</td>
+                <td>行为意向 + 会话意向双通道融合，近期强意向表达加权更高</td>
+              </tr>
+              <tr>
+                <td><strong>需求明确分</strong></td>
+                <td>20%</td>
+                <td>预算、区域、户型、入住时间、通勤、租期、人数、特殊要求</td>
+                <td>按字段完整度加权，越接近可推荐和可约看，分数越高</td>
+              </tr>
+              <tr>
+                <td><strong>核心留资理由分</strong></td>
+                <td>35%</td>
+                <td>约看、问看房时间、确认房源状态、到店/到现场、后续推荐、微信沟通</td>
+                <td>依据历史留资率给理由类型赋值，看房约看类最高，后续跟进和继续推荐次之</td>
+              </tr>
+              <tr>
+                <td><strong>时机轮次分</strong></td>
+                <td>20%</td>
+                <td>会话总轮次、首次索要手机号轮次、最近强意向轮次、会话时长</td>
+                <td>1-3 轮谨慎，4-10 轮重点捕捉；2-12.5 分钟窗口期加权</td>
+              </tr>
+              <tr>
+                <td><strong>负向风险分</strong></td>
+                <td>-100%</td>
+                <td>明确拒绝、已租到、长时间未回复、刚索要未回应、烦躁/投诉风险</td>
+                <td>命中后直接降权或暂停提示，避免重复打扰</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>留资理由类型</th>
+                <th>历史留资率</th>
+                <th>评分含义</th>
+                <th>推荐提示方式</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>看房、约看、询问看房时间</td>
+                <td>41.1%</td>
+                <td>最强核心理由，lead_reason_score 最高</td>
+                <td>说明用于约看确认，给两个时间选项</td>
+              </tr>
+              <tr>
+                <td>有效沟通后用于后续跟进</td>
+                <td>31.51%</td>
+                <td>稳定理由，需已完成基本需求确认</td>
+                <td>说明只同步本次房源和进展，降低打扰感</td>
+              </tr>
+              <tr>
+                <td>用户提出找房需求，用于推荐匹配房源</td>
+                <td>31.88%</td>
+                <td>适合预算、区域、通勤已明确的场景</td>
+                <td>承诺发送 2-3 套匹配房源或对比方案</td>
+              </tr>
+              <tr>
+                <td>确认房源状态、价格、位置、入住时间</td>
+                <td>33.33%</td>
+                <td>适合房源确认型对话，理由明确但需快速履约</td>
+                <td>说明用于房东确认、临时变动通知</td>
+              </tr>
+              <tr>
+                <td>双方明确提到加微信或微信沟通</td>
+                <td>29.46%</td>
+                <td>辅助理由，需结合需求或看房动作增强</td>
+                <td>尊重客户偏好，避免跨平台强诱导</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid-2">
+          <div class="code">lead_window_score =
+  intent_score * 0.25
+  + need_clarity_score * 0.20
+  + lead_reason_score * 0.35
+  + timing_score * 0.20
+  - negative_risk_penalty
+
+score = clamp(lead_window_score, 0, 100)</div>
+          <div class="card blue">
+            <h3>窗口分层</h3>
+            <ul>
+              <li><span class="badge">0-39</span> 低意向，不建议索要手机号</li>
+              <li><span class="badge amber">40-59</span> 有留资意图，继续了解需求</li>
+              <li><span class="badge amber">60-74</span> 弱窗口，可以委婉试探</li>
+              <li><span class="badge green">75-89</span> 强窗口，提示经纪人</li>
+              <li><span class="badge green">90-100</span> 最佳窗口，强提示并给话术</li>
+            </ul>
+          </div>
+        </div>
+        <div class="code">LeadWindowSignal {
+  score: 82,
+  level: "强窗口",
+  should_prompt_agent: true,
+  reason_type: "用户询问看房时间，经纪人可索要联系方式用于约看",
+  evidence_turns: [4, 5],
+  next_action: "委婉说明电话用途，并给两个看房时间选项",
+  suppress_prompt: false
+}</div>
+      </article>
+
+      <article class="slide" id="s10">
+        <p class="kicker">10 / Guardrails</p>
+        <h2>红黄线：把业务风险和培训问题拆开治理</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3><span class="badge red">红线</span> 严重合规风险</h3>
+            <ul>
+              <li>虚假承诺：保证砍价、保证成交、保证房源仍在</li>
+              <li>隐私诱导：不说明用途就索要手机号或微信</li>
+              <li>不实房源：明知信息不确定仍肯定化表达</li>
+              <li>歧视、威胁、骚扰、泄露其他客户隐私</li>
+              <li>绕过平台规则，引导私下交易</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3><span class="badge amber">黄线</span> 转化和体验问题</h3>
+            <ul>
+              <li>客户问题未正面回答</li>
+              <li>连续追问，像审问而不是服务</li>
+              <li>过早要电话，未建立留资理由</li>
+              <li>只堆房源卖点，未结合客户需求</li>
+              <li>客户高意向时推进不及时</li>
+            </ul>
+          </div>
+        </div>
+        <div class="code">GuardrailCheck = RuleEngine + LLMClassifier
+
+RuleEngine:
+  - 正则检测手机号、微信、绝对化承诺、敏感词
+  - 检查平台禁止行为
+
+LLMClassifier:
+  - 判断是否答非所问
+  - 判断是否过早推进
+  - 判断是否虚假/夸大表达
+  - 输出风险等级、证据句、修正建议</div>
+      </article>
+
+      <article class="slide" id="s11">
+        <p class="kicker">11 / Evaluation</p>
+        <h2>评分体系：先校准，再评估，再看业务结果</h2>
+        <p class="lead">
+          评分不是单次打分，而是一套三层体系：规则分判断窗口是否成立，模型分判断对话是否自然且合规，结果分判断训练是否真的推动留资和约看。
+        </p>
+
+        <div class="grid-3">
+          <div class="card blue">
+            <strong>规则分</strong>
+            <p>基于留资窗口分、红黄线、需求完整度、轮次时机等可解释规则，回答“此刻能不能推”。</p>
+          </div>
+          <div class="card green">
+            <strong>模型分</strong>
+            <p>由分类器或大模型判断自然度、同理心、答非所问、是否过早推进，回答“话说得好不好”。</p>
+          </div>
+          <div class="card amber">
+            <strong>结果分</strong>
+            <p>看是否真正进入留资、约看、复访、成交前推进，回答“有没有业务效果”。</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>总评分公式</h3>
+            <div class="code">final_score =
+  0.35 * rule_score
+  + 0.25 * model_score
+  + 0.20 * stage_progress_score
+  + 0.20 * compliance_score</div>
+            <ul>
+              <li>rule_score：需求、异议、留资窗口、时机轮次</li>
+              <li>model_score：表达自然度、承接质量、推进节奏</li>
+              <li>stage_progress_score：留资、约看、复访推进结果</li>
+              <li>compliance_score：红黄线、隐私边界、虚假承诺</li>
+            </ul>
+          </div>
+          <div class="card blue">
+            <h3>分数解释</h3>
+            <ul>
+              <li><span class="badge">0-59</span> 训练动作不完整，建议重新演练</li>
+              <li><span class="badge amber">60-74</span> 有推进意识，但窗口判断或表达质量不足</li>
+              <li><span class="badge green">75-89</span> 能抓窗口，整体可用，仍可优化细节</li>
+              <li><span class="badge green">90-100</span> 窗口判断和话术都比较稳定</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>评分维度</th>
+                <th>核心依据</th>
+                <th>建议校准方式</th>
+                <th>观察指标</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>留资窗口</td>
+                <td>用户意向、需求明确、留资理由、时机轮次、负向风险</td>
+                <td>用历史留资率和专家标注校准权重与阈值</td>
+                <td>lead_window_score、触发准确率</td>
+              </tr>
+              <tr>
+                <td>话术质量</td>
+                <td>是否答非所问、是否自然、是否有同理心、是否推进过快</td>
+                <td>专家抽样复核模型分，形成评分 Rubric</td>
+                <td>model_score、一致性得分</td>
+              </tr>
+              <tr>
+                <td>阶段推进</td>
+                <td>是否完成留资、约看、复访、后续跟进</td>
+                <td>按训练场景定义阶段目标，不同场景不同权重</td>
+                <td>留资率、约看率、复访率</td>
+              </tr>
+              <tr>
+                <td>合规表达</td>
+                <td>红线、黄线、隐私说明、房源真实性、平台规则</td>
+                <td>先规则后模型，红线一票否决，黄线扣分</td>
+                <td>风险命中率、违规率</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid-3">
+          <div class="card green">
+            <strong>离线评测</strong>
+            <p>用标注集做留资窗口、红黄线、意图识别、回复质量的准确率和一致性评估。</p>
+          </div>
+          <div class="card blue">
+            <strong>线上评测</strong>
+            <p>看强窗口提示采纳率、平均对话轮次、窗口命中后留资率、过早索要率。</p>
+          </div>
+          <div class="card amber">
+            <strong>业务评测</strong>
+            <p>看新人通关率、培训周期、留资率、约看率、质检投诉率是否改善。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" id="s12">
+        <p class="kicker">12 / Delivery Plan</p>
+        <h2>工程落地建议：先做可控 MVP，再接入更完整的训练闭环</h2>
+        <div class="grid-3">
+          <div class="card blue">
+            <strong>阶段 1：MVP</strong>
+            <p>10 个高频场景、3 档难度、持续对聊、留资窗口分、实时复盘、基础红黄线。</p>
+          </div>
+          <div class="card green">
+            <strong>阶段 2：数据增强</strong>
+            <p>接入行为轨迹、强意向轮次、成功路径挖掘、案例检索和窗口分校准。</p>
+          </div>
+          <div class="card amber">
+            <strong>阶段 3：运营闭环</strong>
+            <p>教练后台、团队能力看板、个性化训练路径、真实业务指标对照。</p>
+          </div>
+        </div>
+        <div class="matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>模块</th>
+                <th>MVP 技术选型</th>
+                <th>后续增强</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>客户模拟</td>
+                <td>LLM + 场景 Prompt + 状态 JSON</td>
+                <td>RAG 检索真实客户片段，增强口吻和异议真实度</td>
+              </tr>
+              <tr>
+                <td>状态跟踪</td>
+                <td>结构化输出 + 窗口特征抽取</td>
+                <td>小模型分类器识别强意向、需求字段和负向风险</td>
+              </tr>
+              <tr>
+                <td>窗口评分</td>
+                <td>规则加权：25/20/35/20 + 负向风险</td>
+                <td>用真实留资率和 A/B 数据校准权重与阈值</td>
+              </tr>
+              <tr>
+                <td>知识资产</td>
+                <td>人工配置场景和红黄线</td>
+                <td>30w 会话自动聚类、半自动标注、专家审核入库</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="footer-note">
+          推荐先把“客户模拟”和“教练复盘”分成两个独立调用链，前者追求角色稳定，后者追求诊断准确。这样更容易控制体验，也方便后续替换模型和评估效果。
+        </p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

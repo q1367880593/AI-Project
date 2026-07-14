@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>租房经纪人 AI 陪练系统原型</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --line: #d9e0ea;
+      --ink: #1d2733;
+      --muted: #667485;
+      --soft: #eef3f8;
+      --blue: #2364aa;
+      --green: #1f8a70;
+      --amber: #b7791f;
+      --red: #c2413b;
+      --shadow: 0 10px 30px rgba(24, 39, 75, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 390px;
+      gap: 1px;
+      background: var(--line);
+      overflow: hidden;
+      transition: grid-template-columns 180ms ease;
+    }
+
+    .app.review-collapsed {
+      grid-template-columns: 300px minmax(0, 1fr) 64px;
+    }
+
+    .sidebar,
+    .workspace,
+    .review {
+      background: var(--bg);
+      min-width: 0;
+    }
+
+    .sidebar {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 2px 12px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--blue);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.15;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #3c4858;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 4px;
+      background: var(--soft);
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    .mode-tabs button,
+    .difficulty button,
+    .toolbar button,
+    .quick-actions button,
+    .primary-btn,
+    .ghost-btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 6px;
+      min-height: 34px;
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .mode-tabs button.active,
+    .difficulty button.active {
+      background: #fff;
+      color: var(--blue);
+      box-shadow: 0 1px 4px rgba(20, 30, 50, 0.12);
+      font-weight: 700;
+    }
+
+    .scenario-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scenario {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 11px;
+      cursor: pointer;
+    }
+
+    .scenario.active {
+      border-color: var(--blue);
+      box-shadow: inset 3px 0 0 var(--blue);
+    }
+
+    .scenario strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .scenario span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .difficulty {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      padding: 5px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .agent-map {
+      padding: 13px;
+    }
+
+    .agent-node {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .agent-node strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .agent-node span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .arrow {
+      color: var(--muted);
+      text-align: center;
+      font-size: 16px;
+      margin: -2px 0 5px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .customer-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #dfeaf6;
+      color: var(--blue);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .customer-head h2 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .customer-head p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-strip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #2f4052;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    .tag.green {
+      color: var(--green);
+      background: #e8f5f1;
+      border-color: #bce0d5;
+    }
+
+    .tag.amber {
+      color: var(--amber);
+      background: #fff5df;
+      border-color: #f1d18d;
+    }
+
+    .tag.red {
+      color: var(--red);
+      background: #fff0ee;
+      border-color: #efb8b4;
+    }
+
+    .chat {
+      padding: 18px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .message {
+      max-width: 72%;
+      display: grid;
+      gap: 5px;
+    }
+
+    .message.agent {
+      align-self: flex-end;
+    }
+
+    .message .name {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bubble {
+      border-radius: 8px;
+      padding: 10px 12px;
+      line-height: 1.55;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .agent .bubble {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .bubble.warn {
+      border-color: #f1d18d;
+      background: #fffaf0;
+    }
+
+    .inline-note {
+      color: var(--amber);
+      font-size: 12px;
+      padding-left: 8px;
+      border-left: 3px solid var(--amber);
+    }
+
+    .composer {
+      background: #fff;
+      border-top: 1px solid var(--line);
+      padding: 12px 18px 16px;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      overflow: auto;
+    }
+
+    .quick-actions button,
+    .ghost-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0 10px;
+      white-space: nowrap;
+    }
+
+    .quick-actions button:hover,
+    .ghost-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    textarea {
+      width: 100%;
+      height: 58px;
+      resize: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .primary-btn {
+      background: var(--blue);
+      color: #fff;
+      padding: 0 14px;
+      font-weight: 700;
+    }
+
+    .primary-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.62;
+    }
+
+    .review {
+      padding: 18px;
+      height: 100vh;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      transition: padding 180ms ease;
+    }
+
+    .review.collapsed {
+      padding: 12px 8px;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .review.collapsed .review-header {
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    .review-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .review-header h2 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .review-body {
+      min-height: 0;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .review-panel {
+      display: none;
+      gap: 12px;
+    }
+
+    .review-panel.active {
+      display: grid;
+    }
+
+    .panel-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .summary-tile {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-tile span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .summary-tile strong {
+      font-size: 18px;
+    }
+
+    .review-body::-webkit-scrollbar,
+    .chat::-webkit-scrollbar,
+    .sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .review-body::-webkit-scrollbar-thumb,
+    .chat::-webkit-scrollbar-thumb,
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #c5cfda;
+      border-radius: 999px;
+    }
+
+    .collapse-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      min-width: 34px;
+      min-height: 34px;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .collapse-btn:hover {
+      border-color: var(--blue);
+    }
+
+    .review.collapsed .review-title-text,
+    .review.collapsed .toolbar,
+    .review.collapsed .review-body {
+      display: none;
+    }
+
+    .review-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr) 38px;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar {
+      height: 8px;
+      overflow: hidden;
+      background: var(--soft);
+      border-radius: 999px;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      background: var(--blue);
+      border-radius: inherit;
+    }
+
+    .bar i.green {
+      background: var(--green);
+    }
+
+    .bar i.amber {
+      background: var(--amber);
+    }
+
+    .issue {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .issue.yellow {
+      border-color: #f1d18d;
+      background: #fffaf0;
+    }
+
+    .issue.red {
+      border-color: #efb8b4;
+      background: #fff3f1;
+    }
+
+    .issue strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .suggestion {
+      background: #f7fbff;
+      border: 1px solid #cfe0f4;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .mini-list li {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-top: 6px;
+      background: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .dot.green {
+      background: var(--green);
+    }
+
+    .dot.amber {
+      background: var(--amber);
+    }
+
+    .dot.red {
+      background: var(--red);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar button {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0 10px;
+    }
+
+    .toolbar button.active {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .review-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 4px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      flex: 0 0 174px;
+    }
+
+    .review-tabs button {
+      min-height: 30px;
+      border: 0;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .review-tabs button.active {
+      color: var(--blue);
+      background: #fff;
+      border: 0;
+      box-shadow: 0 1px 4px rgba(20, 30, 50, 0.12);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1180px) {
+      .app {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        grid-template-columns: 270px minmax(0, 1fr);
+      }
+
+      .review {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--line);
+        height: 520px;
+        position: relative;
+      }
+
+      .app.review-collapsed {
+        grid-template-columns: 270px minmax(0, 1fr);
+      }
+
+      .review.collapsed {
+        height: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        display: block;
+      }
+
+      .sidebar,
+      .review {
+        padding: 14px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .status-strip {
+        justify-content: flex-start;
+      }
+
+      .message {
+        max-width: 92%;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <h1>租房经纪人陪练</h1>
+          <span>训练、自由对聊、实时复盘</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="section-title">训练模式</p>
+        <div class="mode-tabs" aria-label="训练模式">
+          <button class="active" data-mode="训练闯关">训练闯关</button>
+          <button data-mode="自由陪练">自由陪练</button>
+        </div>
+      </div>
+
+      <div>
+        <p class="section-title">选择场景</p>
+        <div class="scenario-list">
+          <button class="scenario active" data-scenario="预算敏感客户">
+            <strong>预算敏感客户</strong>
+            <span>客户觉得贵，不愿留电话，需要解释价值并提供替代方案。</span>
+          </button>
+          <button class="scenario" data-scenario="强防备客户">
+            <strong>强防备客户</strong>
+            <span>客户担心被骚扰，对经纪人身份和房源真实性有疑虑。</span>
+          </button>
+          <button class="scenario" data-scenario="急租客户">
+            <strong>急租客户</strong>
+            <span>客户时间紧，重点训练需求判断、快速推荐和看房推进。</span>
+          </button>
+          <button class="scenario" data-scenario="通勤顾虑客户">
+            <strong>通勤顾虑客户</strong>
+            <span>客户关注地铁、步行距离和到公司总耗时。</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <p class="section-title">难度设置</p>
+        <div class="difficulty" aria-label="难度设置">
+          <button>初级</button>
+          <button class="active">中级</button>
+          <button>高级</button>
+        </div>
+      </div>
+
+      <section class="agent-map panel">
+        <p class="section-title">Agent 编排</p>
+        <div class="agent-node">
+          <strong>1. 场景导演 Agent</strong>
+          <span>读取场景、难度、客户画像，生成本局目标、隐藏顾虑和失败条件。</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="agent-node">
+          <strong>2. 客户模拟 Agent</strong>
+          <span>只负责扮演客户，保持画像一致，根据经纪人回复调整态度。</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="agent-node">
+          <strong>3. 状态跟踪 Agent</strong>
+          <span>每轮更新信任度、意向度、需求完整度、烦躁度和阶段进展。</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="agent-node">
+          <strong>4. 实时复盘 Agent</strong>
+          <span>点击按钮后输出当前诊断、问题定位、红黄线、下一句建议。</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="agent-node">
+          <strong>5. 评分教练 Agent</strong>
+          <span>阶段结束后给出分数、优秀片段、待改进片段和训练建议。</span>
+        </div>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div class="customer-head">
+          <div class="avatar">林</div>
+          <div>
+            <h2 id="customerName">林女士 · 预算敏感客户</h2>
+            <p id="customerProfile">隐藏画像：预算 4200，通勤到徐家汇，怕被频繁电话打扰，愿意看性价比高的房源。</p>
+          </div>
+        </div>
+        <div class="status-strip" id="statusStrip">
+          <span class="tag green">阶段：留资后跟进</span>
+          <span class="tag">已留手机号</span>
+          <span class="tag amber">主要顾虑：价格</span>
+          <span class="tag red">黄线 1</span>
+        </div>
+      </header>
+
+      <div class="chat" id="chatWindow" aria-label="聊天窗口">
+        <div class="message customer">
+          <div class="name">AI 客户 · 林女士</div>
+          <div class="bubble">这套 4600 还是有点超预算了，我本来想控制在 4200 左右。</div>
+        </div>
+        <div class="message agent">
+          <div class="name">经纪人</div>
+          <div class="bubble">这个价格已经很划算了，您留个电话吧，我直接给您约看。</div>
+        </div>
+        <div class="message customer">
+          <div class="name">AI 客户 · 林女士</div>
+          <div class="bubble warn">我先不用留电话吧，之前留过一次之后电话太多了。</div>
+          <div class="inline-note">系统捕捉：客户出现隐私顾虑，强推留资会降低信任度。</div>
+        </div>
+        <div class="message agent">
+          <div class="name">经纪人</div>
+          <div class="bubble">理解的，我不会频繁打扰。主要是这套房看房要提前和房东确认，我也可以顺便帮您找两套 4200 左右、通勤差不多的备选，您方便接收一下吗？</div>
+        </div>
+        <div class="message customer">
+          <div class="name">AI 客户 · 林女士</div>
+          <div class="bubble">那可以，你先发我看看。电话我刚刚留了，你别一直打就行。</div>
+        </div>
+        <div class="message agent">
+          <div class="name">经纪人</div>
+          <div class="bubble">好的，我只同步房源和看房安排。您一般工作日晚上方便看，还是周末方便？我按您的时间帮您排。</div>
+        </div>
+      </div>
+
+      <footer class="composer">
+        <div class="quick-actions">
+          <button>插入推荐话术</button>
+          <button>查看客户画像</button>
+          <button>切换房源卡</button>
+          <button>标记已留资</button>
+          <button>结束本阶段</button>
+        </div>
+        <div class="input-row">
+          <textarea id="composerText" placeholder="输入经纪人回复，继续和 AI 客户对聊..."></textarea>
+          <button class="ghost-btn" id="reviewBtn">AI 实时复盘</button>
+          <button class="primary-btn" id="sendBtn">发送</button>
+        </div>
+      </footer>
+    </section>
+
+    <aside class="review" id="reviewPanel">
+      <div class="review-header">
+        <div class="review-title">
+          <button class="collapse-btn" id="collapseReviewBtn" aria-label="收起 AI 实时复盘">›</button>
+          <h2 class="review-title-text">AI 实时复盘</h2>
+        </div>
+        <div class="toolbar review-tabs" role="tablist" aria-label="AI 实时复盘视图">
+          <button class="active" data-view="current" role="tab" aria-selected="true" aria-controls="currentView">当前诊断</button>
+          <button data-view="score" role="tab" aria-selected="false" aria-controls="scoreView">阶段评分</button>
+        </div>
+      </div>
+
+      <div class="review-body" id="reviewBody">
+        <div class="review-panel active" id="currentView" role="tabpanel">
+          <div class="panel-summary">
+            <div class="summary-tile"><span>信任度</span><strong>68</strong></div>
+            <div class="summary-tile"><span>意向度</span><strong>74</strong></div>
+            <div class="summary-tile"><span>需求完整</span><strong>62</strong></div>
+            <div class="summary-tile"><span>烦躁度</span><strong>36</strong></div>
+          </div>
+
+          <section class="card">
+            <h3>客户状态</h3>
+            <div class="metric"><span>信任度</span><div class="bar"><i class="green" style="width: 68%"></i></div><strong>68</strong></div>
+            <div class="metric"><span>意向度</span><div class="bar"><i class="green" style="width: 74%"></i></div><strong>74</strong></div>
+            <div class="metric"><span>需求完整</span><div class="bar"><i style="width: 62%"></i></div><strong>62</strong></div>
+            <div class="metric"><span>烦躁度</span><div class="bar"><i class="amber" style="width: 36%"></i></div><strong>36</strong></div>
+          </section>
+
+          <section class="card">
+            <h3>留资窗口分</h3>
+            <div class="metric"><span>用户意向</span><div class="bar"><i class="green" style="width: 74%"></i></div><strong>25%</strong></div>
+            <div class="metric"><span>需求明确</span><div class="bar"><i style="width: 62%"></i></div><strong>20%</strong></div>
+            <div class="metric"><span>留资理由</span><div class="bar"><i class="green" style="width: 86%"></i></div><strong>35%</strong></div>
+            <div class="metric"><span>时机轮次</span><div class="bar"><i class="green" style="width: 78%"></i></div><strong>20%</strong></div>
+            <div class="issue yellow">
+              <strong>综合 82 分 · 强窗口</strong>
+              客户已留资，当前窗口目标应从“索要手机号”切换为“确认看房时间”，避免重复索要造成打扰感。
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>当前判断</h3>
+            <ul class="mini-list">
+              <li><span class="dot green"></span><span>客户已经留资，可以从“拿联系方式”转向“确认看房时间”。</span></li>
+              <li><span class="dot amber"></span><span>客户仍担心被频繁打扰，后续不要连续电话催促。</span></li>
+              <li><span class="dot"></span><span>预算与当前房源有差距，需要准备 1-2 套低价备选。</span></li>
+            </ul>
+          </section>
+
+          <section class="card">
+            <h3>红黄线</h3>
+            <div class="issue yellow">
+              <strong>黄线 · 过早强推留资</strong>
+              第 2 轮客户还在表达价格顾虑，经纪人直接要求留电话，容易造成防备。
+            </div>
+            <div class="issue red">
+              <strong>红线 · 当前未命中</strong>
+              暂无虚假承诺、隐私诱导、歧视表达或房源不实表述。
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>下一步建议</h3>
+            <div class="suggestion">
+              “我先按 4200-4500 给您筛两套备选，同时这套 4600 我帮您确认下是否还有议价空间。您今天晚上 7 点后方便看，还是周六上午更方便？”
+            </div>
+            <div class="suggestion">
+              “电话我只用于看房确认和房源同步，不会频繁打扰。后续您更希望我微信发，还是电话简单确认？”
+            </div>
+          </section>
+        </div>
+
+        <div class="review-panel" id="scoreView" role="tabpanel" hidden>
+          <div class="panel-summary">
+            <div class="summary-tile"><span>需求挖掘</span><strong>70</strong></div>
+            <div class="summary-tile"><span>异议处理</span><strong>82</strong></div>
+            <div class="summary-tile"><span>推进节奏</span><strong>58</strong></div>
+            <div class="summary-tile"><span>合规表达</span><strong>92</strong></div>
+          </div>
+
+          <section class="card">
+            <h3>阶段评分</h3>
+            <div class="metric"><span>需求挖掘</span><div class="bar"><i style="width: 70%"></i></div><strong>70</strong></div>
+            <div class="metric"><span>异议处理</span><div class="bar"><i class="green" style="width: 82%"></i></div><strong>82</strong></div>
+            <div class="metric"><span>推进节奏</span><div class="bar"><i class="amber" style="width: 58%"></i></div><strong>58</strong></div>
+            <div class="metric"><span>合规表达</span><div class="bar"><i class="green" style="width: 92%"></i></div><strong>92</strong></div>
+          </section>
+
+          <section class="card">
+            <h3>已完成动作</h3>
+            <ul class="mini-list">
+              <li><span class="dot green"></span><span>回应客户不想被打扰的顾虑。</span></li>
+              <li><span class="dot green"></span><span>给出留电话的合理用途：确认看房和同步备选房源。</span></li>
+              <li><span class="dot green"></span><span>客户留资后及时转入看房时间确认。</span></li>
+            </ul>
+          </section>
+
+          <section class="card">
+            <h3>待改进</h3>
+            <div class="issue yellow">
+              <strong>推进节奏偏快</strong>
+              要电话前最好先承接预算顾虑，例如说明当前房源贵在哪里、是否有议价空间、是否有低价备选。
+            </div>
+            <div class="issue yellow">
+              <strong>需求信息不足</strong>
+              还没确认入住时间、居住人数、是否接受步行距离稍远但价格更低的备选。
+            </div>
+          </section>
+
+          <section class="card">
+            <h3>下一关建议</h3>
+            <ul class="mini-list">
+              <li><span class="dot"></span><span>进入“看房邀约”阶段，目标是拿到明确时间。</span></li>
+              <li><span class="dot"></span><span>难度提升时，客户会临时改口说还想再比较。</span></li>
+              <li><span class="dot"></span><span>重点训练：防爽约、补充备选、二次确认需求。</span></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const scenarioData = {
+      "预算敏感客户": {
+        customer: "林女士",
+        avatar: "林",
+        profile: "隐藏画像：预算 4200，通勤到徐家汇，怕被频繁电话打扰，愿意看性价比高的房源。",
+        status: [
+          ["green", "阶段：预算异议"],
+          ["", "未留手机号"],
+          ["amber", "主要顾虑：价格"],
+          ["", "第 1 轮"]
+        ],
+        opening: "这套 4600 还是有点超预算了，我本来想控制在 4200 左右。",
+        turns: [
+          {
+            agent: "理解，预算控制很重要。这套贵在离地铁近、采光和楼层都比较好。如果您预算卡在 4200，我可以同时帮您对比两套 4200-4500 的备选，您更在意价格还是通勤时间？",
+            customer: "通勤也挺重要的，我在徐家汇上班，最好别太折腾。",
+            review: {
+              stage: "需求挖掘",
+              tags: [["green", "阶段：需求确认"], ["", "未留手机号"], ["amber", "主要顾虑：价格/通勤"], ["", "第 2 轮"]],
+              metrics: { trust: 66, intent: 70, need: 58, annoyance: 18 },
+              lead: { score: 54, level: "有留资意图", intent: 70, need: 58, reason: 45, timing: 48, note: "客户补充了通勤地点，但还没有看房或接收房源的明确动作，建议继续确认需求。" },
+              judgement: ["已承接预算顾虑，没有直接硬推留资。", "客户给出通勤地点，需求明确度上升。", "下一步应确认入住时间和可接受通勤时长。"],
+              risks: [["yellow", "黄线 · 当前未命中", "暂未出现过早索要、虚假承诺或答非所问。"]],
+              suggestions: ["“您在徐家汇上班的话，我帮您按 35 分钟内通勤筛一下。入住时间大概是这个月内，还是下个月？”", "“如果价格低一点但步行到地铁多 5 分钟，您能接受吗？这样我能把备选范围放准。”"]
+            }
+          },
+          {
+            agent: "那我按到徐家汇 35 分钟内来筛。您大概什么时候入住？如果能接受步行多 5 分钟，我可以帮您把价格压到 4300 左右的房源也找出来。",
+            customer: "我下个月初入住，步行多几分钟可以接受。你能先发两套我看看吗？",
+            review: {
+              stage: "继续推荐",
+              tags: [["green", "阶段：匹配推荐"], ["", "未留手机号"], ["green", "强意向：要备选"], ["", "第 3 轮"]],
+              metrics: { trust: 72, intent: 78, need: 76, annoyance: 14 },
+              lead: { score: 68, level: "弱窗口", intent: 78, need: 76, reason: 62, timing: 58, note: "客户明确要求接收备选房源，可以委婉试探联系方式，但需要说明用途。" },
+              judgement: ["客户给出入住时间和通勤弹性，需求已较明确。", "出现继续推荐理由，可以尝试留联系方式。", "本轮适合用“发匹配房源/确认看房”作为留资理由。"],
+              risks: [["yellow", "黄线 · 需要注意", "如果直接说“留电话”，理由不足；建议说明用于发送备选和同步看房时间。"]],
+              suggestions: ["“可以，我给您发两套 4300 左右、通勤 35 分钟内的。平台消息有时会漏，您留个手机号或微信，我只同步这几套匹配房源和看房时间。”", "“我先把这套 4600 和两套 4300 左右的做个对比，方便的话留个联系方式，我发您完整信息。”"]
+            }
+          },
+          {
+            agent: "可以，我给您发两套 4300 左右、通勤 35 分钟内的。平台消息有时会漏，您留个手机号或微信，我只同步这几套匹配房源和看房时间，不会频繁打扰。",
+            customer: "那行，我手机号是 138****7261，你先发我看看。",
+            review: {
+              stage: "留资成功",
+              tags: [["green", "阶段：留资后跟进"], ["green", "已留手机号"], ["amber", "下一步：约看"], ["", "第 4 轮"]],
+              metrics: { trust: 82, intent: 86, need: 82, annoyance: 10 },
+              lead: { score: 91, level: "最佳窗口", intent: 86, need: 82, reason: 95, timing: 88, note: "客户已留资，窗口目标应切换为确认看房时间和发送备选房源。" },
+              judgement: ["留资理由清晰：发送匹配房源和同步看房安排。", "主动说明不频繁打扰，缓解隐私顾虑。", "下一步应确认看房时间，不要重复索要联系方式。"],
+              risks: [["red", "红线 · 当前未命中", "暂无虚假承诺、隐私诱导或绕平台交易表达。"]],
+              suggestions: ["“收到，我现在按您的预算和通勤筛两套发您。您今天晚上 7 点后方便看，还是周六上午更方便？”", "“我先发房源，另外这套 4600 我帮您问下是否有议价空间，有结果同步您。”"]
+            }
+          }
+        ]
+      },
+      "强防备客户": {
+        customer: "周先生",
+        avatar: "周",
+        profile: "隐藏画像：刚被其他中介频繁电话打扰，担心假房源，只有确认真实性后才愿意留联系方式。",
+        status: [["amber", "阶段：信任建立"], ["", "未留手机号"], ["amber", "主要顾虑：隐私/真实性"], ["", "第 1 轮"]],
+        opening: "你们这个房子是真的吗？我之前问过一个，电话留了之后一直被打。",
+        turns: [
+          {
+            agent: "理解，您这个顾虑很正常。我先不问您电话，先把您关心的信息说清楚：这套目前平台显示可租，我可以先帮您确认今天是否还能看。您主要想确认价格、位置，还是照片和实际是否一致？",
+            customer: "主要怕照片不一致，还有就是别一直打电话。",
+            review: {
+              stage: "信任建立",
+              tags: [["amber", "阶段：真实性确认"], ["", "未留手机号"], ["amber", "主要顾虑：隐私/房源真实性"], ["", "第 2 轮"]],
+              metrics: { trust: 56, intent: 62, need: 42, annoyance: 24 },
+              lead: { score: 41, level: "有留资意图", intent: 62, need: 42, reason: 36, timing: 40, note: "客户仍处于防备状态，暂不建议索要手机号，应先解决真实性和打扰顾虑。" },
+              judgement: ["没有马上索要电话，处理方向正确。", "客户明确隐私和真实性顾虑，信任仍偏低。", "下一步应提供可验证动作，例如确认房源状态或看房规则。"],
+              risks: [["yellow", "黄线 · 防重复打扰", "后续如要联系方式，必须说明用途和联系频率边界。"]],
+              suggestions: ["“可以，我先帮您确认房源是否还在、今天能不能看。确认后我在这里回复您，不需要您先留电话。”", "“照片一致性我会帮您重点确认，如果有差异我直接告诉您，不让您白跑。”"]
+            }
+          },
+          {
+            agent: "可以，我先帮您确认房源是否还在、今天能不能看。确认后我在这里回复您，不需要您先留电话。照片一致性我也会重点问，如果有差异我直接告诉您。",
+            customer: "这样可以。那如果能看，我今晚 7 点后有空。",
+            review: {
+              stage: "看房意愿出现",
+              tags: [["green", "阶段：看房邀约"], ["", "未留手机号"], ["green", "强意向：今晚可看"], ["", "第 3 轮"]],
+              metrics: { trust: 70, intent: 82, need: 60, annoyance: 14 },
+              lead: { score: 76, level: "强窗口", intent: 82, need: 60, reason: 88, timing: 74, note: "客户表达明确看房时间，出现强留资理由，可委婉索要联系方式用于看房确认。" },
+              judgement: ["客户主动给出今晚可看，核心留资理由成立。", "仍需保持低打扰承诺。", "适合用“房东确认和临时变动通知”索要联系方式。"],
+              risks: [["yellow", "黄线 · 留资表达要轻", "不要说“必须留电话”，建议给客户选择权。"]],
+              suggestions: ["“今晚 7 点后可以。我和房东确认看房时间后需要及时同步您，您方便留个手机号吗？只用于这次看房确认和临时变动通知。”", "“您也可以留微信，我确认完房源状态和照片一致性后，把结果发您。”"]
+            }
+          },
+          {
+            agent: "今晚 7 点后可以。我和房东确认看房时间后需要及时同步您，您方便留个手机号吗？只用于这次看房确认和临时变动通知，不会频繁联系。",
+            customer: "好，那我留一个，139****4820。你确认好了再联系我。",
+            review: {
+              stage: "留资成功",
+              tags: [["green", "阶段：留资后跟进"], ["green", "已留手机号"], ["green", "下一步：确认房源"], ["", "第 4 轮"]],
+              metrics: { trust: 82, intent: 88, need: 66, annoyance: 8 },
+              lead: { score: 93, level: "最佳窗口", intent: 88, need: 66, reason: 98, timing: 88, note: "客户因看房确认留下手机号，后续重点是履约和减少打扰。" },
+              judgement: ["留资用途明确，符合隐私边界。", "客户信任度明显提升。", "下一步应先确认房源真实性，不要立刻推荐大量无关房源。"],
+              risks: [["red", "红线 · 当前未命中", "没有承诺一定能看，也没有夸大房源真实性。"]],
+              suggestions: ["“收到，我先确认房源状态、照片一致性和今晚 7 点后的看房安排，有结果第一时间同步您。”", "“如果这套临时看不了，我会按同区域同预算给您备一套，不让您白跑。”"]
+            }
+          }
+        ]
+      },
+      "急租客户": {
+        customer: "陈先生",
+        avatar: "陈",
+        profile: "隐藏画像：三天内必须搬家，预算弹性小，愿意快速看房，但讨厌低效追问。",
+        status: [["green", "阶段：急租判断"], ["", "未留手机号"], ["green", "强需求：三天内入住"], ["", "第 1 轮"]],
+        opening: "这个房子今天能看吗？我这两三天就要搬。",
+        turns: [
+          {
+            agent: "可以，我先帮您确认今天是否能看。您时间比较紧，我先快速对齐三个关键点：预算大概多少、几个人住、最晚哪天必须入住？",
+            customer: "预算 5000 内，一个人住，最晚周日要搬。",
+            review: {
+              stage: "急租需求确认",
+              tags: [["green", "阶段：需求确认"], ["", "未留手机号"], ["green", "强意向：急租"], ["", "第 2 轮"]],
+              metrics: { trust: 68, intent: 88, need: 72, annoyance: 12 },
+              lead: { score: 72, level: "弱窗口", intent: 88, need: 72, reason: 68, timing: 52, note: "客户急租且给出关键信息，但还未确认可看时间，可先推进看房窗口。" },
+              judgement: ["问题数量控制得当，适合急租场景。", "客户需求信息快速补齐。", "下一步应给明确时间选项，不要继续泛问。"],
+              risks: [["yellow", "黄线 · 避免低效追问", "急租客户需要快速推进，继续问太多细节会降低体验。"]],
+              suggestions: ["“明白，5000 内、一个人住、周日前入住。我先按今天能看和可尽快入住筛。您今天 6 点后方便，还是明天上午方便？”", "“这套如果今天能看，我帮您直接排；同时给您备一套同预算可周日前入住的。”"]
+            }
+          },
+          {
+            agent: "明白，5000 内、一个人住、周日前入住。我先按今天能看和可尽快入住筛。这套如果今天能看，我帮您直接排；您今天 6 点后方便，还是明天上午方便？",
+            customer: "今天 6 点后可以，如果确定能看你通知我。",
+            review: {
+              stage: "看房窗口",
+              tags: [["green", "阶段：看房邀约"], ["", "未留手机号"], ["green", "强窗口：今天可看"], ["", "第 3 轮"]],
+              metrics: { trust: 74, intent: 92, need: 78, annoyance: 8 },
+              lead: { score: 88, level: "强窗口", intent: 92, need: 78, reason: 96, timing: 76, note: "客户明确今天可看，强窗口成立，应索要手机号用于看房确认。" },
+              judgement: ["客户已给出看房时间，留资理由非常充分。", "适合明确说明联系方式用于确认房东时间。", "建议同步备选，降低临时不可看的风险。"],
+              risks: [["yellow", "黄线 · 不要拖延", "10 轮内急租客户流失风险高，应立即推进确认。"]],
+              suggestions: ["“可以，我现在和房东确认 6 点后的看房。方便留个手机号吗？确认成功或时间有变我第一时间同步您。”", "“我也会备一套今天能看的同预算房源，避免这套临时约不上。”"]
+            }
+          },
+          {
+            agent: "可以，我现在和房东确认 6 点后的看房。方便留个手机号吗？确认成功或时间有变我第一时间同步您。我也备一套今天能看的同预算房源，避免这套临时约不上。",
+            customer: "可以，136****9035。你尽快确认。",
+            review: {
+              stage: "留资成功",
+              tags: [["green", "阶段：留资后跟进"], ["green", "已留手机号"], ["green", "下一步：确认看房"], ["", "第 4 轮"]],
+              metrics: { trust: 82, intent: 94, need: 82, annoyance: 6 },
+              lead: { score: 96, level: "最佳窗口", intent: 94, need: 82, reason: 100, timing: 92, note: "急租客户留资成功，后续应快速履约，避免等待过久。" },
+              judgement: ["抓住看房强窗口，留资理由明确。", "备选方案符合急租客户需求。", "下一步应给出预计反馈时间。"],
+              risks: [["red", "红线 · 当前未命中", "没有承诺一定能入住，仅承诺确认和同步。"]],
+              suggestions: ["“收到，我 10 分钟内给您反馈这套能否 6 点后看；如果约不上，我马上发备选方案。”", "“您路上大概从哪里出发？我确认好后把看房地址和路线一起发您。”"]
+            }
+          }
+        ]
+      },
+      "通勤顾虑客户": {
+        customer: "王女士",
+        avatar: "王",
+        profile: "隐藏画像：预算 4800，最关注到公司总耗时，愿意为通勤稳定略微加预算。",
+        status: [["amber", "阶段：通勤异议"], ["", "未留手机号"], ["amber", "主要顾虑：距离"], ["", "第 1 轮"]],
+        opening: "这套离地铁是不是有点远？我每天上班不想太折腾。",
+        turns: [
+          {
+            agent: "这套到地铁步行大概 12 分钟，我先不简单说远不远，主要看您到公司总耗时。您公司在哪个区域？我帮您算一下整体通勤时间。",
+            customer: "我在人民广场附近，希望总共 40 分钟以内。",
+            review: {
+              stage: "通勤需求确认",
+              tags: [["green", "阶段：需求确认"], ["", "未留手机号"], ["amber", "主要顾虑：通勤"], ["", "第 2 轮"]],
+              metrics: { trust: 70, intent: 72, need: 60, annoyance: 10 },
+              lead: { score: 56, level: "有留资意图", intent: 72, need: 60, reason: 42, timing: 48, note: "客户给出通勤目标，但尚未出现看房或接收推荐动作，继续补齐预算和入住时间。" },
+              judgement: ["没有直接否定客户顾虑，处理方式专业。", "已获得公司区域和通勤阈值。", "下一步应结合预算判断是否推荐本套或备选。"],
+              risks: [["yellow", "黄线 · 信息还不完整", "尚未确认预算和入住时间，不宜马上索要手机号。"]],
+              suggestions: ["“人民广场 40 分钟内可以，我帮您按总通勤而不是单看地铁距离筛。您预算大概多少，入住时间什么时候？”", "“如果能接受步行 12 分钟，这套总通勤大概可控；如果希望更近地铁，预算可能要上浮一些。”"]
+            }
+          },
+          {
+            agent: "人民广场 40 分钟内可以，我帮您按总通勤而不是单看地铁距离筛。您预算大概多少，入住时间什么时候？如果希望更近地铁，预算可能要上浮一些。",
+            customer: "预算 4800 左右，下个月中入住。如果通勤真的稳，可以稍微加一点。",
+            review: {
+              stage: "匹配推荐",
+              tags: [["green", "阶段：匹配推荐"], ["", "未留手机号"], ["green", "需求明确"], ["", "第 3 轮"]],
+              metrics: { trust: 76, intent: 80, need: 82, annoyance: 8 },
+              lead: { score: 70, level: "弱窗口", intent: 80, need: 82, reason: 58, timing: 60, note: "需求明确度高，但核心留资理由还不够强，建议先给方案再试探留资。" },
+              judgement: ["预算、入住时间、通勤弹性都已明确。", "客户愿意为通勤加预算，存在推荐空间。", "下一步可提出发送通勤对比方案。"],
+              risks: [["yellow", "黄线 · 避免只推一套", "客户核心关注通勤，应提供对比而不是强推当前房源。"]],
+              suggestions: ["“我给您做两类对比：一类 4800 左右通勤 40 分钟内，一类离地铁更近但预算略高。方便留个联系方式吗？我把路线和房源一起发您。”", "“这套我也帮您确认下实际步行时间，避免只看地图误差。”"]
+            }
+          },
+          {
+            agent: "我给您做两类对比：一类 4800 左右通勤 40 分钟内，一类离地铁更近但预算略高。方便留个联系方式吗？我把路线和房源一起发您，也帮您确认这套实际步行时间。",
+            customer: "可以，你发我微信吧，手机号 137****6158。",
+            review: {
+              stage: "留资成功",
+              tags: [["green", "阶段：留资后跟进"], ["green", "已留手机号"], ["green", "下一步：路线对比"], ["", "第 4 轮"]],
+              metrics: { trust: 84, intent: 86, need: 88, annoyance: 5 },
+              lead: { score: 92, level: "最佳窗口", intent: 86, need: 88, reason: 92, timing: 86, note: "客户基于通勤对比方案留资，后续应兑现路线和房源对比。" },
+              judgement: ["留资理由和客户核心顾虑高度匹配。", "话术包含具体服务产物：路线 + 房源对比。", "下一步不要泛发房源，应按通勤方案输出。"],
+              risks: [["red", "红线 · 当前未命中", "没有承诺通勤一定稳定，表述为确认和对比，风险较低。"]],
+              suggestions: ["“收到，我按 4800 左右和更近地铁两组整理，附上到人民广场的路线时间。整理好发您。”", "“如果您晚上方便，我也可以把其中一套约看时间一起确认。”"]
+            }
+          }
+        ]
+      }
+    };
+
+    let activeScenario = "预算敏感客户";
+    let turnIndex = 0;
+
+    const scenarios = document.querySelectorAll(".scenario");
+    const customerName = document.querySelector("#customerName");
+    const customerProfile = document.querySelector("#customerProfile");
+    const avatar = document.querySelector(".avatar");
+    const chatWindow = document.querySelector("#chatWindow");
+    const composerText = document.querySelector("#composerText");
+    const sendBtn = document.querySelector("#sendBtn");
+    const statusStrip = document.querySelector("#statusStrip");
+    const appShell = document.querySelector(".app");
+    const reviewPanel = document.querySelector("#reviewPanel");
+    const reviewBody = document.querySelector("#reviewBody");
+    const collapseReviewBtn = document.querySelector("#collapseReviewBtn");
+    const currentView = document.querySelector("#currentView");
+    const scoreView = document.querySelector("#scoreView");
+
+    function tagClass(type) {
+      return type ? `tag ${type}` : "tag";
+    }
+
+    function issueClass(type) {
+      return type === "red" ? "issue red" : "issue yellow";
+    }
+
+    function barClass(value, inverse = false) {
+      if (inverse) return value >= 45 ? "amber" : "green";
+      if (value >= 75) return "green";
+      if (value >= 55) return "";
+      return "amber";
+    }
+
+    function renderStatus(tags) {
+      statusStrip.innerHTML = tags.map(([type, label]) => `<span class="${tagClass(type)}">${label}</span>`).join("");
+    }
+
+    function messageTemplate(role, text, note = "") {
+      const isAgent = role === "agent";
+      const name = isAgent ? "经纪人" : `AI 客户 · ${scenarioData[activeScenario].customer}`;
+      const noteHtml = note ? `<div class="inline-note">${note}</div>` : "";
+      return `
+        <div class="message ${isAgent ? "agent" : "customer"}">
+          <div class="name">${name}</div>
+          <div class="bubble">${text}</div>
+          ${noteHtml}
+        </div>
+      `;
+    }
+
+    function appendMessage(role, text, note = "") {
+      chatWindow.insertAdjacentHTML("beforeend", messageTemplate(role, text, note));
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function metricRow(label, value, inverse = false) {
+      return `<div class="metric"><span>${label}</span><div class="bar"><i class="${barClass(value, inverse)}" style="width: ${value}%"></i></div><strong>${value}</strong></div>`;
+    }
+
+    function renderReview(review) {
+      renderStatus(review.tags);
+      currentView.innerHTML = `
+        <section class="card">
+          <h3>客户状态</h3>
+          ${metricRow("信任度", review.metrics.trust)}
+          ${metricRow("意向度", review.metrics.intent)}
+          ${metricRow("需求完整", review.metrics.need)}
+          ${metricRow("烦躁度", review.metrics.annoyance, true)}
+        </section>
+
+        <section class="card">
+          <h3>留资窗口分</h3>
+          ${metricRow("用户意向", review.lead.intent)}
+          ${metricRow("需求明确", review.lead.need)}
+          ${metricRow("留资理由", review.lead.reason)}
+          ${metricRow("时机轮次", review.lead.timing)}
+          <div class="${review.lead.score >= 75 ? "issue yellow" : "issue"}">
+            <strong>综合 ${review.lead.score} 分 · ${review.lead.level}</strong>
+            ${review.lead.note}
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>当前判断</h3>
+          <ul class="mini-list">
+            ${review.judgement.map((item, index) => `<li><span class="dot ${index === 0 ? "green" : index === 1 ? "amber" : ""}"></span><span>${item}</span></li>`).join("")}
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>红黄线</h3>
+          ${review.risks.map(([type, title, body]) => `
+            <div class="${issueClass(type)}">
+              <strong>${title}</strong>
+              ${body}
+            </div>
+          `).join("")}
+        </section>
+
+        <section class="card">
+          <h3>下一步建议</h3>
+          ${review.suggestions.map((item) => `<div class="suggestion">${item}</div>`).join("")}
+        </section>
+      `;
+      currentView.classList.add("active");
+      scoreView.classList.remove("active");
+      if (reviewBody) reviewBody.scrollTop = 0;
+    }
+
+    function initialReview(data) {
+      return {
+        tags: data.status,
+        metrics: { trust: 52, intent: 58, need: 30, annoyance: 12 },
+        lead: { score: 32, level: "低意向", intent: 58, need: 30, reason: 24, timing: 24, note: "当前还处于开场阶段，不建议直接索要手机号，应先承接客户问题并补齐需求。" },
+        judgement: ["客户已抛出核心顾虑，需要先正面回应。", "需求信息不足，暂不适合推进留资。", "建议先问一个关键问题，不要连续追问。"],
+        risks: [["yellow", "黄线 · 潜在风险", "如果开场直接索要手机号，容易触发防备或流失。"]],
+        suggestions: [data.turns[0].agent, "先围绕客户当前问题补充解释，再用一个选择题推进需求确认。"]
+      };
+    }
+
+    function prefillNextAgent() {
+      const data = scenarioData[activeScenario];
+      const nextTurn = data.turns[turnIndex];
+      composerText.value = nextTurn ? nextTurn.agent : "本场景预设会话已完成，可以切换场景重新演示。";
+      sendBtn.disabled = !nextTurn;
+      sendBtn.textContent = nextTurn ? "发送" : "已完成";
+    }
+
+    function resetScenario(name) {
+      activeScenario = name;
+      turnIndex = 0;
+      const data = scenarioData[name];
+      customerName.textContent = `${data.customer} · ${name}`;
+      customerProfile.textContent = data.profile;
+      avatar.textContent = data.avatar;
+      chatWindow.innerHTML = messageTemplate("customer", data.opening);
+      renderStatus(data.status);
+      renderReview(initialReview(data));
+      currentView.classList.add("active");
+      currentView.hidden = false;
+      scoreView.classList.remove("active");
+      scoreView.hidden = true;
+      prefillNextAgent();
+    }
+
+    scenarios.forEach((item) => {
+      item.addEventListener("click", () => {
+        scenarios.forEach((node) => node.classList.remove("active"));
+        item.classList.add("active");
+        resetScenario(item.dataset.scenario);
+      });
+    });
+
+    document.querySelectorAll(".mode-tabs button, .difficulty button").forEach((button) => {
+      button.addEventListener("click", () => {
+        button.parentElement.querySelectorAll("button").forEach((node) => node.classList.remove("active"));
+        button.classList.add("active");
+      });
+    });
+
+    document.querySelectorAll(".toolbar button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".toolbar button").forEach((node) => {
+          node.classList.remove("active");
+          node.setAttribute("aria-selected", "false");
+        });
+        button.classList.add("active");
+        button.setAttribute("aria-selected", "true");
+        const showScore = button.dataset.view === "score";
+        currentView.hidden = showScore;
+        scoreView.hidden = !showScore;
+        currentView.classList.toggle("active", !showScore);
+        scoreView.classList.toggle("active", showScore);
+      });
+    });
+
+    sendBtn.addEventListener("click", () => {
+      const data = scenarioData[activeScenario];
+      const turn = data.turns[turnIndex];
+      if (!turn) return;
+
+      const agentText = composerText.value.trim() || turn.agent;
+      appendMessage("agent", agentText);
+      composerText.value = "";
+      sendBtn.disabled = true;
+      sendBtn.textContent = "客户回复中";
+
+      window.setTimeout(() => {
+        const note = turn.review.lead.score >= 75 ? `系统捕捉：${turn.review.lead.level}，${turn.review.lead.note}` : "";
+        appendMessage("customer", turn.customer, note);
+        renderReview(turn.review);
+        document.querySelectorAll(".toolbar button").forEach((node) => {
+          node.classList.remove("active");
+          node.setAttribute("aria-selected", "false");
+        });
+        document.querySelector('[data-view="current"]').classList.add("active");
+        document.querySelector('[data-view="current"]').setAttribute("aria-selected", "true");
+        currentView.hidden = false;
+        scoreView.hidden = true;
+        currentView.classList.add("active");
+        scoreView.classList.remove("active");
+        turnIndex += 1;
+        prefillNextAgent();
+      }, 420);
+    });
+
+    collapseReviewBtn.addEventListener("click", () => {
+      const collapsed = reviewPanel.classList.toggle("collapsed");
+      appShell.classList.toggle("review-collapsed", collapsed);
+      collapseReviewBtn.textContent = collapsed ? "‹" : "›";
+      collapseReviewBtn.setAttribute("aria-label", collapsed ? "展开 AI 实时复盘" : "收起 AI 实时复盘");
+      collapseReviewBtn.title = collapsed ? "展开 AI 实时复盘" : "收起 AI 实时复盘";
+    });
+
+    document.querySelector(".quick-actions button").addEventListener("click", prefillNextAgent);
+
+    document.querySelector("#reviewBtn").addEventListener("click", () => {
+      if (reviewPanel.classList.contains("collapsed")) {
+        collapseReviewBtn.click();
+      }
+      reviewBody.scrollTo({ top: 0, behavior: "smooth" });
+      document.querySelector(".review").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    resetScenario(activeScenario);
+  </script>
+</body>
+</html>
