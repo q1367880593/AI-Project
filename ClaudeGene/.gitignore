@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+memory/task_state.json
+memory/sessions/
+TestProject/build/
+*.xcarchive
+*.ipa
+*.xcuserstate
+# 或者更精准的路径：
+xcuserdata/
+Tests/

@@ -1,0 +1,25 @@
+{
+  "project_path": "/Users/xiaolongbao/Documents/ClaudeGene/TestProject/TestProjectAndroid",
+  "project_name": "TestProjectAndroid",
+  "last_updated": "2026-06-03T16:20:27.819293",
+  "language": "Unknown",
+  "architecture": "Unknown",
+  "code_style": {
+    "prefix": null,
+    "naming": "CamelCase",
+    "comments": "Minimal",
+    "imports": []
+  },
+  "patterns": [],
+  "total_files": 0,
+  "swift_files": 0,
+  "objc_files": 0,
+  "project_file": null,
+  "files": [],
+  "modules": [],
+  "build_info": {
+    "last_build_result": "success",
+    "last_test_result": "pass",
+    "last_build_time": null
+  }
+}

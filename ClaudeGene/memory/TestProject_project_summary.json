@@ -1,0 +1,496 @@
+{
+  "project_path": "/Users/xiaolongbao/Documents/ClaudeGene/TestProject/TestProject",
+  "project_name": "TestProject",
+  "last_updated": "2026-06-03T16:20:27.819008",
+  "language": "Swift",
+  "architecture": "MVVM + SwiftUI",
+  "code_style": {
+    "prefix": null,
+    "naming": "CamelCase",
+    "comments": "MARK sections",
+    "imports": [
+      "SwiftUI",
+      "Foundation",
+      "Combine",
+      "UserNotifications"
+    ]
+  },
+  "patterns": [
+    "@AppStorage",
+    "@Environment",
+    "@State",
+    "@StateObject",
+    "NavigationStack",
+    "ObservableObject",
+    "ViewModel"
+  ],
+  "total_files": 14,
+  "swift_files": 14,
+  "objc_files": 0,
+  "project_file": null,
+  "files": [
+    {
+      "path": "AboutView.swift",
+      "description": "AboutView：UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "AboutView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+          "properties_count": 1,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [],
+      "lines": 44,
+      "last_modified": "2026-05-13T16:28:45"
+    },
+    {
+      "path": "FavoriteManager.swift",
+      "description": "FavoriteManager：ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：favoriteIDs；操作方法：toggleFavorite；辅助方法：isFavorite, favoriteProperties",
+      "language": "Swift",
+      "imports": [
+        "Foundation",
+        "Combine"
+      ],
+      "types": [
+        {
+          "name": "FavoriteManager",
+          "kind": "class",
+          "conformances": [
+            "ObservableObject"
+          ],
+          "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：favoriteIDs；操作方法：toggleFavorite；辅助方法：isFavorite, favoriteProperties",
+          "properties_count": 1,
+          "methods_count": 3
+        }
+      ],
+      "depends_on": [
+        "Property"
+      ],
+      "lines": 34,
+      "last_modified": "2026-06-03T16:11:29.981672"
+    },
+    {
+      "path": "LoginViewModel.swift",
+      "description": "LoginViewModel：ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：phoneNumber, verificationCode, isCodeSent；辅助方法：sendVerificationCode, login, startCountdown",
+      "language": "Swift",
+      "imports": [
+        "Foundation",
+        "Combine"
+      ],
+      "types": [
+        {
+          "name": "LoginViewModel",
+          "kind": "class",
+          "conformances": [
+            "ObservableObject"
+          ],
+          "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：phoneNumber, verificationCode, isCodeSent；辅助方法：sendVerificationCode, login, startCountdown",
+          "properties_count": 11,
+          "methods_count": 3
+        }
+      ],
+      "depends_on": [],
+      "lines": 70,
+      "last_modified": "2026-05-21T16:13:29.485013"
+    },
+    {
+      "path": "TestProjectApp.swift",
+      "description": "TestProjectApp：struct，遵循 App",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "TestProjectApp",
+          "kind": "struct",
+          "conformances": [
+            "App"
+          ],
+          "description": "struct，遵循 App",
+          "properties_count": 1,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "ContentView"
+      ],
+      "lines": 18,
+      "last_modified": "2026-05-13T15:30:28"
+    },
+    {
+      "path": "SettingsView.swift",
+      "description": "SettingsView：UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List 展示数据；使用 Stack 布局；包含弹窗交互",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI",
+        "Combine"
+      ],
+      "types": [
+        {
+          "name": "SettingsView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List 展示数据；使用 Stack 布局；包含弹窗交互",
+          "properties_count": 1,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "AboutView",
+        "PrivacyPolicyView",
+        "SettingsViewModel"
+      ],
+      "lines": 57,
+      "last_modified": "2026-05-26T15:20:46.291689"
+    },
+    {
+      "path": "Property.swift",
+      "description": "Property：struct，遵循 Identifiable, Equatable；辅助方法：mockData",
+      "language": "Swift",
+      "imports": [
+        "Foundation"
+      ],
+      "types": [
+        {
+          "name": "Property",
+          "kind": "struct",
+          "conformances": [
+            "Identifiable",
+            "Equatable"
+          ],
+          "description": "struct，遵循 Identifiable, Equatable；辅助方法：mockData",
+          "properties_count": 7,
+          "methods_count": 1
+        }
+      ],
+      "depends_on": [],
+      "lines": 67,
+      "last_modified": "2026-05-21T10:39:23.961130"
+    },
+    {
+      "path": "PropertyListViewModel.swift",
+      "description": "PropertyListViewModel：ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：properties, isLoading, errorMessage；操作方法：loadProperties, refresh",
+      "language": "Swift",
+      "imports": [
+        "Foundation",
+        "Combine"
+      ],
+      "types": [
+        {
+          "name": "PropertyListViewModel",
+          "kind": "class",
+          "conformances": [
+            "ObservableObject"
+          ],
+          "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：properties, isLoading, errorMessage；操作方法：loadProperties, refresh",
+          "properties_count": 3,
+          "methods_count": 2
+        }
+      ],
+      "depends_on": [
+        "Property"
+      ],
+      "lines": 27,
+      "last_modified": "2026-05-21T10:39:27.699315"
+    },
+    {
+      "path": "SettingsViewModel.swift",
+      "description": "SettingsViewModel：ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：cacheSize；使用 @AppStorage 持久化存储；操作方法：toggleNotification, clearCache；辅助方法：checkNotificationStatus, calculateCacheSize, getDirectorySize",
+      "language": "Swift",
+      "imports": [
+        "Foundation",
+        "UserNotifications",
+        "SwiftUI",
+        "Combine"
+      ],
+      "types": [
+        {
+          "name": "SettingsViewModel",
+          "kind": "class",
+          "conformances": [
+            "ObservableObject"
+          ],
+          "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；发布属性：cacheSize；使用 @AppStorage 持久化存储；操作方法：toggleNotification, clearCache；辅助方法：checkNotificationStatus, calculateCacheSize, getDirectorySize",
+          "properties_count": 3,
+          "methods_count": 5
+        }
+      ],
+      "depends_on": [],
+      "lines": 104,
+      "last_modified": "2026-05-13T16:41:56"
+    },
+    {
+      "path": "LoginView.swift",
+      "description": "LoginView：UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "LoginView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+          "properties_count": 1,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "LoginViewModel"
+      ],
+      "lines": 102,
+      "last_modified": "2026-05-21T16:18:14.069479"
+    },
+    {
+      "path": "PropertyDetailView.swift",
+      "description": "PropertyDetailView：UI 组件/View，定义界面布局和交互；使用 Stack 布局；包含弹窗交互；InfoItem：UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "PropertyDetailView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；使用 Stack 布局；包含弹窗交互",
+          "properties_count": 2,
+          "methods_count": 0
+        },
+        {
+          "name": "InfoItem",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+          "properties_count": 3,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "FavoriteManager",
+        "Property"
+      ],
+      "lines": 113,
+      "last_modified": "2026-06-03T16:12:38.157088"
+    },
+    {
+      "path": "FavoriteListView.swift",
+      "description": "FavoriteListView：UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List + ForEach 展示列表数据；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "FavoriteListView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List + ForEach 展示列表数据；使用 Stack 布局",
+          "properties_count": 1,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "FavoriteManager",
+        "Property",
+        "PropertyCard",
+        "PropertyDetailView"
+      ],
+      "lines": 45,
+      "last_modified": "2026-06-03T16:11:38.441397"
+    },
+    {
+      "path": "PropertyListView.swift",
+      "description": "PropertyListView：UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List + ForEach 展示列表数据；PropertyCard：UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "PropertyListView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List + ForEach 展示列表数据",
+          "properties_count": 1,
+          "methods_count": 0
+        },
+        {
+          "name": "PropertyCard",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；使用 Stack 布局",
+          "properties_count": 2,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "Property",
+        "PropertyDetailView",
+        "PropertyListViewModel"
+      ],
+      "lines": 83,
+      "last_modified": "2026-05-21T10:39:38.840858"
+    },
+    {
+      "path": "ContentView.swift",
+      "description": "ContentView：UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List 展示数据；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "ContentView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；包含导航跳转；使用 List 展示数据；使用 Stack 布局",
+          "properties_count": 1,
+          "methods_count": 0
+        }
+      ],
+      "depends_on": [
+        "FavoriteListView",
+        "LoginView",
+        "PropertyListView",
+        "SettingsView"
+      ],
+      "lines": 52,
+      "last_modified": "2026-06-03T16:12:58.815442"
+    },
+    {
+      "path": "PrivacyPolicyView.swift",
+      "description": "PrivacyPolicyView：UI 组件/View，定义界面布局和交互；辅助方法：sectionTitle, sectionBody；使用 Stack 布局",
+      "language": "Swift",
+      "imports": [
+        "SwiftUI"
+      ],
+      "types": [
+        {
+          "name": "PrivacyPolicyView",
+          "kind": "struct",
+          "conformances": [
+            "View"
+          ],
+          "description": "UI 组件/View，定义界面布局和交互；辅助方法：sectionTitle, sectionBody；使用 Stack 布局",
+          "properties_count": 1,
+          "methods_count": 2
+        }
+      ],
+      "depends_on": [],
+      "lines": 61,
+      "last_modified": "2026-05-26T15:20:37.166760"
+    }
+  ],
+  "modules": [
+    {
+      "name": "About",
+      "description": "UI 组件/View，定义界面布局和交互",
+      "files": [
+        "AboutView.swift"
+      ],
+      "file_count": 1
+    },
+    {
+      "name": "Content",
+      "description": "UI 组件/View，定义界面布局和交互",
+      "files": [
+        "ContentView.swift"
+      ],
+      "file_count": 1
+    },
+    {
+      "name": "Core",
+      "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；struct，遵循 App；struct，遵循 Identifiable, Equatable",
+      "files": [
+        "FavoriteManager.swift",
+        "Property.swift",
+        "TestProjectApp.swift"
+      ],
+      "file_count": 3
+    },
+    {
+      "name": "FavoriteList",
+      "description": "UI 组件/View，定义界面布局和交互",
+      "files": [
+        "FavoriteListView.swift"
+      ],
+      "file_count": 1
+    },
+    {
+      "name": "Login",
+      "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；UI 组件/View，定义界面布局和交互",
+      "files": [
+        "LoginView.swift",
+        "LoginViewModel.swift"
+      ],
+      "file_count": 2
+    },
+    {
+      "name": "PrivacyPolicy",
+      "description": "UI 组件/View，定义界面布局和交互",
+      "files": [
+        "PrivacyPolicyView.swift"
+      ],
+      "file_count": 1
+    },
+    {
+      "name": "PropertyDetail",
+      "description": "UI 组件/View，定义界面布局和交互；UI 组件/View，定义界面布局和交互",
+      "files": [
+        "PropertyDetailView.swift"
+      ],
+      "file_count": 1
+    },
+    {
+      "name": "PropertyList",
+      "description": "ObservableObject 视图模型，管理数据状态和业务逻辑；UI 组件/View，定义界面布局和交互；UI 组件/View，定义界面布局和交互",
+      "files": [
+        "PropertyListView.swift",
+        "PropertyListViewModel.swift"
+      ],
+      "file_count": 2
+    },
+    {
+      "name": "Settings",
+      "description": "UI 组件/View，定义界面布局和交互；ObservableObject 视图模型，管理数据状态和业务逻辑",
+      "files": [
+        "SettingsView.swift",
+        "SettingsViewModel.swift"
+      ],
+      "file_count": 2
+    }
+  ],
+  "build_info": {
+    "last_build_result": "success",
+    "last_test_result": "pass",
+    "last_build_time": null
+  }
+}

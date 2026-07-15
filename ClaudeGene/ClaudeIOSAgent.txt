@@ -1,0 +1,2075 @@
+Last login: Wed May 13 15:21:19 on ttys034
+xiaolongbao@xiaolongbaodeMacBook-Pro ~ % cd Documents/ClaudeGene 
+xiaolongbao@xiaolongbaodeMacBook-Pro ClaudeGene % claude
+╭─── Claude Code v2.1.140 ─────────────────────────────────────────────────────╮
+│                                               │ Tips for getting started     │
+│                 Welcome back!                 │ Ask Claude to create a new … │
+│                                               │ ──────────────────────────── │
+│                   ▗ ▗   ▖ ▖                   │ What's new                   │
+│                                               │ Check the Claude Code chang… │
+│                     ▘▘ ▝▝                     │                              │
+│                                               │                              │
+│   Opus 4.7 (1M context) · API Usage Billing   │                              │
+│            ~/Documents/ClaudeGene             │                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+ ⚠Auth conflict: Both a token (ANTHROPIC_AUTH_TOKEN) and an API key 
+  (ANTHROPIC_API_KEY) are set. This may lead to unexpected behavior.
+    · Trying to use ANTHROPIC_AUTH_TOKEN? Unset the ANTHROPIC_API_KEY 
+│                                    │ Improved Agent tool `subagent_type` ma… │
+│                ▘▘ ▝▝               │ Updated agent color palette             │
+│                                    │ Fixed `/goal` silently hanging when `d… │
+│   Sonnet 4.6 · API Usage Billing   │ /release-notes for more                 │
+│       ~/Documents/ClaudeGene       │                                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+ ⚠Auth conflict: Both a token (ANTHROPIC_AUTH_TOKEN) and an API key
+  (ANTHROPIC_API_KEY) are set. This may lead to unexpected behavior.
+    · Trying to use ANTHROPIC_AUTH_TOKEN? Unset the ANTHROPIC_API_KEY
+    environment variable, or claude /logout then say "No" to the API key
+    approval before login.
+    · Trying to use ANTHROPIC_API_KEY? Unset the ANTHROPIC_AUTH_TOKEN
+    environment variable.
+
+❯ /model                                                                        
+  ⎿  Set model to Sonnet 4.6
+
+❯  我想创建一个自动代码Agent，能完成需求任务拆解、代码编写(OC、SwiftUI)、集成测 
+  试、发布的全流程，Master负责拆解任务、决策路径、任务分配，子Agent负责具体任务 
+  执行，需要保留上下文记忆                                                      
+  
+⏺ 这是一个典型的多智能体编排系统，推荐基于 Claude API + 工具调用 构建：Master
+  Agent 用结构化输出拆解任务并调度子 Agent，子 Agent
+  各自持有专属系统提示（需求分析、OC/SwiftUI
+  编码、测试、发布），通过共享的文件系统或 JSON 状态文件传递上下文记忆。
+
+  主要权衡：文件持久化记忆实现简单但并发写入需加锁；若需真正并行执行子
+  Agent，需要引入任务队列（如 asyncio + 信号量），复杂度会上升。
+  
+  大致架构如下：
+
+  需求输入
+     ↓
+  Master Agent（任务拆解 + 路由决策）
+     ├── RequirementsAgent  → 需求细化、验收标准
+     ├── CodeAgent(OC/SwiftUI) → 代码生成、文件写入
+     ├── TestAgent          → 单测/集成测试生成 + xcodebuild
+     └── ReleaseAgent       → fastlane / App Store Connect API
+           ↑↓
+     共享上下文（memory/*.json + task_state.json）
+
+  几个关键问题确认后可以开始实现：
+
+  1. 运行环境：本地 CLI 脚本，还是需要 Web 服务接口？
+  2. Xcode 项目：已有项目结构，还是从零生成？
+  3. 发布目标：TestFlight、App Store，还是企业内部分发？
+  4. 并发需求：子 Agent 是串行执行就够，还是需要并行？
+
+✻ Cogitated for 38s
+
+❯ 1、本地CLI； 2、已有项目；3、ADHOC；4、串行就可以                             
+
+⏺ Entered plan mode
+  Claude is now exploring and designing an implementation approach.
+
+⏺ 先探索一下当前工作目录的结构。
+
+⏺ Explore(探索项目目录结构)
+  ⎿  Done (2 tool uses · 20.7k tokens · 8s)
+  (ctrl+o to expand)
+     
+⏺ 目录是空的，这是一个全新项目。我需要了解一些关键信息再设计方案。
+
+⏺ User declined to answer questions
+  ⎿  · 你的 iOS 项目在哪个路径？Agent 需要知道项目位置才能读写代码文件。 
+     (稍后告诉你（先设计框架） / 我现在提供路径)
+     · ADHOC 发布用什么工具？ (fastlane / xcodebuild + xcrun / 两者都支持)
+     · 需求输入方式是什么？ (自然语言文本（命令行输入） / Markdown/PRD 文件 / 
+     两者都支持)
+     
+❯ 路径是：TestProject，发布工具xcodebuild，需求输入方式：两者都支持             
+
+⏺ Now let me design the plan. Since the directory is empty and there's no
+  TestProject yet, I think "TestProject" is the name they'll use for their iOS
+  project, or it might be an existing project elsewhere. Let me assume it's a
+  placeholder name and the agent will accept the project path as a parameter.
+
+  Let me now design the full architecture and write the plan.
+
+  Architecture Design
+  
+  Project Structure
+
+  /Users/xiaolongbao/Documents/ClaudeGene/
+  ├── agent/
+  │   ├── main.py              # CLI entry point
+  │   ├── master_agent.py      # Master orchestrator
+  │   ├── agents/
+  │   │   ├── requirements_agent.py  # Requirements analysis
+  │   │   ├── code_agent.py          # OC/SwiftUI code generation
+  │   │   ├── test_agent.py          # Test generation + xcodebuild test
+  │   │   └── release_agent.py       # ADHOC build + export
+  │   ├── tools/
+  │   │   ├── file_tools.py          # File read/write operations
+  │   │   ├── xcode_tools.py         # xcodebuild wrapper
+  │   │   └── git_tools.py           # Git operations
+  │   ├── memory/
+  │   │   ├── context_manager.py     # Context persistence
+  │   │   └── task_state.py          # Task state management
+  │   └── config.py                  # Configuration
+  ├── memory/                        # Runtime memory files
+  │   ├── task_state.json
+  │   └── context/
+  ├── requirements.txt
+  └── README.md
+
+  Key Components
+
+  1. CLI Entry (main.py)
+    - python main.py --project /path/to/project --requirement "需求描述"
+    - python main.py --project /path/to/project --prd requirements.md
+  2. Master Agent
+    - Uses Claude API with tool_use
+    - Decomposes requirements into structured tasks
+    - Routes tasks to appropriate sub-agents
+    - Maintains overall state
+  3. Sub-agents (each is a separate Claude API call with specialized system
+  prompt)
+    - RequirementsAgent: Analyzes requirements, generates acceptance criteria
+    - CodeAgent: Generates OC/SwiftUI code, writes files to project
+    - TestAgent: Generates unit/UI tests, runs xcodebuild test
+    - ReleaseAgent: Runs xcodebuild archive + exportArchive for ADHOC
+  4. Memory/Context System
+    - task_state.json: Current task queue, status, results
+    - context/session_*.json: Per-session context
+    - Each agent reads previous agent's output from state file
+  5. Tools available to agents
+    - read_file(path): Read project files
+    - write_file(path, content): Write code to project
+    - run_command(cmd): Execute shell commands
+    - list_files(dir): List project structure
+    - search_in_files(pattern, dir): Search code
+
+  Flow
+
+  main.py
+    → Master Agent (decompose requirements)
+      → RequirementsAgent (analyze + acceptance criteria)
+      → CodeAgent (generate + write code files)
+      → TestAgent (generate tests + run xcodebuild test)
+      → ReleaseAgent (xcodebuild archive + export ADHOC)
+    → Report results
+
+  Memory/Context Persistence
+
+  - Each agent writes its output to task_state.json
+  - Next agent reads previous outputs as context
+  - Session history stored in memory/context/
+  - Master agent maintains full conversation history
+
+  Let me write this plan to the plan file.
+
+
+  好的，现在我来设计完整方案并写入计划文件。
+
+⏺ Updated plan
+  ⎿  /plan to preview
+
+────────────────────────────────────────────────────────────────────────────────
+ Ready to code?
+     
+ Here is Claude's plan:
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ ClaudeGene — iOS 多智能体自动化 Agent 系统
+
+ Context
+
+ 在 /Users/xiaolongbao/Documents/ClaudeGene 目录下，从零构建一个本地 CLI
+ 多智能体系统，能够接收 iOS 需求（自然语言或 PRD
+ 文件），自动完成需求拆解、OC/SwiftUI 代码编写、集成测试、ADHOC
+ 打包发布的全流程。串行执行，基于 Claude API +
+ 工具调用，文件系统持久化上下文记忆。
+
+ ---
+ 目录结构
+
+ ClaudeGene/
+ ├── main.py                    # CLI 入口
+ ├── config.py                  # 全局配置（模型、路径等）
+ ├── requirements.txt
+ ├── agents/
+ │   ├── master_agent.py        # 主编排器：任务拆解 + 路由
+ │   ├── requirements_agent.py  # 需求细化 + 验收标准
+ │   ├── code_agent.py          # OC/SwiftUI 代码生成 + 写文件
+ │   ├── test_agent.py          # 测试生成 + xcodebuild test
+ │   └── release_agent.py       # xcodebuild archive + exportArchive ADHOC
+ ├── tools/
+ │   ├── file_tools.py          # read_file / write_file / list_files /
+ search_files
+ │   └── xcode_tools.py         # run_xcodebuild / find_scheme / find_workspace
+ ├── memory/
+ │   ├── context_manager.py     # 读写 task_state.json + session 历史
+ │   └── task_state.json        # 运行时任务状态（自动生成）
+ └── export_options.plist        # ADHOC 导出配置模板
+
+ ---
+ 核心设计
+
+ 1. CLI 入口 (main.py)
+
+ python main.py --project /path/to/TestProject \
+                --requirement "新增用户登录页面，支持手机号+验证码"
+
+ python main.py --project /path/to/TestProject \
+                --prd requirements.md
+ 参数：
+ - --project：Xcode 项目根目录（必填）
+ - --requirement：自然语言需求（与 --prd 二选一）
+ - --prd：PRD Markdown 文件路径（与 --requirement 二选一）
+ - --skip-release：只跑到测试，不打包（可选）
+ - --dry-run：只输出计划，不执行代码写入（可选）
+
+ 2. Master Agent (agents/master_agent.py)
+
+ - 系统提示：iOS 技术负责人角色，负责任务拆解和决策
+ - 输入：原始需求 + 项目结构快照
+ - 输出：结构化任务列表（JSON），写入 task_state.json
+ - 工具：list_files、read_file（读取项目结构）
+ - 决策：根据需求判断是否需要新建文件 or 修改已有文件，选择 OC 还是 SwiftUI
+
+ 任务列表格式：
+ {
+   "session_id": "uuid",
+   "requirement": "...",
+   "tasks": [
+     {"id": 1, "type": "requirements", "description": "...", "status":
+ "pending"},
+     {"id": 2, "type": "code", "files": ["LoginVC.m", "LoginVC.h"], "status":
+ "pending"},
+     {"id": 3, "type": "test", "status": "pending"},
+     {"id": 4, "type": "release", "status": "pending"}
+   ]
+ }
+
+ 3. Requirements Agent (agents/requirements_agent.py)
+
+ - 系统提示：iOS 产品/技术分析师
+ - 输入：原始需求 + Master 的任务描述
+ - 输出：细化需求文档（验收标准、涉及文件、技术方案），写入 memory/
+ - 工具：read_file（读取相关已有代码）
+
+ 4. Code Agent (agents/code_agent.py)
+
+ - 系统提示：资深 iOS 工程师，熟悉 OC 和 SwiftUI
+ - 输入：细化需求 + 项目现有代码上下文
+ - 工具：read_file、write_file、list_files、search_files
+ - 行为：
+   - 先读取相关文件理解现有代码风格
+   - 生成代码后调用 write_file 写入项目
+   - 支持多轮工具调用（先读后写）
+ - 输出：写入的文件列表 + 变更摘要
+
+ 5. Test Agent (agents/test_agent.py)
+
+ - 系统提示：iOS 测试工程师
+ - 输入：变更文件列表 + 验收标准
+ - 工具：read_file、write_file、run_xcodebuild
+ - 行为：
+   a. 生成单元测试/UI 测试文件，写入 Tests 目录
+   b. 调用 xcodebuild test 运行测试
+   c. 解析测试结果，失败时反馈给 Master（当前版本：记录到 state，不自动重试）
+ - 输出：测试结果（pass/fail + 详情）
+
+ 6. Release Agent (agents/release_agent.py)
+
+ - 系统提示：iOS DevOps 工程师
+ - 输入：项目路径 + scheme + 测试通过状态
+ - 工具：run_xcodebuild、read_file（读取 Info.plist 获取版本号）
+ - 行为：
+   a. xcodebuild archive 生成 .xcarchive
+   b. xcodebuild -exportArchive 用 ADHOC 配置导出 .ipa
+   c. 输出 .ipa 路径和构建信息
+ - 输出：.ipa 文件路径 + 版本信息
+
+ ---
+ 上下文记忆机制
+
+ task_state.json（运行时状态）
+
+ 每个 Agent 执行完毕后更新对应 task 的 status 和 output：
+ {
+   "session_id": "...",
+   "project_path": "...",
+   "requirement": "...",
+   "tasks": [...],
+   "agent_outputs": {
+     "requirements": {"acceptance_criteria": [...], "files_to_modify": [...]},
+     "code": {"written_files": [...], "summary": "..."},
+     "test": {"result": "pass", "details": "..."},
+     "release": {"ipa_path": "...", "version": "..."}
+   }
+ }
+
+ context_manager.py
+
+ - load_state() / save_state()：读写 task_state.json
+ - get_agent_context(agent_type)：为每个 Agent 组装上下文（前序 Agent 的输出）
+ - save_session_history()：每次运行结束后归档到 memory/sessions/
+
+ ---
+ 工具实现
+
+ file_tools.py
+
+ - read_file(path) → str
+ - write_file(path, content) → bool
+ - list_files(dir, extensions) → list[str]（支持过滤 .m/.h/.swift）
+ - search_files(pattern, dir) → list[{file, line, content}]
+
+ xcode_tools.py
+
+ - find_workspace_or_project(dir) → str（自动检测 .xcworkspace 或 .xcodeproj）
+ - find_schemes(project_path) → list[str]
+ - run_xcodebuild(args) → {returncode, stdout, stderr}
+ - build_test_command(project, scheme, destination) → str
+ - build_archive_command(project, scheme, archive_path) → str
+ - build_export_command(archive_path, export_path, options_plist) → str
+
+ ---
+ 关键技术选型
+
+ ┌──────────────┬─────────────────────────────────┬──────────────────────┐
+ │     项目     │              选择               │         原因         │
+ ├──────────────┼─────────────────────────────────┼──────────────────────┤
+ │ Claude 模型  │ claude-sonnet-4-6               │ 代码能力强，成本合理 │
+ ├──────────────┼─────────────────────────────────┼──────────────────────┤
+ │ API 调用方式 │ anthropic Python SDK + tool_use │ 原生支持工具调用     │
+ ├──────────────┼─────────────────────────────────┼──────────────────────┤
+ │ 状态持久化   │ JSON 文件                       │ 简单可读，无需数据库 │
+ ├──────────────┼─────────────────────────────────┼──────────────────────┤
+ │ 并发         │ 串行                            │ 用户要求，实现简单   │
+ ├──────────────┼─────────────────────────────────┼──────────────────────┤
+ │ 包管理       │ pip + requirements.txt          │ 标准 Python 项目     │
+ └──────────────┴─────────────────────────────────┴──────────────────────┘
+
+ ---
+ 需要创建的文件（共 12 个）
+
+ 1. main.py — CLI 入口 + argparse
+ 2. config.py — 模型名、路径常量、工具定义
+ 3. requirements.txt — anthropic>=0.40.0
+ 4. agents/master_agent.py
+ 5. agents/requirements_agent.py
+ 6. agents/code_agent.py
+ 7. agents/test_agent.py
+ 8. agents/release_agent.py
+ 9. tools/file_tools.py
+ 10. tools/xcode_tools.py
+ 11. memory/context_manager.py
+ 12. export_options.plist — ADHOC 导出配置模板
+
+     12. export_options.plist — ADHOC 导出配置模板
+ 
+     ---
+     验证方式
+ 
+     1. python main.py --project /path/to/TestProject --requirement "测试需求" 
+     --dry-run
+     → 验证 Master Agent 能正确拆解任务并输出 task_state.json，不写入代码
+     2. python main.py --project /path/to/TestProject --requirement 
+     "新增一个空白 ViewController" --skip-release
+     → 验证 Requirements + Code + Test Agent 串行执行，代码写入项目，测试运行
+     3. python main.py --project /path/to/TestProject --prd sample.md
+     → 验证 PRD 文件读取路径
+     4. 检查 memory/task_state.json 内容是否完整记录每个 Agent 的输出
+ 
+⏺ Auto mode lets Claude handle permission prompts automatically — Claude
+   checks each tool call for risky actions and prompt injection before 
+  executing. Actions Claude identifies as safe are executed, while 
+  actions Claude identifies as risky are blocked and Claude may try a 
+  different approach. Ideal for long-running tasks. Sessions are 
+  slightly more expensive. Claude can make mistakes that allow harmful 
+  commands to run, it's recommended to only use in isolated 
+  environments. Shift+Tab to change mode.
+
+⏺ 开始创建所有文件，先并行创建基础层。
+
+⏺ Bash(mkdir -p /Users/xiaolongbao/Documents/ClaudeGene/agents
+      /Users/xiaolongbao/Documents/ClaudeGene/tools
+      /Users/xiaolongbao/Documents/ClaudeGene/memory/sessions &&…)
+  ⎿  Done
+     
+⏺ Write(requirements.txt)
+  ⎿  Wrote 1 lines to requirements.txt
+      1 anthropic>=0.40.0
+
+⏺ Write(config.py)
+  ⎿  Wrote 88 lines to config.py
+       1 import os
+       2 
+       3 MODEL = "claude-sonnet-4-6"
+       4 MAX_TOKENS = 8192
+       5 
+       6 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+       7 
+       8 # Tool definitions shared across agents
+       9 FILE_TOOLS = [
+      10     {
+     … +93 lines (ctrl+o to expand)
+
+⏺ Write(tools/file_tools.py)
+  ⎿  Wrote 72 lines to tools/file_tools.py
+       1 import os
+       2 import re
+       3 import subprocess
+       4 
+       5 
+       6 def read_file(path: str) -> str:
+       7     try:
+       8         with open(path, "r", encoding="utf-8") as f:
+       9             return f.read()
+      10     except FileNotFoundError:
+     … +72 lines (ctrl+o to expand)
+
+⏺ Write(tools/xcode_tools.py)
+  ⎿  Wrote 79 lines to tools/xcode_tools.py
+       2 import subprocess
+       3 import glob
+       4 
+       6 def find_workspace_or_project(directory: str) -> tuple[str, str]
+         :
+       7     """Returns (path, type) where type is 'workspace' or 'projec
+       8     workspaces = glob.glob(os.path.join(directory, "*.xcworkspac
+         e"))
+       9     if workspaces:
+      10         return workspaces[0], "workspace"
+     … +77 lines (ctrl+o to expand)
+
+⏺ Write(memory/context_manager.py)
+  ⎿  Wrote 68 lines to memory/context_manager.py
+       2 import oson
+       3 import uuid
+       4 from datetime import datetime
+       5 
+       6 STATE_FILE = os.path.join(os.path.dirname(__file__), "task_state
+       7 SESSIONS_DIR = os.path.join(os.path.dirname(__file__), "sessions
+         ")
+       8 
+       9 
+      10 def new_state(project_path: str, requirement: str) -> dict:
+     … +64 lines (ctrl+o to expand)
+
+⏺ 现在实现五个 Agent，先写一个共用的 base 运行循环，再写各 Agent。
+
+⏺ Write(agents/base.py)
+  ⎿  Wrote 91 lines to agents/base.py
+      1 """Shared agentic loop: send messages, handle tool calls, return 
+        final text."""
+      2 import anthropic
+      3 import json
+      4 from config import MODEL, MAX_TOKENS, ANTHROPIC_API_KEY
+      5 from tools.file_tools import dispatch_file_tool
+      6 from tools.xcode_tools import dispatch_xcode_tool
+      7 
+      8 _client = None
+      9 
+     … +86 lines (ctrl+o to expand)
+
+⏺ Write(agents/master_agent.py)
+  ⎿  Wrote 80 lines to agents/master_agent.py
+         list."""r Agent: decomposes requirements into a structured task 
+       2 import json
+       3 from agents.base import run_agent
+       5 from tools.xcode_tools import find_workspace_or_project, find_sc
+         hemes
+       6 
+         解为可执行的工程任务。 一位资深 iOS 技术负责人，负责将产品需求拆
+       8 
+       9 你的职责：
+      10 1. 分析 iOS 项目结构，理解现有代码架构
+     … +76 lines (ctrl+o to expand)
+
+⏺ Write(agents/requirements_agent.py)
+  ⎿  Wrote 68 lines to agents/requirements_agent.py
+         nce criteria."""Agent: refines requirements and produces accepta
+       2 import json
+       3 from agents.base import run_agent
+       5 from memory.context_manager import get_agent_context, set_agent_
+         output
+       6 
+         细化为可执行的工程规格。 位 iOS 产品技术分析师，负责将粗粒度需求
+       8 
+       9 你的职责：
+      10 1. 阅读项目中相关的已有代码，理解现有实现
+     … +67 lines (ctrl+o to expand)
+
+⏺ Write(agents/code_agent.py)
+  ⎿  Wrote 94 lines to agents/code_agent.py
+          project."""t: generates OC/SwiftUI code and writes files to the
+       2 import json
+       4 from config import FILE_TOOLSgent
+       5 from memory.context_manager import get_agent_context, set_agent_
+         output
+       7 SYSTEM_PROMPT = """你是一位资深 iOS 工程师，精通 Objective-C 和 
+         SwiftUI。
+       9 你的职责：
+      10 1. 先用 read_file 和 list_files 工具阅读项目现有代码，理解代码风
+         格和架构
+     … +96 lines (ctrl+o to expand)
+
+⏺ Write(agents/test_agent.py)
+  ⎿  Wrote 94 lines to agents/test_agent.py
+       2 import jsonnt: generates tests and runs xcodebuild test."""
+       3 from agents.base import run_agent
+       4 from config import FILE_TOOLS, XCODE_TOOLS
+         outputemory.context_manager import get_agent_context, set_agent_
+       6 from tools.xcode_tools import find_workspace_or_project, find_sc
+         hemes
+       8 SYSTEM_PROMPT = """你是一位 iOS 测试工程师，负责为新增/修改的代
+         码编写测试并运行。
+       9 
+      10 你的职责：
+     … +94 lines (ctrl+o to expand)
+
+⏺ Write(agents/release_agent.py)
+  ⎿  Wrote 118 lines to agents/release_agent.py
+         istribution."""t: xcodebuild archive + exportArchive for ADHOC d
+       2 import json
+       4 import tempfile
+       5 from agents.base import run_agent
+       6 from config import FILE_TOOLS, XCODE_TOOLS
+         outputemory.context_manager import get_agent_context, set_agent_
+       8 from tools.xcode_tools import find_workspace_or_project, find_sc
+       9 hemes, run_xcodebuild
+      10 EXPORT_OPTIONS_TEMPLATE = """<?xml version="1.0" encoding="UTF-8
+         "?>
+     … +121 lines (ctrl+o to expand)
+
+⏺ Write(main.py)
+  ⎿  Wrote 156 lines to main.py
+       2 """ClaudeGene — iOS Multi-Agent Automation CLI
+       3 
+       4 Usage:
+         录页面"n main.py --project /path/to/MyApp --requirement "新增登
+       6   python main.py --project /path/to/MyApp --prd requirements.md
+       7   python main.py --project /path/to/MyApp --requirement "..." --
+       8   python main.py --project /path/to/MyApp --requirement "..." --
+         skip-release
+       9 """
+      10 import argparse
+     … +163 lines (ctrl+o to expand)
+
+⏺ 现在验证语法和导入是否正确。
+
+⏺ Bash(python -c "
+      import ast, sys, os…)
+  ⎿  Error: Exit code 127
+     (eval):1: command not found: python
+
+⏺ Bash(python3 -c "
+      import ast, sys…)
+  ⎿    OK  config.py
+       OK  main.py
+       OK  tools/file_tools.py
+     … +8 lines (ctrl+o to expand)
+  ⎿  Allowed by auto mode classifier
+  
+⏺ 语法全部通过。检查一下最终目录结构。
+
+  Searched for 1 pattern (ctrl+o to expand)
+  
+⏺ TestProject 已经存在，是一个 SwiftUI 项目。现在安装依赖并做一次 dry-run 验证。
+
+⏺ Bash(pip3 install -q anthropic && echo "OK")
+  ⎿  Error: Exit code 1
+     error: externally-managed-environment
+
+     × This environment is externally managed
+     ╰─> To install Python packages system-wide, try brew install
+         xyz, where xyz is the package you are trying to
+         install.
+         
+         If you wish to install a Python library that isn't in Homebrew,
+         use a virtual environment:
+     … +24 lines (ctrl+o to expand)
+
+⏺ Bash(python3 -m venv .venv && .venv/bin/pip install -q anthropic && echo "OK")
+  ⎿  [notice] A new release of pip is available: 24.3.1 -> 26.1.1
+     [notice] To update, run: python3.13 -m pip install --upgrade pip
+     OK
+  ⎿  Allowed by auto mode classifier
+
+⏺ Bash(ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" .venv/bin/python3 main.py
+      --project TestProject --requirement
+      "新增一个设置页面，包含用户名显示和退出登录按钮" --dry-run 2>&1)
+  ⎿  ============================================================
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+     … +56 lines (ctrl+o to expand)
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+  ⎿  ============================================================
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+  ⎿  ============================================================
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+  ⎿  ============================================================
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+  ⎿  ============================================================
+     ClaudeGene iOS Agent
+  ⎿  ============================================================
+     ClaudeGene iOS Agent
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+     … +52 lines (ctrl+o to expand)
+  ⎿  (timeout 1m)
+  ⎿  Allowed by auto mode classifier
+
+⏺ dry-run 完全正常，Master Agent 正确识别了 SwiftUI 项目并拆解出 8
+  个任务。保存一下记忆。
+
+  Read 1 file, recalled 1 memory, wrote 2 memories (ctrl+o to expand)
+
+⏺ 系统已完整搭建并验证通过。以下是使用方式：
+
+  cd /Users/xiaolongbao/Documents/ClaudeGene
+
+  # 安装依赖（已完成）
+  python3 -m venv .venv && .venv/bin/pip install anthropic
+
+  # 只看任务拆解，不写代码
+  ANTHROPIC_API_KEY=xxx .venv/bin/python3 main.py \
+    --project TestProject \
+    --requirement "新增设置页面" \
+    --dry-run
+
+  # 完整流程（需求→代码→测试→ADHOC打包）
+  ANTHROPIC_API_KEY=xxx .venv/bin/python3 main.py \
+    --project TestProject \
+    --requirement "新增设置页面"
+
+  # 从 PRD 文件读取需求，跳过打包
+  ANTHROPIC_API_KEY=xxx .venv/bin/python3 main.py \
+    --project TestProject \
+    --prd requirements.md \
+    --skip-release
+
+  项目结构共 12 个文件，核心设计要点：
+
+  - 串行流水线：Master → Requirements → Code → Test → Release，每步输出写入
+  memory/task_state.json，下一步自动读取上下文
+  - 工具调用循环：每个 Agent 可多轮调用
+  read_file/write_file/run_xcodebuild，直到模型停止调用工具
+  - 会话归档：每次运行结束后完整状态保存到 memory/sessions/，可回溯历史
+  - 自动检测项目：xcode_tools.py 自动识别 .xcworkspace 或 .xcodeproj，无需手动指定
+
+✻ Churned for 11m 6s
+
+※ recap: Built the ClaudeGene multi-agent iOS automation CLI with Master,
+  Requirements, Code, Test, and Release agents. Dry-run verified successfully. Next:
+  run a full end-to-end test with your ANTHROPIC_API_KEY set. (disable recaps in
+  /config)
+
+❯ 用.env管理APIKey、模型和apiurl吧，另外增加Gemini的调用，调用模型的代码如下from     
+  google import genai                                                                
+                                                                                     
+  # 方式1：直接在代码中配置                                                          
+  client = genai.Client(                                                             
+      api_key='你的密钥',  # 你的 API Key                                            
+      http_options={                                                                 
+          'base_url': 'https://api.aicodemirror.com/api/gemini',  # 自定义 API 地址  
+      },                                                                             
+  )                                                                                  
+                                                                                     
+  # 方式2：API Key 使用环境变量 + 代码配置 Base URL（推荐）                          
+  # export GEMINI_API_KEY="你的密钥"                                                 
+  client = genai.Client(                                                             
+      http_options={                                                                 
+          'base_url': 'https://api.aicodemirror.com/api/gemini',                     
+      },                                                                             
+  )                                                                                  
+                                                                                     
+  # 非流式调用                                                                       
+  response = client.models.generate_content(                                         
+      model='gemini-2.5-flash',                                                      
+      contents='Hello',                                                              
+  )                                                                                  
+  print(response.text)                                                               
+                                                                                     
+  # 流式调用                                                                         
+  for chunk in client.models.generate_content_stream(                                
+      model='gemini-2.5-flash',                                                      
+      contents='Hello',                                                              
+  ):                                                                                 
+      print(chunk.text, end='')                                                      
+
+  Read 3 files (ctrl+o to expand)
+
+⏺ 需要改动 4 个文件，新增 3 个文件。先并行写所有内容。
+
+⏺ Write(.env.example)
+  ⎿  Wrote 17 lines to .env.example
+      1 # ── Provider ──────────────────────────────────────────────
+      2 # 选择使用哪个 Provider：claude 或 gemini
+      3 PROVIDER=claude
+      4 
+      5 # ── Claude (Anthropic) ────────────────────────────────────
+      6 ANTHROPIC_API_KEY=sk-ant-your-key-here
+      7 CLAUDE_MODEL=claude-sonnet-4-6
+      8 # 自定义 API 地址（可选，留空使用官方地址）
+      9 CLAUDE_API_URL=
+     … +7 lines (ctrl+o to expand)
+
+⏺ Write(.gitignore)
+  ⎿  Wrote 9 lines to .gitignore
+      1 .env
+      2 .venv/
+      3 __pycache__/
+      4 *.pyc
+      5 memory/task_state.json
+      6 memory/sessions/
+      7 TestProject/build/
+      8 *.xcarchive
+      9 *.ipa
+
+⏺ Write(requirements.txt)
+  ⎿  Added 2 lines
+      1  anthropic>=0.40.0
+      2 +google-genai>=1.0.0                                                  
+      3 +python-dotenv>=1.0.0                                                 
+
+⏺ Write(config.py)
+  ⎿  Added 20 lines, removed 3 lines
+       1  import os
+       2 +from pathlib import Path                                            
+       3 +from dotenv import load_dotenv                                      
+       4  
+       3 -MODEL = "claude-sonnet-4-6"                                         
+       4 -MAX_TOKENS = 8192                                                   
+       5 +# Load .env from project root (same dir as this file)               
+       6 +load_dotenv(Path(__file__).parent / ".env")                         
+       7  
+       6 -ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")         
+       8 +PROVIDER = os.getenv("PROVIDER", "claude").lower()  # "claude" | "ge
+         +mini"                                                               
+       9  
+      10 +# Claude                                                            
+      11 +ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")              
+      12 +CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6")       
+      13 +CLAUDE_API_URL = os.getenv("CLAUDE_API_URL", "")  # empty = use Anth
+         +ropic default                                                       
+      14 +                                                                    
+      15 +# Gemini                                                            
+      16 +GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")                    
+      17 +GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")        
+      18 +GEMINI_API_URL = os.getenv("GEMINI_API_URL", "")                    
+      19 +                                                                    
+      20 +MAX_TOKENS = int(os.getenv("MAX_TOKENS", "8192"))                   
+      21 +                                                                    
+      22 +# Legacy alias used by agents                                       
+      23 +MODEL = CLAUDE_MODEL if PROVIDER == "claude" else GEMINI_MODEL      
+      24 +                                                                    
+      25  # Tool definitions shared across agents
+      26  FILE_TOOLS = [
+      27      {
+
+⏺ 现在重写 base.py，加入 Gemini 支持和 provider 路由。
+
+⏺ Write(agents/base.py)
+  ⎿  Added 159 lines, removed 26 lines
+       1 -"""Shared agentic loop: send messages, handle tool calls, return fin
+         -al text."""                                                         
+       2 -import anthropic                                                    
+       1 +"""Shared agentic loop supporting Claude (Anthropic) and Gemini prov
+         +iders."""                                                           
+       2  import json
+       4 -from config import MODEL, MAX_TOKENS, ANTHROPIC_API_KEY             
+       3 +import config                                                       
+       4  from tools.file_tools import dispatch_file_tool
+       5  from tools.xcode_tools import dispatch_xcode_tool
+       6  
+       8 -_client = None                                                      
+       7 +# Lazy-initialized clients                                          
+       8 +_claude_client = None                                               
+       9 +_gemini_client = None                                               
+      10  
+      11  
+      11 -def get_client() -> anthropic.Anthropic:                            
+      12 -    global _client                                                  
+      13 -    if _client is None:                                             
+      14 -        _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)    
+      15 -    return _client                                                  
+      12 +# ── Public API ────────────────────────────────────────────────────
+         +────────────                                                        
+      13  
+      17 -                                                                    
+      14  def run_agent(
+      15      system_prompt: str,
+      16      user_message: str,
+      17      tools: list[dict],
+      18      verbose: bool = True,
+      19      max_iterations: int = 20,
+      20 +    provider: str | None = None,                                    
+      21  ) -> tuple[str, list[dict]]:
+      25 -    """                                                             
+      26 -    Run an agentic loop until the model stops calling tools.        
+      22 +    """Run an agentic loop until the model stops calling tools.     
+      23 +                                                                    
+      24      Returns (final_text, tool_call_log).
+      25 +    provider overrides config.PROVIDER when set.                    
+      26      """
+      29 -    client = get_client()                                           
+      27 +    p = (provider or config.PROVIDER).lower()                       
+      28 +    if p == "gemini":                                               
+      29 +        return _run_gemini(system_prompt, user_message, tools, verbo
+         +se, max_iterations)                                                 
+      30 +    return _run_claude(system_prompt, user_message, tools, verbose, 
+         +max_iterations)                                                     
+      31 +                                                                    
+      32 +                                                                    
+      33 +# ── Claude ────────────────────────────────────────────────────────
+         +────────────                                                        
+      34 +                                                                    
+      35 +def _get_claude_client():                                           
+      36 +    global _claude_client                                           
+      37 +    if _claude_client is None:                                      
+      38 +        import anthropic                                            
+      39 +        kwargs = {"api_key": config.ANTHROPIC_API_KEY}              
+      40 +        if config.CLAUDE_API_URL:                                   
+      41 +            kwargs["base_url"] = config.CLAUDE_API_URL              
+      42 +        _claude_client = anthropic.Anthropic(**kwargs)              
+      43 +    return _claude_client                                           
+      44 +                                                                    
+      45 +                                                                    
+      46 +def _run_claude(system_prompt, user_message, tools, verbose, max_ite
+         +rations):                                                           
+      47 +    client = _get_claude_client()                                   
+      48      messages = [{"role": "user", "content": user_message}]
+      49      tool_log = []
+      50  
+      51      for _ in range(max_iterations):
+      52          response = client.messages.create(
+      35 -            model=MODEL,                                            
+      36 -            max_tokens=MAX_TOKENS,                                  
+      53 +            model=config.CLAUDE_MODEL,                              
+      54 +            max_tokens=config.MAX_TOKENS,                           
+      55              system=system_prompt,
+      56              tools=tools,
+      57              messages=messages,
+      58          )
+      59  
+      42 -        # Collect text from this response                           
+      43 -        text_parts = []                                             
+      44 -        tool_uses = []                                              
+      60 +        text_parts, tool_uses = [], []                              
+      61          for block in response.content:
+      62              if block.type == "text":
+      63                  text_parts.append(block.text)
+     ...
+      68              print("".join(text_parts))
+      69  
+      70          if response.stop_reason == "end_turn" or not tool_uses:
+      55 -            final_text = "".join(text_parts)                        
+      56 -            return final_text, tool_log                             
+      71 +            return "".join(text_parts), tool_log                    
+      72  
+      58 -        # Append assistant message                                  
+      73          messages.append({"role": "assistant", "content": response.co
+          ntent})
+      74  
+      61 -        # Execute tools and build tool_result blocks                
+      75          tool_results = []
+      76          for tu in tool_uses:
+      77              result = _dispatch_tool(tu.name, tu.input)
+     ...
+       89      return "(max iterations reached)", tool_log
+       90  
+       91  
+       92 +# ── Gemini ───────────────────────────────────────────────────────
+          +─────────────                                                      
+       93 +                                                                   
+       94 +def _get_gemini_client():                                          
+       95 +    global _gemini_client                                          
+       96 +    if _gemini_client is None:                                     
+       97 +        from google import genai                                   
+       98 +        kwargs = {"api_key": config.GEMINI_API_KEY}                
+       99 +        if config.GEMINI_API_URL:                                  
+      100 +            kwargs["http_options"] = {"base_url": config.GEMINI_API
+          +_URL}                                                              
+      101 +        _gemini_client = genai.Client(**kwargs)                    
+      102 +    return _gemini_client                                          
+      103 +                                                                   
+      104 +                                                                   
+      105 +def _run_gemini(system_prompt, user_message, tools, verbose, max_it
+          +erations):                                                         
+      106 +    from google.genai import types                                 
+      107 +                                                                   
+      108 +    client = _get_gemini_client()                                  
+      109 +    gemini_tools = _tools_to_gemini(tools)                         
+      110 +                                                                   
+      111 +    gen_config = types.GenerateContentConfig(                      
+      112 +        system_instruction=system_prompt,                          
+      113 +        tools=gemini_tools or None,                                
+      114 +        max_output_tokens=config.MAX_TOKENS,                       
+      115 +    )                                                              
+      116 +                                                                   
+      117 +    contents = [types.Content(role="user", parts=[types.Part.from_t
+          +ext(user_message)])]                                               
+      118 +    tool_log = []                                                  
+      119 +                                                                   
+      120 +    for _ in range(max_iterations):                                
+      121 +        response = client.models.generate_content(                 
+      122 +            model=config.GEMINI_MODEL,                             
+      123 +            contents=contents,                                     
+      124 +            config=gen_config,                                     
+      125 +        )                                                          
+      126 +                                                                   
+      127 +        candidate = response.candidates[0]                         
+      128 +        parts = candidate.content.parts if candidate.content else [
+          +]                                                                  
+      129 +                                                                   
+      130 +        text_parts, function_calls = [], []                        
+      131 +        for part in parts:                                         
+      132 +            if part.text:                                          
+      133 +                text_parts.append(part.text)                       
+      134 +            if part.function_call:                                 
+      135 +                function_calls.append(part.function_call)          
+      136 +                                                                   
+      137 +        if text_parts and verbose:                                 
+      138 +            print("".join(text_parts))                             
+      139 +                                                                   
+      140 +        finish = candidate.finish_reason.name if candidate.finish_r
+          +eason else ""                                                      
+      141 +        if not function_calls or finish in ("STOP", "MAX_TOKENS", "
+          +SAFETY"):                                                          
+      142 +            return "".join(text_parts), tool_log                   
+      143 +                                                                   
+      144 +        # Append model turn                                        
+      145 +        contents.append(candidate.content)                         
+      146 +                                                                   
+      147 +        # Execute tools and build function_response parts          
+      148 +        response_parts = []                                        
+      149 +        for fc in function_calls:                                  
+      150 +            args = dict(fc.args) if fc.args else {}                
+      151 +            result = _dispatch_tool(fc.name, args)                 
+      152 +            if verbose:                                            
+      153 +                print(f"  [tool] {fc.name}({_summarize(args)}) → {r
+          +esult[:120]}")                                                     
+      154 +            tool_log.append({"tool": fc.name, "input": args, "resul
+          +t": result[:500]})                                                 
+      155 +            response_parts.append(                                 
+      156 +                types.Part.from_function_response(                 
+      157 +                    name=fc.name,                                  
+      158 +                    response={"result": result},                   
+      159 +                )                                                  
+      160 +            )                                                      
+      161 +                                                                   
+      162 +        contents.append(types.Content(role="user", parts=response_p
+          +arts))                                                             
+      163 +                                                                   
+      164 +    return "(max iterations reached)", tool_log                    
+      165 +                                                                   
+      166 +                                                                   
+      167 +def _tools_to_gemini(tools: list[dict]):                           
+      168 +    """Convert Anthropic-style tool defs to a Gemini Tool list.""" 
+      169 +    if not tools:                                                  
+      170 +        return None                                                
+      171 +    from google.genai import types                                 
+      172 +                                                                   
+      173 +    declarations = [                                               
+      174 +        types.FunctionDeclaration(                                 
+      175 +            name=t["name"],                                        
+      176 +            description=t.get("description", ""),                  
+      177 +            parameters=_schema_to_gemini(t.get("input_schema", {}))
+          +,                                                                  
+      178 +        )                                                          
+      179 +        for t in tools                                             
+      180 +    ]                                                              
+      181 +    return [types.Tool(function_declarations=declarations)]        
+      182 +                                                                   
+      183 +                                                                   
+      184 +def _schema_to_gemini(schema: dict):                               
+      185 +    from google.genai import types                                 
+      186 +                                                                   
+      187 +    _type_map = {                                                  
+      188 +        "object": types.Type.OBJECT,                               
+      189 +        "string": types.Type.STRING,                               
+      190 +        "array": types.Type.ARRAY,                                 
+      191 +        "boolean": types.Type.BOOLEAN,                             
+      192 +        "number": types.Type.NUMBER,                               
+      193 +        "integer": types.Type.INTEGER,                             
+      194 +    }                                                              
+      195 +    t = _type_map.get(schema.get("type", "object"), types.Type.OBJE
+          +CT)                                                                
+      196 +                                                                   
+      197 +    props = {                                                      
+      198 +        k: _schema_to_gemini(v)                                    
+      199 +        for k, v in schema.get("properties", {}).items()           
+      200 +    }                                                              
+      201 +    items = _schema_to_gemini(schema["items"]) if "items" in schema
+          + else None                                                         
+      202 +                                                                   
+      203 +    return types.Schema(                                           
+      204 +        type=t,                                                    
+      205 +        description=schema.get("description", ""),                 
+      206 +        properties=props or None,                                  
+      207 +        required=schema.get("required") or None,                   
+      208 +        items=items,                                               
+      209 +    )                                                              
+      210 +                                                                   
+      211 +                                                                   
+      212 +# ── Shared helpers ───────────────────────────────────────────────
+          +─────────────                                                      
+      213 +                                                                   
+      214  def _dispatch_tool(name: str, inp: dict) -> str:
+       80 -    file_tool_names = {"read_file", "write_file", "list_files", "se
+          -arch_files"}                                                       
+       81 -    xcode_tool_names = {"run_xcodebuild"}                          
+       82 -    if name in file_tool_names:                                    
+      215 +    if name in {"read_file", "write_file", "list_files", "search_fi
+          +les"}:                                                             
+      216          return dispatch_file_tool(name, inp)
+       84 -    if name in xcode_tool_names:                                   
+      217 +    if name == "run_xcodebuild":                                   
+      218          return dispatch_xcode_tool(name, inp)
+      219      return f"[ERROR] Unknown tool: {name}"
+      220  
+
+⏺ 更新 main.py，加 --provider 参数，修复 check_api_key。
+
+⏺ Update(main.py)
+  ⎿  Added 1 line
+      32      parser.add_argument("--skip-release", action="store_true", help=
+          "跳过打包发布步骤")
+      33      parser.add_argument("--dry-run", action="store_true", help="只输
+          出任务计划，不执行代码写入")
+      34      parser.add_argument("--quiet", action="store_true", help="减少输
+          出")
+      35 +    parser.add_argument("--provider", choices=["claude", "gemini"], 
+         +help="覆盖 .env 中的 PROVIDER 设置")                                
+      36      return parser.parse_args()
+      37  
+      38  
+
+⏺ Update(main.py)
+  ⎿  Added 10 lines, removed 4 lines
+      55      return path
+      56  
+      57  
+      58 -def check_api_key():                                                
+      59 -    if not os.environ.get("ANTHROPIC_API_KEY"):                     
+      60 -        print("[ERROR] 请设置环境变量 ANTHROPIC_API_KEY", file=sys.s
+         -tderr)                                                              
+      61 -        sys.exit(1)                                                 
+      58 +def check_api_key(provider: str):                                   
+      59 +    import config                                                   
+      60 +    if provider == "gemini":                                        
+      61 +        if not config.GEMINI_API_KEY:                               
+      62 +            print("[ERROR] 请在 .env 中设置 GEMINI_API_KEY", file=sy
+         +s.stderr)                                                           
+      63 +            sys.exit(1)                                             
+      64 +    else:                                                           
+      65 +        if not config.ANTHROPIC_API_KEY:                            
+      66 +            print("[ERROR] 请在 .env 中设置 ANTHROPIC_API_KEY", file
+         +=sys.stderr)                                                        
+      67 +            sys.exit(1)                                             
+      68  
+      69  
+      70  def main():
+
+⏺ Update(main.py)
+  ⎿  Added 10 lines, removed 2 lines
+      69  
+      70  def main():
+      71      args = parse_args()
+      72 -    check_api_key()                                                 
+      72  
+      73 +    # Apply --provider override before config is used by agents     
+      74 +    if args.provider:                                               
+      75 +        import config                                               
+      76 +        config.PROVIDER = args.provider                             
+      77 +                                                                    
+      78 +    import config as cfg                                            
+      79 +    provider = cfg.PROVIDER                                         
+      80 +    check_api_key(provider)                                         
+      81 +                                                                    
+      82      project_path = validate_project(args.project)
+      83      requirement = load_requirement(args)
+      84      verbose = not args.quiet
+      85  
+      86      print(f"\n{'='*60}")
+      79 -    print(f"ClaudeGene iOS Agent")                                  
+      87 +    print(f"ClaudeGene iOS Agent  [{provider.upper()}]")            
+      88      print(f"项目: {project_path}")
+      89      print(f"需求: {requirement[:80]}{'...' if len(requirement) > 80 
+          else ''}")
+      90      if args.dry_run:
+
+⏺ 安装新依赖，验证语法。
+
+⏺ Bash(.venv/bin/pip install -q python-dotenv google-genai && echo "OK")
+  ⎿  [notice] A new release of pip is available: 24.3.1 -> 26.1.1
+     [notice] To update, run: python3.13 -m pip install --upgrade pip
+     OK
+  ⎿  Allowed by auto mode classifier
+
+⏺ Bash(.venv/bin/python3 -c "
+      import ast, sys…)
+  ⎿    OK  config.py
+       OK  main.py
+       OK  agents/base.py
+  ⎿  Allowed by auto mode classifier
+     
+⏺ Bash(cp .env.example .env && echo "已从 .env.example 创建 .env")
+  ⎿  已从 .env.example 创建 .env
+     
+⏺ 做一次 dry-run 验证 .env 加载和 provider 显示正常。
+
+⏺ Bash(.venv/bin/python3 main.py --project TestProject --requirement "测试" --dry-run
+       2>&1 | head -8)
+  ⎿  ============================================================
+     ClaudeGene iOS Agent  [CLAUDE]
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+     … +3 lines (ctrl+o to expand)
+  ⎿  Allowed by auto mode classifier
+     
+⏺ 完成。以下是改动摘要：
+
+  新增文件
+  - .env.example — 配置模板，复制为 .env 后填入密钥
+  - .gitignore — 防止 .env 和构建产物被提交
+
+  修改文件
+
+  config.py — 用 python-dotenv 加载 .env，新增
+  PROVIDER、CLAUDE_MODEL、CLAUDE_API_URL、GEMINI_* 等变量
+
+  agents/base.py — 拆分为 _run_claude 和 _run_gemini 两条路径，run_agent() 根据
+  provider 参数路由；Gemini 工具调用通过 _tools_to_gemini() 自动将 Anthropic
+  格式的工具定义转换为 Gemini FunctionDeclaration
+  
+  main.py — 新增 --provider 参数可覆盖 .env 设置，check_api_key() 按 provider
+  检查对应的 key
+
+  使用方式
+
+  # 编辑 .env，填入密钥和 PROVIDER=claude 或 gemini
+  cp .env.example .env
+
+  # 用 Gemini 运行（覆盖 .env 设置）
+  .venv/bin/python3 main.py --project TestProject \
+    --requirement "新增设置页面" \
+    --provider gemini --dry-run
+
+✻ Brewed for 4m 37s
+
+※ recap: Built a multi-agent iOS automation CLI in ClaudeGene that handles 
+  requirements, code generation, testing, and ADHOC release. Just added .env config 
+  and Gemini support alongside Claude. Ready to test with real API keys. (disable 
+  recaps in /config)
+
+❯ xiaolongbao@xiaolongbaodeMacBook-Pro ClaudeGene % .venv/bin/python3 main.py        
+  --project TestProject \                                                            
+      --requirement "新增设置页面" \                                                 
+      --dry-run                                                                      
+                                                                                     
+  ============================================================                       
+  ClaudeGene iOS Agent  [GEMINI]                                                     
+  项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject                          
+  需求: 新增设置页面                                                                 
+  [DRY RUN 模式 — 不会写入代码]                                                      
+  ============================================================                       
+                                                                                     
+  [Master Agent] 分析项目结构并拆解任务...                                           
+  Traceback (most recent call last):                                                 
+    File "/Users/xiaolongbao/Documents/ClaudeGene/main.py", line 171, in <module>    
+      main()                                                                         
+      ~~~~^^                                                                         
+    File "/Users/xiaolongbao/Documents/ClaudeGene/main.py", line 99, in main         
+      state = master_agent.run(state, dry_run=args.dry_run, verbose=verbose)         
+    File "/Users/xiaolongbao/Documents/ClaudeGene/agents/master_agent.py", line 45,  
+  in run                                                                             
+      final_text, _ = run_agent(                                                     
+                      ~~~~~~~~~^                                                     
+          system_prompt=SYSTEM_PROMPT,                                               
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                               
+      ...<2 lines>...                                                                
+          verbose=verbose,                                                           
+          ^^^^^^^^^^^^^^^^                                                           
+      )                                                                              
+      ^                                                                              
+    File "/Users/xiaolongbao/Documents/ClaudeGene/agents/base.py", line 29, in       
+  run_agent                                                                          
+      return _run_gemini(system_prompt, user_message, tools, verbose,                
+  max_iterations)                                                                    
+    File "/Users/xiaolongbao/Documents/ClaudeGene/agents/base.py", line 117, in      
+  _run_gemini                                                                        
+      contents = [types.Content(role="user",                                         
+  parts=[types.Part.from_text(user_message)])]                                       
+                                                                                     
+  ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^                                                 
+  TypeError: Part.from_text() takes 1 positional argument but 2 were given           
+                                                                                     
+
+⏺ Bash(.venv/bin/python3 -c "from google.genai import types;
+      help(types.Part.from_text)" 2>&1 | head -20)
+  ⎿  Help on method from_text in module google.genai.types:
+
+     from_text(*, text: str) -> 'Part' class method of google.genai.types.Part
+  ⎿  Allowed by auto mode classifier
+
+⏺ keyword-only 参数，需要 text=。
+
+⏺ Update(agents/base.py)
+  ⎿  Added 1 line, removed 1 line
+      114          max_output_tokens=config.MAX_TOKENS,
+      115      )
+      116  
+      117 -    contents = [types.Content(role="user", parts=[types.Part.from_t
+          -ext(user_message)])]                                               
+      117 +    contents = [types.Content(role="user", parts=[types.Part.from_t
+          +ext(text=user_message)])]                                          
+      118      tool_log = []
+      119  
+      120      for _ in range(max_iterations):
+
+⏺ 顺手检查同文件里其他 from_text 调用有没有同样问题。
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ 只有一处，修好了。Part.from_text() 在这个版本的 google-genai 里是
+  keyword-only，需要写 text=。
+     
+✻ Worked for 44s
+
+❯  % .venv/bin/python3 main.py --project TestProject \                               
+      --requirement "新增设置页面"                                                   
+                                                                                     
+  ============================================================                       
+  ClaudeGene iOS Agent  [GEMINI]                                                     
+  项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject                          
+  需求: 新增设置页面                                                                 
+  ============================================================                       
+                                                                                     
+  [Master Agent] 分析项目结构并拆解任务...                                           
+                                                                                     
+  [Master Agent] 拆解完成，共 0 个任务：                                             
+                                                                                     
+  [Requirements Agent] 细化需求和验收标准...                                         
+                                                                                     
+  [Requirements Agent] 完成，0 条验收标准                                            
+                                                                                     
+  [Code Agent] 生成 ObjC 代码并写入项目...                                           
+                                                                                     
+  [Code Agent] 完成，写入 0 个文件：                                                 
+                                                                                     
+  [Test Agent] 生成测试并运行 xcodebuild test...                                     
+                                                                                     
+  [Test Agent] 测试结果：~ skipped                                                   
+                                                                                     
+  [Release Agent] 开始 ADHOC 打包，Scheme: TestProject...                            
+                                                                                     
+  [Release Agent] 打包失败:                                                          
+                                                                                     
+  ============================================================                       
+  执行摘要                                                                           
+  ============================================================                       
+  Session ID: 960e6c16-7395-40fe-9d2e-4cee9bc4bb2c                                   
+  需求: 新增设置页面                                                                 
+                                                                                     
+  需求细化: 0 条验收标准                                                             
+  代码生成: 0 个文件                                                                 
+  测试结果: ~ skipped                                                                
+  发布结果: ✗ 失败                                                                   
+  ============================================================                       
+                                                                                     
+  会话记录已保存: /Users/xiaolongbao/Documents/ClaudeGene/memory/sessions/session_20 
+  260513_161908_960e6c16.json                                                        
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ 问题很清楚：session 文件里 tasks: []，说明 Gemini 返回了内容但 JSON
+  提取失败，而且没有任何 [tool] 输出，说明工具根本没被调用。
+
+  根本原因在 _run_gemini 的提前返回条件：
+
+  if not function_calls or finish in ("STOP", "MAX_TOKENS", "SAFETY"):
+
+  Gemini 在返回 function call 时 finish_reason 也是 STOP，导致 True or True = 
+  True，第一轮就直接返回了，工具从未执行，最终 text 为空，JSON 提取得到空结果。
+
+⏺ Update(agents/base.py)
+  ⎿  Added 1 line, removed 2 lines
+      137          if text_parts and verbose:
+      138              print("".join(text_parts))
+      139  
+      140 -        finish = candidate.finish_reason.name if candidate.finish_r
+          -eason else ""                                                      
+      141 -        if not function_calls or finish in ("STOP", "MAX_TOKENS", "
+          -SAFETY"):                                                          
+      140 +        if not function_calls:                                     
+      141              return "".join(text_parts), tool_log
+      142  
+      143          # Append model turn
+
+⏺ 顺手验证一下修改后的逻辑完整性：
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ 逻辑正确。再跑一次 dry-run 验证：
+
+⏺ Bash(.venv/bin/python3 main.py --project TestProject --requirement "新增设置页面"
+      --dry-run 2>&1)
+  ⎿  ============================================================
+     ClaudeGene iOS Agent  [GEMINI]
+     项目: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+     … +28 lines (ctrl+o to expand)
+  ⎿  (timeout 2m)
+  ⎿  Allowed by auto mode classifier
+
+⏺ 工具调用正常，5 个任务正确拆解。
+
+  问题根因：Gemini 在返回 function call 时 finish_reason 同样是 STOP，原来的条件 not 
+  function_calls or finish in ("STOP", ...) 因为 or
+  短路，第一轮就直接返回了，工具从未执行。修复后改为只判断 not 
+  function_calls，只要模型还在调用工具就继续循环。
+
+✻ Churned for 1m 43s
+
+※ recap: Building a local iOS multi-agent CLI that automates requirements, code, 
+  testing, and ADHOC release. Fixed a Gemini tool-calling loop bug. Ready to run the 
+  full pipeline without --dry-run. (disable recaps in /config)
+  
+❯ 有几个问题想了解：1、这套脚本能实现读取项目的上下文吗                              
+  2、能在完成更大的需求的时候分多个Agent去调用API写代码，并且都了解项目的上下文？    
+  3、在任务完成后，已知的项目上下文会被存储，并在下次启动的时候自动调用吗            
+  
+  Read 3 files, listed 2 directories (ctrl+o to expand)
+
+⏺ 读完代码了，直接回答你的三个问题：
+
+  ---
+  1. 能读取项目上下文吗？
+  
+  能，但是是"按需读取"而不是"预加载"。每个 Agent 启动时通过 list_files + read_file
+  工具调用去扫描和读取项目文件，模型自己决定读哪些文件。这意味着：
+
+  - 优点：不会把整个项目塞进 prompt，节省 token
+  - 缺点：每次都要重新扫描，且模型可能漏读某些关键文件
+
+  ---
+  2. 大需求能拆分多个 Code Agent 并行写代码吗？
+
+  目前不能。 现在的 Code Agent 是单个 Agent 处理所有文件，而且是串行的。有两个问题：
+
+  - Master Agent 拆解出多个 code 类型任务，但 code_agent.py 只取第一个任务的
+  language，其余任务描述被忽略
+  - 没有"每个 code task 启动一个独立 Agent"的机制
+
+  这是一个真实的缺陷，需要改造 code_agent.py 让它按任务逐个调用，或者改 main.py
+  为每个 code task 启动独立 Agent 实例。
+
+  ---
+  3. 项目上下文会持久化并在下次自动加载吗？
+
+  目前不会。 现在的持久化只存了任务执行结果（task_state.json +
+  sessions/），但没有"项目知识库"的概念。每次启动都是全新的
+  new_state()，不会读取上次的 session。
+
+  具体缺失的是：
+  - 没有 project_context.json（记录项目架构、文件职责、已知约定）
+  - new_state() 不会去查找历史 session 并复用其中的项目知识
+
+  ---
+  总结：三个问题对应三个需要改进的地方
+
+  ┌─────────────────────┬────────────────────────┬───────────────────────────┐
+  │        问题         │          现状          │         需要改进          │
+  ├─────────────────────┼────────────────────────┼───────────────────────────┤
+  │ 读取项目上下文      │ 按需读取，能用但不稳定 │ 增加项目知识库预扫描      │
+  ├─────────────────────┼────────────────────────┼───────────────────────────┤
+  │ 多 Agent 并行写代码 │ 单 Agent 串行          │ 按 code task 拆分 Agent   │
+  ├─────────────────────┼────────────────────────┼───────────────────────────┤
+  │ 上下文跨会话持久化  │ 只存结果，不复用       │ 增加 project_context.json │
+  └─────────────────────┴────────────────────────┴───────────────────────────┘
+
+  要我把这三点都改进吗？
+
+✻ Churned for 1m 29s
+
+※ recap: Building a multi-agent iOS automation CLI. We just identified three gaps: 
+  project context isn't persisted across sessions, large tasks don't split across 
+  multiple Code Agents, and the user asked if we should fix all three.
+  
+❯ 改进一下吧                                                                         
+
+⏺ Entered plan mode
+  Claude is now exploring and designing an implementation approach.
+
+⏺ Explore(探索现有代码，为三项改进做准备)
+  ⎿  Done (8 tool uses · 30.4k tokens · 28s)
+  (ctrl+o to expand)
+          
+⏺ Updated plan
+  ⎿  /plan to preview
+     
+─────────────────────────────────────────────────────────────────────────────────────
+ Ready to code?
+     
+ Here is Claude's plan:
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ ClaudeGene 三项改进计划
+
+ Context
+
+ 用户确认了三个现有缺陷需要修复：
+ 1. 项目上下文不稳定：每次 Agent 都从零扫描，可能漏读关键文件
+ 2. 多 Code Agent 串行：大需求拆出多个 code task，但只有一个 Agent
+ 处理，且只取第一个 task 的 language
+ 3. 上下文不跨会话持久化：每次启动都是全新 state，不复用历史项目知识
+
+ ---
+ 改进一：项目知识库预扫描（project_context.json）
+
+ 新增文件：memory/project_scanner.py
+
+ 在每次运行开始时，由一个专用 Scanner Agent 扫描项目，生成并持久化
+ memory/project_context.json：
+
+ {
+   "project_path": "...",
+   "scanned_at": "ISO时间",
+   "language": "SwiftUI|ObjC|Mixed",
+   "architecture": "MVC|MVVM|...",
+   "key_files": [
+     {"path": "...", "role": "AppDelegate|ViewModel|..."}
+   ],
+   "naming_conventions": "...",
+   "dependencies": ["..."],
+   "summary": "项目整体描述"
+ }
+
+ 逻辑：
+ - 若 project_context.json 不存在，或 project_path 与当前不同，或文件超过 7
+ 天，则重新扫描
+ - 否则直接加载，跳过扫描
+ - 扫描结果注入 state["project_context"]，所有 Agent 都能从 state 读取
+
+ 修改：memory/context_manager.py
+
+ - new_state() 增加 project_context 字段（初始为 None）
+ - 新增 load_project_context(project_path) / save_project_context(ctx) 函数
+
+ 修改：main.py
+
+ 在 Master Agent 之前插入扫描步骤：
+ state = project_scanner.run(state, verbose=verbose)  # 新增
+ state = master_agent.run(state, ...)
+
+ 修改：各 Agent 的 user_msg
+
+ 在 prompt 中注入 state["project_context"]["summary"] 和
+ key_files，让模型不必每次从零扫描。
+
+ ---
+ 改进二：多 Code Agent 按任务并行（实际串行执行）
+
+ 修改：agents/code_agent.py
+
+ 将单次调用改为按 code task 逐个调用，每个 task 启动独立的 Agent 实例，共享同一个
+ project_context：
+
+ def run(state, verbose=True):
+     code_tasks = [t for t in state["tasks"] if t["type"] == "code"]
+     all_written = []
+
+     for task in code_tasks:
+         written = _run_single_task(state, task, verbose)
+         all_written.extend(written)
+
+     set_agent_output(state, "code", {"written_files": all_written, ...})
+
+ 每个 _run_single_task() 接收单个 task（含 files、language、description），构建专属
+ prompt，独立调用 run_agent()。
+
+ 好处：
+ - 每个 Agent 专注单一职责，prompt 更精准
+ - 每个 task 完成后立即写入文件，下一个 task 的 Agent 可以 read_file
+ 看到前一个的成果
+ - 天然支持未来改为真正并行（asyncio）
+
+ 修改：memory/context_manager.py
+
+ get_agent_context() 增加 project_context 字段透传。
+
+ ---
+ 改进三：跨会话项目上下文持久化
+
+ 核心机制
+
+ project_context.json 本身就是持久化载体。改进一已经实现了文件的读写，这里补充：
+
+ 1. 自动加载：project_scanner.run() 优先读取已有的
+ project_context.json，只在以下情况重新扫描：
+   - 文件不存在
+   - project_path 不匹配
+   - 文件超过 7 天（scanned_at 字段判断）
+   - 用户传入 --rescan 参数
+ 
+     ---
+     需要修改/新增的文件
+
+     ┌──────────────────────────────┬──────┬─────────────────────────────────────────
+     ┐
+     │             文件             │ 操作 │                改动内容
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ memory/project_scanner.py    │ 新增 │ Scanner Agent，生成/加载            
+     │                          
+     │                              │      │ project_context.json
+     │                          
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤                          
+     │                              │      │ 新增
+     │
+     │ memory/context_manager.py    │ 修改 │ load/save_project_context，new_state
+     │
+     │                              │      │ 加字段，get_agent_context 透传
+     │
+     │                              │      │ project_context
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ agents/code_agent.py         │ 修改 │ 按 task 逐个调用，每 task 独立 Agent
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ main.py                      │ 修改 │ 插入 scanner 步骤，新增 --rescan 参数
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ agents/master_agent.py       │ 修改 │ user_msg 注入 project_context 摘要
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ agents/requirements_agent.py │ 修改 │ user_msg 注入 project_context
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ agents/test_agent.py         │ 修改 │ user_msg 注入 project_context
+     │
+     ├──────────────────────────────┼──────┼─────────────────────────────────────────
+     ┤
+     │ agents/release_agent.py      │ 修改 │ user_msg 注入 project_context
+     │
+     └──────────────────────────────┴──────┴─────────────────────────────────────────
+     ┘
+ 
+     ---
+     project_context.json 存储位置
+      
+     memory/project_context.json（与 task_state.json 同目录）
+ 
+     ---
+     验证方式
+
+     1. 首次运行：--dry-run 验证 project_context.json 被创建，内容包含 key_files 和
+     summary
+     2. 第二次运行：验证 "已加载项目上下文" 日志出现，不重新扫描
+     3. --rescan 运行：验证强制重新扫描
+     4. 大需求测试：构造包含 3 个 code task 的需求，验证每个 task 都有独立 [Code
+     Agent - task N] 日志
+     5. 检查 project_context.json 在 Code Agent 完成后是否追加了新文件
+
+⏺ Auto mode lets Claude handle permission prompts automatically — Claude 
+  checks each tool call for risky actions and prompt injection before 
+  executing. Actions Claude identifies as safe are executed, while actions 
+  Claude identifies as risky are blocked and Claude may try a different 
+  approach. Ideal for long-running tasks. Sessions are slightly more 
+  expensive. Claude can make mistakes that allow harmful commands to run, 
+  it's recommended to only use in isolated environments. Shift+Tab to change 
+  mode.
+                                                                   
+⏺ 先并行写 project_scanner.py 和更新 context_manager.py。
+
+⏺ Write(memory/project_scanner.py)
+  ⎿  Wrote 119 lines to memory/project_scanner.py
+         n project_context.json.ns an iOS project once and caches the result i
+       2 
+       3 Cached context is reused across sessions unless:
+       4 - project_path changes
+       5 - cache is older than CACHE_TTL_DAYS
+       6 - caller passes force=True (--rescan flag)
+       7 """
+       8 import json
+       9 import os
+      10 from datetime import datetime, timedelta
+     … +121 lines (ctrl+o to expand)
+
+⏺ Write(memory/context_manager.py)
+  ⎿  Added 36 lines, removed 2 lines
+       1  import json
+       2  import os
+       3  import uuid
+       4 -from datetime import datetime                                       
+       4 +from datetime import datetime, timedelta                            
+       5  
+       6  STATE_FILE = os.path.join(os.path.dirname(__file__), "task_state.jso
+          n")
+       7  SESSIONS_DIR = os.path.join(os.path.dirname(__file__), "sessions")
+       8 +PROJECT_CONTEXT_FILE = os.path.join(os.path.dirname(__file__), "proj
+         +ect_context.json")                                                  
+       9  
+      10 +CACHE_TTL_DAYS = 7                                                  
+      11  
+      12 +                                                                    
+      13  def new_state(project_path: str, requirement: str) -> dict:
+      14      return {
+      15          "session_id": str(uuid.uuid4()),
+     ...
+      17          "project_path": project_path,
+      18          "requirement": requirement,
+      19          "tasks": [],
+      17 -        "agent_outputs": {}                                         
+      20 +        "agent_outputs": {},                                        
+      21 +        "project_context": None,                                    
+      22      }
+      23  
+      24  
+     ...
+      54          "project_path": state["project_path"],
+      55          "requirement": state["requirement"],
+      56          "tasks": state["tasks"],
+      57 +        "project_context": state.get("project_context"),            
+      58      }
+      59      order = ["requirements", "code", "test", "release"]
+      60      idx = order.index(agent_type) if agent_type in order else len(or
+          der)
+     ...
+       71      with open(path, "w", encoding="utf-8") as f:
+       72          json.dump(state, f, ensure_ascii=False, indent=2)
+       73      return path
+       74 +                                                                   
+       75 +                                                                   
+       76 +# ── Project context persistence ──────────────────────────────────
+          +─────────────                                                      
+       77 +                                                                   
+       78 +def load_project_context(project_path: str) -> dict | None:        
+       79 +    """Load cached project context if it exists, matches project_pa
+          +th, and is fresh."""                                               
+       80 +    if not os.path.exists(PROJECT_CONTEXT_FILE):                   
+       81 +        return None                                                
+       82 +    try:                                                           
+       83 +        with open(PROJECT_CONTEXT_FILE, "r", encoding="utf-8") as f
+          +:                                                                  
+       84 +            ctx = json.load(f)                                     
+       85 +    except (json.JSONDecodeError, OSError):                        
+       86 +        return None                                                
+       87 +                                                                   
+       88 +    if ctx.get("project_path") != project_path:                    
+       89 +        return None                                                
+       90 +                                                                   
+       91 +    scanned_at = ctx.get("scanned_at")                             
+       92 +    if scanned_at:                                                 
+       93 +        age = datetime.now() - datetime.fromisoformat(scanned_at)  
+       94 +        if age > timedelta(days=CACHE_TTL_DAYS):                   
+       95 +            return None                                            
+       96 +                                                                   
+       97 +    return ctx                                                     
+       98 +                                                                   
+       99 +                                                                   
+      100 +def save_project_context(ctx: dict) -> None:                       
+      101 +    with open(PROJECT_CONTEXT_FILE, "w", encoding="utf-8") as f:   
+      102 +        json.dump(ctx, f, ensure_ascii=False, indent=2)            
+
+⏺ Write(agents/code_agent.py)
+  ⎿  Added 80 lines, removed 30 lines
+       1 -"""Code Agent: generates OC/SwiftUI code and writes files to the pro
+         -ject."""                                                            
+       1 +"""Code Agent: one independent Agent per code task, all sharing proj
+         +ect_context."""                                                     
+       2  import json
+       3  from agents.base import run_agent
+       4  from config import FILE_TOOLS
+       5  from memory.context_manager import get_agent_context, set_agent_outp
+          ut
+       6 +from memory.project_scanner import append_new_files                 
+       7  
+       8  SYSTEM_PROMPT = """你是一位资深 iOS 工程师，精通 Objective-C 和 Swif
+          tUI。
+       9  
+      10  你的职责：
+      10 -1. 先用 read_file 和 list_files 工具阅读项目现有代码，理解代码风格和
+         -架构                                                                
+      11 -2. 根据需求和验收标准，生成高质量的 iOS 代码                        
+      11 +1. 先用 read_file 阅读任务涉及的现有文件（若文件已存在），理解代码风
+         +格                                                                  
+      12 +2. 根据任务描述、验收标准和项目上下文，生成高质量的 iOS 代码        
+      13  3. 用 write_file 工具将代码写入项目对应文件
+      13 -4. 遵循项目现有的命名规范、架构模式（MVC/MVVM 等）                  
+      14 +4. 遵循项目现有的命名规范、架构模式                                 
+      15  5. 代码要完整可编译，不留 TODO 占位
+      16  
+      17  代码规范：
+     ...
+       32  def run(state: dict, verbose: bool = True) -> dict:
+       33      ctx = get_agent_context(state, "code")
+       34      req_output = ctx.get("requirements_output", {})
+       35 +    project_context = ctx.get("project_context") or {}             
+       36  
+       35 -    files_info = json.dumps(req_output.get("files_to_modify", []), 
+          -ensure_ascii=False, indent=2)                                      
+       37 +    code_tasks = [t for t in state["tasks"] if t["type"] == "code"]
+       38 +    if not code_tasks:                                             
+       39 +        set_agent_output(state, "code", {"written_files": [], "summ
+          +ary": "无 code 任务", "notes": ""})                                
+       40 +        return state                                               
+       41 +                                                                   
+       42 +    all_written: list[str] = []                                    
+       43 +    all_summaries: list[str] = []                                  
+       44 +                                                                   
+       45 +    for i, task in enumerate(code_tasks, 1):                       
+       46 +        if verbose:                                                
+       47 +            print(f"\n[Code Agent {i}/{len(code_tasks)}] {task.get(
+          +'description', '')[:60]}...")                                      
+       48 +                                                                   
+       49 +        written, summary = _run_single_task(state, task, req_output
+          +, project_context, verbose)                                        
+       50 +        all_written.extend(written)                                
+       51 +        if summary:                                                
+       52 +            all_summaries.append(f"Task {i}: {summary}")           
+       53 +                                                                   
+       54 +        # Keep project_context up to date so subsequent tasks see n
+          +ew files                                                           
+       55 +        append_new_files(state, written)                           
+       56 +                                                                   
+       57 +    output = {                                                     
+       58 +        "written_files": all_written,                              
+       59 +        "summary": "\n".join(all_summaries),                       
+       60 +        "notes": "",                                               
+       61 +    }                                                              
+       62 +    set_agent_output(state, "code", output)                        
+       63 +                                                                   
+       64 +    if verbose:                                                    
+       65 +        print(f"\n[Code Agent] 全部完成，共写入 {len(all_written)} 
+          +个文件：")                                                         
+       66 +        for f in all_written:                                      
+       67 +            print(f"  • {f}")                                      
+       68 +                                                                   
+       69 +    return state                                                   
+       70 +                                                                   
+       71 +                                                                   
+       72 +def _run_single_task(                                              
+       73 +    state: dict,                                                   
+       74 +    task: dict,                                                    
+       75 +    req_output: dict,                                              
+       76 +    project_context: dict,                                         
+       77 +    verbose: bool,                                                 
+       78 +) -> tuple[list[str], str]:                                        
+       79      criteria = "\n".join(f"- {c}" for c in req_output.get("acceptan
+           ce_criteria", []))
+       80      tech_notes = "\n".join(f"- {n}" for n in req_output.get("tech_n
+           otes", []))
+       81  
+       39 -    # Find code task for language hint                             
+       40 -    code_tasks = [t for t in state["tasks"] if t["type"] == "code"]
+       41 -    language = code_tasks[0].get("language", "ObjC") if code_tasks 
+          -else "ObjC"                                                        
+       82 +    # Build project context snippet                                
+       83 +    pc_summary = project_context.get("summary", "")                
+       84 +    pc_lang = project_context.get("language", "")                  
+       85 +    pc_arch = project_context.get("architecture", "")              
+       86 +    pc_naming = project_context.get("naming_conventions", "")      
+       87 +    key_files_str = "\n".join(                                     
+       88 +        f"  {kf['path']} ({kf.get('role', '')})"                   
+       89 +        for kf in project_context.get("key_files", [])[:10]        
+       90 +    )                                                              
+       91  
+       43 -    user_msg = f"""项目路径：{ctx['project_path']}                 
+       44 -需求：{ctx['requirement']}                                         
+       45 -语言：{language}                                                   
+       92 +    files_str = "\n".join(f"  - {f}" for f in task.get("files", [])
+          +)                                                                  
+       93  
+       94 +    user_msg = f"""项目路径：{state['project_path']}               
+       95 +需求：{state['requirement']}                                       
+       96 +语言：{task.get('language', pc_lang or 'SwiftUI')}                 
+       97 +                                                                   
+       98 +【项目上下文】                                                     
+       99 +{pc_summary}                                                       
+      100 +架构：{pc_arch}  命名规范：{pc_naming}                             
+      101 +关键文件：                                                         
+      102 +{key_files_str or '  （无）'}                                      
+      103 +                                                                   
+      104 +【本次任务】                                                       
+      105 +{task.get('description', '')}                                      
+      106 +                                                                   
+      107 +涉及文件：                                                         
+      108 +{files_str or '  （由你决定）'}                                    
+      109 +                                                                   
+      110  验收标准：
+      111  {criteria or '（见需求描述）'}
+      112  
+      113  技术要点：
+      114  {tech_notes or '（无特殊要求）'}
+      115  
+       53 -需要处理的文件：                                                   
+       54 -{files_info}                                                       
+      116 +请先阅读涉及的现有文件，然后生成并写入代码，最后输出 JSON 结果。"""
+      117  
+       56 -请先阅读相关现有代码，然后生成并写入代码文件，最后输出 JSON 结果。"
+          -""                                                                 
+       57 -                                                                   
+       58 -    if verbose:                                                    
+       59 -        print(f"\n[Code Agent] 生成 {language} 代码并写入项目...") 
+       60 -                                                                   
+      118      final_text, tool_log = run_agent(
+      119          system_prompt=SYSTEM_PROMPT,
+      120          user_message=user_msg,
+     ...
+      122          verbose=verbose,
+      123      )
+      124  
+       68 -    output = _extract_json(final_text)                             
+      125 +    result = _extract_json(final_text)                             
+      126 +                                                                   
+      127      # Supplement written_files from tool log if agent forgot to lis
+           t them
+       70 -    if not output.get("written_files"):                            
+       71 -        output["written_files"] = [                                
+      128 +    if not result.get("written_files"):                            
+      129 +        result["written_files"] = [                                
+      130              t["input"]["path"] for t in tool_log if t["tool"] == "w
+           rite_file"
+      131          ]
+      132  
+       75 -    set_agent_output(state, "code", output)                        
+      133 +    return result.get("written_files", []), result.get("summary", "
+          +")                                                                 
+      134  
+       77 -    if verbose:                                                    
+       78 -        written = output.get("written_files", [])                  
+       79 -        print(f"\n[Code Agent] 完成，写入 {len(written)} 个文件：")
+       80 -        for f in written:                                          
+       81 -            print(f"  • {f}")                                      
+      135  
+       83 -    return state                                                   
+       84 -                                                                   
+       85 -                                                                   
+      136  def _extract_json(text: str) -> dict:
+      137      import re
+      138      match = re.search(r"\{[\s\S]*\}", text)
+
+⏺ 现在更新 main.py 和各 Agent 注入 project_context。先更新 main.py：
+
+⏺ Update(main.py)
+  ⎿  Added 1 line
+      12  import sys
+      13  
+      14  from memory.context_manager import new_state, save_state, save_sessi
+          on_history
+      15 +from memory import project_scanner                                  
+      16  import agents.master_agent as master_agent
+      17  import agents.requirements_agent as requirements_agent
+      18  import agents.code_agent as code_agent
+  
+⏺ Update(main.py)
+  ⎿  Added 1 line
+      34      parser.add_argument("--dry-run", action="store_true", help="只输
+          出任务计划，不执行代码写入")
+      35      parser.add_argument("--quiet", action="store_true", help="减少输
+          出")
+      36      parser.add_argument("--provider", choices=["claude", "gemini"], 
+          help="覆盖 .env 中的 PROVIDER 设置")
+      37 +    parser.add_argument("--rescan", action="store_true", help="强制 
+         +重新扫描项目，忽略缓存的 project_context")                          
+      38      return parser.parse_args()
+      39  
+      40  
+
+⏺ Update(main.py)
+  ⎿  Added 4 lines
+       97      state = new_state(project_path, requirement)
+       98      save_state(state)
+       99  
+      100 +    # Step 0: Project Scanner — build/load project knowledge base  
+      101 +    state = project_scanner.run(state, force=args.rescan, verbose=v
+          +erbose)                                                            
+      102 +    save_state(state)                                              
+      103 +                                                                   
+      104      # Step 1: Master Agent — task decomposition
+      105      state = master_agent.run(state, dry_run=args.dry_run, verbose=v
+           erbose)
+      106      save_state(state)
+
+⏺ 现在更新各 Agent 注入 project_context。先更新 master_agent.py：
+
+⏺ Update(agents/master_agent.py)
+  ⎿  Added 4 lines, removed 1 line
+      37  可用 Scheme：{', '.join(schemes) if schemes else '未检测到'}
+      38  需求：{requirement}
+      39  
+      40 -请先用 list_files 工具扫描项目结构，然后输出任务拆解 JSON。"""      
+      40 +【项目上下文】                                                      
+      41 +{_format_project_context(state.get('project_context'))}             
+      42  
+      43 +请根据以上项目上下文直接输出任务拆解 JSON，无需重复扫描已知文件。"""
+      44 +                                                                    
+      45      if verbose:
+      46          print("\n[Master Agent] 分析项目结构并拆解任务...")
+      47  
+
+⏺ Update(agents/master_agent.py)
+  ⎿  Added 15 lines
+      71      return state
+      72  
+      73  
+      74 +def _format_project_context(pc: dict | None) -> str:                
+      75 +    if not pc:                                                      
+      76 +        return "（尚未扫描，请用 list_files 工具扫描项目结构）"     
+      77 +    key_files = "\n".join(                                          
+      78 +        f"  {kf['path']} ({kf.get('role', '')})"                    
+      79 +        for kf in pc.get("key_files", [])[:10]                      
+      80 +    )                                                               
+      81 +    return (                                                        
+      82 +        f"语言: {pc.get('language', '?')}  架构: {pc.get('architectu
+         +re', '?')}\n"                                                       
+      83 +        f"命名规范: {pc.get('naming_conventions', '?')}\n"          
+      84 +        f"摘要: {pc.get('summary', '')}\n"                          
+      85 +        f"关键文件:\n{key_files or '  （无）'}"                     
+      86 +    )                                                               
+      87 +                                                                    
+      88 +                                                                    
+      89  def _extract_json(text: str) -> dict:
+      90      # Try to find JSON block
+      91      import re
+
+⏺ 现在更新 requirements_agent.py、test_agent.py、release_agent.py 注入
+  project_context：
+     
+⏺ Update(agents/requirements_agent.py)
+  ⎿  Added 16 lines, removed 1 line
+      28      ctx = get_agent_context(state, "requirements")
+      29      tasks = [t for t in state["tasks"] if t["type"] == "requirements
+          "]
+      30      task_desc = tasks[0]["description"] if tasks else ctx["requireme
+          nt"]
+      31 +    project_context = ctx.get("project_context") or {}              
+      32  
+      33 +    pc_summary = project_context.get("summary", "")                 
+      34 +    pc_lang = project_context.get("language", "")                   
+      35 +    pc_arch = project_context.get("architecture", "")               
+      36 +    key_files_str = "\n".join(                                      
+      37 +        f"  {kf['path']} ({kf.get('role', '')})"                    
+      38 +        for kf in project_context.get("key_files", [])[:10]         
+      39 +    )                                                               
+      40 +                                                                    
+      41      user_msg = f"""项目路径：{ctx['project_path']}
+      42  原始需求：{ctx['requirement']}
+      43  任务描述：{task_desc}
+      44  
+      36 -请先用 list_files 和 read_file 工具阅读相关代码，然后输出细化需求 JS
+         -ON。"""                                                             
+      45 +【项目上下文】                                                      
+      46 +{pc_summary}                                                        
+      47 +语言: {pc_lang}  架构: {pc_arch}                                    
+      48 +关键文件:                                                           
+      49 +{key_files_str or '  （无）'}                                       
+      50  
+      51 +请根据以上上下文细化需求（可用 read_file 工具阅读相关已有代码），然 
+         +后输出细化需求 JSON。"""                                            
+      52 +                                                                    
+      53      if verbose:
+      54          print("\n[Requirements Agent] 细化需求和验收标准...")
+      55  
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Update(agents/test_agent.py)
+  ⎿  Added 7 lines
+      34      ctx = get_agent_context(state, "test")
+      35      code_output = ctx.get("code_output", {})
+      36      req_output = ctx.get("requirements_output", {})
+      37 +    project_context = ctx.get("project_context") or {}              
+      38  
+      39      written_files = code_output.get("written_files", [])
+      40      criteria = "\n".join(f"- {c}" for c in req_output.get("acceptanc
+          e_criteria", []))
+     ...
+      45  
+      46      proj_flag = "-workspace" if proj_type == "workspace" else "-proj
+          ect"
+      47  
+      48 +    pc_summary = project_context.get("summary", "")                 
+      49 +    pc_arch = project_context.get("architecture", "")               
+      50 +                                                                    
+      51      user_msg = f"""项目路径：{ctx['project_path']}
+      52  项目文件：{proj_path}（{proj_flag}）
+      53  Scheme：{scheme}
+      54  
+      55 +【项目上下文】                                                      
+      56 +{pc_summary}  架构: {pc_arch}                                       
+      57 +                                                                    
+      58  新增/修改的文件：
+      59  {chr(10).join('- ' + f for f in written_files) or '（无）'}
+      60  
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ release_agent 的 user_msg 是纯构建指令，不需要注入
+  project_context，跳过。现在验证所有文件语法：
+
+⏺ Bash(.venv/bin/python3 -c "
+      import ast, sys…)
+  ⎿    OK  config.py
+       OK  main.py
+       OK  memory/context_manager.py
+     … +7 lines (ctrl+o to expand)
+  ⎿  Allowed by auto mode classifier
+     
+⏺ 语法全部通过。验证三项改进：
+
+  改进一：首次扫描生成 project_context.json
+     
+⏺ Bash(rm -f memory/project_context.json && .venv/bin/python3 main.py --project
+      TestProject --requirement "新增设置页面" --dry-run 2>&1)
+  ⎿  Error: Exit code 1
+     [ERROR] 项目目录不存在: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+
+⏺ Bash(rm -f memory/project_context.json && .venv/bin/python3 main.py --project
+      TestProject --requirement "新增设置页面" --dry-run 2>&1)
+  ⎿  Error: Exit code 1
+     [ERROR] 项目目录不存在: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Bash(rm -f memory/project_context.json && .venv/bin/python3 main.py --project
+      TestProject --requirement "新增设置页面" --dry-run 2>&1)
+  ⎿  Error: Exit code 1
+     [ERROR] 项目目录不存在: /Users/xiaolongbao/Documents/ClaudeGene/TestProject
+
+  Searched for 1 pattern, listed 1 directory (ctrl+o to expand)
+  ⎿  Please run /login · API Error: 403 {"error":"您的余额不足，请充值后继续使用"}
+     
+✻ Brewed for 10m 15s
+
+  3 tasks (2 done, 1 in progress, 0 open)
+  ✔ 新增 project_scanner.py + 修改 context_manager.py
+  ✔ 改造 code_agent.py 支持多 task 独立 Agent
+  ◼ 修改 main.py 和各 Agent 注入 project_context
+
+─────────────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · ctrl+t to hide tasks        
+                                             new task? /clear to save 115.3k tokens
+
+
