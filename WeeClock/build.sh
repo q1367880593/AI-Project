@@ -5,7 +5,7 @@ set -e
 
 APP_NAME="WeeClock"
 BUNDLE_ID="com.weeclock.app"
-TARGET="arm64-apple-macosx14.0"
+TARGET="arm64-apple-macosx26.0"
 WORK_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_DIR="${WORK_DIR}/${APP_NAME}.app"
 CONTENTS_DIR="${APP_DIR}/Contents"
@@ -54,7 +54,7 @@ cat > "${CONTENTS_DIR}/Info.plist" <<PLIST
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>LSMinimumSystemVersion</key>
-    <string>14.0</string>
+    <string>26.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>LSApplicationCategoryType</key>

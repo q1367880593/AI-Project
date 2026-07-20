@@ -276,16 +276,23 @@ struct ContentView: View {
 
     // MARK: 隐身模式视图
     private var ghostModeView: some View {
-        HStack(spacing: 12) {
+        // 深色文字配色：靛蓝紫主调
+        let accentStart   = Color(red: 0.30, green: 0.36, blue: 0.72)
+        let accentEnd      = Color(red: 0.45, green: 0.32, blue: 0.82)
+        let primaryText   = Color(red: 0.16, green: 0.18, blue: 0.30)
+        let secondaryText = Color(red: 0.38, green: 0.40, blue: 0.55)
+        let trackColor      = Color.black.opacity(0.10)
+
+        return HStack(spacing: 12) {
             // 左侧：圆形进度环
             ZStack {
                 Circle()
-                    .stroke(Color.white.opacity(0.18), lineWidth: 3.5)
+                    .stroke(trackColor, lineWidth: 3.5)
                 Circle()
                     .trim(from: 0, to: vm.progress)
                     .stroke(
                         AngularGradient(
-                            colors: [.accentColor.opacity(0.7), .accentColor],
+                            colors: [accentStart, accentEnd],
                             center: .center
                         ),
                         style: StrokeStyle(lineWidth: 3.5, lineCap: .round)
@@ -294,21 +301,18 @@ struct ContentView: View {
                     .animation(.linear(duration: 0.5), value: vm.progress)
                 Text("\(Int(vm.progress * 100))")
                     .font(.system(size: 11, weight: .bold, design: .monospaced))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(primaryText)
             }
             .frame(width: 36, height: 36)
 
             // 中间：倒计时
-            VStack(alignment: .leading, spacing: 1) {
-                Text("剩余时间")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.55))
-                Text(vm.remaining.hhmmss)
-                    .font(.system(size: 17, weight: .bold, design: .monospaced))
-                    .monospacedDigit()
-                    .foregroundStyle(.white)
-                    .contentTransition(.numericText())
-            }
+            Text(vm.remaining.hhmmss)
+                .font(.system(size: 20, weight: .semibold, design: .monospaced))
+                .monospacedDigit()
+                .foregroundStyle(primaryText)
+                .contentTransition(.numericText())
+
+            Spacer(minLength: 0)
 
             // 右侧：状态点 + 退出按钮
             Capsule()
@@ -321,9 +325,9 @@ struct ContentView: View {
             } label: {
                 Image(systemName: "arrow.up.left.and.arrow.down.right")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(secondaryText)
                     .padding(6)
-                    .background(Circle().fill(Color.white.opacity(0.1)))
+                    .background(Circle().fill(Color.black.opacity(0.06)))
             }
             .buttonStyle(.plain)
             .help("退出隐身模式")
@@ -331,15 +335,8 @@ struct ContentView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .frame(width: 260, height: 64)
-        .background(
-            Capsule()
-                .fill(.ultraThinMaterial)
-                .overlay(
-                    Capsule()
-                        .stroke(Color.white.opacity(0.18), lineWidth: 0.5)
-                )
-                .shadow(color: .black.opacity(0.35), radius: 14, y: 5)
-        )
+        .background(.clear)
+        .glassEffect(.regular, in: Capsule())
     }
 
     // MARK: 窗口模式切换
