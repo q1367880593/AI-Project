@@ -136,32 +136,55 @@ struct ContentView: View {
         .frame(maxWidth: .infinity)
     }
 
-    // MARK: 进度条（10 段 × 4 小时）
+    // MARK: 进度条（连贯填充 + 4 小时刻度）
     private var progressBlock: some View {
         VStack(spacing: 8) {
-            HStack(spacing: 5) {
-                ForEach(0..<WorkClockLogic.totalSegments, id: \.self) { i in
-                    let isFilled = i < vm.filledSegments
-                    let isCurrent = i == vm.filledSegments && vm.status == .counting
-                    RoundedRectangle(cornerRadius: 3, style: .continuous)
-                        .fill(isFilled
-                              ? Color.accentColor
-                              : Color(nsColor: .separatorColor).opacity(0.6))
-                        .frame(height: 22)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                                .fill(Color.accentColor.opacity(isCurrent ? 0.5 : 0))
-                                .blur(radius: 3)
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    // 轨道
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .fill(Color(nsColor: .separatorColor).opacity(0.35))
+                    // 填充：随时间连续增长
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.accentColor.opacity(0.75),
+                                    Color.accentColor
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
-                        .overlay(
-                            Text("\(i + 1)")
-                                .font(.system(size: 10, weight: .semibold, design: .rounded))
-                                .foregroundStyle(isFilled ? .white : .secondary)
-                        )
+                        .frame(width: max(0, geo.size.width * vm.progress))
+                        .animation(.linear(duration: 0.5), value: vm.progress)
+                    // 刻度线：每 4 小时一道（共 9 道，第 10 段为末端）
+                    HStack(spacing: 0) {
+                        ForEach(0..<WorkClockLogic.totalSegments, id: \.self) { i in
+                            if i > 0 {
+                                Rectangle()
+                                    .fill(Color.white.opacity(0.35))
+                                    .frame(width: 1)
+                            }
+                            Spacer()
+                        }
+                    }
+                    .padding(.horizontal, 0)
+                    // 段数标签（覆盖在填充末端附近）
+                    HStack {
+                        Spacer()
+                        Text("\(vm.filledSegments)/\(WorkClockLogic.totalSegments)")
+                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(.white)
+                            .padding(.trailing, 12)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+            .frame(height: 22)
+
             HStack(spacing: 0) {
-                Text("\(vm.filledSegments)/\(WorkClockLogic.totalSegments) 段")
+                Text("每段 4 小时 · 共 40 小时")
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(String(format: "%.1f%%", vm.progress * 100))
