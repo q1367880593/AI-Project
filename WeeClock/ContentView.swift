@@ -1,9 +1,11 @@
 import SwiftUI
+import AppKit
 import Combine
 
 // MARK: - 视图模型
 final class WorkClockViewModel: ObservableObject {
     @Published var now: Date = Date()
+    @Published var isGhostMode: Bool = false
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
 
@@ -75,8 +77,25 @@ final class WorkClockViewModel: ObservableObject {
 // MARK: - 主视图
 struct ContentView: View {
     @StateObject private var vm = WorkClockViewModel()
+    @State private var savedFrame: NSRect = .zero
 
     var body: some View {
+        ZStack {
+            if vm.isGhostMode {
+                ghostModeView
+            } else {
+                normalView
+            }
+        }
+        .onAppear {
+            if vm.isGhostMode { applyWindowMode(isGhost: true) }
+        }
+        .onChange(of: vm.isGhostMode) { newValue in
+            applyWindowMode(isGhost: newValue)
+        }
+    }
+
+    private var normalView: some View {
         VStack(spacing: 22) {
             header
             countdownBlock
@@ -91,28 +110,42 @@ struct ContentView: View {
 
     // MARK: 标题
     private var header: some View {
-        VStack(spacing: 6) {
-            HStack(spacing: 8) {
-                Image(systemName: "clock.fill")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.tint)
-                Text("WeeClock")
-                    .font(.system(size: 22, weight: .semibold, design: .rounded))
+        HStack(alignment: .top) {
+            VStack(spacing: 6) {
+                HStack(spacing: 8) {
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.tint)
+                    Text("WeeClock")
+                        .font(.system(size: 22, weight: .semibold, design: .rounded))
+                }
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(vm.statusColor)
+                        .frame(width: 7, height: 7)
+                        .overlay(
+                            Circle().fill(vm.statusColor)
+                                .frame(width: 7, height: 7)
+                                .blur(radius: 2)
+                                .opacity(vm.status == .counting ? 0.8 : 0)
+                        )
+                    Text(vm.statusText)
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+                }
             }
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(vm.statusColor)
-                    .frame(width: 7, height: 7)
-                    .overlay(
-                        Circle().fill(vm.statusColor)
-                            .frame(width: 7, height: 7)
-                            .blur(radius: 2)
-                            .opacity(vm.status == .counting ? 0.8 : 0)
-                    )
-                Text(vm.statusText)
-                    .font(.system(size: 13))
+            Spacer()
+            Button {
+                vm.isGhostMode = true
+            } label: {
+                Image(systemName: "eye.slash.fill")
+                    .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.secondary)
+                    .padding(8)
+                    .background(Circle().fill(Color(nsColor: .separatorColor).opacity(0.5)))
             }
+            .buttonStyle(.plain)
+            .help("进入隐身模式")
         }
         .frame(maxWidth: .infinity)
     }
@@ -239,5 +272,137 @@ struct ContentView: View {
         let f = DateFormatter()
         f.dateFormat = "HH:mm:ss"
         return f.string(from: date)
+    }
+
+    // MARK: 隐身模式视图
+    private var ghostModeView: some View {
+        HStack(spacing: 12) {
+            // 左侧：圆形进度环
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.18), lineWidth: 3.5)
+                Circle()
+                    .trim(from: 0, to: vm.progress)
+                    .stroke(
+                        AngularGradient(
+                            colors: [.accentColor.opacity(0.7), .accentColor],
+                            center: .center
+                        ),
+                        style: StrokeStyle(lineWidth: 3.5, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+                    .animation(.linear(duration: 0.5), value: vm.progress)
+                Text("\(Int(vm.progress * 100))")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.white)
+            }
+            .frame(width: 36, height: 36)
+
+            // 中间：倒计时
+            VStack(alignment: .leading, spacing: 1) {
+                Text("剩余时间")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.55))
+                Text(vm.remaining.hhmmss)
+                    .font(.system(size: 17, weight: .bold, design: .monospaced))
+                    .monospacedDigit()
+                    .foregroundStyle(.white)
+                    .contentTransition(.numericText())
+            }
+
+            // 右侧：状态点 + 退出按钮
+            Capsule()
+                .fill(vm.statusColor)
+                .frame(width: 8, height: 8)
+                .opacity(vm.status == .counting ? 1 : 0.5)
+
+            Button {
+                vm.isGhostMode = false
+            } label: {
+                Image(systemName: "arrow.up.left.and.arrow.down.right")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.6))
+                    .padding(6)
+                    .background(Circle().fill(Color.white.opacity(0.1)))
+            }
+            .buttonStyle(.plain)
+            .help("退出隐身模式")
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .frame(width: 260, height: 64)
+        .background(
+            Capsule()
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    Capsule()
+                        .stroke(Color.white.opacity(0.18), lineWidth: 0.5)
+                )
+                .shadow(color: .black.opacity(0.35), radius: 14, y: 5)
+        )
+    }
+
+    // MARK: 窗口模式切换
+    private func applyWindowMode(isGhost: Bool) {
+        // 找到主窗口（优先 keyWindow，其次带标题栏的窗口）
+        guard let window = NSApp.keyWindow
+                            ?? NSApp.windows.first(where: { $0.styleMask.contains(.titled) })
+                            ?? NSApp.windows.first(where: { $0.contentView != nil })
+        else { return }
+
+        if isGhost {
+            // 保存当前 frame，便于退出时恢复
+            if savedFrame == .zero {
+                savedFrame = window.frame
+            }
+            let ghostSize = CGSize(width: 260, height: 64)
+            let center = CGPoint(
+                x: window.frame.midX - ghostSize.width / 2,
+                y: window.frame.midY - ghostSize.height / 2
+            )
+            window.styleMask = .borderless
+            window.isOpaque = false
+            window.backgroundColor = .clear
+            window.hasShadow = false
+            window.level = .floating
+            window.isMovable = true
+            window.isMovableByWindowBackground = true
+            window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+            NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.3
+                ctx.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                window.animator().setFrame(
+                    NSRect(origin: center, size: ghostSize),
+                    display: true
+                )
+            }
+        } else {
+            let target = savedFrame == .zero
+                ? NSRect(x: 0, y: 0, width: 500, height: 480)
+                : savedFrame
+            // 居中
+            let screenFrame = NSScreen.main?.visibleFrame ?? .zero
+            let centered = NSRect(
+                x: screenFrame.midX - target.width / 2,
+                y: screenFrame.midY - target.height / 2,
+                width: target.width,
+                height: target.height
+            )
+            window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+            window.isOpaque = true
+            window.backgroundColor = .windowBackgroundColor
+            window.hasShadow = true
+            window.level = .normal
+            window.isMovable = true
+            window.isMovableByWindowBackground = false
+            window.collectionBehavior = [.managed, .participatesInCycle]
+            window.title = "WeeClock"
+            NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.3
+                ctx.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                window.animator().setFrame(centered, display: true)
+            }
+            savedFrame = .zero
+        }
     }
 }
