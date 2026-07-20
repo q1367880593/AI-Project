@@ -368,6 +368,13 @@ struct ContentView: View {
             window.isMovable = true
             window.isMovableByWindowBackground = true
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+            // 用 layer 圆角裁剪掉透明窗口矩形的四角底色
+            let cornerRadius: CGFloat = 32
+            if let cv = window.contentView {
+                cv.wantsLayer = true
+                cv.layer?.cornerRadius = cornerRadius
+                cv.layer?.masksToBounds = true
+            }
             NSAnimationContext.runAnimationGroup { ctx in
                 ctx.duration = 0.3
                 ctx.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
