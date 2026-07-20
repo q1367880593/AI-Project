@@ -276,11 +276,11 @@ struct ContentView: View {
 
     // MARK: 隐身模式视图
     private var ghostModeView: some View {
-        // 深色文字配色：靛蓝紫主调
+        // 进度条 tint 色：靛蓝紫
         let accentStart   = Color(red: 0.30, green: 0.36, blue: 0.72)
         let accentEnd      = Color(red: 0.45, green: 0.32, blue: 0.82)
-        let primaryText   = Color(red: 0.16, green: 0.18, blue: 0.30)
-        let secondaryText = Color(red: 0.38, green: 0.40, blue: 0.55)
+        let primaryText   = accentStart
+        let secondaryText = accentEnd.opacity(0.70)
         let trackColor      = Color.black.opacity(0.10)
 
         return HStack(spacing: 12) {
@@ -312,14 +312,7 @@ struct ContentView: View {
                 .foregroundStyle(primaryText)
                 .contentTransition(.numericText())
 
-            Spacer(minLength: 0)
-
-            // 右侧：状态点 + 退出按钮
-            Capsule()
-                .fill(vm.statusColor)
-                .frame(width: 8, height: 8)
-                .opacity(vm.status == .counting ? 1 : 0.5)
-
+            // 退出按钮
             Button {
                 vm.isGhostMode = false
             } label: {
@@ -332,9 +325,9 @@ struct ContentView: View {
             .buttonStyle(.plain)
             .help("退出隐身模式")
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .frame(width: 260, height: 64)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .frame(width: 210, height: 52)
         .background(.clear)
         .glassEffect(.regular, in: Capsule())
     }
@@ -352,7 +345,7 @@ struct ContentView: View {
             if savedFrame == .zero {
                 savedFrame = window.frame
             }
-            let ghostSize = CGSize(width: 260, height: 64)
+            let ghostSize = CGSize(width: 210, height: 52)
             let center = CGPoint(
                 x: window.frame.midX - ghostSize.width / 2,
                 y: window.frame.midY - ghostSize.height / 2
@@ -366,11 +359,12 @@ struct ContentView: View {
             window.isMovableByWindowBackground = true
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             // 用 layer 圆角裁剪掉透明窗口矩形的四角底色
-            let cornerRadius: CGFloat = 32
+            let cornerRadius: CGFloat = 26
             if let cv = window.contentView {
                 cv.wantsLayer = true
                 cv.layer?.cornerRadius = cornerRadius
                 cv.layer?.masksToBounds = true
+                cv.layer?.shadowOpacity = 0
             }
             NSAnimationContext.runAnimationGroup { ctx in
                 ctx.duration = 0.3
