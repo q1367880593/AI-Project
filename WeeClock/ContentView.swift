@@ -284,12 +284,12 @@ struct ContentView: View {
         let trackColor      = Color.black.opacity(0.10)
 
         return HStack(spacing: 12) {
-            // 左侧：圆形进度环
+            // 左侧：圆形进度环（显示剩余比例：满 = 刚开始，空 = 已完成）
             ZStack {
                 Circle()
                     .stroke(trackColor, lineWidth: 3.5)
                 Circle()
-                    .trim(from: 0, to: vm.progress)
+                    .trim(from: 0, to: 1 - vm.progress)
                     .stroke(
                         AngularGradient(
                             colors: [accentStart, accentEnd],
@@ -299,7 +299,7 @@ struct ContentView: View {
                     )
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 0.5), value: vm.progress)
-                Text("\(Int(vm.progress * 100))")
+                Text("\(Int((1 - vm.progress) * 100))")
                     .font(.system(size: 11, weight: .bold, design: .monospaced))
                     .foregroundStyle(primaryText)
             }
