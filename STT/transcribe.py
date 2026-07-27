@@ -130,7 +130,7 @@ def translate_with_gemini(segments: list[str]) -> list[str]:
     client = genai.Client(api_key=GEMINI_API_KEY)
 
     BATCH_SIZE = 50
-    DELAY_BETWEEN_BATCHES = 5  # 免费层 RPM=15，每批间隔 5 秒
+    DELAY_BETWEEN_BATCHES = 30  # 免费层 RPM=15，每批间隔 5 秒
 
     all_results = []
     total_batches = (len(segments) + BATCH_SIZE - 1) // BATCH_SIZE
