@@ -137,6 +137,17 @@ for (size, name) in sizes {
     print("✅ \(name) (\(Int(size))x\(Int(size)))")
 }
 
+// 用 pngquant 压缩 PNG（无损视觉品质）
+print("📦 压缩 PNG...")
+let pngquant = Process()
+pngquant.launchPath = "/usr/bin/env"
+pngquant.arguments = [
+    "bash", "-c",
+    "for f in \(outputDir)/*.png; do pngquant --quality=70-90 --speed 1 --force --output \"$f\" \"$f\" 2>/dev/null; done"
+]
+pngquant.launch()
+pngquant.waitUntilExit()
+
 // 用 iconutil 打包
 let task = Process()
 task.launchPath = "/usr/bin/iconutil"
