@@ -36,6 +36,9 @@ TRANSLATION_API = os.getenv("TRANSLATION_API", "gemini")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
 
+# Google Translate
+GOOGLE_TRANSLATE_API_KEY = os.getenv("GOOGLE_TRANSLATE_API_KEY", "")
+
 # Ollama 本地翻译
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3:8b")
@@ -421,6 +424,47 @@ def translate_with_deepl(segments: list[str]) -> list[str]:
     return results
 
 
+def translate_with_google_translate(segments: list[str]) -> list[str]:
+    """使用 Google Cloud Translation API v2 翻译（每月 50 万字符免费）"""
+    import requests
+
+    url = "https://translation.googleapis.com/language/translate/v2"
+    results = []
+
+    for i, text in enumerate(segments):
+        if not text.strip():
+            results.append("")
+            continue
+        for attempt in range(3):
+            try:
+                resp = requests.post(
+                    url,
+                    params={"key": GOOGLE_TRANSLATE_API_KEY},
+                    data={
+                        "q": text,
+                        "source": "ja",
+                        "target": "zh-CN",
+                        "format": "text",
+                    },
+                    timeout=15,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                translated = data["data"]["translations"][0]["translatedText"]
+                results.append(translated)
+                break
+            except Exception as e:
+                print(f"  ⚠ Google Translate 错误: {e}，重试...")
+                time.sleep(2)
+        else:
+            raise RuntimeError(f"Google Translate 翻译失败: {text[:30]}...")
+
+        if (i + 1) % 50 == 0:
+            print(f"  ✅ 已翻译 {i + 1}/{len(segments)}")
+
+    return results
+
+
 def translate_segments(segments: list[str]) -> list[str]:
     """根据配置选择翻译方式"""
     if not segments:
@@ -431,6 +475,10 @@ def translate_segments(segments: list[str]) -> list[str]:
         if not GEMINI_API_KEY:
             raise RuntimeError("请设置 GEMINI_API_KEY 环境变量")
         return translate_with_gemini(segments)
+    elif TRANSLATION_API == "google_translate":
+        if not GOOGLE_TRANSLATE_API_KEY:
+            raise RuntimeError("请设置 GOOGLE_TRANSLATE_API_KEY 环境变量")
+        return translate_with_google_translate(segments)
     elif TRANSLATION_API == "ollama":
         return translate_with_ollama(segments)
     elif TRANSLATION_API == "deepl":
