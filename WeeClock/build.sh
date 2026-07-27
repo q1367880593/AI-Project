@@ -31,6 +31,12 @@ rm -rf "${APP_DIR}"
 mkdir -p "${MACOS_DIR}" "${RESOURCES_DIR}"
 mv "${APP_NAME}" "${MACOS_DIR}/${APP_NAME}"
 
+# 拷贝图标
+if [ -f "${WORK_DIR}/WeeClock.icns" ]; then
+    cp "${WORK_DIR}/WeeClock.icns" "${RESOURCES_DIR}/AppIcon.icns"
+    echo "🎨 图标已嵌入"
+fi
+
 # 写入 Info.plist
 cat > "${CONTENTS_DIR}/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -51,6 +57,8 @@ cat > "${CONTENTS_DIR}/Info.plist" <<PLIST
     <string>APPL</string>
     <key>CFBundleExecutable</key>
     <string>${APP_NAME}</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>LSMinimumSystemVersion</key>
