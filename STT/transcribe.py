@@ -74,6 +74,23 @@ Style: CN,Microsoft YaHei,28,&H0000FFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
 
+ASS_HEADER_CN = """[Script Info]
+Title: Chinese Subtitles
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: None
+PlayResX: 1920
+PlayResY: 1080
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: CN,Microsoft YaHei,36,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,0,2,10,10,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+
 
 # ============================================================
 # 工具函数
@@ -413,23 +430,33 @@ def generate_ass(
     translations: list[str],
     output_path: Path,
 ):
-    """生成双语 ASS 字幕文件"""
-    with open(output_path, "w", encoding="utf-8") as f:
+    """生成双语 ASS 和纯中文 ASS 字幕文件"""
+    cn_path = output_path.with_suffix(".cn.ass")
+
+    with open(output_path, "w", encoding="utf-8") as f, \
+         open(cn_path, "w", encoding="utf-8") as f_cn:
+
         f.write(ASS_HEADER)
+        f_cn.write(ASS_HEADER_CN)
 
         for seg, cn_text in zip(segments, translations):
             start = seconds_to_ass_time(seg["start"])
             end = seconds_to_ass_time(seg["end"])
             jp_text = format_segment_text(seg["text"])
 
-            # 日文原文
+            # 双语：日文 + 中文
             f.write(f"Dialogue: 0,{start},{end},JP,,0,0,0,,{jp_text}\n")
-            # 中文翻译
             if cn_text:
                 cn_formatted = format_segment_text(cn_text, max_chars_per_line=25)
                 f.write(f"Dialogue: 0,{start},{end},CN,,0,0,0,,{cn_formatted}\n")
 
-    print(f"\n✅ 字幕已生成: {output_path}")
+            # 纯中文
+            if cn_text:
+                cn_formatted = format_segment_text(cn_text, max_chars_per_line=30)
+                f_cn.write(f"Dialogue: 0,{start},{end},CN,,0,0,0,,{cn_formatted}\n")
+
+    print(f"\n✅ 双语字幕: {output_path}")
+    print(f"✅ 纯中文字幕: {cn_path}")
 
 
 # ============================================================
