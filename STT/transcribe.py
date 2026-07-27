@@ -123,14 +123,71 @@ def format_segment_text(text: str, max_chars_per_line: int = 30) -> str:
 # 翻译模块
 # ============================================================
 
+def _ollama_translate_batch(batch: list[str]) -> list[str]:
+    """用 Ollama 翻译单个批次（Gemini 失败时的降级方案）"""
+    import requests
+
+    if not any(t.strip() for t in batch):
+        return [""] * len(batch)
+
+    numbered = "\n".join(
+        f"{i+1}. {t}" for i, t in enumerate(batch) if t.strip()
+    )
+
+    prompt = f"""将以下日语对话逐行翻译成中文，保持语气和语境。
+
+规则：
+- 一行原文对应一行翻译，顺序不变
+- 只输出中文译文，不要编号、不要解释
+- 空行保留为空
+
+{numbered}"""
+
+    try:
+        resp = requests.post(
+            f"{OLLAMA_HOST}/api/chat",
+            json={
+                "model": OLLAMA_MODEL,
+                "messages": [
+                    {"role": "system", "content": "你是日语翻译专家，逐行翻译日语为流畅中文，只输出译文，不输出任何额外内容。"},
+                    {"role": "user", "content": prompt},
+                ],
+                "stream": False,
+                "options": {"temperature": 0.1},
+            },
+            timeout=120,
+        )
+        resp.raise_for_status()
+        result = resp.json()["message"]["content"].strip()
+        lines = [line.strip() for line in result.split("\n") if line.strip()]
+        lines = [re.sub(r"^\d+[\.\、\)）]\s*", "", line) for line in lines]
+
+        final_batch = []
+        line_idx = 0
+        for t in batch:
+            if t.strip():
+                final_batch.append(lines[line_idx] if line_idx < len(lines) else t)
+                line_idx += 1
+            else:
+                final_batch.append("")
+
+        if len(final_batch) == len(batch):
+            return final_batch
+        print(f"  ⚠ Ollama 降级行数不匹配，保留原文")
+    except Exception as e:
+        print(f"  ⚠ Ollama 降级错误: {e}")
+
+    return batch  # 失败返回原文
+
+
 def translate_with_gemini(segments: list[str]) -> list[str]:
-    """使用 Google Gemini API 批量翻译（免费额度，带限速）"""
+    """使用 Google Gemini API 批量翻译（免费额度，带限速，失败降级到 Ollama）"""
     from google import genai
 
     client = genai.Client(api_key=GEMINI_API_KEY)
 
-    BATCH_SIZE = 50
-    DELAY_BETWEEN_BATCHES = 30  # 免费层 RPM=15，每批间隔 5 秒
+    BATCH_SIZE = 10
+    DELAY_BETWEEN_BATCHES = 5
 
     all_results = []
     total_batches = (len(segments) + BATCH_SIZE - 1) // BATCH_SIZE
@@ -155,6 +212,7 @@ def translate_with_gemini(segments: list[str]) -> list[str]:
 
 {numbered}"""
 
+        success = False
         for attempt in range(3):
             try:
                 response = client.models.generate_content(
@@ -182,7 +240,8 @@ def translate_with_gemini(segments: list[str]) -> list[str]:
 
                 if len(final_batch) == len(batch):
                     all_results.extend(final_batch)
-                    print(f"  ✅ 批次 {batch_num}/{total_batches} 完成")
+                    print(f"  ✅ 批次 {batch_num}/{total_batches} Gemini 完成")
+                    success = True
                     break
                 print(f"  ⚠ 翻译行数不匹配 (期望 {len(batch)}，得到 {len(final_batch)})，重试...")
             except Exception as e:
@@ -192,14 +251,17 @@ def translate_with_gemini(segments: list[str]) -> list[str]:
                     m = re.search(r"retryDelay['\"]:\s*['\"](\d+)s", err_msg)
                     if m:
                         wait = int(m.group(1)) + 2
-                    print(f"  ⏳ 触发限速，等待 {wait}s...")
+                    print(f"  ⏳ Gemini 限速，等待 {wait}s...")
                     time.sleep(wait)
                 else:
                     print(f"  ⚠ Gemini 错误: {e}，重试...")
                     time.sleep(3)
-        else:
-            print(f"  ⚠ 批次 {batch_num} 翻译失败，保留原文")
-            all_results.extend(batch)
+
+        if not success:
+            print(f"  🔄 批次 {batch_num}/{total_batches} Gemini 失败，降级到 Ollama...")
+            fallback = _ollama_translate_batch(batch)
+            all_results.extend(fallback)
+            print(f"  ✅ 批次 {batch_num}/{total_batches} Ollama 降级完成")
 
         # 批次间延迟，避免触发限速
         if batch_start + BATCH_SIZE < len(segments):
@@ -226,7 +288,7 @@ def translate_with_ollama(segments: list[str]) -> list[str]:
             f"{i+1}. {t}" for i, t in enumerate(batch) if t.strip()
         )
 
-        prompt = f"""将以下日语歌词逐行翻译成中文，保持歌词的韵律和意境。
+        prompt = f"""将以下日语对话逐行翻译成中文，保持语气和语境。
 
 规则：
 - 一行原文对应一行翻译，顺序不变
