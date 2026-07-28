@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>租房经纪人 AI 陪练 - 客户模拟</title>
+<style>
+:root {
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --line: #d9e0ea;
+  --ink: #1d2733;
+  --muted: #667485;
+  --soft: #eef3f8;
+  --blue: #2364aa;
+  --green: #1f8a70;
+  --amber: #b7791f;
+  --red: #c2413b;
+  --shadow: 0 10px 30px rgba(24,39,75,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink); background: var(--bg); height: 100vh; overflow: hidden;
+}
+button, input, textarea, select { font: inherit; }
+
+.app {
+  height: 100vh; display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 1px; background: var(--line);
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  background: var(--bg); display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-inner { padding: 16px; overflow: auto; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+.brand {
+  display: flex; align-items: center; gap: 10px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 8px; display: grid;
+  place-items: center; color: #fff; background: var(--blue); font-weight: 800; font-size: 14px;
+}
+.brand h1 { font-size: 16px; line-height: 1.15; }
+.brand span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+
+.section-title {
+  font-size: 12px; color: #3c4858; font-weight: 700; margin-bottom: 8px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* API Config */
+.api-config {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px; box-shadow: var(--shadow);
+}
+.api-config summary {
+  cursor: pointer; font-size: 13px; font-weight: 700; color: var(--muted);
+  user-select: none;
+}
+.api-config summary:hover { color: var(--ink); }
+.api-fields { display: grid; gap: 8px; margin-top: 10px; }
+.api-fields label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 3px; }
+.api-fields input, .api-fields select {
+  width: 100%; border: 1px solid var(--line); border-radius: 6px;
+  padding: 7px 10px; font-size: 13px; outline: none;
+}
+.api-fields input:focus, .api-fields select:focus { border-color: var(--blue); }
+.api-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Difficulty filter */
+.diff-tabs {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px;
+  padding: 3px; background: var(--soft); border: 1px solid var(--line); border-radius: 8px;
+}
+.diff-tabs button {
+  border: 0; cursor: pointer; border-radius: 5px; min-height: 30px;
+  font-size: 12px; color: var(--muted); background: transparent;
+}
+.diff-tabs button.active { background: #fff; color: var(--blue); font-weight: 700; box-shadow: 0 1px 4px rgba(20,30,50,0.12); }
+
+/* Profile list */
+.profile-list { display: flex; flex-direction: column; gap: 6px; }
+.profile-item {
+  width: 100%; text-align: left; border: 1px solid var(--line);
+  background: #fff; border-radius: 8px; padding: 10px 12px; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.profile-item:hover { border-color: var(--blue); }
+.profile-item.active { border-color: var(--blue); box-shadow: inset 3px 0 0 var(--blue); }
+.profile-item .pi-name { font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; }
+.profile-item .pi-summary { font-size: 11px; color: var(--muted); line-height: 1.35; display: block; }
+.profile-item .pi-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* Profile detail */
+.profile-detail {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px; box-shadow: var(--shadow);
+  max-height: 200px; overflow: auto; font-size: 12px; line-height: 1.6;
+}
+.profile-detail .pd-label { color: var(--muted); }
+.profile-detail .pd-value { color: var(--ink); font-weight: 600; }
+
+/* ===== Main Chat ===== */
+.main {
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--bg); min-width: 0;
+}
+
+/* Top bar */
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--line);
+  padding: 12px 18px; display: flex; align-items: center; gap: 12px;
+}
+.topbar .avatar {
+  width: 40px; height: 40px; border-radius: 8px; display: grid;
+  place-items: center; background: #dfeaf6; color: var(--blue);
+  font-weight: 800; font-size: 16px; flex: 0 0 auto;
+}
+.topbar h2 { font-size: 16px; margin: 0; }
+.topbar p { color: var(--muted); font-size: 12px; margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar .tags { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.tag {
+  display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px;
+  border-radius: 999px; font-size: 11px; color: #2f4052; background: var(--soft);
+  border: 1px solid var(--line); white-space: nowrap;
+}
+.tag.green { color: var(--green); background: #e8f5f1; border-color: #bce0d5; }
+.tag.amber { color: var(--amber); background: #fff5df; border-color: #f1d18d; }
+.tag.red { color: var(--red); background: #fff0ee; border-color: #efb8b4; }
+
+/* Chat area */
+.chat { padding: 16px 18px; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+.chat::-webkit-scrollbar { width: 6px; }
+.chat::-webkit-scrollbar-thumb { background: #c5cfda; border-radius: 999px; }
+
+.message { max-width: 75%; display: grid; gap: 4px; }
+.message.agent { align-self: flex-end; }
+.message .name { color: var(--muted); font-size: 11px; }
+.bubble {
+  border-radius: 8px; padding: 10px 13px; line-height: 1.55; font-size: 14px;
+  border: 1px solid var(--line); background: #fff;
+}
+.agent .bubble { color: #fff; background: var(--blue); border-color: var(--blue); }
+
+/* Action badge */
+.action-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; padding: 3px 8px; border-radius: 999px; margin-top: 4px;
+}
+.action-badge.chat { background: #eef3f8; color: var(--muted); border: 1px solid var(--line); }
+.action-badge.leave_phone { background: #e8f5f1; color: var(--green); border: 1px solid #bce0d5; }
+.action-badge.refuse { background: #fff0ee; color: var(--red); border: 1px solid #efb8b4; }
+.action-reason { font-size: 11px; color: var(--muted); margin-top: 3px; padding-left: 4px; border-left: 2px solid var(--line); }
+
+/* Composer */
+.composer {
+  background: #fff; border-top: 1px solid var(--line); padding: 12px 18px 16px;
+}
+.quick-actions { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.quick-actions button {
+  border: 1px solid var(--line); background: #fff; padding: 4px 10px;
+  border-radius: 6px; font-size: 12px; cursor: pointer; white-space: nowrap;
+}
+.quick-actions button:hover { border-color: var(--blue); color: var(--blue); }
+.input-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; }
+.input-row textarea {
+  width: 100%; height: 56px; resize: none; border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none;
+}
+.input-row textarea:focus { border-color: var(--blue); }
+.primary-btn {
+  background: var(--blue); color: #fff; border: 0; border-radius: 8px;
+  padding: 0 18px; font-weight: 700; cursor: pointer; min-height: 56px; font-size: 14px;
+}
+.primary-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Loading */
+.typing { display: flex; gap: 4px; padding: 8px 0; }
+.typing span {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--muted);
+  animation: bounce 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Empty state */
+.empty-state {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 14px; text-align: center; line-height: 1.6;
+}
+.empty-state strong { color: var(--ink); }
+
+/* Reset button */
+.reset-btn {
+  border: 1px solid var(--line); background: #fff; padding: 0 12px;
+  border-radius: 6px; cursor: pointer; min-height: 32px; font-size: 12px;
+  color: var(--muted);
+}
+.reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+@media (max-width: 780px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .sidebar.open { display: flex; position: fixed; inset: 0; z-index: 100; }
+  .message { max-width: 90%; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <h1>租房经纪人陪练</h1>
+          <span>客户模拟 · 自由对聊</span>
+        </div>
+      </div>
+
+      <!-- API Config -->
+      <details class="api-config" id="apiConfig">
+        <summary>API 配置</summary>
+        <div class="api-fields">
+          <div>
+            <label>API Key</label>
+            <input type="password" id="apiKey" placeholder="sk-...">
+          </div>
+          <div>
+            <label>API Base URL</label>
+            <input type="text" id="apiBase" value="http://localhost:11434/v1" placeholder="http://localhost:11434/v1">
+          </div>
+          <div class="api-row">
+            <div>
+              <label>模型</label>
+              <input type="text" id="apiModel" value="qwen3:8b" placeholder="qwen3:8b">
+            </div>
+            <div>
+              <label>保存</label>
+              <button style="width:100%;min-height:35px;border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;font-size:13px;" onclick="saveApiConfig()">保存配置</button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Difficulty -->
+      <div>
+        <p class="section-title">难度筛选</p>
+        <div class="diff-tabs" id="diffTabs"></div>
+      </div>
+
+      <!-- Profile list -->
+      <div style="flex:1;overflow:auto;">
+        <p class="section-title">客户画像</p>
+        <div class="profile-list" id="profileList"></div>
+      </div>
+
+      <!-- Selected profile detail -->
+      <div class="profile-detail" id="profileDetail" style="display:none;"></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar" id="topbar">
+      <div class="avatar" id="topAvatar">?</div>
+      <div style="min-width:0;">
+        <h2 id="topName">请选择客户画像</h2>
+        <p id="topSummary">从左侧列表选择一个客户开始对话</p>
+      </div>
+      <div class="tags" id="topTags"></div>
+      <button class="reset-btn" onclick="resetChat()" title="重置对话">重置</button>
+    </header>
+
+    <div class="chat" id="chatWindow">
+      <div class="empty-state">
+        <div>
+          <strong>👈 从左侧选择客户画像开始对练</strong><br>
+          选择后将加载客户画像和真实对话参考，<br>AI 将模拟该客户与你对话。
+        </div>
+      </div>
+    </div>
+
+    <footer class="composer">
+      <div class="quick-actions" id="quickActions">
+        <button onclick="insertQuick('您好，请问您对房源有什么具体要求呢？')">开场问候</button>
+        <button onclick="insertQuick('您的预算大概在什么范围呢？')">询问预算</button>
+        <button onclick="insertQuick('您对地段有什么偏好吗？靠近地铁还是安静一点？')">询问地段</button>
+        <button onclick="insertQuick('我这边有几套符合您需求的房源，方便的话我发给您看看。')">推荐房源</button>
+        <button onclick="insertQuick('您方便留个联系方式吗？有合适的房源我第一时间同步您。')">索要联系方式</button>
+      </div>
+      <div class="input-row">
+        <textarea id="composerText" placeholder="输入经纪人回复..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+        <button class="primary-btn" id="sendBtn" onclick="sendMessage()" disabled>发送</button>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+// ===== State =====
+let profiles = [];
+let groupedProfiles = {};
+let activeProfileId = null;
+let activeSystemPrompt = null;
+let activeProfileData = null;
+let chatMessages = [];
+let activeDifficulty = '全部';
+let isSending = false;
+
+// ===== Init =====
+async function init() {
+  loadApiConfig();
+  await loadProfiles();
+}
+
+function loadApiConfig() {
+  const saved = localStorage.getItem('imtalker_api_config');
+  if (saved) {
+    try {
+      const cfg = JSON.parse(saved);
+      document.getElementById('apiKey').value = cfg.apiKey || '';
+      document.getElementById('apiBase').value = cfg.apiBase || 'http://localhost:11434/v1';
+      document.getElementById('apiModel').value = cfg.model || 'qwen3:8b';
+    } catch(e) {}
+  }
+}
+
+function saveApiConfig() {
+  const cfg = {
+    apiKey: document.getElementById('apiKey').value.trim(),
+    apiBase: document.getElementById('apiBase').value.trim() || 'https://api.openai.com/v1',
+    model: document.getElementById('apiModel').value.trim() || 'gpt-4o'
+  };
+  localStorage.setItem('imtalker_api_config', JSON.stringify(cfg));
+  alert('配置已保存');
+}
+
+async function loadProfiles() {
+  try {
+    const res = await fetch('/api/profiles');
+    const data = await res.json();
+    profiles = data.profiles;
+    groupedProfiles = data.grouped;
+    renderDiffTabs();
+    renderProfileList();
+  } catch(e) {
+    console.error('加载画像列表失败:', e);
+  }
+}
+
+function renderDiffTabs() {
+  const container = document.getElementById('diffTabs');
+  const diffs = ['全部', '入门', '中等', '中高', '高等'];
+  container.innerHTML = diffs.map(d =>
+    `<button class="${d === activeDifficulty ? 'active' : ''}" onclick="setDifficulty('${d}')">${d}</button>`
+  ).join('');
+}
+
+function setDifficulty(diff) {
+  activeDifficulty = diff;
+  renderDiffTabs();
+  renderProfileList();
+}
+
+function renderProfileList() {
+  const container = document.getElementById('profileList');
+  let list = profiles;
+  if (activeDifficulty !== '全部') {
+    list = groupedProfiles[activeDifficulty] || [];
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:12px;">暂无画像</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((p, i) => `
+    <button class="profile-item ${p.id === activeProfileId ? 'active' : ''}" onclick="selectProfile('${p.id}')">
+      <span class="pi-name">客户 ${i + 1}</span>
+      <span class="pi-summary">${p.summary || '无概要'}</span>
+      <span class="pi-meta">${p.difficulty} · ${p.conv_count} 条对话参考</span>
+    </button>
+  `).join('');
+}
+
+async function selectProfile(profileId) {
+  activeProfileId = profileId;
+  renderProfileList();
+
+  try {
+    const res = await fetch(`/api/profile/${encodeURIComponent(profileId)}`);
+    const data = await res.json();
+    activeProfileData = data;
+    activeSystemPrompt = data.system_prompt;
+
+    // Update topbar
+    const info = profiles.find(p => p.id === profileId);
+    document.getElementById('topAvatar').textContent = info ? info.difficulty.charAt(0) : '?';
+    document.getElementById('topName').textContent = `${info?.difficulty || ''}客户 · ${profileId}`;
+    document.getElementById('topSummary').textContent = info?.summary || '';
+
+    // Update tags
+    updateTopTags(data);
+
+    // Update profile detail
+    renderProfileDetail(data);
+
+    // Reset chat
+    resetChat();
+    document.getElementById('sendBtn').disabled = false;
+
+  } catch(e) {
+    console.error('加载画像失败:', e);
+  }
+}
+
+function updateTopTags(data) {
+  const tags = document.getElementById('topTags');
+  if (!data || !data.conversations.length) {
+    tags.innerHTML = '<span class="tag">无对话参考</span>';
+    return;
+  }
+  const conv = data.conversations[0].parsed;
+  const features = conv.matched_features || [];
+  tags.innerHTML = features.slice(0, 4).map(f =>
+    `<span class="tag">${f.dimension}: ${f.label}</span>`
+  ).join('');
+  tags.innerHTML += `<span class="tag green">${data.conversations.length} 条参考</span>`;
+}
+
+function renderProfileDetail(data) {
+  const detail = document.getElementById('profileDetail');
+  if (!data || !data.conversations.length) {
+    detail.style.display = 'none';
+    return;
+  }
+  const conv = data.conversations[0].parsed;
+  const features = conv.matched_features || [];
+  detail.style.display = 'block';
+  detail.innerHTML = `
+    <div style="font-weight:700;margin-bottom:6px;font-size:13px;">匹配画像特征</div>
+    ${features.map(f => `<div><span class="pd-label">${f.dimension}:</span> <span class="pd-value">${f.label}</span></div>`).join('')}
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">${conv.turn_count} · ${conv.biz_type}</div>
+  `;
+}
+
+function resetChat() {
+  chatMessages = [];
+  document.getElementById('chatWindow').innerHTML = activeProfileId
+    ? '<div class="empty-state"><div><strong>对话已重置</strong><br>在下方输入框中开始与客户对话</div></div>'
+    : '<div class="empty-state"><div><strong>👈 从左侧选择客户画像开始对练</strong><br>选择后将加载客户画像和真实对话参考，<br>AI 将模拟该客户与你对话。</div></div>';
+  document.getElementById('topTags').innerHTML = '';
+}
+
+// ===== Chat =====
+function insertQuick(text) {
+  document.getElementById('composerText').value = text;
+  document.getElementById('composerText').focus();
+}
+
+function addMessage(role, text, action, actionReason) {
+  const chat = document.getElementById('chatWindow');
+  // Remove empty state
+  const empty = chat.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  const isAgent = role === 'agent';
+  const name = isAgent ? '经纪人' : 'AI 客户';
+  const actionHtml = (!isAgent && action) ? `
+    <span class="action-badge ${action}">${action === 'leave_phone' ? '留资' : action === 'refuse' ? '拒绝' : '聊天'}</span>
+    ${actionReason ? `<div class="action-reason">${actionReason}</div>` : ''}
+  ` : '';
+
+  const html = `
+    <div class="message ${isAgent ? 'agent' : 'customer'}">
+      <div class="name">${name}</div>
+      <div class="bubble">${escapeHtml(text)}</div>
+      ${actionHtml}
+    </div>
+  `;
+  chat.insertAdjacentHTML('beforeend', html);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showTyping() {
+  const chat = document.getElementById('chatWindow');
+  const empty = chat.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  const html = `
+    <div class="message customer" id="typingIndicator">
+      <div class="name">AI 客户</div>
+      <div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>
+    </div>
+  `;
+  chat.insertAdjacentHTML('beforeend', html);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function hideTyping() {
+  const indicator = document.getElementById('typingIndicator');
+  if (indicator) indicator.remove();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+async function sendMessage() {
+  if (isSending) return;
+
+  const textarea = document.getElementById('composerText');
+  const text = textarea.value.trim();
+  if (!text) return;
+  if (!activeSystemPrompt) {
+    alert('请先选择客户画像');
+    return;
+  }
+
+  const apiKey = document.getElementById('apiKey').value.trim() || 'ollama';
+  if (!apiKey) {
+    alert('请先配置 API Key');
+    document.getElementById('apiConfig').open = true;
+    return;
+  }
+
+  isSending = true;
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('sendBtn').textContent = '发送中';
+
+  // Add agent message
+  addMessage('agent', text);
+  chatMessages.push({ role: 'user', content: text });
+  textarea.value = '';
+
+  // Show typing
+  showTyping();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: apiKey,
+        api_base: document.getElementById('apiBase').value.trim() || 'https://api.openai.com/v1',
+        model: document.getElementById('apiModel').value.trim() || 'gpt-4o',
+        system_prompt: activeSystemPrompt,
+        messages: chatMessages
+      })
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    if (data.error) {
+      addMessage('customer', '错误: ' + data.error, 'chat', '');
+    } else {
+      addMessage('customer', data.response, data.action, data.action_reason);
+      chatMessages.push({ role: 'assistant', content: data.raw || data.response });
+    }
+
+    // Check for special actions
+    if (data.action === 'leave_phone') {
+      setTimeout(() => {
+        const chat = document.getElementById('chatWindow');
+        chat.insertAdjacentHTML('beforeend', `
+          <div style="text-align:center;padding:12px;color:var(--green);font-size:13px;font-weight:700;background:#e8f5f1;border-radius:8px;margin-top:8px;">
+            客户愿意留资！对话目标达成
+          </div>
+        `);
+        chat.scrollTop = chat.scrollHeight;
+      }, 300);
+    } else if (data.action === 'refuse') {
+      setTimeout(() => {
+        const chat = document.getElementById('chatWindow');
+        chat.insertAdjacentHTML('beforeend', `
+          <div style="text-align:center;padding:12px;color:var(--red);font-size:13px;font-weight:700;background:#fff0ee;border-radius:8px;margin-top:8px;">
+            客户拒绝了，对话结束
+          </div>
+        `);
+        chat.scrollTop = chat.scrollHeight;
+      }, 300);
+    }
+
+  } catch(e) {
+    hideTyping();
+    addMessage('customer', '网络错误: ' + e.message, 'chat', '');
+  }
+
+  isSending = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('sendBtn').textContent = '发送';
+  textarea.focus();
+}
+
+// ===== Start =====
+init();
+</script>
+</body>
+</html>
