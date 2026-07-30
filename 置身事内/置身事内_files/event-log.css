@@ -1,0 +1,20 @@
+/* 源自《置身事内》单文件版 - Event Log Bar */
+/* 自动拆分生成，请勿手动调整章节归属 */
+
+
+/* ========== Event Log Bar ========== */
+#event-bar {
+  position: fixed; left: 12px; right: 64px; top: calc(var(--safe-top) + 52px);
+  z-index: 14; display: flex; gap: 6px; overflow: hidden;
+  pointer-events: none; flex-direction: column;
+}
+#event-bar .log-pill {
+  padding: 4px 12px; border-radius: 12px;
+  background: var(--bg-glass); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+  font-size: 12px; white-space: nowrap; box-shadow: var(--shadow-xs);
+  animation: notifIn 0.3s;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+  display: flex; align-items: center; gap: 4px;
+}
+#event-bar .log-pill svg { width: 12px; height: 12px; opacity: 0.7; flex-shrink: 0; }
+
