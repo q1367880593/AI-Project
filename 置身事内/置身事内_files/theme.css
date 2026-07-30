@@ -1,0 +1,50 @@
+/* 源自《置身事内》单文件版 - 主题变量 :root */
+/* 自动拆分生成，请勿手动调整章节归属 */
+
+:root {
+  /* 纸 · 宣纸暖白 */
+  --bg: #f1eee5;
+  --bg-card: #fffdf8;
+  --bg-glass: rgba(255,253,248,0.84);
+  --bg-glass-dark: rgba(32,29,24,0.55);
+  --bg-elevated: #faf7ee;
+  /* 墨 · 暖黑层次 */
+  --text: #2a2721;
+  --text-2: #6f6a5c;
+  --text-3: #a39c8b;
+  --separator: #e0dac9;
+  --separator-light: #ebe5d4;
+  /* 朱砂 · 印泥主色 */
+  --accent: #b03a2e;
+  --accent-light: #f6e7e1;
+  --accent-dark: #932e20;
+  /* 语义色 · 矿物色系 */
+  --green: #3e7a55;
+  --green-light: #e4eee4;
+  --red: #c0392b;
+  --red-light: #f8e7e2;
+  --orange: #b57d28;
+  --orange-light: #f6edd8;
+  --purple: #6d5a8c;
+  --purple-light: #ede9f3;
+  --yellow: #a8912a;
+  --yellow-light: #f5efce;
+  --teal: #2e7d74;
+  --teal-light: #e0eeea;
+  /* 暖调阴影 */
+  --shadow-xs: 0 1px 2px rgba(70,58,40,0.05);
+  --shadow-sm: 0 2px 8px rgba(70,58,40,0.07);
+  --shadow-md: 0 6px 20px rgba(70,58,40,0.10);
+  --shadow-lg: 0 16px 48px rgba(70,58,40,0.15);
+  --shadow-glow: 0 0 24px rgba(176,58,46,0.12);
+  /* 克制的圆角 */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --radius-pill: 20px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --font: -apple-system, "SF Pro Display", "PingFang SC", "Noto Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
