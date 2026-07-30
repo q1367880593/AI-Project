@@ -1,0 +1,67 @@
+/* 源自《置身事内》单文件版 - Modal */
+/* 自动拆分生成，请勿手动调整章节归属 */
+
+
+/* ========== Modal ========== */
+#modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  display: none; align-items: flex-end; justify-content: center;
+  z-index: 500; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+#modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+#modal {
+  background: var(--bg-card); border-radius: 24px 24px 0 0;
+  max-width: 480px; width: 100%; max-height: 85vh;
+  display: flex; flex-direction: column;
+  animation: sheetUp 0.35s cubic-bezier(0.16,1,0.3,1);
+  padding-bottom: var(--safe-bottom);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
+}
+#modal .modal-header {
+  padding: 16px 20px 8px; text-align: center;
+}
+#modal .modal-header .event-tag {
+  display: inline-block; font-size: 11px; padding: 3px 10px;
+  border-radius: 12px; font-weight: 600; margin-bottom: 8px;
+}
+#modal .modal-header h2 { font-family: var(--font-serif); font-size: 19px; font-weight: 900; letter-spacing: 0.05em; }
+#modal .modal-body {
+  padding: 12px 20px; overflow-y: auto; flex: 1;
+}
+#modal .modal-body p { line-height: 1.6; margin-bottom: 10px; font-size: 14px; }
+.effect-list {
+  margin: 8px 0; padding: 10px 14px; border-radius: var(--radius-xs);
+  background: var(--separator-light);
+}
+.effect-item {
+  display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px;
+}
+.effect-item .eff-label { color: var(--text-2); display: flex; align-items: center; gap: 4px; }
+.effect-item .eff-label svg { width: 12px; height: 12px; opacity: 0.65; color: var(--text-3); flex-shrink: 0; }
+.effect-item .eff-val.pos { color: var(--green); font-weight: 600; }
+.effect-item .eff-val.neg { color: var(--red); font-weight: 600; }
+/* Section title icons: consistent sizing across all tabs */
+.section-title-icon { display: inline-flex; align-items: center; gap: 6px; }
+.section-title-icon svg { width: 16px; height: 16px; opacity: 0.7; flex-shrink: 0; }
+/* Inline icons in text (warnings, notices) */
+.inline-icon { display: inline-flex; align-items: center; vertical-align: middle; }
+.inline-icon svg { width: 14px; height: 14px; flex-shrink: 0; }
+#modal .modal-footer {
+  padding: 12px 20px calc(12px + var(--safe-bottom));
+  display: flex; flex-direction: column; gap: 8px;
+}
+#modal .modal-footer button {
+  padding: 14px; border-radius: var(--radius-xs);
+  font-size: 16px; font-weight: 600; border: none; cursor: pointer;
+  transition: var(--transition);
+}
+#modal .modal-footer button:active { transform: scale(0.97); }
+#modal .modal-footer .btn-green { background: var(--green); color: #fff; }
+#modal .modal-footer .btn-blue { background: var(--accent); color: #fff; }
+#modal .modal-footer .btn-gray { background: var(--separator-light); color: var(--text); }
+#modal .modal-footer .btn-yellow { background: var(--orange); color: #fff; }
+#modal .modal-footer .btn-gold { background: var(--orange); color: #fff; }
+#modal .modal-footer .btn-red { background: var(--red); color: #fff; }
+#modal .modal-footer .btn-purple { background: var(--purple); color: #fff; }
+

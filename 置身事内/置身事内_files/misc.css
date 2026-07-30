@@ -1,0 +1,33 @@
+/* 源自《置身事内》单文件版 - Misc */
+/* 自动拆分生成，请勿手动调整章节归属 */
+
+
+/* ========== Misc ========== */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--separator); border-radius: 2px; }
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  #fab { right: 16px; top: calc(var(--safe-top) + 52px); width: 44px; height: 44px; }
+  #fab svg { width: 20px; height: 20px; }
+  #menu-btn { top: calc(var(--safe-top) + 52px); }
+  #fab-menu {
+    width: 560px; left: auto; right: 16px;
+    border-radius: 24px; bottom: calc(var(--safe-bottom) + 12px);
+    border: 0.5px solid var(--separator);
+    height: 580px;
+    max-width: 560px;
+    max-height: 580px;
+  }
+  #fab-menu .sheet-content { height: 480px; max-height: 480px; }
+  #modal { border-radius: 24px; max-width: 480px; }
+  #modal-overlay { align-items: center; }
+  #modal { animation: modalIn 0.35s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  #event-bar { left: 16px; right: 80px; }
+  #zoom-controls { right: 16px; }
+  #bottom-toolbar { max-width: 480px; }
+}
+
