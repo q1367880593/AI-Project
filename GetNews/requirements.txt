@@ -1,0 +1,17 @@
+# Local Research Agent 依赖
+# Python 3.10+
+
+# 核心依赖
+httpx>=0.27.0
+feedparser>=6.0.0
+pyyaml>=6.0
+
+# 可选：Markdown 转 HTML
+markdown>=3.5.0
+
+# 可选：向量化（RAG 扩展）
+# chromadb>=0.4.0
+# sentence-transformers>=2.2.0
+
+# 可选：本地 LLM
+# ollama>=0.1.0 (通过 REST API 调用，无需 Python 包)

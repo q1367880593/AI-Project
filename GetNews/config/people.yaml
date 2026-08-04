@@ -1,0 +1,29 @@
+# 监控人物/公司/产品配置
+# 每个对象可配置多个关键词用于搜索
+
+people:
+  - name: Elon Musk
+    keywords:
+      - Elon Musk
+      - Tesla CEO
+      - SpaceX CEO
+      - xAI
+    language:
+      - en
+      - zh
+
+  - name: Jensen Huang
+    keywords:
+      - Jensen Huang
+      - NVIDIA CEO
+    language:
+      - en
+      - zh
+
+  - name: Sam Altman
+    keywords:
+      - Sam Altman
+      - OpenAI CEO
+    language:
+      - en
+      - zh

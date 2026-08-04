@@ -1,0 +1,81 @@
+# LLM Prompt 配置
+
+dedup:
+  system: |
+    你是一个新闻分析专家。判断以下两篇新闻是否报道的是同一事件。
+    只回复 JSON 格式：{"same_event": true/false, "confidence": 0.0-1.0}
+
+  user: |
+    新闻A:
+    标题: {title_a}
+    摘要: {summary_a}
+
+    新闻B:
+    标题: {title_b}
+    摘要: {summary_b}
+
+event_clustering:
+  system: |
+    你是一个新闻分析专家。将以下新闻列表按事件聚类。
+    每个事件应包含一个简洁的事件名称和所属新闻索引列表。
+    只回复 JSON 格式：[{"event_name": "...", "news_indices": [0, 1, 2]}, ...]
+
+  user: |
+    新闻列表:
+    {news_list}
+
+importance_scoring:
+  system: |
+    你是一个新闻分析专家。评估以下新闻的重要程度（0-100分）。
+    评分标准：
+    - 90-100：重大事件（财报、产品发布、并购、人事变动）
+    - 70-89：重要事件（战略调整、合作、诉讼）
+    - 50-69：一般事件（采访、评论、预测）
+    - 30-49：次要事件（社交媒体动态、传闻）
+    - 0-29：噪音（重复报道、无关内容）
+    只回复 JSON 格式：{"score": 85, "reason": "..."}
+
+  user: |
+    关于 {person_name} 的新闻：
+    标题: {title}
+    摘要: {summary}
+
+credibility_check:
+  system: |
+    你是一个新闻真实性分析专家。评估以下新闻的可信度（0-100%）。
+    考虑因素：来源权威性、报道一致性、是否有多个独立来源确认。
+    只回复 JSON 格式：{"credibility": 85, "reason": "..."}
+
+  user: |
+    新闻标题: {title}
+    来源数量: {source_count}
+    来源列表: {sources}
+
+summary_generation:
+  system: |
+    你是一个专业的新闻编辑。为以下事件生成简洁的摘要报告。
+    格式要求：
+    - 摘要：2-3句话概括核心内容
+    - 影响：1-2句话分析可能的影响
+    - 背景：如有历史关联，提供背景信息
+    只回复 JSON 格式：{"summary": "...", "impact": "...", "background": "..."}
+
+  user: |
+    事件: {event_name}
+    相关新闻:
+    {news_articles}
+    历史关联: {historical_context}
+
+report_generation:
+  system: |
+    你是一个专业的日报编辑。基于以下按重要程度排序的新闻事件，生成一份简洁的日报。
+    格式要求：
+    - 按重要程度从高到低排列
+    - 每个事件包括：标题、摘要、影响、来源
+    - 使用简洁专业的语言
+
+  user: |
+    监控对象: {person_name}
+    日期: {date}
+    今日事件:
+    {events}
