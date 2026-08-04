@@ -89,23 +89,29 @@ class Scheduler:
                 results = await self.search_agent.search(kw, person_name, lang, max_results=10)
                 all_results.extend(results)
 
-        # 入库
+        # 入库，mock 数据（example.com）直接使用 summary 作为正文
+        seen_urls = set()
         new_count = 0
         for result in all_results:
+            if result.url in seen_urls:
+                continue
+            seen_urls.add(result.url)
             if not self.db.news_exists(result.url):
+                is_mock = "example.com" in result.url
                 article = NewsArticle(
                     url=result.url,
                     title=result.title,
                     summary=result.summary,
+                    content=result.summary if is_mock else "",  # mock 数据直接用 summary 作为正文
                     source=result.source,
                     published_at=result.published_at,
                     person_name=person_name,
                     keyword="",
                 )
-                self.db.insert_news(article)
+                news_id = self.db.insert_news(article)
                 new_count += 1
 
-        print(f"[Phase 1] 搜索到 {len(all_results)} 条结果，新增 {new_count} 条")
+        print(f"[Phase 1] 搜索到 {len(seen_urls)} 条去重结果，新增 {new_count} 条")
 
     async def _phase_crawl(self, person_name: str):
         """Phase 2: 抓取正文"""
@@ -115,17 +121,15 @@ class Scheduler:
         urls_to_crawl = [a.url for a in articles if not a.content]
 
         if not urls_to_crawl:
-            print(f"[Phase 2] 没有需要抓取的 URL")
+            print(f"[Phase 2] 没有需要抓取的 URL（已有 {len(articles)} 篇含正文）")
             return
 
         print(f"[Phase 2] 待抓取: {len(urls_to_crawl)} 个 URL")
         results = await self.crawl_agent.crawl_batch(urls_to_crawl, concurrency=5)
 
+        crawled_count = 0
         for result in results:
             if result and result.markdown.strip():
-                # 查找已有记录
-                from storage.models import NewsArticle
-                # 更新内容
                 article = NewsArticle(
                     url=result.url,
                     title=result.title or "",
@@ -134,8 +138,15 @@ class Scheduler:
                 )
                 news_id = self.db.insert_news(article)
                 self.db.update_news_content(news_id, result.markdown, "")
+                crawled_count += 1
 
-        print(f"[Phase 2] 成功抓取 {len(results)} 篇")
+        # 对抓取失败的 URL，用 summary 作为正文回退
+        for url in urls_to_crawl:
+            article = self.db.get_news_by_url(url)
+            if article and not article.content:
+                self.db.update_news_content(article.id, article.summary, article.summary[:200])
+
+        print(f"[Phase 2] 成功抓取 {crawled_count} 篇，已有内容 {len(articles) - len(urls_to_crawl)} 篇")
 
     async def _phase_analyze(self, person_name: str, target_date: date) -> list:
         """Phase 3: 分析"""

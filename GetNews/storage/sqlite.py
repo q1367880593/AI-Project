@@ -129,6 +129,13 @@ class Database:
             row = conn.execute("SELECT 1 FROM news WHERE url = ?", (url,)).fetchone()
             return row is not None
 
+    def get_news_by_url(self, url: str) -> Optional[NewsArticle]:
+        with self._get_conn() as conn:
+            row = conn.execute("SELECT * FROM news WHERE url = ?", (url,)).fetchone()
+            if row:
+                return self._row_to_news(row)
+        return None
+
     def get_news_by_id(self, news_id: int) -> Optional[NewsArticle]:
         with self._get_conn() as conn:
             row = conn.execute("SELECT * FROM news WHERE id = ?", (news_id,)).fetchone()

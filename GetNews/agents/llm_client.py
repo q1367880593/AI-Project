@@ -21,6 +21,7 @@ class LLMClient:
         self.model = cfg.get("model", "qwen2.5:7b")
         self.api_key = cfg.get("api_key") or os.getenv("OPENAI_API_KEY", "")
         self.client = httpx.Client(timeout=120.0)
+        self._error_shown = False  # 只显示一次错误
 
     def chat(self, system_prompt: str, user_prompt: str, temperature: float = 0.3) -> str:
         """发送对话请求"""
@@ -45,9 +46,12 @@ class LLMClient:
             )
             resp.raise_for_status()
             data = resp.json()
+            self._error_shown = False  # 重置，连接恢复后可以再次提示
             return data.get("message", {}).get("content", "")
         except Exception as e:
-            print(f"[LLM/Ollama] 请求失败: {e}")
+            if not self._error_shown:
+                print(f"[LLM] 本地模型不可用 ({type(e).__name__})，使用内置算法降级分析")
+                self._error_shown = True
             return ""
 
     def _chat_openai(self, system: str, user: str, temperature: float) -> str:
@@ -70,9 +74,12 @@ class LLMClient:
             )
             resp.raise_for_status()
             data = resp.json()
+            self._error_shown = False
             return data.get("choices", [{}])[0].get("message", {}).get("content", "")
         except Exception as e:
-            print(f"[LLM/OpenAI] 请求失败: {e}")
+            if not self._error_shown:
+                print(f"[LLM] API 不可用 ({type(e).__name__})，使用内置算法降级分析")
+                self._error_shown = True
             return ""
 
     def extract_json(self, text: str) -> Optional[dict]:
