@@ -1,0 +1,37 @@
+[app]
+timezone = "Asia/Shanghai"
+output_language = "zh-CN"
+report_dir = "reports"
+database_path = "database/research.db"
+
+[search]
+window_hours = 24
+per_query_limit = 20
+timeout_seconds = 15
+user_agent = "FetchNews/0.1 (+local research tool)"
+
+[crawler]
+timeout_seconds = 20
+max_retries = 2
+min_content_chars = 300
+use_jina_fallback = true
+
+[analysis]
+provider = "none"
+base_url = "http://localhost:11434"
+model = "qwen2.5:7b"
+timeout_seconds = 90
+event_lookback_days = 30
+
+[report]
+importance_threshold = 40
+top_story_count = 5
+
+[[targets]]
+slug = "elon_musk"
+name = "Elon Musk"
+type = "person"
+enabled = true
+keywords_en = ["Elon Musk", "Tesla CEO", "SpaceX CEO", "xAI"]
+keywords_zh = ["马斯克", "特斯拉 CEO", "SpaceX", "xAI"]
+

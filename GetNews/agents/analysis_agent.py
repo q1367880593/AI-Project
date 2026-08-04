@@ -33,7 +33,7 @@ class AnalysisAgent:
         today_str = today.isoformat()
 
         # 1. 获取待分析新闻
-        articles = self.db.get_news_for_analysis(person_name, limit=50)
+        articles = self.db.get_news_for_analysis(person_name, limit=30)
         if not articles:
             print(f"[Analysis] {person_name} 没有待分析的新闻")
             return []
@@ -96,11 +96,16 @@ class AnalysisAgent:
         return unique
 
     def _simple_dedup(self, articles: list[NewsArticle]) -> list[NewsArticle]:
-        """简单去重：基于标题关键词重叠"""
+        """简单去重：基于标题关键词重叠和 URL 匹配"""
         def get_keywords(title: str) -> set:
-            # 简单分词
             words = title.lower().split()
             return {w.strip(".,;:!?\"'()[]{}") for w in words if len(w) > 3}
+
+        def get_domain(url: str) -> str:
+            parts = url.split("/")
+            if len(parts) > 2:
+                return parts[2].replace("www.", "")
+            return url
 
         unique = [articles[0]]
         for article in articles[1:]:
@@ -110,7 +115,13 @@ class AnalysisAgent:
                 ekws = get_keywords(existing.title)
                 if ekws and kws:
                     overlap = len(kws & ekws) / min(len(kws), len(ekws))
-                    if overlap > 0.6:
+                    # Lower threshold for dedup
+                    if overlap > 0.4:
+                        is_dup = True
+                        break
+                # Same domain + similar title = likely same source repost
+                if get_domain(article.url) == get_domain(existing.url):
+                    if kws and ekws and len(kws & ekws) > 0:
                         is_dup = True
                         break
             if not is_dup:

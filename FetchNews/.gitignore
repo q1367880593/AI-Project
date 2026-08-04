@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+config/config.toml
+database/*.db
+database/*.db-*
+logs/*.log
+reports/**/*.md
+!reports/.gitkeep

@@ -1,6 +1,5 @@
-"""Report Agent - 生成日报/周报"""
+"""Report Agent - 生成中文日报/周报"""
 
-import os
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Optional
@@ -45,86 +44,60 @@ class ReportAgent:
         if not events:
             return self._empty_report(person_name, target_date)
 
-        # 按重要程度排序
         events.sort(key=lambda e: e.importance, reverse=True)
-
-        # 生成报告
-        if self.llm:
-            report = self._llm_report(person_name, target_date, events)
-        else:
-            report = self._template_report(person_name, target_date, events)
-
-        # 保存文件
-        filepath = self._save_report(person_name, target_date, report, format)
+        report = self._template_report(person_name, target_date, events)
+        self._save_report(person_name, target_date, report, format)
         return report
 
-    def _llm_report(self, person_name: str, target_date: date, events: list[Event]) -> str:
-        """使用 LLM 生成报告"""
-        # 构建事件列表
-        events_text = []
-        for e in events:
-            news = self.db.get_news_for_event(e.id)
-            sources = ", ".join(set(n.source for n in news if n.source))
-            stars = self._get_stars(e.importance)
-            events_text.append(
-                f"### {stars} (重要性: {e.importance}/100, 可信度: {e.credibility}%)\n"
-                f"**{e.summary[:200]}**\n"
-                f"来源: {sources}\n"
-            )
-        events_combined = "\n\n".join(events_text)
-
-        prompt = f"""监控对象: {person_name}
-日期: {target_date}
-今日事件:
-
-{events_combined}
-
-请生成简洁日报。确保每个事件保留重要性星级和来源信息。"""
-
-        response = self.llm.chat(
-            "你是一个专业的日报编辑。生成简洁专业的日报。",
-            prompt,
-        )
-        if response.strip():
-            return f"# {person_name} Daily Report - {target_date}\n\n{response.strip()}"
-
-        return self._template_report(person_name, target_date, events)
-
     def _template_report(self, person_name: str, target_date: date, events: list[Event]) -> str:
-        """使用模板生成报告"""
+        """使用模板生成中文报告"""
         lines = [
-            f"# {person_name} Daily Report",
-            f"**Date: {target_date}**",
+            f"# {person_name} 日报",
+            f"**日期：{target_date}**",
             "",
             "---",
             "",
+            f"> 今日共监测到 {len(events)} 个相关事件，按重要程度排列如下：",
+            "",
         ]
 
-        for e in events:
+        for i, e in enumerate(events, 1):
             stars = self._get_stars(e.importance)
             news = self.db.get_news_for_event(e.id)
             sources = list(set(n.source for n in news if n.source))
 
-            lines.append(f"## {stars} {e.summary[:80]}")
+            lines.append(f"## {i}. {stars} {e.summary[:80]}")
             lines.append("")
-            lines.append(f"**重要性**: {e.importance}/100 | **可信度**: {e.credibility}%")
+            lines.append(f"| 指标 | 评分 |")
+            lines.append(f"|------|------|")
+            lines.append(f"| 重要程度 | {e.importance}/100 |")
+            lines.append(f"| 可信度 | {e.credibility}% |")
             lines.append("")
 
-            # 解析摘要中的影响和背景
+            # 解析摘要
             if "\n\n影响：" in e.summary:
                 parts = e.summary.split("\n\n影响：")
-                lines.append(f"**摘要**: {parts[0]}")
+                lines.append(f"**摘要**：{parts[0]}")
                 if len(parts) > 1:
                     impact_parts = parts[1].split("\n\n背景：")
-                    lines.append(f"**影响**: {impact_parts[0]}")
+                    lines.append(f"**影响**：{impact_parts[0]}")
                     if len(impact_parts) > 1:
-                        lines.append(f"**背景**: {impact_parts[1]}")
+                        lines.append(f"**背景**：{impact_parts[1]}")
             else:
-                lines.append(f"**摘要**: {e.summary}")
+                lines.append(f"**摘要**：{e.summary}")
 
             lines.append("")
+
+            # 相关新闻链接
+            if news:
+                lines.append("**相关新闻**：")
+                for n in news[:5]:
+                    lines.append(f"- [{n.title[:60]}]({n.url})")
+                lines.append("")
+
             if sources:
-                lines.append(f"**来源**: {', '.join(sources)}")
+                lines.append(f"**来源**：{', '.join(sources)}")
+
             lines.append("")
             lines.append("---")
             lines.append("")
@@ -132,7 +105,7 @@ class ReportAgent:
         return "\n".join(lines)
 
     def _empty_report(self, person_name: str, target_date: date) -> str:
-        report = f"# {person_name} Daily Report\n**Date: {target_date}**\n\n---\n\n今日暂无相关新闻。"
+        report = f"# {person_name} 日报\n**日期：{target_date}**\n\n---\n\n今日暂无相关新闻。"
         self._save_report(person_name, target_date, report, "markdown")
         return report
 
@@ -145,7 +118,6 @@ class ReportAgent:
     def _save_report(
         self, person_name: str, target_date: date, content: str, format: str
     ) -> Path:
-        """保存报告到文件"""
         safe_name = person_name.lower().replace(" ", "_")
         filename = f"{safe_name}_{target_date.isoformat()}.md"
         filepath = self.output_dir / filename
@@ -159,14 +131,11 @@ class ReportAgent:
         return filepath
 
     def _markdown_to_html(self, md: str) -> str:
-        """简单的 Markdown 转 HTML"""
         try:
             import markdown
             return markdown.markdown(md, extensions=["extra", "nl2br"])
         except ImportError:
-            # 简单转换
-            html = f"<html><head><meta charset='utf-8'></head><body><pre>{md}</pre></body></html>"
-            return html
+            return f"<html><head><meta charset='utf-8'></head><body><pre>{md}</pre></body></html>"
 
     def generate_weekly_report(
         self, person_name: str, end_date: Optional[date] = None
@@ -176,14 +145,13 @@ class ReportAgent:
         start_date = end_date - timedelta(days=7)
 
         lines = [
-            f"# {person_name} Weekly Report",
+            f"# {person_name} 周报",
             f"**{start_date} ~ {end_date}**",
             "",
             "---",
             "",
         ]
 
-        # 过去一周的事件
         with self.db._get_conn() as conn:
             rows = conn.execute(
                 """SELECT * FROM event
@@ -207,9 +175,12 @@ class ReportAgent:
 
         if not events:
             lines.append("本周暂无相关新闻。")
-            return "\n".join(lines)
+            content = "\n".join(lines)
+            safe_name = person_name.lower().replace(" ", "_")
+            filepath = self.output_dir / f"{safe_name}_weekly_{end_date.isoformat()}.md"
+            filepath.write_text(content, encoding="utf-8")
+            return content
 
-        # 按日期分组
         from collections import defaultdict
         by_date = defaultdict(list)
         for e in events:
@@ -221,10 +192,9 @@ class ReportAgent:
             lines.append("")
             for e in by_date[d]:
                 stars = self._get_stars(e.importance)
-                lines.append(f"- {stars} {e.summary[:100]} (重要性: {e.importance})")
+                lines.append(f"- {stars} {e.summary[:100]}（重要性：{e.importance}）")
             lines.append("")
 
-        # 保存
         safe_name = person_name.lower().replace(" ", "_")
         filepath = self.output_dir / f"{safe_name}_weekly_{end_date.isoformat()}.md"
         content = "\n".join(lines)

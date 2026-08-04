@@ -3,7 +3,6 @@
 import asyncio
 import yaml
 from datetime import date, datetime
-from pathlib import Path
 from typing import Optional
 
 from storage import Database, NewsArticle
@@ -32,7 +31,7 @@ class Scheduler:
         self.alert_agent = AlertAgent(self.db)
 
     async def close(self):
-        await self.search_agent.close()
+        self.search_agent.close()
         await self.crawl_agent.close()
 
     async def run(self, person_name: Optional[str] = None, target_date: Optional[date] = None):
@@ -52,26 +51,24 @@ class Scheduler:
         for person in people:
             name = person["name"]
             keywords = person.get("keywords", [name])
-            languages = person.get("language", ["en"])
 
             print(f"\n--- 处理: {name} ---")
 
             # Phase 1: 搜索
-            await self._phase_search(name, keywords, languages)
+            self._phase_search(name, keywords)
 
-            # Phase 2: 抓取
+            # Phase 2: 抓取正文（可选）
             await self._phase_crawl(name)
 
             # Phase 3: 分析
-            events = await self._phase_analyze(name, target_date)
+            events = self._phase_analyze(name, target_date)
 
             # Phase 4: 生成报告
-            await self._phase_report(name, target_date)
+            self._phase_report(name, target_date)
 
             # Phase 5: 告警
             self._phase_alert(name, events)
 
-            # 打印统计
             stats = self.db.get_stats(name)
             print(f"[{name}] 总新闻: {stats['total_news']}, 总事件: {stats['total_events']}")
 
@@ -79,17 +76,18 @@ class Scheduler:
         print("Scheduler 运行完成")
         print(f"{'='*60}\n")
 
-    async def _phase_search(self, person_name: str, keywords: list[str], languages: list[str]):
+    def _phase_search(self, person_name: str, keywords: list[str]):
         """Phase 1: 搜索新闻"""
         print(f"[Phase 1] 搜索 {person_name}...")
         all_results = []
 
-        for lang in languages:
-            for kw in keywords:
-                results = await self.search_agent.search(kw, person_name, lang, max_results=10)
-                all_results.extend(results)
+        for kw in keywords:
+            results = self.search_agent.search(kw, person_name, max_results=10)
+            if results:
+                print(f"  关键词「{kw}」: 找到 {len(results)} 条")
+            all_results.extend(results)
 
-        # 入库，mock 数据（example.com）直接使用 summary 作为正文
+        # 入库，搜索结果的 summary 直接作为正文
         seen_urls = set()
         new_count = 0
         for result in all_results:
@@ -97,24 +95,23 @@ class Scheduler:
                 continue
             seen_urls.add(result.url)
             if not self.db.news_exists(result.url):
-                is_mock = "example.com" in result.url
                 article = NewsArticle(
                     url=result.url,
                     title=result.title,
                     summary=result.summary,
-                    content=result.summary if is_mock else "",  # mock 数据直接用 summary 作为正文
+                    content=result.summary,
                     source=result.source,
                     published_at=result.published_at,
                     person_name=person_name,
                     keyword="",
                 )
-                news_id = self.db.insert_news(article)
+                self.db.insert_news(article)
                 new_count += 1
 
         print(f"[Phase 1] 搜索到 {len(seen_urls)} 条去重结果，新增 {new_count} 条")
 
     async def _phase_crawl(self, person_name: str):
-        """Phase 2: 抓取正文"""
+        """Phase 2: 抓取正文（补充没有正文的新闻）"""
         print(f"[Phase 2] 抓取 {person_name} 的新闻正文...")
 
         articles = self.db.get_news_for_analysis(person_name, limit=30)
@@ -146,19 +143,19 @@ class Scheduler:
             if article and not article.content:
                 self.db.update_news_content(article.id, article.summary, article.summary[:200])
 
-        print(f"[Phase 2] 成功抓取 {crawled_count} 篇，已有内容 {len(articles) - len(urls_to_crawl)} 篇")
+        print(f"[Phase 2] 成功抓取 {crawled_count} 篇")
 
-    async def _phase_analyze(self, person_name: str, target_date: date) -> list:
+    def _phase_analyze(self, person_name: str, target_date: date) -> list:
         """Phase 3: 分析"""
         print(f"[Phase 3] 分析 {person_name} 的新闻...")
         events = self.analysis_agent.analyze(person_name, target_date)
         print(f"[Phase 3] 生成 {len(events)} 个事件")
         return events
 
-    async def _phase_report(self, person_name: str, target_date: date):
+    def _phase_report(self, person_name: str, target_date: date):
         """Phase 4: 生成报告"""
         print(f"[Phase 4] 生成 {person_name} 的日报...")
-        report = self.report_agent.generate_daily_report(person_name, target_date)
+        self.report_agent.generate_daily_report(person_name, target_date)
         print(f"[Phase 4] 日报已生成")
 
     def _phase_alert(self, person_name: str, events: list):
@@ -166,41 +163,36 @@ class Scheduler:
         if events:
             self.alert_agent.check_and_alert(person_name, events)
 
-    async def run_search_only(self, person_name: Optional[str] = None):
+    def run_search_only(self, person_name: Optional[str] = None):
         """仅运行搜索阶段"""
         people = self.people_config.get("people", [])
         if person_name:
             people = [p for p in people if p["name"] == person_name]
-
         for person in people:
             keywords = person.get("keywords", [person["name"]])
-            languages = person.get("language", ["en"])
-            await self._phase_search(person["name"], keywords, languages)
+            self._phase_search(person["name"], keywords)
 
     async def run_crawl_only(self, person_name: Optional[str] = None):
         """仅运行抓取阶段"""
         people = self.people_config.get("people", [])
         if person_name:
             people = [p for p in people if p["name"] == person_name]
-
         for person in people:
             await self._phase_crawl(person["name"])
 
-    async def run_analyze_only(self, person_name: Optional[str] = None):
+    def run_analyze_only(self, person_name: Optional[str] = None):
         """仅运行分析阶段"""
         people = self.people_config.get("people", [])
         if person_name:
             people = [p for p in people if p["name"] == person_name]
-
         for person in people:
-            events = await self._phase_analyze(person["name"], date.today())
+            events = self._phase_analyze(person["name"], date.today())
             self._phase_alert(person["name"], events)
 
-    async def run_report_only(self, person_name: Optional[str] = None):
+    def run_report_only(self, person_name: Optional[str] = None):
         """仅运行报告阶段"""
         people = self.people_config.get("people", [])
         if person_name:
             people = [p for p in people if p["name"] == person_name]
-
         for person in people:
-            await self._phase_report(person["name"], date.today())
+            self._phase_report(person["name"], date.today())
