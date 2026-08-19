@@ -8,9 +8,9 @@ from .analysis import Analyzer
 from .config import AppConfig
 from .crawl import ArticleCrawler, CrawlError
 from .domain import Target
-from .llm import OllamaClient
+from .llm import OllamaClient, OpenAIClient
 from .report import MarkdownReporter
-from .search import GoogleNewsRSS, SearchError
+from .search import GoogleNewsRSS, SearchError, TavilySearch
 from .storage import Database
 
 
@@ -33,6 +33,16 @@ class Pipeline:
             timeout=int(config.search.get("timeout_seconds", 15)),
             user_agent=str(config.search.get("user_agent", "FetchNews/0.1")),
         )
+        self.fallback_searchers = []
+        if bool(config.search.get("tavily_enabled", False)):
+            self.fallback_searchers.append(
+                TavilySearch(
+                    timeout=int(config.search.get("timeout_seconds", 15)),
+                    api_key_env=str(config.search.get("tavily_api_key_env", "TAVILY_API_KEY")),
+                    base_url=str(config.search.get("tavily_base_url", "https://api.tavily.com/search")),
+                    user_agent=str(config.search.get("user_agent", "FetchNews/0.1")),
+                )
+            )
         self.crawler = ArticleCrawler(
             timeout=int(config.crawler.get("timeout_seconds", 20)),
             max_retries=int(config.crawler.get("max_retries", 2)),
@@ -41,6 +51,7 @@ class Pipeline:
             user_agent=str(config.search.get("user_agent", "FetchNews/0.1")),
         )
         provider = str(config.analysis.get("provider", "none")).lower()
+        self.analysis_provider = provider
         llm = None
         if provider == "ollama":
             llm = OllamaClient(
@@ -48,6 +59,17 @@ class Pipeline:
                 model=str(config.analysis.get("model", "qwen2.5:7b")),
                 timeout=int(config.analysis.get("timeout_seconds", 90)),
             )
+        elif provider == "openai":
+            llm = OpenAIClient(
+                base_url=str(config.analysis.get("base_url", "https://api.openai.com/v1")),
+                model=str(config.analysis.get("model", "gpt-5.6-sol")),
+                timeout=int(config.analysis.get("timeout_seconds", 90)),
+                api_key_env=str(config.analysis.get("api_key_env", "OPENAI_API_KEY")),
+                reasoning_effort=str(config.analysis.get("reasoning_effort", "low")),
+                max_output_tokens=int(config.analysis.get("max_output_tokens", 1600)),
+            )
+        elif provider != "none":
+            raise ValueError(f"不支持的 analysis.provider：{provider}")
         self.analyzer = Analyzer(llm)
         self.reporter = MarkdownReporter(config.report_dir, config.timezone, __version__)
 
@@ -108,16 +130,33 @@ class Pipeline:
 
     def _search(self, target: Target, target_id: int, result: RunResult) -> None:
         limit = int(self.config.search.get("per_query_limit", 20))
+        providers = [self.searcher, *self.fallback_searchers]
+        unavailable_providers: dict[str, str] = {}
         for query in target.keywords:
             language = "zh" if any("\u3400" <= char <= "\u9fff" for char in query) else "en"
-            try:
-                found = self.searcher.search(query, language=language, limit=limit)
-                for item in found:
-                    _, created = self.database.upsert_search_result(target_id, item)
-                    result.discovered += int(created)
-            except SearchError as error:
+            query_succeeded = False
+            for provider in providers:
+                provider_name = getattr(provider, "name", provider.__class__.__name__)
+                if provider_name in unavailable_providers:
+                    continue
+                try:
+                    found = provider.search(query, language=language, limit=limit)
+                    query_succeeded = True
+                    for item in found:
+                        _, created = self.database.upsert_search_result(target_id, item)
+                        result.discovered += int(created)
+                except SearchError as error:
+                    unavailable_providers[provider_name] = str(error)
+                    result.errors += 1
+            if not query_succeeded and not providers:
                 result.errors += 1
-                result.warnings.append(f"关键词“{query}”搜索失败：{error}")
+        for provider_name, error in unavailable_providers.items():
+            result.warnings.append(f"搜索源 {provider_name} 已停用：{error}")
+        if unavailable_providers and len(unavailable_providers) == len(providers):
+            result.warnings.append(
+                "所有搜索源均不可用；如当前网络无法访问 Google News，请在 .env 配置 HTTPS_PROXY，"
+                "或启用 Tavily 并设置 TAVILY_API_KEY。"
+            )
 
     def _crawl(self, target_id: int, result: RunResult) -> None:
         for row in self.database.pending_news(target_id):

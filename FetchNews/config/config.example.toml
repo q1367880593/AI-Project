@@ -9,6 +9,9 @@ window_hours = 24
 per_query_limit = 20
 timeout_seconds = 15
 user_agent = "FetchNews/0.1 (+local research tool)"
+tavily_enabled = false
+tavily_api_key_env = "TAVILY_API_KEY"
+tavily_base_url = "https://api.tavily.com/search"
 
 [crawler]
 timeout_seconds = 20
@@ -17,11 +20,18 @@ min_content_chars = 300
 use_jina_fallback = true
 
 [analysis]
-provider = "none"
-base_url = "http://localhost:11434"
-model = "qwen2.5:7b"
+provider = "openai"
+base_url = "https://hezubus.cc/v1"
+model = "gpt-5.4"
 timeout_seconds = 90
 event_lookback_days = 30
+api_key_env = "OPENAI_API_KEY"
+reasoning_effort = "low"
+max_output_tokens = 1600
+# 使用 OpenAI API：将 provider 改为 "openai"。
+# 使用 Ollama：将 provider 改为 "ollama"，并设置：
+# base_url = "http://localhost:11434"
+# model = "qwen2.5:7b"
 
 [report]
 importance_threshold = 40
@@ -34,4 +44,3 @@ type = "person"
 enabled = true
 keywords_en = ["Elon Musk", "Tesla CEO", "SpaceX CEO", "xAI"]
 keywords_zh = ["马斯克", "特斯拉 CEO", "SpaceX", "xAI"]
-

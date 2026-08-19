@@ -6,6 +6,7 @@ from pathlib import Path
 from fetch_news.config import AppConfig
 from fetch_news.domain import CrawlResult, SearchResult, Target
 from fetch_news.pipeline import Pipeline
+from fetch_news.search import SearchError
 
 
 class FakeSearcher:
@@ -35,6 +36,17 @@ class FakeCrawler:
             content_quality="full",
             extractor="fixture",
         )
+
+
+class FailingSearcher:
+    name = "failing"
+
+    def __init__(self):
+        self.calls = 0
+
+    def search(self, query, language="zh", limit=20):
+        self.calls += 1
+        raise SearchError("timed out")
 
 
 class PipelineTests(unittest.TestCase):
@@ -69,6 +81,29 @@ class PipelineTests(unittest.TestCase):
             report = Path(second.report_path).read_text(encoding="utf-8")
             self.assertIn("Elon Musk 新闻日报", report)
             self.assertIn("Example News", report)
+
+    def test_failed_provider_is_circuit_broken(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            target = Target("elon", "Elon Musk", "person", ("one", "two", "three"))
+            config = AppConfig(
+                path=root / "config.toml",
+                timezone="Asia/Shanghai",
+                report_dir=root / "reports",
+                database_path=root / "research.db",
+                search={},
+                crawler={},
+                analysis={"provider": "none"},
+                report={},
+                targets=(target,),
+            )
+            pipeline = Pipeline(config)
+            failing = FailingSearcher()
+            pipeline.searcher = failing
+            result = pipeline.run(date(2026, 8, 4), "elon")[0]
+            self.assertEqual(failing.calls, 1)
+            self.assertEqual(result.errors, 1)
+            self.assertTrue(any("所有搜索源" in warning for warning in result.warnings))
 
 
 if __name__ == "__main__":

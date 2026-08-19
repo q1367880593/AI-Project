@@ -483,8 +483,11 @@ crawler:
   min_content_chars: 300
 
 analysis:
-  provider: ollama
-  model: qwen2.5:7b
+  provider: openai
+  base_url: https://api.openai.com/v1
+  model: gpt-5.6-sol
+  api_key_env: OPENAI_API_KEY
+  reasoning_effort: low
   output_language: zh-CN
   event_lookback_days: 30
   prompt_version: v1
@@ -495,7 +498,7 @@ report:
   include_collection_notes: true
 ```
 
-密钥只从 `NEWSAPI_KEY`、`TAVILY_API_KEY`、`OPENAI_API_KEY` 等环境变量读取，不能写入 YAML 或日志。
+密钥只从 `NEWSAPI_KEY`、`TAVILY_API_KEY`、`OPENAI_API_KEY` 等环境变量读取，不能写入 TOML 或日志。本地开发默认从 Git 忽略的 `.env` 加载，系统环境变量优先于 `.env`。
 
 ---
 

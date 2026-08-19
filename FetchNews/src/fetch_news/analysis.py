@@ -5,12 +5,12 @@ import sqlite3
 from collections import Counter
 
 from .domain import EventDraft, Target
-from .llm import LLMError, OllamaClient
+from .llm import JSONGenerator, LLMError
 from .utils import normalize_space
 
 
 class Analyzer:
-    def __init__(self, llm: OllamaClient | None = None):
+    def __init__(self, llm: JSONGenerator | None = None):
         self.llm = llm
 
     def analyze(self, target: Target, rows: list[sqlite3.Row]) -> tuple[list[EventDraft], list[tuple[int, float, bool]], list[str]]:
@@ -137,4 +137,3 @@ def title_tokens(title: str) -> set[str]:
     chinese = set(re.findall(r"[\u3400-\u9fff]{2,4}", title or ""))
     stopwords = {"news", "says", "said", "with", "from", "that", "this", "报道", "新闻"}
     return (english | chinese) - stopwords
-

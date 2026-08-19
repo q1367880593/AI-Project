@@ -54,6 +54,69 @@ model = "qwen2.5:7b"
 
 模型返回必须是结构化 JSON；调用失败时自动回退规则模式，并在日报标记 `partial: true`。
 
+### 使用 OpenAI API
+
+执行 `init` 会同时创建被 Git 忽略的 `.env`。在其中填写 API Key，不要把密钥写进 TOML：
+
+```dotenv
+OPENAI_API_KEY=你的_API_Key
+```
+
+然后修改 `config/config.toml`：
+
+```toml
+[analysis]
+provider = "openai"
+base_url = "https://api.openai.com/v1"
+model = "gpt-5.6-sol"
+api_key_env = "OPENAI_API_KEY"
+reasoning_effort = "low"
+max_output_tokens = 1600
+timeout_seconds = 90
+```
+
+OpenAI provider 使用 Responses API 和严格 JSON Schema。可按账户权限或成本需求覆盖 `model`；新闻归纳默认使用 `low` 推理强度以控制延迟与成本。运行 `doctor` 可检查密钥和 API 连通性：
+
+```bash
+PYTHONPATH=src python3 -m fetch_news --config config/config.toml doctor
+```
+
+程序默认从当前工作目录读取 `.env`。也可以显式指定其他路径：
+
+```bash
+PYTHONPATH=src python3 -m fetch_news \
+  --env-file /安全目录/fetch-news.env \
+  --config config/config.toml run
+```
+
+操作系统中已经存在的同名环境变量优先于 `.env`，适合生产环境和定时任务覆盖本地设置。
+
+### 搜索超时处理
+
+如果报告出现 `Google News RSS 请求失败：timed out`，说明当前网络不能直连 Google News，并非 OpenAI 调用错误。可以在 `.env` 配置本机 HTTP 代理：
+
+```dotenv
+HTTPS_PROXY=http://127.0.0.1:7890
+HTTP_PROXY=http://127.0.0.1:7890
+```
+
+端口需要与本机代理软件一致。也可以申请 Tavily Key，在 `.env` 中设置：
+
+```dotenv
+TAVILY_API_KEY=你的_Tavily_Key
+```
+
+并在 `config/config.toml` 的 `[search]` 中启用备用源：
+
+```toml
+tavily_enabled = true
+tavily_api_key_env = "TAVILY_API_KEY"
+```
+
+当某个搜索源首次发生连接错误时，本轮任务会熔断该来源，避免每个关键词重复等待超时。
+
+第三方 OpenAI 兼容服务不一定实现 Responses API 或 `/models` 端点。若使用非 `api.openai.com` 地址，请确认服务明确支持 `/v1/responses`；否则应使用官方地址或后续增加对应服务的 Chat Completions 适配器。
+
 ## 常用命令
 
 ```bash
@@ -75,4 +138,3 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 
 架构与后续路线见 [架构设计文档](%23%20Local%20Research%20Agent%20架构设计.md)。
-
