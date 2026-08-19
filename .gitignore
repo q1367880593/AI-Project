@@ -181,3 +181,10 @@ local.properties
 bulid/
 conversation_features.csv
 *.mov
+
+# 屏蔽任何目录下以 .~ 开头、.xlsx 结尾的临时文件
+.~*.xlsx
+
+# 屏蔽所有目录下由 Excel 或 Mac 生成的各种临时/隐藏文件
+~$*.xlsx
+._*.xlsx
