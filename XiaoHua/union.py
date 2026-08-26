@@ -21,37 +21,21 @@ if __name__ == '__main__':
     end_name = ""
     
     
-    files = os.listdir(path)
-    
-#    arr = []
-    
-#    for file_name in files:
-#        if file_name.find('.txt')>=0:
-#            print(file_name)
-#            num = int(file_name.replace('第', '').replace('章.txt', ''))
-#            arr.append(num)
-    
-#    print(arr)
-#    print(arr.sort())
-    
-#    print(arr)
-    
-    files.sort()
+    files = [f for f in os.listdir(path) if f.endswith('.txt')]
+    # 按章节数字排序，避免字符串字典序导致"第100章"排在"第10章"前面
+    files.sort(key=lambda name: extract_numbers(name))
     print(files)
 
-
-    
     for file_name in files:
-        if file_name.find('.txt')>=0:
-            if idx == 0:
-                start_name = file_name
-            end_name = file_name
-            idx += 1
-    
-            filePath = os.path.join(path,file_name)
-            print(filePath)
-            f = open(filePath, 'r')
-            union_str += str(f.read())
+        if idx == 0:
+            start_name = file_name
+        end_name = file_name
+        idx += 1
+
+        filePath = os.path.join(path, file_name)
+        print(filePath)
+        with open(filePath, 'r', encoding='utf-8') as f:
+            union_str += f.read()
     
     print(start_name)
     print(end_name)
