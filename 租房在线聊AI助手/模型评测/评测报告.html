@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模型评测综合报告 - 2026-08-19</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --text-secondary: #6b7280;
+    --accent: #3b82f6;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 24px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #111827;
+  }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 32px; }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+  }
+  h3 { font-size: 16px; font-weight: 600; color: #1f2937; margin-bottom: 12px; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+  .badge.green { background: #d1fae5; color: #065f46; }
+  .badge.red { background: #fee2e2; color: #991b1b; }
+  .badge.blue { background: #dbeafe; color: #1e40af; }
+
+  /* 排名卡片 */
+  .rank-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .rank-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .rank-card.rank-1 { border-color: #f59e0b; border-width: 2px; }
+  .rank-card.rank-2 { border-color: #9ca3af; }
+  .rank-card.rank-3 { border-color: #d97706; }
+  .rank-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+  .rank-1 .rank-badge { background: #fef3c7; color: #92400e; }
+  .rank-2 .rank-badge { background: #f3f4f6; color: #4b5563; }
+  .rank-3 .rank-badge { background: #fef3c7; color: #92400e; }
+  .rank-4 .rank-badge { background: #f3f4f6; color: #9ca3af; }
+  .model-name { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .pass-rate { font-size: 36px; font-weight: 800; color: var(--green); }
+  .pass-rate.ok { color: var(--yellow); }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-top: 4px;
+    color: var(--text-secondary);
+  }
+  .stat-row .val { color: var(--text); font-weight: 600; }
+
+  /* 表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: #f9fafb;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  .geval-table td, .geval-table th { text-align: center; }
+  .geval-table td:first-child { text-align: left; }
+  .best { color: var(--green); font-weight: 700; }
+  .worst { color: var(--red); font-weight: 700; }
+  .num { text-align: center; }
+
+  /* 条形图 */
+  .bar-chart { margin: 8px 0; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 13px;
+  }
+  .bar-label { width: 180px; text-align: right; margin-right: 12px; color: var(--text-secondary); flex-shrink: 0; font-size: 12px; }
+  .bar-track {
+    flex: 1;
+    height: 22px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .bar-fill.blue { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .bar-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+  .bar-fill.yellow { background: linear-gradient(90deg, #d97706, #f59e0b); }
+  .bar-fill.red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+  .bar-fill.purple { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+
+  .bar-group { margin: 10px 0; }
+  .bar-group-title { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+
+  /* 标签 */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tag.green { background: #d1fae5; color: #065f46; }
+  .tag.yellow { background: #fef3c7; color: #92400e; }
+  .tag.red { background: #fee2e2; color: #991b1b; }
+  .tag.blue { background: #dbeafe; color: #1e40af; }
+
+  /* 图表容器 */
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  .chart-wrap canvas { max-height: 360px; }
+
+  /* 模型卡片 */
+  .model-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .model-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .model-card h3 { margin-bottom: 4px; }
+  .model-card .summary { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+  .model-card ul { padding-left: 18px; font-size: 13px; }
+  .model-card li { margin: 4px 0; color: var(--text); }
+  .model-card .pro { color: var(--green); }
+  .model-card .con { color: var(--red); }
+  .model-card .verdict {
+    margin-top: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .verdict.recommend { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+  .verdict.caution { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .verdict.avoid { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+  /* 推荐区域 */
+  .recommend-list { counter-reset: rec; }
+  .recommend-item {
+    counter-increment: rec;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 10px 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    box-shadow: var(--shadow);
+  }
+  .recommend-item::before {
+    content: counter(rec);
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .recommend-item .rec-content { flex: 1; }
+  .recommend-item .rec-title { font-weight: 600; font-size: 15px; color: #111827; }
+  .recommend-item .rec-desc { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* 稳定性指示 */
+  .stability-stable { color: var(--green); }
+  .stability-moderate { color: var(--yellow); }
+  .stability-volatile { color: var(--red); }
+
+  @media (max-width: 900px) {
+    .rank-grid { grid-template-columns: repeat(2, 1fr); }
+    .model-cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .rank-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>PE 自动化评测系统 — 模型综合报告</h1>
+  <div class="subtitle">
+    评测日期：2026-08-19 | 评测框架：GEval（LLM-as-Judge）| 数据来源：2组测试集 × 2轮评测 = 4次评测 | 每模型800用例  | 打分模型：deepseek-v4-pro
+  </div>
+
+  <!-- 一、总览 -->
+  <h2>一、通过率总体排名（4次评测汇总）</h2>
+  <div class="rank-grid">
+    <div class="rank-card rank-1">
+      <span class="rank-badge">No.1</span>
+      <div class="model-name">豆包seed-2.0-lite</div>
+      <div class="pass-rate">87.0%</div>
+      <div class="stat-row"><span>综合得分</span><span class="val">0.9096</span></div>
+      <div class="stat-row"><span>五维均分</span><span class="val">0.9075</span></div>
+      <div class="stat-row"><span>稳定性</span><span class="val stability-moderate">中等</span></div>
+      <div class="stat-row"><span>总成本</span><span class="val">5.86元</span></div>
+    </div>
+
+    <div class="rank-card rank-2">
+      <span class="rank-badge">No.2</span>
+      <div class="model-name">豆包seed-2.0-pro</div>
+      <div class="pass-rate ok">85.9%</div>
+      <div class="stat-row"><span>综合得分</span><span class="val">0.9060</span></div>
+      <div class="stat-row"><span>五维均分</span><span class="val">0.9039</span></div>
+      <div class="stat-row"><span>稳定性</span><span class="val stability-stable">良好</span></div>
+      <div class="stat-row"><span>总成本</span><span class="val">30.40元</span></div>
+    </div>
+
+    <div class="rank-card rank-3">
+      <span class="rank-badge">No.3</span>
+      <div class="model-name">火山-deepseek-v4-flash</div>
+      <div class="pass-rate ok">85.4%</div>
+      <div class="stat-row"><span>综合得分</span><span class="val">0.8993</span></div>
+      <div class="stat-row"><span>五维均分</span><span class="val">0.8972</span></div>
+      <div class="stat-row"><span>稳定性</span><span class="val stability-stable">良好</span></div>
+      <div class="stat-row"><span>总成本</span><span class="val">8.54元</span></div>
+    </div>
+
+    <div class="rank-card rank-4">
+      <span class="rank-badge">No.4</span>
+      <div class="model-name">豆包seed-2.0-mini-线上</div>
+      <div class="pass-rate ok">82.0%</div>
+      <div class="stat-row"><span>综合得分</span><span class="val">0.8806</span></div>
+      <div class="stat-row"><span>五维均分</span><span class="val">0.8816</span></div>
+      <div class="stat-row"><span>稳定性</span><span class="val stability-moderate">中等</span></div>
+      <div class="stat-row"><span>总成本</span><span class="val">2.16元</span></div>
+    </div>
+  </div>
+
+  <!-- 二、评测概览表 -->
+  <h2>二、各评测轮次通过率</h2>
+  <table>
+    <thead>
+      <tr><th>模型</th><th>数据1-评测1</th><th>数据1-评测2</th><th>数据2-评测1</th><th>数据2-评测2</th><th>全局平均</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>火山-deepseek-v4-flash</td>
+        <td>83.5%</td>
+        <td>85.5%</td>
+        <td>85.5%</td>
+        <td>87.0%</td>
+        <td>85.4%</td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-mini</td>
+        <td>85.5%</td>
+        <td>81.5%</td>
+        <td class="worst">80.0%</td>
+        <td>81.0%</td>
+        <td class="worst">82.0%</td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-lite</td>
+        <td class="best">90.0%</td>
+        <td>84.5%</td>
+        <td>86.0%</td>
+        <td>87.5%</td>
+        <td class="best">87.0%</td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-pro</td>
+        <td>84.5%</td>
+        <td>87.5%</td>
+        <td>85.0%</td>
+        <td>86.5%</td>
+        <td>85.9%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:13px; color: var(--text-secondary); margin-top: 8px;">
+    注：数据1评测1中 lite 达到 90% 通过率为单次最高，但评测2骤降至 84.5%，波动 5.5% 为所有模型最高。
+  </p>
+
+  <!-- 三、GEval 五维度 -->
+  <h2>三、GEval 五维度评分对比（800用例均值）</h2>
+  <table class="geval-table">
+    <thead>
+      <tr><th>维度</th><th>火山-deepseek-v4-flash</th><th>豆包seed-2.0-mini</th><th>豆包seed-2.0-lite</th><th>豆包seed-2.0-pro</th><th style="width:14%;">评估角度</th><th style="width:16%;">典型Badcase</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>准确性</td><td>0.8250</td><td class="worst">0.7788</td><td class="best">0.8605</td><td>0.8340</td><td style="font-size:12px; color: var(--text-secondary);">对输入信息的理解是否与事实一致，是否存在虚构或幻觉</td><td style="font-size:12px; color: #9ca3af;">意图识别错误（如将"约看房"误判为"闲聊"、将"房源还在吗"误判为"闲聊"），以及凭空捏造不存在的证据消息ID</td></tr>
+      <tr><td>完整性</td><td>0.8412</td><td class="worst">0.8180</td><td>0.8332</td><td class="best">0.8424</td><td style="font-size:12px; color: var(--text-secondary);">是否覆盖了上下文中所有需要提取的信息，有无遗漏</td><td style="font-size:12px; color: #9ca3af;">仅提取当前消息而忽略历史对话中已透露的偏好（户型、楼层、装修等），以及遗漏经纪人索要联系方式的判断</td></tr>
+      <tr><td>清晰度</td><td class="best">0.9489</td><td>0.9484</td><td>0.9479</td><td class="best">0.9488</td><td style="font-size:12px; color: var(--text-secondary);">输出结构是否规范，表达是否无歧义，是否易于理解</td><td style="font-size:12px; color: #9ca3af;">JSON 格式正确但输出内容完全错误，导致"格式工整但实际无意义"；或输出过于机器化，不兼顾可读性</td></tr>
+      <tr><td>一致性</td><td>0.8851</td><td class="worst">0.8593</td><td class="best">0.9029</td><td>0.9016</td><td style="font-size:12px; color: var(--text-secondary);">输出内部逻辑是否自洽，结论与输入证据是否一致</td><td style="font-size:12px; color: #9ca3af;">normalized_semantics 写"猜测房源已租出"，意图却标为"闲聊"；或将经纪人消息ID误用作租客消息证据，证据链断裂</td></tr>
+      <tr><td>安全性</td><td>0.9856</td><td class="worst">0.9850</td><td class="best">0.9931</td><td>0.9926</td><td style="font-size:12px; color: var(--text-secondary);">是否包含敏感信息泄露、违规内容或越权风险</td><td style="font-size:12px; color: #9ca3af;">输出中直接暴露未脱敏的手机号，或完全忽略系统安全指令导致功能性幻觉</td></tr>
+      <tr style="font-weight:700; border-top: 2px solid var(--border);">
+        <td>五维均分</td><td>0.8972</td><td class="worst">0.8816</td><td class="best">0.9075</td><td>0.9039</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:13px; color: var(--text-secondary); margin-top: 8px;">
+    四个模型在清晰度和安全性上差距很小，真正的分水岭在<b>准确性</b>和<b>完整性</b>。mini 准确性仅 0.7788，意味着每 5 个用例就有 1 个意图识别错误。
+  </p>
+
+  <div class="chart-wrap">
+    <canvas id="lineChart"></canvas>
+  </div>
+
+  <!-- 四、稳定性 -->
+  <h2>四、评测稳定性分析</h2>
+  <table>
+    <thead>
+      <tr><th>模型</th><th>数据1波动</th><th>数据2波动</th><th>最大波动</th><th>稳定性评级</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>火山-deepseek-v4-flash</td><td>2.0%</td><td>1.5%</td><td>2.0%</td><td><span class="tag green">稳定</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-mini</td><td>4.0%</td><td>1.0%</td><td>4.0%</td><td><span class="tag yellow">偏波动</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-lite</td><td class="worst">5.5%</td><td>1.5%</td><td class="worst">5.5%</td><td><span class="tag yellow">偏波动</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-pro</td><td>3.0%</td><td>1.5%</td><td>3.0%</td><td><span class="tag green">稳定</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:13px; color: var(--text-secondary); margin-top: 8px;">
+    稳定性 = 同一测试集两次评测之间通过率的最大差值。lite 在数据1上波动 5.5%（90%→84.5%），说明其输出质量受随机性影响较大，实际部署时需注意。
+  </p>
+
+  <!-- 五、数据集差异 -->
+  <h2>五、跨数据集表现对比</h2>
+  <table>
+    <thead>
+      <tr><th>模型</th><th>数据1 通过率</th><th>数据1 均分</th><th>数据2 通过率</th><th>数据2 均分</th><th>跨集差异</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>火山-deepseek-v4-flash</td><td>84.5%</td><td>0.9009</td><td>86.2%</td><td>0.8978</td><td><span class="tag green">1.8%</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-mini</td><td>83.5%</td><td>0.8861</td><td>80.5%</td><td>0.8750</td><td><span class="tag yellow">3.0%</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-lite</td><td>87.2%</td><td>0.9093</td><td>86.8%</td><td>0.9099</td><td><span class="tag green">0.5%</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-pro</td><td>86.0%</td><td>0.9133</td><td>85.8%</td><td>0.8988</td><td><span class="tag green">0.2%</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px; color: var(--text-secondary); margin-top: 8px;">
+    跨集差异 = 两组测试集间通过率差异。pro 在数据1上综合得分0.9133为全局最高，但在数据2上降至0.8988，说明对不同测试集敏感。<br>
+    lite 跨数据集表现最稳定，差异仅 0.5%。
+  </p>
+
+  <!-- 六、性能 -->
+  <h2>六、性能指标对比（800用例汇总）</h2>
+  <table>
+    <thead>
+      <tr><th>模型</th><th>平均延迟</th><th>P95延迟</th><th>中位延迟</th><th>总Token</th><th>总成本</th><th>单用例成本</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>火山-deepseek-v4-flash</td><td>2,653ms</td><td>3,461ms</td><td>2,578ms</td><td>10,392</td><td>8.54元</td><td>0.0107元</td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-mini</td><td class="best">2,520ms</td><td class="best">3,283ms</td><td class="best">2,420ms</td><td>10,630</td><td class="best">2.16元</td><td class="best">0.0027元</td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-lite</td><td>7,194ms</td><td>8,704ms</td><td>7,097ms</td><td>10,629</td><td>5.86元</td><td>0.0073元</td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-pro</td><td class="worst">7,784ms</td><td class="worst">9,630ms</td><td class="worst">7,480ms</td><td>10,625</td><td class="worst">30.40元</td><td class="worst">0.0380元</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bar-chart">
+    <div class="bar-group">
+      <div class="bar-group-title">平均延迟 (ms) — 越低越好</div>
+      <div class="bar-row"><span class="bar-label">deepseek-v4-flash</span><div class="bar-track"><div class="bar-fill green" style="width:34%">2,653</div></div></div>
+      <div class="bar-row"><span class="bar-label">豆包seed-2.0-mini</span><div class="bar-track"><div class="bar-fill green" style="width:32%">2,520</div></div></div>
+      <div class="bar-row"><span class="bar-label">豆包seed-2.0-lite</span><div class="bar-track"><div class="bar-fill yellow" style="width:92%">7,194</div></div></div>
+      <div class="bar-row"><span class="bar-label">豆包seed-2.0-pro</span><div class="bar-track"><div class="bar-fill red" style="width:100%">7,784</div></div></div>
+    </div>
+    <div class="bar-group" style="margin-top:16px;">
+      <div class="bar-group-title">总成本 (元/800用例) — 越低越好</div>
+      <div class="bar-row"><span class="bar-label">deepseek-v4-flash</span><div class="bar-track"><div class="bar-fill yellow" style="width:28%">8.54</div></div></div>
+      <div class="bar-row"><span class="bar-label">豆包seed-2.0-mini</span><div class="bar-track"><div class="bar-fill green" style="width:7%">2.16</div></div></div>
+      <div class="bar-row"><span class="bar-label">豆包seed-2.0-lite</span><div class="bar-track"><div class="bar-fill green" style="width:19%">5.86</div></div></div>
+      <div class="bar-row"><span class="bar-label">豆包seed-2.0-pro</span><div class="bar-track"><div class="bar-fill red" style="width:100%">30.40</div></div></div>
+    </div>
+  </div>
+
+  <!-- 七、综合得分分布 -->
+  <h2>七、综合得分区间分布（800用例）</h2>
+  <table>
+    <thead>
+      <tr><th>模型</th><th>&lt; 0.6</th><th>0.6-0.7</th><th>0.7-0.8</th><th>0.8-0.9</th><th>0.9-0.95</th><th>0.95-1.0</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>火山-deepseek-v4-flash</td><td>33</td><td>66</td><td>35</td><td>52</td><td>82</td><td><span class="tag green">532</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-mini</td><td><span class="tag red">43</span></td><td><span class="tag red">83</span></td><td>52</td><td>116</td><td><span class="tag yellow">137</span></td><td><span class="tag red">369</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-lite</td><td><span class="tag green">26</span></td><td><span class="tag green">56</span></td><td>55</td><td>92</td><td>118</td><td><span class="tag green">453</span></td>
+      </tr>
+      <tr>
+        <td>豆包seed-2.0-pro</td><td>30</td><td>60</td><td>57</td><td>93</td><td>118</td><td>442</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:13px; color: var(--text-secondary); margin-top: 8px;">
+    lite 的低分case（&lt;0.7）最少，仅 82 个（10.3%）；mini 最多，126 个（15.8%）。
+  </p>
+
+  <!-- 八、各模型详细分析 -->
+  <h2>八、各模型详细分析（按响应速度排列）</h2>
+  <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;">
+    系统注重时效性，以下按推荐优先级排列，重点评估每个模型在速度约束下的质量表现。
+  </p>
+  <div class="model-cards">
+    <div class="model-card">
+      <h3>火山-deepseek-v4-flash <span class="tag green">首选推荐</span></h3>
+      <div class="summary">延迟 2,653ms | 通过率 85.4% | 综合得分 0.8993 | 成本 8.54元/800用例</div>
+      <ul>
+        <li><span class="pro">优势：延迟 2.65s，仅比 mini 慢 133ms，同属秒级响应梯队</span></li>
+        <li><span class="pro">优势：通过率 85.4%，比 mini 高 3.4 个百分点</span></li>
+        <li><span class="pro">优势：清晰度 0.9489 最高，评测稳定性最好（波动 2.0%）</span></li>
+        <li><span class="con">劣势：准确性 0.8250 偏低，仍有意图识别错误</span></li>
+        <li><span class="con">劣势：成本 8.54 元，是 mini 的 4 倍</span></li>
+      </ul>
+      <div class="verdict recommend">速度与质量的最佳平衡点 — 接近最快速度，质量明显优于 mini，推荐为时效性场景首选</div>
+    </div>
+
+    <div class="model-card">
+      <h3>豆包seed-2.0-mini-线上 <span class="tag blue">极速低成本</span></h3>
+      <div class="summary">延迟 2,520ms | 通过率 82.0% | 综合得分 0.8806 | 成本 2.16元/800用例</div>
+      <ul>
+        <li><span class="pro">优势：延迟最低（2.52s），P95 仅 3.28s，速度第一</span></li>
+        <li><span class="pro">优势：成本 2.16 元，仅为 flash 的 1/4，速度快+成本低双优</span></li>
+        <li><span class="pro">优势：清晰度 0.9484，输出格式规范无歧义</span></li>
+        <li><span class="con">劣势：准确性 0.7788 最低，比 flash 低 0.046</span></li>
+        <li><span class="con">劣势：数据2通过率仅 80.5%，低分case最多（15.8%），表现不稳定</span></li>
+      </ul>
+      <div class="verdict caution">速度最快但质量垫底，适合对延迟极度敏感、可容忍一定错误率的场景</div>
+    </div>
+
+    <div class="model-card">
+      <h3>豆包seed-2.0-lite <span class="tag yellow">质量优先</span></h3>
+      <div class="summary">延迟 7,194ms | 通过率 87.0% | 综合得分 0.9096 | 成本 5.86元/800用例</div>
+      <ul>
+        <li><span class="pro">优势：准确性 0.8605、一致性 0.9029、安全性 0.9931 三项第一</span></li>
+        <li><span class="pro">优势：跨数据集差异仅 0.5%，泛化能力最强</span></li>
+        <li><span class="pro">优势：低分case最少（10.3%），成本适中</span></li>
+        <li><span class="con">劣势：延迟 7.2s，是 flash 的 2.7 倍，P95 达 8.7s</span></li>
+        <li><span class="con">劣势：评测波动 5.5%，同数据集两次评测间变化较大</span></li>
+      </ul>
+      <div class="verdict caution">质量最高但延迟不满足时效性要求（7.2s），除非对正确率有极致要求，否则不推荐</div>
+    </div>
+
+    <div class="model-card">
+      <h3>豆包seed-2.0-pro <span class="tag red">不推荐</span></h3>
+      <div class="summary">延迟 7,784ms | 通过率 85.9% | 综合得分 0.9060 | 成本 30.40元/800用例</div>
+      <ul>
+        <li><span class="pro">优势：完整性 0.8424 最高，评测稳定性良好</span></li>
+        <li><span class="con">劣势：延迟最高 7.8s，P95 达 9.6s，最快模型的 3 倍</span></li>
+        <li><span class="con">劣势：成本 30.40 元，是 mini 的 14 倍、flash 的 3.6 倍</span></li>
+        <li><span class="con">劣势：质量不如 lite，速度不如 flash，各方面均无优势</span></li>
+      </ul>
+      <div class="verdict avoid">速度最慢、成本最高、质量无优势，在时效性要求下无任何使用场景</div>
+    </div>
+  </div>
+
+  <!-- 九、维度最优/最差 -->
+  <h2>九、维度最优/最差总览</h2>
+  <table>
+    <thead>
+      <tr><th>维度</th><th>最优模型</th><th>最优值</th><th>最差模型</th><th>最差值</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>通过率</td><td class="best">豆包seed-2.0-lite</td><td class="best">87.0%</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">82.0%</td></tr>
+      <tr><td>综合得分</td><td class="best">豆包seed-2.0-lite</td><td class="best">0.9096</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">0.8806</td></tr>
+      <tr><td>准确性</td><td class="best">豆包seed-2.0-lite</td><td class="best">0.8605</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">0.7788</td></tr>
+      <tr><td>完整性</td><td class="best">豆包seed-2.0-pro</td><td class="best">0.8424</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">0.8180</td></tr>
+      <tr><td>清晰度</td><td class="best">火山-deepseek-v4-flash</td><td class="best">0.9489</td><td class="worst">豆包seed-2.0-lite</td><td class="worst">0.9479</td></tr>
+      <tr><td>一致性</td><td class="best">豆包seed-2.0-lite</td><td class="best">0.9029</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">0.8593</td></tr>
+      <tr><td>安全性</td><td class="best">豆包seed-2.0-lite</td><td class="best">0.9931</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">0.9850</td></tr>
+      <tr><td>速度</td><td class="best">豆包seed-2.0-mini</td><td class="best">2,520ms</td><td class="worst">豆包seed-2.0-pro</td><td class="worst">7,784ms</td></tr>
+      <tr><td>成本</td><td class="best">豆包seed-2.0-mini</td><td class="best">2.16元</td><td class="worst">豆包seed-2.0-pro</td><td class="worst">30.40元</td></tr>
+      <tr><td>稳定性</td><td class="best">火山-deepseek-v4-flash</td><td class="best">2.0%</td><td class="worst">豆包seed-2.0-lite</td><td class="worst">5.5%</td></tr>
+      <tr><td>跨集泛化</td><td class="best">豆包seed-2.0-lite</td><td class="best">0.5%</td><td class="worst">豆包seed-2.0-mini</td><td class="worst">3.0%</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 十、推荐 -->
+  <h2>十、推荐排序（时效性优先）</h2>
+  <div class="recommend-list">
+    <div class="recommend-item">
+      <div class="rec-content">
+        <div class="rec-title">首选：火山-deepseek-v4-flash正式版</div>
+        <div class="rec-desc">
+          延迟 2.65s，仅比最快的 mini 慢 133ms，同属秒级响应。通过率 85.4% 比 mini 高 3.4 个百分点，清晰度最高、稳定性最好。在时效性约束下，是速度与质量的最佳平衡点。
+        </div>
+      </div>
+    </div>
+    <div class="recommend-item">
+      <div class="rec-content">
+        <div class="rec-title">备选：豆包seed-2.0-mini-线上</div>
+        <div class="rec-desc">
+          速度最快（2.52s）、成本最低（2.16元），但准确性仅 0.7788，通过率 82.0%。如果业务对错误率容忍度较高，或者需要极致压缩成本，可作为备选。
+        </div>
+      </div>
+    </div>
+    <div class="recommend-item">
+      <div class="rec-content">
+        <div class="rec-title">不适合：豆包seed-2.0-lite</div>
+        <div class="rec-desc">
+          质量最高但延迟 7.2s，是 flash 的 2.7 倍，不满足时效性要求。除非正确率是绝对首位且可接受 7s+ 等待，否则不推荐。
+        </div>
+      </div>
+    </div>
+    <div class="recommend-item">
+      <div class="rec-content">
+        <div class="rec-title">不推荐：豆包seed-2.0-pro</div>
+        <div class="rec-desc">
+          延迟最慢（7.8s）、成本最高（30.40元）、质量无优势。在时效性约束下没有任何使用场景。
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const ctx = document.getElementById('lineChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['准确性', '完整性', '清晰度', '一致性', '安全性'],
+      datasets: [
+        {
+          label: '火山-deepseek-v4-flash',
+          data: [0.8250, 0.8412, 0.9489, 0.8851, 0.9856],
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59,130,246,0.08)',
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointBackgroundColor: '#3b82f6',
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: '豆包seed-2.0-mini',
+          data: [0.7788, 0.8180, 0.9484, 0.8593, 0.9850],
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245,158,11,0.08)',
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointBackgroundColor: '#f59e0b',
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: '豆包seed-2.0-lite',
+          data: [0.8605, 0.8332, 0.9479, 0.9029, 0.9931],
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16,185,129,0.08)',
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointBackgroundColor: '#10b981',
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: '豆包seed-2.0-pro',
+          data: [0.8340, 0.8424, 0.9488, 0.9016, 0.9926],
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139,92,246,0.08)',
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointBackgroundColor: '#8b5cf6',
+          tension: 0.3,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            pointStyleWidth: 10,
+            padding: 24,
+            font: { size: 13, family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
+            color: '#374151'
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1f2937',
+          titleFont: { size: 13 },
+          bodyFont: { size: 12 },
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(4)}`
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: 0.7,
+          max: 1.0,
+          ticks: {
+            stepSize: 0.05,
+            callback: (v) => v.toFixed(2),
+            font: { size: 12 },
+            color: '#6b7280'
+          },
+          grid: { color: '#f3f4f6' }
+        },
+        x: {
+          ticks: {
+            font: { size: 13 },
+            color: '#374151'
+          },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
