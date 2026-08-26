@@ -2,49 +2,40 @@ import os
 import re
 
 
+def extract_chapter_number(filename):
+    """从文件名中提取章节编号（格式：第N章），失败返回 None。"""
+    match = re.search(r'第(\d+)章', filename)
+    return int(match.group(1)) if match else None
 
-def extract_numbers(string):
-    pattern = r'\d+' # 匹配连续的数字
-    numbers = re.findall(pattern, string)
-    
-    return [int(num) for num in numbers][0]
- 
 
 if __name__ == '__main__':
-    
-    
     path = 'xiaohua'
-    
-    idx = 0
-    union_str = ""
-    start_name = ""
-    end_name = ""
-    
-    
+
     files = [f for f in os.listdir(path) if f.endswith('.txt')]
-    # 按章节数字排序，避免字符串字典序导致"第100章"排在"第10章"前面
-    files.sort(key=lambda name: extract_numbers(name))
+    if not files:
+        print(f"错误：{path} 目录下没有 txt 文件")
+        exit(1)
+
+    # 按章节编号排序，避免字符串字典序导致"第100章"排在"第10章"前面
+    files.sort(key=lambda name: extract_chapter_number(name) or 0)
     print(files)
 
-    for file_name in files:
-        if idx == 0:
-            start_name = file_name
-        end_name = file_name
-        idx += 1
+    union_str = ""
+    start_name = files[0]
+    end_name = files[-1]
 
+    for file_name in files:
         filePath = os.path.join(path, file_name)
         print(filePath)
         with open(filePath, 'r', encoding='utf-8') as f:
             union_str += f.read()
-    
-    print(start_name)
-    print(end_name)
-    
-    a = extract_numbers(start_name)
-    b = extract_numbers(end_name)
-    # a = start_name.split(' ')[0].replace('第', '').replace('章.txt', '').replace('章', '')
-    # b = end_name.split(' ')[0].replace('第', '').replace('章.txt', '').replace('章', '')
-    
-    f = open(str(a)+"-"+str(b)+".txt",'w')
-    f.write(union_str)
-    f.close()
+            union_str += "\n\n"  # 每个章节之间加两个换行符
+
+    a = extract_chapter_number(start_name)
+    b = extract_chapter_number(end_name)
+
+    output_file = f"{a}-{b}.txt"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(union_str)
+
+    print(f"已合并 {len(files)} 个章节 -> {output_file}")

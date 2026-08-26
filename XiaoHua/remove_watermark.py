@@ -6,16 +6,27 @@
 
 import re
 import os
+import json
 from pathlib import Path
 
+from clean import clean_text
 
-def extract_keywords(text, top_n=5):
+try:
+    import jieba
+    import jieba.posseg as pseg
+except ImportError:
+    jieba = None
+    pseg = None
+
+
+def extract_keywords(text, top_n=5, exclude_names=None):
     """
     从文本中提取高频关键词
 
     Args:
         text: 文本内容
         top_n: 返回前N个高频词
+        exclude_names: 需要排除的人名/称谓集合（可选）
 
     Returns:
         关键词列表
@@ -30,16 +41,41 @@ def extract_keywords(text, top_n=5):
         '便', '才', '已', '经', '过', '得', '地', '着', '了', '么', '吗', '呢', '吧',
         '啊', '呀', '哦', '哪', '怎', '为何', '如何', '何', '谁', '多', '少', '几',
         '第', '章', '话', '集', '部', '篇', '节', '段', '行', '句', '字', '个字',
+        '众人', '我们', '他们', '你们', '说道', '知道', '顿时', '忽然', '只见',
+        '起来', '不会', '不是', '就是', '现在', '这里', '不过', '居然', '确实',
+        '特别', '直接', '一点', '模样', '卑下', '半步', '男子', '女子', '全都',
+        '应该', '能够', '出来', '看着', '跟着', '结果', '事情', '地方', '对面', '胆子',
+        '流程', '普通', '级别', '全场', '所有人', '只是', '而是', '以及', '可能',
     }
 
-    # 提取2-4个字的中文词组（可能是人名、技能名、事件等）
-    words = re.findall(r'[\u4e00-\u9fa5]{2,4}', text)
+    if exclude_names is None:
+        exclude_names = set()
+    else:
+        exclude_names = set(exclude_names)
+
+    # 只保留有实际含义的词性（名词/动词/形容词/成语/地名/机构名等）
+    keep_flags = {'n', 'v', 'vn', 'vd', 'a', 'an', 'i', 'l', 'ns', 'nt', 'nz', 'j'}
+    # 人名相关词性（nr 及各种人名变体）
+    name_flags = {'nr', 'nrt', 'nrfg', 'nrf', 'nrg', 'nrj'}
+
+    # 优先用 jieba 分词（切词质量更高），未安装时退回 2-4 字滑窗提取
+    if jieba is not None:
+        # 用词性标注过滤人名与虚词，只保留实义词
+        words = [
+            w.word for w in pseg.cut(text)
+            if w.flag not in name_flags
+            and w.flag in keep_flags
+            and len(w.word) >= 2
+            and re.fullmatch(r'[\u4e00-\u9fa5]+', w.word)
+        ]
+    else:
+        words = re.findall(r'[\u4e00-\u9fa5]{2,4}', text)
 
     # 统计词频
     word_count = {}
     for word in words:
-        # 过滤停用词
-        if word not in stop_words:
+        # 过滤停用词与手动指定的人名/称谓
+        if word not in stop_words and word not in exclude_names:
             word_count[word] = word_count.get(word, 0) + 1
 
     # 按频率排序，返回前N个
@@ -47,12 +83,13 @@ def extract_keywords(text, top_n=5):
     return [word for word, count in sorted_words[:top_n]]
 
 
-def rename_chapter(content):
+def rename_chapter(content, exclude_names=None):
     """
     自动重命名章节标题
 
     Args:
         content: 文件内容
+        exclude_names: 需要排除的人名/称谓集合（可选）
 
     Returns:
         (重命名后的内容, 新章节名, 章节编号)
@@ -83,7 +120,7 @@ def rename_chapter(content):
             content_text = '\n'.join(lines[1:100])
 
             # 提取高频关键词
-            keywords = extract_keywords(content_text, top_n=5)
+            keywords = extract_keywords(content_text, top_n=5, exclude_names=exclude_names)
 
             if keywords:
                 # 选择第一个高频词作为章节名
@@ -111,7 +148,7 @@ def rename_chapter(content):
     return '\n'.join(lines), new_chapter_name, chapter_number
 
 
-def remove_watermark(input_file, output_file=None, rename=True, rename_file=False):
+def remove_watermark(input_file, output_file=None, rename=True, rename_file=False, exclude_names=None):
     """
     移除文本文件底部的网址水印
 
@@ -120,35 +157,18 @@ def remove_watermark(input_file, output_file=None, rename=True, rename_file=Fals
         output_file: 输出文件路径（如果为None，则覆盖原文件）
         rename: 是否自动重命名章节（默认True）
         rename_file: 是否根据章节名重命名文件（默认False）
+        exclude_names: 需要排除的人名/称谓集合（可选）
     """
     # 读取文件内容
     with open(input_file, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 正则表达式模式
-    # 匹配包含网址的行（https:// 或 http:// 开头的链接）
-    url_pattern = r'^\s*\(https?://[^\)]+\)\s*$'
-
-    # 匹配包含常见水印文字的行（如：1秒记住、手机版阅读网址等）
-    watermark_pattern = r'^\s*.*?([0-9]+秒记住|手机版阅读网址|阅读网址).*?$'
-
-    # 按行分割内容
+    # 按行分割内容，供统计行数使用
     lines = content.split('\n')
 
-    # 过滤掉匹配的行
-    cleaned_lines = []
-    for line in lines:
-        # 检查是否匹配网址或水印模式
-        if re.match(url_pattern, line) or re.match(watermark_pattern, line):
-            continue  # 跳过这一行
-        cleaned_lines.append(line)
-
-    # 移除末尾的空行
-    while cleaned_lines and not cleaned_lines[-1].strip():
-        cleaned_lines.pop()
-
-    # 重新组合内容
-    cleaned_content = '\n'.join(cleaned_lines)
+    # 统一清洗：删除水印片段、过滤水印/网址行、去除末尾空行
+    cleaned_content = clean_text(content)
+    cleaned_lines = cleaned_content.split('\n')
 
     # 章节名和章节编号
     new_chapter_name = None
@@ -156,7 +176,7 @@ def remove_watermark(input_file, output_file=None, rename=True, rename_file=Fals
 
     # 如果需要，重命名章节
     if rename:
-        cleaned_content, new_chapter_name, chapter_number = rename_chapter(cleaned_content)
+        cleaned_content, new_chapter_name, chapter_number = rename_chapter(cleaned_content, exclude_names=exclude_names)
 
     # 确定输出文件路径
     if output_file is None:
@@ -185,7 +205,7 @@ def remove_watermark(input_file, output_file=None, rename=True, rename_file=Fals
     print(f"清理后行数: {len(cleaned_lines)}")
 
 
-def batch_remove_watermark(folder_path, rename=True, rename_file=False):
+def batch_remove_watermark(folder_path, rename=True, rename_file=False, exclude_names=None):
     """
     批量处理文件夹中的所有txt文件
 
@@ -193,6 +213,7 @@ def batch_remove_watermark(folder_path, rename=True, rename_file=False):
         folder_path: 文件夹路径
         rename: 是否自动重命名章节（默认True）
         rename_file: 是否根据章节名重命名文件（默认False）
+        exclude_names: 需要排除的人名/称谓集合（可选）
     """
     folder = Path(folder_path)
 
@@ -216,7 +237,7 @@ def batch_remove_watermark(folder_path, rename=True, rename_file=False):
     for txt_file in txt_files:
         try:
             print(f"\n正在处理: {txt_file.name}")
-            remove_watermark(str(txt_file), rename=rename, rename_file=rename_file)
+            remove_watermark(str(txt_file), rename=rename, rename_file=rename_file, exclude_names=exclude_names)
             success_count += 1
         except Exception as e:
             print(f"处理失败: {txt_file.name}")
@@ -230,11 +251,19 @@ def batch_remove_watermark(folder_path, rename=True, rename_file=False):
 
 
 if __name__ == '__main__':
+    # 从 config.json 读取需要排除的人名/称谓（如主角名、尊号等）
+    exclude_names = []
+    try:
+        with open('config.json', 'r', encoding='utf-8') as f:
+            exclude_names = json.load(f).get('exclude_names', [])
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+
     # 使用示例
 
     # 方式1: 批量处理整个文件夹（重命名章节和文件）
     folder_path = './xiaohua'
-    batch_remove_watermark(folder_path, rename=True, rename_file=True)
+    batch_remove_watermark(folder_path, rename=True, rename_file=True, exclude_names=exclude_names)
 
     # 方式2: 只重命名章节，不重命名文件
     # batch_remove_watermark(folder_path, rename=True, rename_file=False)

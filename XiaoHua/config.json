@@ -1,0 +1,27 @@
+{
+  "base_url": "http://www.xqianqianwx.cc",
+  "herf": "/4/4127/37560170.html",
+  "idx": 12903,
+  "sleep_seconds": 66,
+  "max_retry": 3,
+  "max_chapters": 0,
+  "output_dir": "xiaohua",
+  "exclude_names": [
+    "林逸",
+    "柳梦烟",
+    "甘念念",
+    "念念",
+    "赵宁",
+    "赵奉",
+    "张白羽",
+    "古玄",
+    "古天",
+    "古天阙",
+    "叶风",
+    "影帝",
+    "黑影",
+    "大帝",
+    "老祖",
+    "师兄"
+  ]
+}
