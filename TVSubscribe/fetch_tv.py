@@ -9,6 +9,7 @@
 import json
 import os
 import sys
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime
@@ -48,14 +49,23 @@ def set_proxy(proxy):
     _opener = urllib.request.build_opener(*handlers)
 
 
-def http_get_json(url):
+def http_get_json(url, retries=2):
+    """请求 JSON，失败时自动重试（网络抖动容错）。"""
     headers = {
         "User-Agent": "TVSubscribe/1.0 (local script)",
         "Accept": "application/json",
     }
-    req = urllib.request.Request(url, headers=headers)
-    with _opener.open(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    last_err = None
+    for attempt in range(retries + 1):
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with _opener.open(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except Exception as e:
+            last_err = e
+            if attempt < retries:
+                time.sleep(1.5 * (attempt + 1))
+    raise last_err
 
 
 def search_show(api_key, title):
@@ -223,25 +233,43 @@ def process_item(api_key, item):
 
 
 def main():
-    config = load_json(CONFIG_PATH)
+    try:
+        config = load_json(CONFIG_PATH)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"读取 config.json 失败: {e}")
+        sys.exit(1)
     set_proxy((config.get("proxy") or "").strip())
     api_key = (config.get("api_key") or "").strip()
     if not api_key:
         print("请先在 config.json 中填入 TMDB API Key。")
         sys.exit(1)
 
-    shows_cfg = load_json(SHOWS_PATH)
+    try:
+        shows_cfg = load_json(SHOWS_PATH)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"读取 shows.json 失败: {e}")
+        sys.exit(1)
     shows = shows_cfg.get("shows", [])
+    if not isinstance(shows, list) or not shows:
+        print("shows.json 中没有订阅剧目。")
+        sys.exit(1)
 
-    only = sys.argv[1].strip() if len(sys.argv) > 1 else None
+    only = None
+    if len(sys.argv) > 1:
+        only = sys.argv[1].strip()
+        if not only:
+            print("用法: python3 fetch_tv.py [剧名 或 imdb 号]，参数不能为空。")
+            sys.exit(1)
 
     # 局部更新：python3 fetch_tv.py <title 或 imdb_id>
     if only:
         target = None
         for item in shows:
             if (item.get("title") or "").strip() == only or (item.get("imdb_id") or "").strip() == only:
+                if target is not None:
+                    print(f"警告: shows.json 中存在多个 '{only}'，仅更新第一条。")
+                    break
                 target = item
-                break
         if target is None:
             print(f"未在 shows.json 中找到 '{only}'")
             sys.exit(1)
@@ -256,6 +284,9 @@ def main():
 
         payload = load_data_payload()
         merged = payload.get("shows", [])
+        if not merged:
+            print("data.js 不存在或为空，请先执行一次全量抓取（python3 fetch_tv.py）。")
+            sys.exit(1)
         title = (target.get("title") or "").strip()
         replaced = False
         for i, s in enumerate(merged):
