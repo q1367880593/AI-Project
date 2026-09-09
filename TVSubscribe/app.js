@@ -4,8 +4,13 @@
   var data = window.TV_DATA;
   var grid = document.getElementById("grid");
   var updatedAt = document.getElementById("updated-at");
+  var statusSel = document.getElementById("filter-status");
+  var networkSel = document.getElementById("filter-network");
+  var sortSel = document.getElementById("sort-key");
+  var sortDirBtn = document.getElementById("sort-dir");
 
   var TMDB_BASE = "https://www.themoviedb.org/tv/";
+  var STATUS_ORDER = ["Returning Series", "Ended", "Canceled", "In Production", "Planned", "Pilot"];
 
   function statusClass(status) {
     switch (status) {
@@ -104,15 +109,50 @@
     return c;
   }
 
-  function sortShows(shows) {
+  function initFilters() {
+    if (!data || !data.shows) return;
+
+    var statuses = {};
+    data.shows.forEach(function (s) {
+      if (s.found && s.status) statuses[s.status] = s.status_zh || s.status;
+    });
+    Object.keys(statuses).sort(function (a, b) {
+      var ia = STATUS_ORDER.indexOf(a), ib = STATUS_ORDER.indexOf(b);
+      if (ia < 0) ia = 999;
+      if (ib < 0) ib = 999;
+      return ia - ib;
+    }).forEach(function (st) {
+      var o = el("option", null, statuses[st]);
+      o.value = st;
+      statusSel.appendChild(o);
+    });
+
+    var nets = {};
+    data.shows.forEach(function (s) {
+      (s.networks || []).forEach(function (n) { if (n) nets[n] = true; });
+    });
+    Object.keys(nets).sort(function (a, b) { return a.localeCompare(b); }).forEach(function (n) {
+      var o = el("option", null, n);
+      o.value = n;
+      networkSel.appendChild(o);
+    });
+  }
+
+  function sortValue(show, key) {
+    if (key === "latest_season") {
+      return show.latest_season ? (show.latest_season.air_date || "") : "";
+    }
+    return show[key] || "";
+  }
+
+  function sortShows(shows, key, asc) {
     return shows.slice().sort(function (a, b) {
-      var da = a.last_air_date || "";
-      var db = b.last_air_date || "";
-      if (!da && !db) return 0;
-      if (!da) return 1;
-      if (!db) return -1;
-      if (da < db) return 1;
-      if (da > db) return -1;
+      var va = sortValue(a, key), vb = sortValue(b, key);
+      if (!va && !vb) return 0;
+      if (!va) return 1;
+      if (!vb) return -1;
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
       return 0;
     });
   }
@@ -128,8 +168,25 @@
       updatedAt.textContent = "更新于 " + data.generated_at;
     }
 
+    var status = statusSel.value;
+    var network = networkSel.value;
+    var key = sortSel.value;
+    var asc = sortDirBtn.dataset.dir === "asc";
+
+    var list = data.shows.filter(function (s) {
+      if (status && s.status !== status) return false;
+      if (network && (s.networks || []).indexOf(network) < 0) return false;
+      return true;
+    });
+
+    var sorted = sortShows(list, key, asc);
+
     grid.innerHTML = "";
-    sortShows(data.shows).forEach(function (show) {
+    if (sorted.length === 0) {
+      grid.appendChild(el("div", "empty", "没有符合条件的剧集。"));
+      return;
+    }
+    sorted.forEach(function (show) {
       if (!show.found) {
         grid.appendChild(el("div", "card", "未找到或抓取失败：" + (show.title || "")));
       } else {
@@ -138,5 +195,19 @@
     });
   }
 
+  function bindEvents() {
+    statusSel.addEventListener("change", render);
+    networkSel.addEventListener("change", render);
+    sortSel.addEventListener("change", render);
+    sortDirBtn.addEventListener("click", function () {
+      var asc = sortDirBtn.dataset.dir !== "asc";
+      sortDirBtn.dataset.dir = asc ? "asc" : "desc";
+      sortDirBtn.textContent = asc ? "↑ 升序" : "↓ 降序";
+      render();
+    });
+  }
+
+  initFilters();
+  bindEvents();
   render();
 })();

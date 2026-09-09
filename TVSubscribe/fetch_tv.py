@@ -72,6 +72,19 @@ def search_show(api_key, title):
     return results[0]["id"]
 
 
+def find_by_imdb(api_key, imdb_id):
+    params = urllib.parse.urlencode({
+        "api_key": api_key,
+        "external_source": "imdb_id",
+    })
+    url = f"{BASE_URL}/find/{urllib.parse.quote(imdb_id)}?{params}"
+    data = http_get_json(url)
+    results = data.get("tv_results", [])
+    if not results:
+        return None
+    return results[0]["id"]
+
+
 def fetch_show(api_key, tmdb_id):
     params = urllib.parse.urlencode({
         "api_key": api_key,
@@ -79,6 +92,13 @@ def fetch_show(api_key, tmdb_id):
     })
     url = f"{BASE_URL}/tv/{tmdb_id}?{params}"
     return http_get_json(url)
+
+
+def fetch_external_ids(api_key, tmdb_id):
+    params = urllib.parse.urlencode({"api_key": api_key})
+    url = f"{BASE_URL}/tv/{tmdb_id}/external_ids?{params}"
+    data = http_get_json(url)
+    return data.get("imdb_id")
 
 
 def zh_status(status):
@@ -130,8 +150,76 @@ def build_entry(title, raw):
         "last_episode": episode(last_ep),
         "next_episode": episode(next_ep),
         "latest_season": pick_latest_season(raw.get("seasons")),
+        "networks": [n.get("name") for n in (raw.get("networks") or []) if n.get("name")],
         "found": True,
     }
+
+
+def save_shows(shows_cfg):
+    with open(SHOWS_PATH, "w", encoding="utf-8") as f:
+        json.dump(shows_cfg, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+
+def load_data_payload():
+    """读取现有 data.js 中的 TV_DATA（用于局部更新时合并）。"""
+    if not os.path.exists(OUTPUT_PATH):
+        return {"shows": []}
+    with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+    marker = "window.TV_DATA = "
+    idx = content.find(marker)
+    if idx < 0:
+        return {"shows": []}
+    js = content[idx + len(marker):].strip()
+    if js.endswith(";"):
+        js = js[:-1].rstrip()
+    return json.loads(js)
+
+
+def process_item(api_key, item):
+    """处理单个剧集条目，返回 (entry, changed)。entry.found=False 表示未找到。"""
+    title = (item.get("title") or "").strip()
+    imdb_id = (item.get("imdb_id") or "").strip()
+    name_zh = (item.get("name_zh") or "").strip()
+    tmdb_id = item.get("tmdb_id")
+    display = title or imdb_id
+    if not display and not tmdb_id:
+        return {"title": "", "found": False}, False
+
+    matched_by_text = False
+    # 匹配优先级：imdb 号 -> tmdb_id -> 文本搜索
+    if not tmdb_id:
+        if imdb_id:
+            tmdb_id = find_by_imdb(api_key, imdb_id)
+        if not tmdb_id and title:
+            tmdb_id = search_show(api_key, title)
+            if tmdb_id:
+                matched_by_text = True
+        if not tmdb_id:
+            print(f"[跳过] 未找到: {display}")
+            return {"title": display, "found": False}, False
+
+    changed = False
+    # 文本匹配命中后，把确认的 imdb 号回填到 shows.json
+    if matched_by_text:
+        imdb = fetch_external_ids(api_key, tmdb_id)
+        if imdb and imdb != imdb_id:
+            item["imdb_id"] = imdb
+            changed = True
+            print(f"[回填] {display} -> imdb {imdb}")
+
+    raw = fetch_show(api_key, tmdb_id)
+    # 回填中文名到 shows.json
+    zh = (raw.get("name") or "").strip()
+    if zh and zh != name_zh:
+        item["name_zh"] = zh
+        changed = True
+
+    entry = build_entry(title or display, raw)
+    entry["tmdb_id"] = tmdb_id
+    print(f"[完成] {entry.get('name') or display} -> {entry.get('status_zh')}")
+    return entry, changed
 
 
 def main():
@@ -145,27 +233,60 @@ def main():
     shows_cfg = load_json(SHOWS_PATH)
     shows = shows_cfg.get("shows", [])
 
-    results = []
-    for item in shows:
-        title = (item.get("title") or "").strip()
-        if not title:
-            continue
-        tmdb_id = item.get("tmdb_id")
+    only = sys.argv[1].strip() if len(sys.argv) > 1 else None
+
+    # 局部更新：python3 fetch_tv.py <title 或 imdb_id>
+    if only:
+        target = None
+        for item in shows:
+            if (item.get("title") or "").strip() == only or (item.get("imdb_id") or "").strip() == only:
+                target = item
+                break
+        if target is None:
+            print(f"未在 shows.json 中找到 '{only}'")
+            sys.exit(1)
         try:
-            if not tmdb_id:
-                tmdb_id = search_show(api_key, title)
-                if not tmdb_id:
-                    print(f"[跳过] 未找到: {title}")
-                    results.append({"title": title, "found": False})
-                    continue
-            raw = fetch_show(api_key, tmdb_id)
-            entry = build_entry(title, raw)
-            entry["tmdb_id"] = tmdb_id
-            results.append(entry)
-            print(f"[完成] {entry.get('name') or title} -> {entry.get('status_zh')}")
+            entry, changed = process_item(api_key, target)
         except Exception as e:
-            print(f"[失败] {title}: {e}")
-            results.append({"title": title, "found": False, "error": str(e)})
+            print(f"[失败] {only}: {e}")
+            sys.exit(1)
+        if changed:
+            save_shows(shows_cfg)
+            print("已回填到 shows.json")
+
+        payload = load_data_payload()
+        merged = payload.get("shows", [])
+        title = (target.get("title") or "").strip()
+        replaced = False
+        for i, s in enumerate(merged):
+            if (s.get("title") or "") == title:
+                merged[i] = entry
+                replaced = True
+                break
+        if not replaced:
+            merged.append(entry)
+        payload["generated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        payload["shows"] = merged
+        write_output(payload)
+        return
+
+    results = []
+    changed = False
+    for item in shows:
+        display = (item.get("title") or "").strip() or (item.get("imdb_id") or "").strip()
+        if not display and not item.get("tmdb_id"):
+            continue
+        try:
+            entry, ch = process_item(api_key, item)
+            changed = changed or ch
+            results.append(entry)
+        except Exception as e:
+            print(f"[失败] {display}: {e}")
+            results.append({"title": display, "found": False, "error": str(e)})
+
+    if changed:
+        save_shows(shows_cfg)
+        print("已回填到 shows.json")
 
     payload = {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),

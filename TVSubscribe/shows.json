@@ -1,9 +1,534 @@
 {
   "shows": [
-    { "title": "Breaking Bad" },
-    { "title": "Game of Thrones" },
-    { "title": "Stranger Things" },
-    { "title": "The Last of Us" },
-    { "title": "Westworld" }
+    {
+      "title": "Game of Thrones",
+      "imdb_id": "tt0944947",
+      "name_zh": "权力的游戏"
+    },
+    {
+      "title": "Breaking Bad",
+      "imdb_id": "tt0903747",
+      "name_zh": "绝命毒师"
+    },
+    {
+      "title": "Westworld",
+      "imdb_id": "tt0475784",
+      "name_zh": "西部世界"
+    },
+    {
+      "title": "Prison Break",
+      "imdb_id": "tt0455275",
+      "name_zh": "越狱"
+    },
+    {
+      "title": "Medici: Masters of Florence",
+      "imdb_id": "tt5057130",
+      "name_zh": "美第奇家族：翡冷翠名门"
+    },
+    {
+      "title": "Uncle",
+      "imdb_id": "tt2546866",
+      "name_zh": "废柴舅舅"
+    },
+    {
+      "title": "Better Call Saul",
+      "imdb_id": "tt3032476",
+      "name_zh": "风骚律师"
+    },
+    {
+      "title": "Silicon Valley",
+      "imdb_id": "tt2575988",
+      "name_zh": "硅谷"
+    },
+    {
+      "title": "You're the Worst",
+      "imdb_id": "tt3228420",
+      "name_zh": "我爱上的人是奇葩"
+    },
+    {
+      "title": "Shameless",
+      "imdb_id": "tt1586680",
+      "name_zh": "无耻之徒"
+    },
+    {
+      "title": "The Vampire Diaries",
+      "imdb_id": "tt1405406",
+      "name_zh": "吸血鬼日记"
+    },
+    {
+      "title": "The Originals",
+      "imdb_id": "tt2632424",
+      "name_zh": "初代吸血鬼"
+    },
+    {
+      "title": "Agents of S.H.I.L.D.",
+      "imdb_id": "tt2364582",
+      "name_zh": "神盾局特工"
+    },
+    {
+      "title": "Agent Carter",
+      "imdb_id": "tt3475734",
+      "name_zh": "卡特特工"
+    },
+    {
+      "title": "The Strain",
+      "imdb_id": "tt2654620",
+      "name_zh": "血族"
+    },
+    {
+      "title": "This is Us",
+      "imdb_id": "tt5555260",
+      "name_zh": "我们这一天"
+    },
+    {
+      "title": "A Discovery of Witches",
+      "imdb_id": "tt2177461",
+      "name_zh": "发现女巫"
+    },
+    {
+      "title": "The Purge",
+      "imdb_id": "tt6110648",
+      "name_zh": "人类清除计划"
+    },
+    {
+      "title": "My Brilliant Friend",
+      "imdb_id": "tt7278862",
+      "name_zh": "我的天才女友"
+    },
+    {
+      "title": "The Gifted",
+      "imdb_id": "tt4396630",
+      "name_zh": "天赋异禀"
+    },
+    {
+      "title": "2 Broken Girls",
+      "imdb_id": "tt1845307",
+      "name_zh": "破产姐妹"
+    },
+    {
+      "title": "Legacies",
+      "imdb_id": "tt8103070",
+      "name_zh": "吸血鬼后裔"
+    },
+    {
+      "title": "The Walking Dead",
+      "imdb_id": "tt1520211",
+      "name_zh": "行尸走肉"
+    },
+    {
+      "title": "Chernobyl",
+      "imdb_id": "tt7366338",
+      "name_zh": "切尔诺贝利"
+    },
+    {
+      "title": "The Flash",
+      "imdb_id": "tt3107288",
+      "name_zh": "闪电侠"
+    },
+    {
+      "title": "Good Omens",
+      "imdb_id": "tt1869454",
+      "name_zh": "好兆头"
+    },
+    {
+      "title": "Killing Eve",
+      "imdb_id": "tt7016936",
+      "name_zh": "杀死伊芙"
+    },
+    {
+      "title": "The Handmaid's Tale",
+      "imdb_id": "tt5834204",
+      "name_zh": "使女的故事"
+    },
+    {
+      "title": "Euphoria",
+      "imdb_id": "tt8772296",
+      "name_zh": "亢奋"
+    },
+    {
+      "title": "Horace and Pete",
+      "imdb_id": "tt5425186",
+      "name_zh": "百年酒馆"
+    },
+    {
+      "title": "The Marvelous Mrs. Maisel",
+      "imdb_id": "tt5788792",
+      "name_zh": "了不起的麦瑟尔夫人"
+    },
+    {
+      "title": "Stories from Our Future",
+      "imdb_id": "tt10404752",
+      "name_zh": "来自未来的故事"
+    },
+    {
+      "title": "Picnic at Hanging Rock",
+      "imdb_id": "tt6038954",
+      "name_zh": "悬崖上的野餐"
+    },
+    {
+      "title": "The Big Bang Theory",
+      "imdb_id": "tt0898266",
+      "name_zh": "生活大爆炸"
+    },
+    {
+      "title": "Why Women Kill",
+      "imdb_id": "tt9054904",
+      "name_zh": "致命女人"
+    },
+    {
+      "title": "The Witcher",
+      "imdb_id": "tt5180504",
+      "name_zh": "猎魔人"
+    },
+    {
+      "title": "Love, Death & Robots",
+      "imdb_id": "tt9561862",
+      "name_zh": "Love, Death & Robots"
+    },
+    {
+      "title": "100 humans",
+      "imdb_id": "tt11823088",
+      "name_zh": "百人社会实验"
+    },
+    {
+      "title": "Sex Education",
+      "imdb_id": "tt7767422",
+      "name_zh": "性爱自修室"
+    },
+    {
+      "title": "Sherlock",
+      "imdb_id": "tt1475582",
+      "name_zh": "神探夏洛克"
+    },
+    {
+      "title": "Fargo",
+      "imdb_id": "tt2802850",
+      "name_zh": "冰血暴"
+    },
+    {
+      "title": "Mrs. America",
+      "imdb_id": "tt9244556",
+      "name_zh": "美国夫人"
+    },
+    {
+      "title": "Friends",
+      "imdb_id": "tt0108778",
+      "name_zh": "老友记"
+    },
+    {
+      "title": "What We Do in the Shadows",
+      "imdb_id": "tt7908628",
+      "name_zh": "吸血鬼生活"
+    },
+    {
+      "title": "Young Sheldon",
+      "imdb_id": "tt6226232",
+      "name_zh": "小谢尔顿"
+    },
+    {
+      "title": "Raised by Wolves",
+      "imdb_id": "tt9170108",
+      "name_zh": "异星灾变"
+    },
+    {
+      "title": "Black Mirror",
+      "imdb_id": "tt2085059",
+      "name_zh": "黑镜"
+    },
+    {
+      "title": "Watchmen",
+      "imdb_id": "tt7049682",
+      "name_zh": "守望者"
+    },
+    {
+      "title": "WandaVision",
+      "imdb_id": "tt9140560",
+      "name_zh": "WandaVision"
+    },
+    {
+      "title": "The Queen's Gambit",
+      "imdb_id": "tt10048342",
+      "name_zh": "后翼弃兵"
+    },
+    {
+      "title": "Staged",
+      "imdb_id": "tt12369754",
+      "name_zh": "舞台剧"
+    },
+    {
+      "title": "The Falcon and the Winter Soldier",
+      "imdb_id": "tt9208876",
+      "name_zh": "猎鹰与冬兵"
+    },
+    {
+      "title": "The Mandalorian",
+      "imdb_id": "tt8111088",
+      "name_zh": "曼达洛人"
+    },
+    {
+      "title": "Shameless Hall of Shame",
+      "imdb_id": "tt13653972",
+      "name_zh": "无耻之徒之无耻堂"
+    },
+    {
+      "title": "Loki",
+      "imdb_id": "tt9140554",
+      "name_zh": "洛基"
+    },
+    {
+      "title": "Obi-Wan Kenobi",
+      "imdb_id": "tt8466564",
+      "name_zh": "Obi-Wan Kenobi"
+    },
+    {
+      "title": "The Book of Boba Fett",
+      "imdb_id": "tt13668894",
+      "name_zh": "波巴·费特之书"
+    },
+    {
+      "title": "Andor",
+      "imdb_id": "tt9253284",
+      "name_zh": "Andor"
+    },
+    {
+      "title": "Ahsoka",
+      "imdb_id": "tt13622776",
+      "name_zh": "Ahsoka"
+    },
+    {
+      "title": "The Acolyte",
+      "imdb_id": "tt12262202",
+      "name_zh": "The Acolyte"
+    },
+    {
+      "title": "Harley Quinn",
+      "imdb_id": "tt7658402",
+      "name_zh": "哈莉·奎茵"
+    },
+    {
+      "title": "Lie to Me",
+      "imdb_id": "tt1235099",
+      "name_zh": "千谎百计"
+    },
+    {
+      "title": "Rick and Morty",
+      "imdb_id": "tt2861424",
+      "name_zh": "瑞克和莫蒂"
+    },
+    {
+      "title": "Squid Game",
+      "imdb_id": "tt10919420",
+      "name_zh": "鱿鱼游戏"
+    },
+    {
+      "title": "Only Murders in the Building",
+      "imdb_id": "tt11691774",
+      "name_zh": "大楼里只有谋杀"
+    },
+    {
+      "title": "Arcane",
+      "imdb_id": "tt11126994",
+      "name_zh": "英雄联盟：双城之战"
+    },
+    {
+      "title": "Ling Cage",
+      "imdb_id": "tt10827146",
+      "name_zh": "灵笼"
+    },
+    {
+      "title": "Hawkeye",
+      "imdb_id": "tt10160804",
+      "name_zh": "鹰眼"
+    },
+    {
+      "title": "Ghosts",
+      "imdb_id": "tt11379026",
+      "name_zh": "鬼屋欢乐送"
+    },
+    {
+      "title": "American Horror Story",
+      "imdb_id": "tt1844624",
+      "name_zh": "美国恐怖故事"
+    },
+    {
+      "title": "House of the Dragon",
+      "imdb_id": "tt11198330",
+      "name_zh": "权力的游戏前传：龙族"
+    },
+    {
+      "title": "Inventing Anna",
+      "imdb_id": "tt8740976",
+      "name_zh": "虚构安娜"
+    },
+    {
+      "title": "Upload",
+      "imdb_id": "tt7826376",
+      "name_zh": "上载新生"
+    },
+    {
+      "title": "The Boys",
+      "imdb_id": "tt1190634",
+      "name_zh": "黑袍纠察队"
+    },
+    {
+      "title": "Ms. Marvel",
+      "imdb_id": "tt10857164",
+      "name_zh": "Ms. Marvel"
+    },
+    {
+      "title": "She-Hulk: Attorney at Law",
+      "imdb_id": "tt10857160",
+      "name_zh": "She-Hulk: Attorney at Law"
+    },
+    {
+      "title": "Our Great National Parks",
+      "imdb_id": "tt18750552",
+      "name_zh": "全球绝美国家公园"
+    },
+    {
+      "title": "The Bear",
+      "imdb_id": "tt14452776",
+      "name_zh": "熊家餐馆"
+    },
+    {
+      "title": "Les 7 vies de Léa",
+      "imdb_id": "tt14140886",
+      "name_zh": "莉亚的7重人生"
+    },
+    {
+      "title": "Stranger Things",
+      "imdb_id": "tt4574334",
+      "name_zh": "怪奇物语"
+    },
+    {
+      "title": "Modern Family",
+      "imdb_id": "tt1442437",
+      "name_zh": "摩登家庭"
+    },
+    {
+      "title": "How I Met Your Mother",
+      "imdb_id": "tt0460649",
+      "name_zh": "老爸老妈的浪漫史"
+    },
+    {
+      "title": "The Peripheral",
+      "imdb_id": "tt8291284",
+      "name_zh": "边缘世界"
+    },
+    {
+      "title": "All Creatures Great & Small",
+      "imdb_id": "tt10590066",
+      "name_zh": "万物生灵"
+    },
+    {
+      "title": "The Lord of the Rings: The Rings of Power",
+      "imdb_id": "tt7631058",
+      "name_zh": "指环王：力量之戒"
+    },
+    {
+      "title": "Cyberpunk: Edgerunners",
+      "imdb_id": "tt12590266",
+      "name_zh": "赛博朋克：边缘行者"
+    },
+    {
+      "title": "Downton Abbey",
+      "imdb_id": "tt1606375",
+      "name_zh": "唐顿庄园"
+    },
+    {
+      "title": "Gen V",
+      "imdb_id": "tt13159924",
+      "name_zh": "V世代"
+    },
+    {
+      "title": "Depp V Heard",
+      "imdb_id": "tt27541298",
+      "name_zh": "德普大战希尔德"
+    },
+    {
+      "title": "The Walking Dead: Daryl Dixon",
+      "imdb_id": "tt13062500",
+      "name_zh": "行尸走肉：达里尔·迪克森"
+    },
+    {
+      "title": "The Walking Dead: The Ones Who Live",
+      "imdb_id": "tt9859436",
+      "name_zh": "行尸走肉：存活之人"
+    },
+    {
+      "title": "3 Body Problem",
+      "imdb_id": "tt13016388",
+      "name_zh": "3 Body Problem"
+    },
+    {
+      "title": "Clarkson's Farm",
+      "imdb_id": "tt10541088",
+      "name_zh": "克拉克森的农场"
+    },
+    {
+      "title": "Agatha All Along",
+      "imdb_id": "tt15571732",
+      "name_zh": "Agatha All Along"
+    },
+    {
+      "title": "Dark",
+      "imdb_id": "tt5753856",
+      "name_zh": "暗黑"
+    },
+    {
+      "title": "The Pitt",
+      "imdb_id": "tt31938062",
+      "name_zh": "匹兹堡医护前线"
+    },
+    {
+      "title": "Gravity Falls",
+      "imdb_id": "tt1865718",
+      "name_zh": "怪诞小镇"
+    },
+    {
+      "title": "Joy of Life",
+      "imdb_id": "tt11273352",
+      "name_zh": "庆余年"
+    },
+    {
+      "title": "Sword Snow Stride",
+      "imdb_id": "tt12740306",
+      "name_zh": "雪中悍刀行"
+    },
+    {
+      "title": "Chef's Table",
+      "imdb_id": "tt4295140",
+      "name_zh": "主厨的餐桌"
+    },
+    {
+      "title": "A Knight of the Seven Kingdoms",
+      "imdb_id": "tt27497448",
+      "name_zh": "七王国的骑士"
+    },
+    {
+      "title": "The IT Crowd",
+      "imdb_id": "tt0487831",
+      "name_zh": "IT狂人"
+    },
+    {
+      "title": "Black Books",
+      "imdb_id": "tt0262150",
+      "name_zh": "布莱克书店"
+    },
+    {
+      "title": "Haunted Hotel",
+      "imdb_id": "tt32499579",
+      "name_zh": "酒店有鬼"
+    },
+    {
+      "title": "Scissor Seven",
+      "imdb_id": "tt10384610",
+      "name_zh": "刺客伍六七"
+    },
+    {
+      "title": "领风者",
+      "imdb_id": "tt9878732",
+      "name_zh": "领风者"
+    }
   ]
 }
