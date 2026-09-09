@@ -12,29 +12,42 @@
 <body>
   <header>
     <h1>美剧订阅</h1>
-    <p class="subtitle" id="updated-at"></p>
+    <p class="tagline">追剧进度 · 完结状态 · 最新季播出时间</p>
   </header>
   <div class="toolbar">
-    <label class="field">状态
+    <label class="field">
+      <span class="field-label">状态</span>
       <select id="filter-status">
         <option value="">全部</option>
       </select>
     </label>
-    <label class="field">出品方
+    <label class="field">
+      <span class="field-label">出品方</span>
       <select id="filter-network">
         <option value="">全部</option>
       </select>
     </label>
-    <label class="field">排序
+    <span class="tb-divider"></span>
+    <label class="field">
+      <span class="field-label">排序</span>
       <select id="sort-key">
         <option value="last_air_date">最后更新时间</option>
         <option value="first_air_date">首季播出时间</option>
         <option value="latest_season">最新季播出时间</option>
       </select>
     </label>
-    <button id="sort-dir" class="sort-dir" data-dir="desc" title="切换升/降序">↓ 降序</button>
+    <button id="sort-dir" class="sort-dir" data-dir="desc" title="切换升/降序">
+      <svg class="dir-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+      <span class="dir-text">降序</span>
+    </button>
+    <span class="tb-count" id="result-count"></span>
   </div>
   <main id="grid" class="grid"></main>
+  <footer>
+    <div class="footer-line"></div>
+    <p class="updated-at" id="updated-at"></p>
+    <p class="footer-note">数据来源 <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a> · <span id="footer-count"></span></p>
+  </footer>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

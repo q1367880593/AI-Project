@@ -8,6 +8,8 @@
   var networkSel = document.getElementById("filter-network");
   var sortSel = document.getElementById("sort-key");
   var sortDirBtn = document.getElementById("sort-dir");
+  var resultCount = document.getElementById("result-count");
+  var footerCount = document.getElementById("footer-count");
 
   var TMDB_BASE = "https://www.themoviedb.org/tv/";
   var STATUS_ORDER = ["Returning Series", "Ended", "Canceled", "In Production", "Planned", "Pilot"];
@@ -74,6 +76,18 @@
     titleRow.appendChild(link(hasId ? showUrl(show.tmdb_id) : "#", "title", show.name || show.title));
     titleRow.appendChild(el("span", "badge " + statusClass(show.status), show.status_zh));
     info.appendChild(titleRow);
+
+    var nets = show.networks || [];
+    if (nets.length) {
+      var chipRow = el("div", "net-row");
+      nets.slice(0, 2).forEach(function (n) {
+        chipRow.appendChild(el("span", "chip", n));
+      });
+      if (nets.length > 2) {
+        chipRow.appendChild(el("span", "chip chip-more", "+" + (nets.length - 2)));
+      }
+      info.appendChild(chipRow);
+    }
 
     if (show.original_name && show.original_name !== show.name) {
       info.appendChild(el("div", "original", show.original_name));
@@ -166,6 +180,7 @@
 
     if (data.generated_at) {
       updatedAt.textContent = "更新于 " + data.generated_at;
+      footerCount.textContent = "共收录 " + data.shows.length + " 部剧集";
     }
 
     var status = statusSel.value;
@@ -181,17 +196,28 @@
 
     var sorted = sortShows(list, key, asc);
 
+    // 结果计数
+    var total = data.shows.length;
+    if (status || network) {
+      resultCount.innerHTML = "当前 <b>" + sorted.length + "</b> / " + total + " 部";
+    } else {
+      resultCount.innerHTML = "共 <b>" + total + "</b> 部";
+    }
+
     grid.innerHTML = "";
     if (sorted.length === 0) {
       grid.appendChild(el("div", "empty", "没有符合条件的剧集。"));
       return;
     }
-    sorted.forEach(function (show) {
+    sorted.forEach(function (show, idx) {
+      var node;
       if (!show.found) {
-        grid.appendChild(el("div", "card", "未找到或抓取失败：" + (show.title || "")));
+        node = el("div", "card", "未找到或抓取失败：" + (show.title || ""));
       } else {
-        grid.appendChild(card(show));
+        node = card(show);
       }
+      node.style.animationDelay = Math.min(idx, 24) * 14 + "ms";
+      grid.appendChild(node);
     });
   }
 
@@ -202,7 +228,7 @@
     sortDirBtn.addEventListener("click", function () {
       var asc = sortDirBtn.dataset.dir !== "asc";
       sortDirBtn.dataset.dir = asc ? "asc" : "desc";
-      sortDirBtn.textContent = asc ? "↑ 升序" : "↓ 降序";
+      sortDirBtn.querySelector(".dir-text").textContent = asc ? "升序" : "降序";
       render();
     });
   }
