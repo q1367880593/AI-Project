@@ -27,6 +27,15 @@
         <option value="">全部</option>
       </select>
     </label>
+    <label class="field">
+      <span class="field-label">观剧</span>
+      <select id="filter-mark">
+        <option value="">全部</option>
+        <option value="none">未标记</option>
+        <option value="finished">已追完</option>
+        <option value="dropped">已弃剧</option>
+      </select>
+    </label>
     <span class="tb-divider"></span>
     <label class="field">
       <span class="field-label">排序</span>
@@ -40,6 +49,10 @@
       <svg class="dir-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
       <span class="dir-text">降序</span>
     </button>
+    <span class="tb-divider"></span>
+    <button id="btn-edit" class="tb-btn" title="编辑模式下才能添加 / 删除 / 标记">✎ 编辑</button>
+    <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加剧集" hidden>＋ 添加</button>
+    <button id="btn-export" class="tb-btn" title="下载合并了本地添加/删除后的 shows.json">导出</button>
     <span class="tb-count" id="result-count"></span>
   </div>
   <main id="grid" class="grid"></main>
@@ -48,6 +61,58 @@
     <p class="updated-at" id="updated-at"></p>
     <p class="footer-note">数据来源 <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a> · <span id="footer-count"></span></p>
   </footer>
+  <div class="overlay" id="add-overlay" hidden>
+    <div class="dialog dialog-add" role="dialog" aria-modal="true" aria-labelledby="add-title-label">
+      <h2 id="add-title-label">添加剧集</h2>
+      <div id="add-view-search">
+        <div class="dlg-search">
+          <input type="text" id="add-input-title" placeholder="输入剧名搜索，如 Westworld">
+          <button type="button" id="add-search-btn" class="tb-btn tb-btn-primary">搜索</button>
+        </div>
+        <div class="search-hint" id="search-hint">输入剧名后回车或点击搜索</div>
+        <div class="search-results" id="search-results"></div>
+        <div class="search-manual-toggle">
+          <button type="button" id="add-to-manual" class="link-btn">搜索不通？手动输入</button>
+        </div>
+      </div>
+      <div id="add-view-manual" hidden>
+        <label class="dlg-field">剧名（英文 / 原文）<span class="req">*</span>
+          <input type="text" id="add-m-title" placeholder="如 Westworld">
+        </label>
+        <label class="dlg-field">中文名（可选）
+          <input type="text" id="add-m-zh" placeholder="如 西部世界">
+        </label>
+        <label class="dlg-field">IMDB 号（可选）
+          <input type="text" id="add-m-imdb" placeholder="如 tt0475784">
+        </label>
+        <div class="dlg-actions">
+          <button type="button" id="add-m-back" class="tb-btn">返回搜索</button>
+          <button type="button" id="add-m-confirm" class="tb-btn tb-btn-primary">添加</button>
+        </div>
+      </div>
+      <div id="add-view-preview" hidden>
+        <div class="preview" id="preview-box"></div>
+        <div class="dlg-actions">
+          <button type="button" id="add-back" class="tb-btn">返回</button>
+          <button type="button" id="add-confirm" class="tb-btn tb-btn-primary">确认添加</button>
+        </div>
+      </div>
+      <div class="dlg-actions">
+        <button type="button" id="add-cancel" class="tb-btn">取消</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="mark-overlay" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="mark-label">
+      <h2 id="mark-label">标记</h2>
+      <div class="mark-options">
+        <button type="button" class="mark-opt" data-mark="">未标记</button>
+        <button type="button" class="mark-opt" data-mark="finished">已追完</button>
+        <button type="button" class="mark-opt" data-mark="dropped">已弃剧</button>
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

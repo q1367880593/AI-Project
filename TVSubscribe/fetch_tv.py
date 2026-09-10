@@ -228,6 +228,7 @@ def process_item(api_key, item):
 
     entry = build_entry(title or display, raw)
     entry["tmdb_id"] = tmdb_id
+    entry["imdb_id"] = (item.get("imdb_id") or "").strip() or None
     print(f"[完成] {entry.get('name') or display} -> {entry.get('status_zh')}")
     return entry, changed
 
@@ -318,6 +319,10 @@ def main():
     if changed:
         save_shows(shows_cfg)
         print("已回填到 shows.json")
+
+    if sum(1 for s in results if s.get("found")) == 0:
+        print("本次抓取全部失败（网络或代理异常），已保留现有 data.js，请检查 config.json 中的 proxy。")
+        sys.exit(1)
 
     payload = {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
