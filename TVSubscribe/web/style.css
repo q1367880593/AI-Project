@@ -63,6 +63,52 @@ h1::before {
   color: var(--muted);
 }
 
+/* ---------- 顶部 Tab（液态玻璃分段控件） ---------- */
+.tabs {
+  width: fit-content;
+  margin: 18px auto 0;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.26));
+  backdrop-filter: blur(22px) saturate(1.7);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 8px 28px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.tab-btn {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn.active {
+  color: var(--blue);
+  font-weight: 700;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.85));
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px rgba(59, 130, 246, 0.06);
+}
+
 /* ---------- 工具栏 ---------- */
 .toolbar {
   position: sticky;
@@ -116,7 +162,9 @@ h1::before {
 
 #filter-status,
 #filter-network,
-#filter-mark {
+#filter-mark,
+#filter-origin,
+#group-view {
   width: 82px;
 }
 
@@ -324,6 +372,15 @@ h1::before {
   white-space: nowrap;
 }
 
+.card-check {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
 .badge {
   flex: 0 0 auto;
   display: inline-flex;
@@ -372,6 +429,41 @@ h1::before {
   font-size: 12px;
 }
 
+/* ---------- 星级评分 ---------- */
+.score-line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.stars {
+  position: relative;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: #d5dbe3;
+}
+
+.stars-bg {
+  display: block;
+}
+
+.stars-fg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #f59e0b;
+}
+
+.score-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .empty {
   grid-column: 1 / -1;
   max-width: 1080px;
@@ -383,6 +475,39 @@ h1::before {
   color: var(--muted);
   font-size: 14px;
   text-align: center;
+}
+
+/* ---------- 分组视图 ---------- */
+.group-block {
+  grid-column: 1 / -1;
+}
+
+.group-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 14px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.group-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.group-grid .card {
+  animation: card-in 0.28s ease backwards;
 }
 
 /* ---------- 页脚 ---------- */
@@ -632,6 +757,35 @@ footer {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+}
+
+.dlg-field select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-weight: 400;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+}
+
+.dlg-field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+}
+
+.group-hint {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.group-actions > :first-child {
+  margin-right: auto;
 }
 
 .dlg-actions {

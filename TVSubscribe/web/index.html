@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>美剧订阅</title>
+  <title>影视订阅</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="128x128" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -11,9 +11,28 @@
 </head>
 <body>
   <header>
-    <h1>美剧订阅</h1>
-    <p class="tagline">追剧进度 · 完结状态 · 最新季播出时间</p>
+    <h1>影视订阅</h1>
+    <p class="tagline" id="tagline"></p>
   </header>
+  <nav class="tabs" id="tabs" role="tablist">
+    <button type="button" class="tab-btn active" data-kind="tv" role="tab" aria-selected="true">剧集</button>
+    <button type="button" class="tab-btn" data-kind="movie" role="tab" aria-selected="false">电影</button>
+  </nav>
+  <script>
+    // 首帧渲染前按 URL 修正 Tab 选中态，避免刷新时先显示剧集再跳到电影
+    (function () {
+      try {
+        if (new URLSearchParams(location.search).get("tab") === "movie") {
+          var tv = document.querySelector('.tab-btn[data-kind="tv"]');
+          var mv = document.querySelector('.tab-btn[data-kind="movie"]');
+          tv.classList.remove("active");
+          tv.setAttribute("aria-selected", "false");
+          mv.classList.add("active");
+          mv.setAttribute("aria-selected", "true");
+        }
+      } catch (e) { /* 忽略 */ }
+    })();
+  </script>
   <div class="toolbar">
     <label class="field">
       <span class="field-label">状态</span>
@@ -26,17 +45,36 @@
       <select id="filter-mark">
         <option value="">全部</option>
         <option value="none">未标记</option>
-        <option value="finished">已追完</option>
-        <option value="dropped">已弃剧</option>
+        <option value="finished" id="mark-filter-finished">已追完</option>
+        <option value="dropped" id="mark-filter-dropped">已弃剧</option>
       </select>
     </label>
     <label class="field">
-      <span class="field-label">出品方</span>
+      <span class="field-label" id="network-label">出品方</span>
       <select id="filter-network">
         <option value="">全部</option>
       </select>
     </label>
+    <label class="field" id="origin-field" hidden>
+      <span class="field-label">地区</span>
+      <select id="filter-origin">
+        <option value="">全部</option>
+        <option value="chinese">华语</option>
+        <option value="west">欧美</option>
+        <option value="japan">日本</option>
+        <option value="korea">韩国</option>
+        <option value="other">其他</option>
+        <option value="unknown">未知</option>
+      </select>
+    </label>
     <span class="tb-divider"></span>
+    <label class="field" id="group-view-field" hidden>
+      <span class="field-label">视图</span>
+      <select id="group-view">
+        <option value="flat">平铺</option>
+        <option value="grouped">按分组</option>
+      </select>
+    </label>
     <label class="field">
       <span class="field-label">排序</span>
       <select id="sort-key">
@@ -51,7 +89,8 @@
     </button>
     <span class="tb-divider"></span>
     <button id="btn-edit" class="tb-btn" title="编辑模式下才能添加 / 删除 / 标记">✎ 编辑</button>
-    <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加剧集" hidden>＋ 添加</button>
+    <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加" hidden>＋ 添加</button>
+    <button id="btn-group" class="tb-btn" title="勾选电影后加入 / 移出分组" hidden>分组</button>
     <button id="btn-refresh" class="tb-btn" title="调用 fetch_tv.py 全量抓取（需几分钟）">更新数据</button>
     <span class="tb-count" id="result-count"></span>
   </div>
@@ -76,10 +115,10 @@
         </div>
       </div>
       <div id="add-view-manual" hidden>
-        <label class="dlg-field">剧名（英文 / 原文）<span class="req">*</span>
+        <label class="dlg-field"><span id="add-m-title-label">剧名（英文 / 原文）</span><span class="req">*</span>
           <input type="text" id="add-m-title" placeholder="如 Westworld">
         </label>
-        <label class="dlg-field">中文名（可选）
+        <label class="dlg-field"><span id="add-m-zh-label">中文名（可选）</span>
           <input type="text" id="add-m-zh" placeholder="如 西部世界">
         </label>
         <label class="dlg-field">IMDB 号（可选）
@@ -107,12 +146,30 @@
       <h2 id="mark-label">标记</h2>
       <div class="mark-options">
         <button type="button" class="mark-opt" data-mark="">未标记</button>
-        <button type="button" class="mark-opt" data-mark="finished">已追完</button>
-        <button type="button" class="mark-opt" data-mark="dropped">已弃剧</button>
+        <button type="button" class="mark-opt" data-mark="finished" id="mark-opt-finished">已追完</button>
+        <button type="button" class="mark-opt" data-mark="dropped" id="mark-opt-dropped">已弃剧</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="group-overlay" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="group-label">
+      <h2 id="group-label">电影分组</h2>
+      <p class="group-hint" id="group-hint"></p>
+      <label class="dlg-field">加入已有分组
+        <select id="group-select"></select>
+      </label>
+      <label class="dlg-field">或输入新组名
+        <input type="text" id="group-input" placeholder="如 加勒比海盗系列">
+      </label>
+      <div class="dlg-actions group-actions">
+        <button type="button" id="group-dismiss" class="tb-btn">移出分组</button>
+        <button type="button" id="group-cancel" class="tb-btn">取消</button>
+        <button type="button" id="group-confirm" class="tb-btn tb-btn-primary">加入</button>
       </div>
     </div>
   </div>
   <script src="data.js"></script>
+  <script src="movies_data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

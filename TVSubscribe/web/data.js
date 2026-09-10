@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-10 14:15:51",
+  "generated_at": "2026-09-10 14:55:36",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -3799,6 +3799,38 @@ window.TV_DATA = {
       "tmdb_id": 139162,
       "imdb_id": "tt26007176",
       "mark": "finished"
+    },
+    {
+      "title": "Lucky",
+      "name": "幸运女神",
+      "original_name": "Lucky",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": null,
+      "first_air_date": "2026-07-14",
+      "last_air_date": "2026-08-18",
+      "release_date": "",
+      "runtime": null,
+      "vote_average": null,
+      "poster": "https://image.tmdb.org/t/p/w200/9gCX7hf1nDovg3E5WHRzxFdzOm1.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 7,
+        "name": "好景不常",
+        "air_date": "2026-08-18"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2026-07-14",
+        "episode_count": 7
+      },
+      "networks": [
+        "Apple TV"
+      ],
+      "found": true,
+      "imdb_id": "tt34866681",
+      "mark": null
     }
   ]
 };
