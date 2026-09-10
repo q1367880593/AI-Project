@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """从 TMDB 抓取订阅美剧的完结状态与最新一季播出时间，并输出 data.js。
 
-用法：在项目目录下执行 `python3 fetch_tv.py`
+用法：在项目目录下执行 `python3 app/fetch_tv.py`
 依赖：仅使用 Python 标准库，无需 pip 安装任何包。
 """
 
@@ -18,9 +18,10 @@ BASE_URL = "https://api.themoviedb.org/3"
 IMAGE_BASE = "https://image.tmdb.org/t/p/w200"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CONFIG_PATH = os.path.join(HERE, "config.json")
-SHOWS_PATH = os.path.join(HERE, "shows.json")
-OUTPUT_PATH = os.path.join(HERE, "data.js")
+ROOT = os.path.dirname(HERE)
+CONFIG_PATH = os.path.join(ROOT, "data", "config.json")
+SHOWS_PATH = os.path.join(ROOT, "data", "shows.json")
+OUTPUT_PATH = os.path.join(ROOT, "web", "data.js")
 
 STATUS_ZH = {
     "Returning Series": "在播",

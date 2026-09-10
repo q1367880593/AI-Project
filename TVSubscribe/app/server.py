@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""TVSubscribe 本地小服务（可选，用于让页面直接读写 shows.json / data.js）
+"""TVSubscribe 本地小服务：页面直接读写 shows.json / data.js
 
 用法：
-    双击 start.command（或执行 python3 server.py）
+    双击 start.command（或执行 python3 app/server.py）
     浏览器访问 http://127.0.0.1:8765
-
-不启动本服务时，项目仍可按原方式以 file:// 直接打开 index.html。
 """
 import contextlib
 import io
@@ -20,7 +18,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import fetch_tv as ft
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = os.path.dirname(os.path.abspath(__file__))   # app/
+ROOT = os.path.dirname(HERE)                          # 项目根目录
+WEB_DIR = os.path.join(ROOT, "web")
 PORT = 8765
 HOST = "127.0.0.1"
 
@@ -30,7 +30,6 @@ STATIC_OK = {
     "style.css": "text/css; charset=utf-8",
     "app.js": "application/javascript; charset=utf-8",
     "data.js": "application/javascript; charset=utf-8",
-    "shows.json": "application/json; charset=utf-8",
     "favicon.svg": "image/svg+xml",
     "favicon.png": "image/png",
     "apple-touch-icon.png": "image/png",
@@ -131,10 +130,10 @@ def save_shows(entries):
 
 def serve_index():
     """返回 index.html，并给本地资源加时间戳版本号，避免浏览器缓存旧 JS/CSS。"""
-    with open(os.path.join(HERE, "index.html"), "rb") as f:
+    with open(os.path.join(WEB_DIR, "index.html"), "rb") as f:
         content = f.read().decode("utf-8")
     for asset in ("style.css", "data.js", "app.js"):
-        mtime = int(os.path.getmtime(os.path.join(HERE, asset)))
+        mtime = int(os.path.getmtime(os.path.join(WEB_DIR, asset)))
         content = content.replace('"%s"' % asset, '"%s?v=%d"' % (asset, mtime))
     return content.encode("utf-8")
 
@@ -197,7 +196,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(404, {"error": "not found"})
             return
         if name and name != "index.html":
-            fp = os.path.join(HERE, name)
+            fp = os.path.join(WEB_DIR, name)
             try:
                 with open(fp, "rb") as f:
                     body = f.read()
