@@ -129,6 +129,16 @@ def save_shows(entries):
     })
 
 
+def serve_index():
+    """返回 index.html，并给本地资源加时间戳版本号，避免浏览器缓存旧 JS/CSS。"""
+    with open(os.path.join(HERE, "index.html"), "rb") as f:
+        content = f.read().decode("utf-8")
+    for asset in ("style.css", "data.js", "app.js"):
+        mtime = int(os.path.getmtime(os.path.join(HERE, asset)))
+        content = content.replace('"%s"' % asset, '"%s?v=%d"' % (asset, mtime))
+    return content.encode("utf-8")
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         sys.stderr.write("[http] %s\n" % (fmt % args))
@@ -171,6 +181,12 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 detail = ft.http_get_json(tmdb_url("/tv/%s?language=zh-CN" % urllib.parse.quote(tid)))
                 ext = ft.http_get_json(tmdb_url("/tv/%s/external_ids" % urllib.parse.quote(tid)))
+                # 主名无中文时，补取中文别名（如 女巫阿加莎）
+                name = (detail.get("name") or "")
+                if name and not ft.has_cjk(name):
+                    alias = ft.fetch_zh_alias(API_KEY, tid)
+                    if alias:
+                        detail["name"] = alias
                 self.send_json(200, {"detail": detail, "imdb_id": ext.get("imdb_id")})
             except Exception as e:
                 self.send_json(502, {"error": "获取详情失败: %s" % e})
@@ -180,13 +196,17 @@ class Handler(BaseHTTPRequestHandler):
         if name not in STATIC_OK:
             self.send_json(404, {"error": "not found"})
             return
-        fp = os.path.join(HERE, name) if name else os.path.join(HERE, "index.html")
-        try:
-            with open(fp, "rb") as f:
-                body = f.read()
-        except OSError:
-            self.send_json(404, {"error": "not found"})
-            return
+        if name and name != "index.html":
+            fp = os.path.join(HERE, name)
+            try:
+                with open(fp, "rb") as f:
+                    body = f.read()
+            except OSError:
+                self.send_json(404, {"error": "not found"})
+                return
+        else:
+            # index.html：注入资源版本号
+            body = serve_index()
         self.send_response(200)
         self.send_header("Content-Type", STATIC_OK[name] or STATIC_OK[""])
         self.send_header("Content-Length", str(len(body)))

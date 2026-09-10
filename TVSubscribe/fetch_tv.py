@@ -111,6 +111,35 @@ def fetch_external_ids(api_key, tmdb_id):
     return data.get("imdb_id")
 
 
+def has_cjk(s):
+    """是否包含中文字符。"""
+    return any("\u4e00" <= ch <= "\u9fff" for ch in s)
+
+
+def fetch_zh_alias(api_key, tmdb_id):
+    """从 TMDB 别名（alternative_titles）中找中文译名，找不到返回 None。"""
+    try:
+        params = urllib.parse.urlencode({"api_key": api_key})
+        url = f"{BASE_URL}/tv/{tmdb_id}/alternative_titles?{params}"
+        data = http_get_json(url)
+        for t in (data.get("titles") or data.get("results") or []):
+            iso = (t.get("iso_3166_1") or "").upper()
+            name = (t.get("title") or "").strip()
+            if iso in ("CN", "TW", "HK", "SG") and name:
+                return name
+    except Exception:
+        pass
+    return None
+
+
+def pick_zh_name(raw, api_key, tmdb_id):
+    """优先 zh-CN 主名；无中文时回退到中文别名。"""
+    zh = (raw.get("name") or "").strip()
+    if zh and has_cjk(zh):
+        return zh
+    return fetch_zh_alias(api_key, tmdb_id) or zh
+
+
 def zh_status(status):
     return STATUS_ZH.get(status, status or "未知")
 
@@ -220,13 +249,15 @@ def process_item(api_key, item):
             print(f"[回填] {display} -> imdb {imdb}")
 
     raw = fetch_show(api_key, tmdb_id)
-    # 回填中文名到 shows.json
-    zh = (raw.get("name") or "").strip()
+    # 回填中文名到 shows.json（主名没有中文时，从中文别名补取）
+    zh = pick_zh_name(raw, api_key, tmdb_id)
     if zh and zh != name_zh:
         item["name_zh"] = zh
         changed = True
 
     entry = build_entry(title or display, raw)
+    if zh:
+        entry["name"] = zh
     entry["tmdb_id"] = tmdb_id
     entry["imdb_id"] = (item.get("imdb_id") or "").strip() or None
     entry["mark"] = (item.get("mark") or "").strip() or None

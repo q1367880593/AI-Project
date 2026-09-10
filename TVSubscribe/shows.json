@@ -217,7 +217,8 @@
     },
     {
       "title": "Love, Death & Robots",
-      "imdb_id": "tt9561862"
+      "imdb_id": "tt9561862",
+      "name_zh": "爱，死亡和机器人"
     },
     {
       "title": "100 humans",
@@ -287,6 +288,7 @@
     {
       "title": "WandaVision",
       "imdb_id": "tt9140560",
+      "name_zh": "旺达幻视",
       "mark": "finished"
     },
     {
@@ -327,6 +329,7 @@
     {
       "title": "Obi-Wan Kenobi",
       "imdb_id": "tt8466564",
+      "name_zh": "欧比旺·克诺比",
       "mark": "finished"
     },
     {
@@ -338,15 +341,18 @@
     {
       "title": "Andor",
       "imdb_id": "tt9253284",
+      "name_zh": "星球大战：安多",
       "mark": "finished"
     },
     {
       "title": "Ahsoka",
-      "imdb_id": "tt13622776"
+      "imdb_id": "tt13622776",
+      "name_zh": "阿索卡"
     },
     {
       "title": "The Acolyte",
       "imdb_id": "tt12262202",
+      "name_zh": "星球大战：侍者",
       "mark": "finished"
     },
     {
@@ -429,11 +435,13 @@
     {
       "title": "Ms. Marvel",
       "imdb_id": "tt10857164",
+      "name_zh": "惊奇少女",
       "mark": "finished"
     },
     {
       "title": "She-Hulk: Attorney at Law",
       "imdb_id": "tt10857160",
+      "name_zh": "女浩克",
       "mark": "finished"
     },
     {
@@ -522,7 +530,8 @@
     },
     {
       "title": "3 Body Problem",
-      "imdb_id": "tt13016388"
+      "imdb_id": "tt13016388",
+      "name_zh": "3体"
     },
     {
       "title": "Clarkson's Farm",
@@ -532,6 +541,7 @@
     {
       "title": "Agatha All Along",
       "imdb_id": "tt15571732",
+      "name_zh": "女巫阿加莎",
       "mark": "finished"
     },
     {
@@ -611,6 +621,7 @@
     {
       "title": "Secret Invasion",
       "imdb_id": "tt13157618",
+      "name_zh": "秘密入侵",
       "mark": "finished"
     },
     {
@@ -698,6 +709,11 @@
       "title": "The Sandman",
       "imdb_id": "tt1751634",
       "name_zh": "睡魔"
+    },
+    {
+      "title": "中国奇谭",
+      "imdb_id": "tt26007176",
+      "mark": "finished"
     }
   ]
 }

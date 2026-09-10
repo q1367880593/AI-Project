@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-10 13:57:20",
+  "generated_at": "2026-09-10 14:15:51",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -8,7 +8,7 @@ window.TV_DATA = {
       "original_name": "Game of Thrones",
       "status": "Ended",
       "status_zh": "已完结",
-      "in_production": null,
+      "in_production": false,
       "first_air_date": "2011-04-17",
       "last_air_date": "2019-05-19",
       "poster": "https://image.tmdb.org/t/p/w200/6fJ7Gql9rD4C3X1uW2zinlkNwvw.jpg",
@@ -28,6 +28,7 @@ window.TV_DATA = {
         "HBO"
       ],
       "found": true,
+      "tmdb_id": 1399,
       "imdb_id": "tt0944947",
       "mark": "finished"
     },
@@ -1084,7 +1085,7 @@ window.TV_DATA = {
     },
     {
       "title": "Love, Death & Robots",
-      "name": "Love, Death & Robots",
+      "name": "爱，死亡和机器人",
       "original_name": "Love, Death & Robots",
       "status": "Canceled",
       "status_zh": "已取消",
@@ -1445,7 +1446,7 @@ window.TV_DATA = {
     },
     {
       "title": "WandaVision",
-      "name": "WandaVision",
+      "name": "旺达幻视",
       "original_name": "WandaVision",
       "status": "Ended",
       "status_zh": "已完结",
@@ -1654,7 +1655,7 @@ window.TV_DATA = {
     },
     {
       "title": "Obi-Wan Kenobi",
-      "name": "Obi-Wan Kenobi",
+      "name": "欧比旺·克诺比",
       "original_name": "Obi-Wan Kenobi",
       "status": "Ended",
       "status_zh": "已完结",
@@ -1714,7 +1715,7 @@ window.TV_DATA = {
     },
     {
       "title": "Andor",
-      "name": "Andor",
+      "name": "星球大战：安多",
       "original_name": "Andor",
       "status": "Ended",
       "status_zh": "已完结",
@@ -1744,7 +1745,7 @@ window.TV_DATA = {
     },
     {
       "title": "Ahsoka",
-      "name": "Ahsoka",
+      "name": "阿索卡",
       "original_name": "Ahsoka",
       "status": "Returning Series",
       "status_zh": "在播",
@@ -1779,7 +1780,7 @@ window.TV_DATA = {
     },
     {
       "title": "The Acolyte",
-      "name": "The Acolyte",
+      "name": "星球大战：侍者",
       "original_name": "The Acolyte",
       "status": "Canceled",
       "status_zh": "已取消",
@@ -2246,7 +2247,7 @@ window.TV_DATA = {
     },
     {
       "title": "Ms. Marvel",
-      "name": "Ms. Marvel",
+      "name": "惊奇少女",
       "original_name": "Ms. Marvel",
       "status": "Ended",
       "status_zh": "已完结",
@@ -2276,7 +2277,7 @@ window.TV_DATA = {
     },
     {
       "title": "She-Hulk: Attorney at Law",
-      "name": "She-Hulk: Attorney at Law",
+      "name": "女浩克",
       "original_name": "She-Hulk: Attorney at Law",
       "status": "Ended",
       "status_zh": "已完结",
@@ -2766,7 +2767,7 @@ window.TV_DATA = {
     },
     {
       "title": "3 Body Problem",
-      "name": "3 Body Problem",
+      "name": "3体",
       "original_name": "3 Body Problem",
       "status": "Returning Series",
       "status_zh": "在播",
@@ -2826,7 +2827,7 @@ window.TV_DATA = {
     },
     {
       "title": "Agatha All Along",
-      "name": "Agatha All Along",
+      "name": "女巫阿加莎",
       "original_name": "Agatha All Along",
       "status": "Ended",
       "status_zh": "已完结",
@@ -3289,7 +3290,7 @@ window.TV_DATA = {
     },
     {
       "title": "Secret Invasion",
-      "name": "Secret Invasion",
+      "name": "秘密入侵",
       "original_name": "Secret Invasion",
       "status": "Ended",
       "status_zh": "已完结",
@@ -3745,7 +3746,7 @@ window.TV_DATA = {
       "original_name": "The Sandman",
       "status": "Ended",
       "status_zh": "已完结",
-      "in_production": null,
+      "in_production": false,
       "first_air_date": "2022-08-05",
       "last_air_date": "2025-07-31",
       "poster": "https://image.tmdb.org/t/p/w200/3LeLp0ikt7XOCcQiBKwL5eAHaqJ.jpg",
@@ -3765,8 +3766,39 @@ window.TV_DATA = {
         "Netflix"
       ],
       "found": true,
+      "tmdb_id": 90802,
       "imdb_id": "tt1751634",
       "mark": null
+    },
+    {
+      "title": "中国奇谭",
+      "name": "中国奇谭",
+      "original_name": "中国奇谭",
+      "status": "Returning Series",
+      "status_zh": "在播",
+      "in_production": true,
+      "first_air_date": "2023-01-01",
+      "last_air_date": "2026-02-19",
+      "poster": "https://image.tmdb.org/t/p/w200/lyDRtY01krTcs1JP74XL2XxqUb4.jpg",
+      "last_episode": {
+        "season": 2,
+        "episode": 9,
+        "name": "大贵人",
+        "air_date": "2026-02-19"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 2,
+        "air_date": "2026-01-01",
+        "episode_count": 9
+      },
+      "networks": [
+        "bilibili"
+      ],
+      "found": true,
+      "tmdb_id": 139162,
+      "imdb_id": "tt26007176",
+      "mark": "finished"
     }
   ]
 };

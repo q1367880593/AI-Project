@@ -87,8 +87,8 @@
     });
   }
 
-  /* 把完整列表 POST 给 server.py 写盘，成功后刷新页面 */
-  function persistEntries(entries) {
+  /* 把完整列表 POST 给 server.py 写盘；成功后更新内存数据并重渲染（不刷新页面） */
+  function persistEntries(entries, onFail) {
     fetch("/api/save-shows", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -98,8 +98,12 @@
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
-      .then(function () { location.reload(); })
+      .then(function () {
+        data.shows = entries;
+        render();
+      })
       .catch(function (e) {
+        if (onFail) onFail();
         window.alert("写入 shows.json 失败：" + e.message + "（请确认 server.py 正在运行）");
         render();
       });
@@ -574,9 +578,13 @@
 
   function chooseMark(value) {
     if (!pendingMark) return;
-    pendingMark.mark = value || null;
+    var show = pendingMark;
+    var oldMark = show.mark || null;
+    show.mark = value || null;
     closeMarkDialog();
-    persistEntries(allShows());
+    persistEntries(allShows(), function () {
+      show.mark = oldMark; // 写盘失败则回滚
+    });
   }
 
   /* ---------- 编辑模式 ---------- */
