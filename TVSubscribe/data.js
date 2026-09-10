@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-09 18:20:59",
+  "generated_at": "2026-09-10 13:57:20",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -8,7 +8,7 @@ window.TV_DATA = {
       "original_name": "Game of Thrones",
       "status": "Ended",
       "status_zh": "已完结",
-      "in_production": false,
+      "in_production": null,
       "first_air_date": "2011-04-17",
       "last_air_date": "2019-05-19",
       "poster": "https://image.tmdb.org/t/p/w200/6fJ7Gql9rD4C3X1uW2zinlkNwvw.jpg",
@@ -28,8 +28,8 @@ window.TV_DATA = {
         "HBO"
       ],
       "found": true,
-      "tmdb_id": 1399,
-      "imdb_id": "tt0944947"
+      "imdb_id": "tt0944947",
+      "mark": "finished"
     },
     {
       "title": "Breaking Bad",
@@ -58,7 +58,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1396,
-      "imdb_id": "tt0903747"
+      "imdb_id": "tt0903747",
+      "mark": "finished"
     },
     {
       "title": "Westworld",
@@ -87,7 +88,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 63247,
-      "imdb_id": "tt0475784"
+      "imdb_id": "tt0475784",
+      "mark": "finished"
     },
     {
       "title": "Prison Break",
@@ -116,7 +118,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 2288,
-      "imdb_id": "tt0455275"
+      "imdb_id": "tt0455275",
+      "mark": "finished"
     },
     {
       "title": "Medici: Masters of Florence",
@@ -145,7 +148,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 66761,
-      "imdb_id": "tt5057130"
+      "imdb_id": "tt5057130",
+      "mark": "dropped"
     },
     {
       "title": "Uncle",
@@ -174,7 +178,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 62019,
-      "imdb_id": "tt2546866"
+      "imdb_id": "tt2546866",
+      "mark": "finished"
     },
     {
       "title": "Better Call Saul",
@@ -203,7 +208,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 60059,
-      "imdb_id": "tt3032476"
+      "imdb_id": "tt3032476",
+      "mark": "finished"
     },
     {
       "title": "Silicon Valley",
@@ -232,7 +238,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 60573,
-      "imdb_id": "tt2575988"
+      "imdb_id": "tt2575988",
+      "mark": "finished"
     },
     {
       "title": "You're the Worst",
@@ -262,7 +269,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 61118,
-      "imdb_id": "tt3228420"
+      "imdb_id": "tt3228420",
+      "mark": "finished"
     },
     {
       "title": "Shameless",
@@ -291,7 +299,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 34307,
-      "imdb_id": "tt1586680"
+      "imdb_id": "tt1586680",
+      "mark": "finished"
     },
     {
       "title": "The Vampire Diaries",
@@ -320,7 +329,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 18165,
-      "imdb_id": "tt1405406"
+      "imdb_id": "tt1405406",
+      "mark": "finished"
     },
     {
       "title": "The Originals",
@@ -349,7 +359,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 46896,
-      "imdb_id": "tt2632424"
+      "imdb_id": "tt2632424",
+      "mark": "finished"
     },
     {
       "title": "Agents of S.H.I.L.D.",
@@ -378,7 +389,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1403,
-      "imdb_id": "tt2364582"
+      "imdb_id": "tt2364582",
+      "mark": "dropped"
     },
     {
       "title": "Agent Carter",
@@ -407,7 +419,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 61550,
-      "imdb_id": "tt3475734"
+      "imdb_id": "tt3475734",
+      "mark": "finished"
     },
     {
       "title": "The Strain",
@@ -436,7 +449,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 47640,
-      "imdb_id": "tt2654620"
+      "imdb_id": "tt2654620",
+      "mark": "finished"
     },
     {
       "title": "This is Us",
@@ -465,7 +479,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 67136,
-      "imdb_id": "tt5555260"
+      "imdb_id": "tt5555260",
+      "mark": "finished"
     },
     {
       "title": "A Discovery of Witches",
@@ -495,7 +510,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 77236,
-      "imdb_id": "tt2177461"
+      "imdb_id": "tt2177461",
+      "mark": "dropped"
     },
     {
       "title": "The Purge",
@@ -524,7 +540,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 80213,
-      "imdb_id": "tt6110648"
+      "imdb_id": "tt6110648",
+      "mark": "finished"
     },
     {
       "title": "My Brilliant Friend",
@@ -553,7 +570,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 78154,
-      "imdb_id": "tt7278862"
+      "imdb_id": "tt7278862",
+      "mark": "dropped"
     },
     {
       "title": "The Gifted",
@@ -582,7 +600,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 69629,
-      "imdb_id": "tt4396630"
+      "imdb_id": "tt4396630",
+      "mark": "finished"
     },
     {
       "title": "2 Broken Girls",
@@ -611,7 +630,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 39340,
-      "imdb_id": "tt1845307"
+      "imdb_id": "tt1845307",
+      "mark": "finished"
     },
     {
       "title": "Legacies",
@@ -640,7 +660,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 79460,
-      "imdb_id": "tt8103070"
+      "imdb_id": "tt8103070",
+      "mark": "dropped"
     },
     {
       "title": "The Walking Dead",
@@ -669,7 +690,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1402,
-      "imdb_id": "tt1520211"
+      "imdb_id": "tt1520211",
+      "mark": "finished"
     },
     {
       "title": "Chernobyl",
@@ -698,7 +720,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 87108,
-      "imdb_id": "tt7366338"
+      "imdb_id": "tt7366338",
+      "mark": "finished"
     },
     {
       "title": "The Flash",
@@ -727,7 +750,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 60735,
-      "imdb_id": "tt3107288"
+      "imdb_id": "tt3107288",
+      "mark": "dropped"
     },
     {
       "title": "Good Omens",
@@ -756,7 +780,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 71915,
-      "imdb_id": "tt1869454"
+      "imdb_id": "tt1869454",
+      "mark": null
     },
     {
       "title": "Killing Eve",
@@ -785,7 +810,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 72750,
-      "imdb_id": "tt7016936"
+      "imdb_id": "tt7016936",
+      "mark": "finished"
     },
     {
       "title": "The Handmaid's Tale",
@@ -814,7 +840,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 69478,
-      "imdb_id": "tt5834204"
+      "imdb_id": "tt5834204",
+      "mark": "finished"
     },
     {
       "title": "Euphoria",
@@ -843,7 +870,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 85552,
-      "imdb_id": "tt8772296"
+      "imdb_id": "tt8772296",
+      "mark": "dropped"
     },
     {
       "title": "Horace and Pete",
@@ -870,7 +898,8 @@ window.TV_DATA = {
       "networks": [],
       "found": true,
       "tmdb_id": 65454,
-      "imdb_id": "tt5425186"
+      "imdb_id": "tt5425186",
+      "mark": "finished"
     },
     {
       "title": "The Marvelous Mrs. Maisel",
@@ -899,7 +928,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 70796,
-      "imdb_id": "tt5788792"
+      "imdb_id": "tt5788792",
+      "mark": "finished"
     },
     {
       "title": "Stories from Our Future",
@@ -928,7 +958,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 106661,
-      "imdb_id": "tt10404752"
+      "imdb_id": "tt10404752",
+      "mark": "finished"
     },
     {
       "title": "Picnic at Hanging Rock",
@@ -957,7 +988,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 78881,
-      "imdb_id": "tt6038954"
+      "imdb_id": "tt6038954",
+      "mark": "finished"
     },
     {
       "title": "The Big Bang Theory",
@@ -986,7 +1018,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1418,
-      "imdb_id": "tt0898266"
+      "imdb_id": "tt0898266",
+      "mark": "finished"
     },
     {
       "title": "Why Women Kill",
@@ -1016,7 +1049,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 87428,
-      "imdb_id": "tt9054904"
+      "imdb_id": "tt9054904",
+      "mark": "finished"
     },
     {
       "title": "The Witcher",
@@ -1045,15 +1079,16 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 71912,
-      "imdb_id": "tt5180504"
+      "imdb_id": "tt5180504",
+      "mark": "dropped"
     },
     {
       "title": "Love, Death & Robots",
       "name": "Love, Death & Robots",
       "original_name": "Love, Death & Robots",
-      "status": "Returning Series",
-      "status_zh": "在播",
-      "in_production": true,
+      "status": "Canceled",
+      "status_zh": "已取消",
+      "in_production": false,
       "first_air_date": "2019-03-15",
       "last_air_date": "2025-05-15",
       "poster": "https://image.tmdb.org/t/p/w200/ooSYCehJ3nJh3UywyKSmHXALDyA.jpg",
@@ -1074,7 +1109,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 86831,
-      "imdb_id": "tt9561862"
+      "imdb_id": "tt9561862",
+      "mark": null
     },
     {
       "title": "100 humans",
@@ -1103,7 +1139,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 100429,
-      "imdb_id": "tt11823088"
+      "imdb_id": "tt11823088",
+      "mark": "finished"
     },
     {
       "title": "Sex Education",
@@ -1132,7 +1169,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 81356,
-      "imdb_id": "tt7767422"
+      "imdb_id": "tt7767422",
+      "mark": "finished"
     },
     {
       "title": "Sherlock",
@@ -1161,15 +1199,16 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 19885,
-      "imdb_id": "tt1475582"
+      "imdb_id": "tt1475582",
+      "mark": "finished"
     },
     {
       "title": "Fargo",
       "name": "冰血暴",
       "original_name": "Fargo",
-      "status": "Returning Series",
-      "status_zh": "在播",
-      "in_production": true,
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
       "first_air_date": "2014-04-15",
       "last_air_date": "2024-01-16",
       "poster": "https://image.tmdb.org/t/p/w200/ck4OUAw65awqGc9ZYpbKAHUOqST.jpg",
@@ -1190,7 +1229,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 60622,
-      "imdb_id": "tt2802850"
+      "imdb_id": "tt2802850",
+      "mark": "dropped"
     },
     {
       "title": "Mrs. America",
@@ -1219,7 +1259,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 83605,
-      "imdb_id": "tt9244556"
+      "imdb_id": "tt9244556",
+      "mark": "finished"
     },
     {
       "title": "Friends",
@@ -1248,7 +1289,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1668,
-      "imdb_id": "tt0108778"
+      "imdb_id": "tt0108778",
+      "mark": "finished"
     },
     {
       "title": "What We Do in the Shadows",
@@ -1277,7 +1319,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 83631,
-      "imdb_id": "tt7908628"
+      "imdb_id": "tt7908628",
+      "mark": "dropped"
     },
     {
       "title": "Young Sheldon",
@@ -1306,7 +1349,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 71728,
-      "imdb_id": "tt6226232"
+      "imdb_id": "tt6226232",
+      "mark": "finished"
     },
     {
       "title": "Raised by Wolves",
@@ -1335,7 +1379,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 85723,
-      "imdb_id": "tt9170108"
+      "imdb_id": "tt9170108",
+      "mark": "dropped"
     },
     {
       "title": "Black Mirror",
@@ -1365,7 +1410,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 42009,
-      "imdb_id": "tt2085059"
+      "imdb_id": "tt2085059",
+      "mark": null
     },
     {
       "title": "Watchmen",
@@ -1394,7 +1440,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 79788,
-      "imdb_id": "tt7049682"
+      "imdb_id": "tt7049682",
+      "mark": "finished"
     },
     {
       "title": "WandaVision",
@@ -1423,7 +1470,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 85271,
-      "imdb_id": "tt9140560"
+      "imdb_id": "tt9140560",
+      "mark": "finished"
     },
     {
       "title": "The Queen's Gambit",
@@ -1452,7 +1500,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 87739,
-      "imdb_id": "tt10048342"
+      "imdb_id": "tt10048342",
+      "mark": "finished"
     },
     {
       "title": "Staged",
@@ -1482,7 +1531,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 104674,
-      "imdb_id": "tt12369754"
+      "imdb_id": "tt12369754",
+      "mark": null
     },
     {
       "title": "The Falcon and the Winter Soldier",
@@ -1511,7 +1561,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 88396,
-      "imdb_id": "tt9208876"
+      "imdb_id": "tt9208876",
+      "mark": "finished"
     },
     {
       "title": "The Mandalorian",
@@ -1540,7 +1591,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 82856,
-      "imdb_id": "tt8111088"
+      "imdb_id": "tt8111088",
+      "mark": "finished"
     },
     {
       "title": "Shameless Hall of Shame",
@@ -1567,7 +1619,8 @@ window.TV_DATA = {
       "networks": [],
       "found": true,
       "tmdb_id": 208736,
-      "imdb_id": "tt13653972"
+      "imdb_id": "tt13653972",
+      "mark": "finished"
     },
     {
       "title": "Loki",
@@ -1596,7 +1649,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 84958,
-      "imdb_id": "tt9140554"
+      "imdb_id": "tt9140554",
+      "mark": "finished"
     },
     {
       "title": "Obi-Wan Kenobi",
@@ -1625,7 +1679,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 92830,
-      "imdb_id": "tt8466564"
+      "imdb_id": "tt8466564",
+      "mark": "finished"
     },
     {
       "title": "The Book of Boba Fett",
@@ -1654,7 +1709,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 115036,
-      "imdb_id": "tt13668894"
+      "imdb_id": "tt13668894",
+      "mark": "finished"
     },
     {
       "title": "Andor",
@@ -1683,7 +1739,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 83867,
-      "imdb_id": "tt9253284"
+      "imdb_id": "tt9253284",
+      "mark": "finished"
     },
     {
       "title": "Ahsoka",
@@ -1717,7 +1774,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 114461,
-      "imdb_id": "tt13622776"
+      "imdb_id": "tt13622776",
+      "mark": null
     },
     {
       "title": "The Acolyte",
@@ -1746,7 +1804,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 114479,
-      "imdb_id": "tt12262202"
+      "imdb_id": "tt12262202",
+      "mark": "finished"
     },
     {
       "title": "Harley Quinn",
@@ -1777,7 +1836,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 74440,
-      "imdb_id": "tt7658402"
+      "imdb_id": "tt7658402",
+      "mark": null
     },
     {
       "title": "Lie to Me",
@@ -1806,7 +1866,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 8358,
-      "imdb_id": "tt1235099"
+      "imdb_id": "tt1235099",
+      "mark": "finished"
     },
     {
       "title": "Rick and Morty",
@@ -1835,7 +1896,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 60625,
-      "imdb_id": "tt2861424"
+      "imdb_id": "tt2861424",
+      "mark": null
     },
     {
       "title": "Squid Game",
@@ -1864,7 +1926,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 93405,
-      "imdb_id": "tt10919420"
+      "imdb_id": "tt10919420",
+      "mark": "finished"
     },
     {
       "title": "Only Murders in the Building",
@@ -1898,7 +1961,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 107113,
-      "imdb_id": "tt11691774"
+      "imdb_id": "tt11691774",
+      "mark": null
     },
     {
       "title": "Arcane",
@@ -1927,7 +1991,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 94605,
-      "imdb_id": "tt11126994"
+      "imdb_id": "tt11126994",
+      "mark": "finished"
     },
     {
       "title": "Ling Cage",
@@ -1956,7 +2021,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 91097,
-      "imdb_id": "tt10827146"
+      "imdb_id": "tt10827146",
+      "mark": null
     },
     {
       "title": "Hawkeye",
@@ -1985,7 +2051,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 88329,
-      "imdb_id": "tt10160804"
+      "imdb_id": "tt10160804",
+      "mark": "finished"
     },
     {
       "title": "Ghosts",
@@ -2019,7 +2086,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 126027,
-      "imdb_id": "tt11379026"
+      "imdb_id": "tt11379026",
+      "mark": null
     },
     {
       "title": "American Horror Story",
@@ -2053,7 +2121,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1413,
-      "imdb_id": "tt1844624"
+      "imdb_id": "tt1844624",
+      "mark": null
     },
     {
       "title": "House of the Dragon",
@@ -2082,7 +2151,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 94997,
-      "imdb_id": "tt11198330"
+      "imdb_id": "tt11198330",
+      "mark": null
     },
     {
       "title": "Inventing Anna",
@@ -2111,7 +2181,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 95665,
-      "imdb_id": "tt8740976"
+      "imdb_id": "tt8740976",
+      "mark": "finished"
     },
     {
       "title": "Upload",
@@ -2140,7 +2211,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 86248,
-      "imdb_id": "tt7826376"
+      "imdb_id": "tt7826376",
+      "mark": "finished"
     },
     {
       "title": "The Boys",
@@ -2169,7 +2241,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 76479,
-      "imdb_id": "tt1190634"
+      "imdb_id": "tt1190634",
+      "mark": "finished"
     },
     {
       "title": "Ms. Marvel",
@@ -2198,7 +2271,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 92782,
-      "imdb_id": "tt10857164"
+      "imdb_id": "tt10857164",
+      "mark": "finished"
     },
     {
       "title": "She-Hulk: Attorney at Law",
@@ -2227,7 +2301,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 92783,
-      "imdb_id": "tt10857160"
+      "imdb_id": "tt10857160",
+      "mark": "finished"
     },
     {
       "title": "Our Great National Parks",
@@ -2256,7 +2331,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 195258,
-      "imdb_id": "tt18750552"
+      "imdb_id": "tt18750552",
+      "mark": null
     },
     {
       "title": "The Bear",
@@ -2285,7 +2361,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 136315,
-      "imdb_id": "tt14452776"
+      "imdb_id": "tt14452776",
+      "mark": "dropped"
     },
     {
       "title": "Les 7 vies de Léa",
@@ -2314,7 +2391,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 195928,
-      "imdb_id": "tt14140886"
+      "imdb_id": "tt14140886",
+      "mark": "finished"
     },
     {
       "title": "Stranger Things",
@@ -2343,7 +2421,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 66732,
-      "imdb_id": "tt4574334"
+      "imdb_id": "tt4574334",
+      "mark": "finished"
     },
     {
       "title": "Modern Family",
@@ -2372,7 +2451,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1421,
-      "imdb_id": "tt1442437"
+      "imdb_id": "tt1442437",
+      "mark": "finished"
     },
     {
       "title": "How I Met Your Mother",
@@ -2401,7 +2481,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 1100,
-      "imdb_id": "tt0460649"
+      "imdb_id": "tt0460649",
+      "mark": null
     },
     {
       "title": "The Peripheral",
@@ -2430,7 +2511,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 95403,
-      "imdb_id": "tt8291284"
+      "imdb_id": "tt8291284",
+      "mark": "finished"
     },
     {
       "title": "All Creatures Great & Small",
@@ -2464,7 +2546,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 108255,
-      "imdb_id": "tt10590066"
+      "imdb_id": "tt10590066",
+      "mark": null
     },
     {
       "title": "The Lord of the Rings: The Rings of Power",
@@ -2498,7 +2581,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 84773,
-      "imdb_id": "tt7631058"
+      "imdb_id": "tt7631058",
+      "mark": null
     },
     {
       "title": "Cyberpunk: Edgerunners",
@@ -2527,7 +2611,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 105248,
-      "imdb_id": "tt12590266"
+      "imdb_id": "tt12590266",
+      "mark": "finished"
     },
     {
       "title": "Downton Abbey",
@@ -2556,7 +2641,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 33907,
-      "imdb_id": "tt1606375"
+      "imdb_id": "tt1606375",
+      "mark": null
     },
     {
       "title": "Gen V",
@@ -2585,7 +2671,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 205715,
-      "imdb_id": "tt13159924"
+      "imdb_id": "tt13159924",
+      "mark": "finished"
     },
     {
       "title": "Depp V Heard",
@@ -2614,7 +2701,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 227381,
-      "imdb_id": "tt27541298"
+      "imdb_id": "tt27541298",
+      "mark": "finished"
     },
     {
       "title": "The Walking Dead: Daryl Dixon",
@@ -2643,7 +2731,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 211684,
-      "imdb_id": "tt13062500"
+      "imdb_id": "tt13062500",
+      "mark": null
     },
     {
       "title": "The Walking Dead: The Ones Who Live",
@@ -2672,7 +2761,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 206586,
-      "imdb_id": "tt9859436"
+      "imdb_id": "tt9859436",
+      "mark": "finished"
     },
     {
       "title": "3 Body Problem",
@@ -2701,7 +2791,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 108545,
-      "imdb_id": "tt13016388"
+      "imdb_id": "tt13016388",
+      "mark": null
     },
     {
       "title": "Clarkson's Farm",
@@ -2730,7 +2821,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 117648,
-      "imdb_id": "tt10541088"
+      "imdb_id": "tt10541088",
+      "mark": null
     },
     {
       "title": "Agatha All Along",
@@ -2759,7 +2851,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 138501,
-      "imdb_id": "tt15571732"
+      "imdb_id": "tt15571732",
+      "mark": "finished"
     },
     {
       "title": "Dark",
@@ -2788,7 +2881,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 70523,
-      "imdb_id": "tt5753856"
+      "imdb_id": "tt5753856",
+      "mark": null
     },
     {
       "title": "The Pitt",
@@ -2818,7 +2912,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 250307,
-      "imdb_id": "tt31938062"
+      "imdb_id": "tt31938062",
+      "mark": null
     },
     {
       "title": "Gravity Falls",
@@ -2848,7 +2943,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 40075,
-      "imdb_id": "tt1865718"
+      "imdb_id": "tt1865718",
+      "mark": null
     },
     {
       "title": "Joy of Life",
@@ -2879,7 +2975,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 95842,
-      "imdb_id": "tt11273352"
+      "imdb_id": "tt11273352",
+      "mark": null
     },
     {
       "title": "Sword Snow Stride",
@@ -2909,7 +3006,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 89614,
-      "imdb_id": "tt12740306"
+      "imdb_id": "tt12740306",
+      "mark": null
     },
     {
       "title": "Chef's Table",
@@ -2938,7 +3036,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 62391,
-      "imdb_id": "tt4295140"
+      "imdb_id": "tt4295140",
+      "mark": null
     },
     {
       "title": "A Knight of the Seven Kingdoms",
@@ -2967,7 +3066,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 224372,
-      "imdb_id": "tt27497448"
+      "imdb_id": "tt27497448",
+      "mark": null
     },
     {
       "title": "The IT Crowd",
@@ -2996,7 +3096,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 2490,
-      "imdb_id": "tt0487831"
+      "imdb_id": "tt0487831",
+      "mark": "finished"
     },
     {
       "title": "Black Books",
@@ -3025,7 +3126,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 903,
-      "imdb_id": "tt0262150"
+      "imdb_id": "tt0262150",
+      "mark": "finished"
     },
     {
       "title": "Haunted Hotel",
@@ -3043,18 +3145,24 @@ window.TV_DATA = {
         "name": "亚巴顿的信徒",
         "air_date": "2025-09-19"
       },
-      "next_episode": null,
+      "next_episode": {
+        "season": 2,
+        "episode": 1,
+        "name": "第 1 集",
+        "air_date": "2026-10-09"
+      },
       "latest_season": {
-        "season_number": 1,
-        "air_date": "2025-09-19",
-        "episode_count": 10
+        "season_number": 2,
+        "air_date": "2026-10-09",
+        "episode_count": 1
       },
       "networks": [
         "Netflix"
       ],
       "found": true,
       "tmdb_id": 255752,
-      "imdb_id": "tt32499579"
+      "imdb_id": "tt32499579",
+      "mark": null
     },
     {
       "title": "Scissor Seven",
@@ -3086,7 +3194,8 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 79141,
-      "imdb_id": "tt10384610"
+      "imdb_id": "tt10384610",
+      "mark": null
     },
     {
       "title": "领风者",
@@ -3115,7 +3224,549 @@ window.TV_DATA = {
       ],
       "found": true,
       "tmdb_id": 86648,
-      "imdb_id": "tt9878732"
+      "imdb_id": "tt9878732",
+      "mark": "finished"
+    },
+    {
+      "title": "What If...?",
+      "name": "假如…？",
+      "original_name": "What If...?",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2021-08-11",
+      "last_air_date": "2024-12-29",
+      "poster": "https://image.tmdb.org/t/p/w200/mcAqhGI6JaJVOK5Jvo4hH0AWTQy.jpg",
+      "last_episode": {
+        "season": 3,
+        "episode": 8,
+        "name": "假如…有无限可能？",
+        "air_date": "2024-12-29"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 3,
+        "air_date": "2024-12-22",
+        "episode_count": 8
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 91363,
+      "imdb_id": "tt10168312",
+      "mark": "finished"
+    },
+    {
+      "title": "Moon Knight",
+      "name": "月光骑士",
+      "original_name": "Moon Knight",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2022-03-30",
+      "last_air_date": "2022-05-04",
+      "poster": "https://image.tmdb.org/t/p/w200/j1zZuylv2XYBSSROWOMiyIclCJl.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 6,
+        "name": "神与怪物",
+        "air_date": "2022-05-04"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2022-03-30",
+        "episode_count": 6
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 92749,
+      "imdb_id": "tt10234724",
+      "mark": "finished"
+    },
+    {
+      "title": "Secret Invasion",
+      "name": "Secret Invasion",
+      "original_name": "Secret Invasion",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2023-06-21",
+      "last_air_date": "2023-07-26",
+      "poster": "https://image.tmdb.org/t/p/w200/yehwpNDcEx4d5sDEJTbI5TOIPG7.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 6,
+        "name": "家园",
+        "air_date": "2023-07-26"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2023-06-21",
+        "episode_count": 6
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 114472,
+      "imdb_id": "tt13157618",
+      "mark": "finished"
+    },
+    {
+      "title": "Echo",
+      "name": "回声",
+      "original_name": "Echo",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2024-01-09",
+      "last_air_date": "2024-01-09",
+      "poster": "https://image.tmdb.org/t/p/w200/ttvdmDp42Q2nWSooLhFjwM2EPfa.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 5,
+        "name": "玛雅",
+        "air_date": "2024-01-09"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2024-01-09",
+        "episode_count": 5
+      },
+      "networks": [
+        "Hulu",
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 122226,
+      "imdb_id": "tt13966962",
+      "mark": "dropped"
+    },
+    {
+      "title": "X-Men '97",
+      "name": "X战警97",
+      "original_name": "X-Men '97",
+      "status": "Returning Series",
+      "status_zh": "在播",
+      "in_production": true,
+      "first_air_date": "2024-03-20",
+      "last_air_date": "2026-08-12",
+      "poster": "https://image.tmdb.org/t/p/w200/pmNPP4TdwTXl6FgCY8ppOIu096A.jpg",
+      "last_episode": {
+        "season": 2,
+        "episode": 9,
+        "name": "适者生存",
+        "air_date": "2026-08-12"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 2,
+        "air_date": "2026-07-01",
+        "episode_count": 9
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 138502,
+      "imdb_id": "tt16026746",
+      "mark": null
+    },
+    {
+      "title": "Your Friendly Neighborhood Spider-Man",
+      "name": "你的友好邻居蜘蛛侠",
+      "original_name": "Your Friendly Neighborhood Spider-Man",
+      "status": "Returning Series",
+      "status_zh": "在播",
+      "in_production": true,
+      "first_air_date": "2025-01-29",
+      "last_air_date": "2025-02-19",
+      "poster": "https://image.tmdb.org/t/p/w200/8yozj6ASC9LuLnEspv1rLbgAA0I.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 10,
+        "name": "如果这是我的命运...",
+        "air_date": "2025-02-19"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2025-01-27",
+        "episode_count": 10
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 138503,
+      "imdb_id": "tt16027074",
+      "mark": null
+    },
+    {
+      "title": "Daredevil: Born Again",
+      "name": "夜魔侠：重生",
+      "original_name": "Daredevil: Born Again",
+      "status": "Returning Series",
+      "status_zh": "在播",
+      "in_production": true,
+      "first_air_date": "2025-03-04",
+      "last_air_date": "2026-05-05",
+      "poster": "https://image.tmdb.org/t/p/w200/cHfQQKZqJs4fwLrbn5RgfGsIoWt.jpg",
+      "last_episode": {
+        "season": 2,
+        "episode": 8,
+        "name": "南十字座",
+        "air_date": "2026-05-05"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 2,
+        "air_date": "2026-03-24",
+        "episode_count": 8
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 202555,
+      "imdb_id": "tt18923754",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's Daredevil",
+      "name": "夜魔侠",
+      "original_name": "Marvel's Daredevil",
+      "status": "Canceled",
+      "status_zh": "已取消",
+      "in_production": false,
+      "first_air_date": "2015-04-10",
+      "last_air_date": "2018-10-19",
+      "poster": "https://image.tmdb.org/t/p/w200/tzxZEUPGydBODCflz0qvnLuBlAr.jpg",
+      "last_episode": {
+        "season": 3,
+        "episode": 13,
+        "name": "新餐巾",
+        "air_date": "2018-10-19"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 3,
+        "air_date": "2018-10-19",
+        "episode_count": 13
+      },
+      "networks": [
+        "Netflix"
+      ],
+      "found": true,
+      "tmdb_id": 61889,
+      "imdb_id": "tt3322312",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's The Defenders",
+      "name": "捍卫者联盟",
+      "original_name": "Marvel's The Defenders",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2017-08-18",
+      "last_air_date": "2017-08-18",
+      "poster": "https://image.tmdb.org/t/p/w200/1PPmT4DrWdV8jFgYkuB2Qyqa3zn.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 8,
+        "name": "捍卫者联盟",
+        "air_date": "2017-08-18"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2017-08-18",
+        "episode_count": 8
+      },
+      "networks": [
+        "Netflix"
+      ],
+      "found": true,
+      "tmdb_id": 62285,
+      "imdb_id": "tt4230076",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's The Punisher",
+      "name": "惩罚者",
+      "original_name": "Marvel's The Punisher",
+      "status": "Canceled",
+      "status_zh": "已取消",
+      "in_production": false,
+      "first_air_date": "2017-11-17",
+      "last_air_date": "2019-01-18",
+      "poster": "https://image.tmdb.org/t/p/w200/5DHHqqBkrNwgLjhDE3KKeat42sf.jpg",
+      "last_episode": {
+        "season": 2,
+        "episode": 13,
+        "name": "黑旋风",
+        "air_date": "2019-01-18"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 2,
+        "air_date": "2019-01-18",
+        "episode_count": 13
+      },
+      "networks": [
+        "Netflix"
+      ],
+      "found": true,
+      "tmdb_id": 67178,
+      "imdb_id": "tt5675620",
+      "mark": "finished"
+    },
+    {
+      "title": "Ironheart",
+      "name": "钢铁之心",
+      "original_name": "Ironheart",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2025-06-24",
+      "last_air_date": "2025-07-01",
+      "poster": "https://image.tmdb.org/t/p/w200/cdqVKwUv0QNCqN5Kf6NRtbmpO7s.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 6,
+        "name": "过去已过去",
+        "air_date": "2025-07-01"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2025-06-24",
+        "episode_count": 6
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 114471,
+      "imdb_id": "tt13623126",
+      "mark": "dropped"
+    },
+    {
+      "title": "Eyes of Wakanda",
+      "name": "瓦坎达之眼",
+      "original_name": "Eyes of Wakanda",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2025-08-01",
+      "last_air_date": "2025-08-01",
+      "poster": "https://image.tmdb.org/t/p/w200/IqtWxuofEoqDEkVstzBVEmUtvb.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 4,
+        "name": "最后的黑豹",
+        "air_date": "2025-08-01"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2025-08-01",
+        "episode_count": 4
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 241388,
+      "imdb_id": "tt13968252",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel Zombies",
+      "name": "漫威丧尸",
+      "original_name": "Marvel Zombies",
+      "status": "Returning Series",
+      "status_zh": "在播",
+      "in_production": true,
+      "first_air_date": "2025-09-24",
+      "last_air_date": "2025-09-24",
+      "poster": "https://image.tmdb.org/t/p/w200/qDOo93OQCG5ugV67kRVMZmygkJV.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 4,
+        "name": "第 4 集",
+        "air_date": "2025-09-24"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2025-09-24",
+        "episode_count": 4
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 138505,
+      "imdb_id": "tt16027014",
+      "mark": null
+    },
+    {
+      "title": "Wonder Man",
+      "name": "奇迹人",
+      "original_name": "Wonder Man",
+      "status": "Canceled",
+      "status_zh": "已取消",
+      "in_production": false,
+      "first_air_date": "2026-01-27",
+      "last_air_date": "2026-01-27",
+      "poster": "https://image.tmdb.org/t/p/w200/5wfW72dFSqJGboyh6fCD01wxrLv.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 8,
+        "name": "西卡瓦利",
+        "air_date": "2026-01-27"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2026-01-26",
+        "episode_count": 8
+      },
+      "networks": [
+        "Disney+"
+      ],
+      "found": true,
+      "tmdb_id": 198178,
+      "imdb_id": "tt21066182",
+      "mark": "finished"
+    },
+    {
+      "title": "Spider-Noir",
+      "name": "暗影蜘蛛侠",
+      "original_name": "Spider-Noir",
+      "status": "Canceled",
+      "status_zh": "已取消",
+      "in_production": false,
+      "first_air_date": "2026-05-25",
+      "last_air_date": "2026-05-25",
+      "poster": "https://image.tmdb.org/t/p/w200/f2dyNx2eWY8Ccmko94DPEfeE361.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 8,
+        "name": "面具下的男人",
+        "air_date": "2026-05-25"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "2026-05-25",
+        "episode_count": 8
+      },
+      "networks": [
+        "MGM+"
+      ],
+      "found": true,
+      "tmdb_id": 220102,
+      "imdb_id": "tt30460310",
+      "mark": "finished"
+    },
+    {
+      "title": "The Spectacular Spider-Man",
+      "name": "神奇蜘蛛侠",
+      "original_name": "The Spectacular Spider-Man",
+      "status": "Canceled",
+      "status_zh": "已取消",
+      "in_production": false,
+      "first_air_date": "2008-03-08",
+      "last_air_date": "2009-11-18",
+      "poster": "https://image.tmdb.org/t/p/w200/dCNxOhXT7c4lqYuRpdM3m8s9XDp.jpg",
+      "last_episode": {
+        "season": 2,
+        "episode": 13,
+        "name": "第 13 集",
+        "air_date": "2009-11-18"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 2,
+        "air_date": "2009-06-22",
+        "episode_count": 13
+      },
+      "networks": [
+        "Disney XD",
+        "The CW"
+      ],
+      "found": true,
+      "tmdb_id": 3854,
+      "imdb_id": "tt0976192",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's Ultimate Spider-Man",
+      "name": "终极蜘蛛侠",
+      "original_name": "Marvel's Ultimate Spider-Man",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": false,
+      "first_air_date": "2012-04-01",
+      "last_air_date": "2017-01-07",
+      "poster": "https://image.tmdb.org/t/p/w200/jK3pc8XOQT8UgdvSjMFk8xLQOxE.jpg",
+      "last_episode": {
+        "season": 4,
+        "episode": 26,
+        "name": "毕业日（第2部分）",
+        "air_date": "2017-01-07"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 4,
+        "air_date": "2016-02-21",
+        "episode_count": 26
+      },
+      "networks": [
+        "Disney XD"
+      ],
+      "found": true,
+      "tmdb_id": 34391,
+      "imdb_id": "tt1722512",
+      "mark": "finished"
+    },
+    {
+      "title": "The Sandman",
+      "name": "睡魔",
+      "original_name": "The Sandman",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": null,
+      "first_air_date": "2022-08-05",
+      "last_air_date": "2025-07-31",
+      "poster": "https://image.tmdb.org/t/p/w200/3LeLp0ikt7XOCcQiBKwL5eAHaqJ.jpg",
+      "last_episode": {
+        "season": 2,
+        "episode": 12,
+        "name": "特别剧集 - 死亡：高昂的生活成本",
+        "air_date": "2025-07-31"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 2,
+        "air_date": "2025-07-03",
+        "episode_count": 12
+      },
+      "networks": [
+        "Netflix"
+      ],
+      "found": true,
+      "imdb_id": "tt1751634",
+      "mark": null
     }
   ]
 };

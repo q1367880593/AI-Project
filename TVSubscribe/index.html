@@ -22,18 +22,18 @@
       </select>
     </label>
     <label class="field">
-      <span class="field-label">出品方</span>
-      <select id="filter-network">
-        <option value="">全部</option>
-      </select>
-    </label>
-    <label class="field">
       <span class="field-label">观剧</span>
       <select id="filter-mark">
         <option value="">全部</option>
         <option value="none">未标记</option>
         <option value="finished">已追完</option>
         <option value="dropped">已弃剧</option>
+      </select>
+    </label>
+    <label class="field">
+      <span class="field-label">出品方</span>
+      <select id="filter-network">
+        <option value="">全部</option>
       </select>
     </label>
     <span class="tb-divider"></span>
@@ -52,7 +52,7 @@
     <span class="tb-divider"></span>
     <button id="btn-edit" class="tb-btn" title="编辑模式下才能添加 / 删除 / 标记">✎ 编辑</button>
     <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加剧集" hidden>＋ 添加</button>
-    <button id="btn-export" class="tb-btn" title="下载合并了本地添加/删除后的 shows.json">导出</button>
+    <button id="btn-refresh" class="tb-btn" title="调用 fetch_tv.py 全量抓取（需几分钟）">更新数据</button>
     <span class="tb-count" id="result-count"></span>
   </div>
   <main id="grid" class="grid"></main>
@@ -112,7 +112,6 @@
       </div>
     </div>
   </div>
-  <script src="config.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

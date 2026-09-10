@@ -12,7 +12,7 @@
   var footerCount = document.getElementById("footer-count");
 
   var btnAdd = document.getElementById("btn-add");
-  var btnExport = document.getElementById("btn-export");
+  var btnRefresh = document.getElementById("btn-refresh");
   var btnEdit = document.getElementById("btn-edit");
   var markSel = document.getElementById("filter-mark");
   var overlay = document.getElementById("add-overlay");
@@ -31,10 +31,7 @@
 
   var TMDB_BASE = "https://www.themoviedb.org/tv/";
   var TMDB_SEARCH = "https://www.themoviedb.org/search?query=";
-  var TMDB_API = "https://api.themoviedb.org/3";
   var TMDB_IMG = "https://image.tmdb.org/t/p/w200";
-  var API_KEY = (window.TV_CONFIG && window.TV_CONFIG.api_key) ? window.TV_CONFIG.api_key : "";
-  var CORS_PROXY = (window.TV_CONFIG && window.TV_CONFIG.cors_proxy) ? window.TV_CONFIG.cors_proxy : "";
   var STATUS_ORDER = ["Returning Series", "Ended", "Canceled", "In Production", "Planned", "Pilot"];
   var STATUS_ZH = {
     "Returning Series": "在播",
@@ -45,80 +42,7 @@
     "Pilot": "试播集"
   };
 
-  /* ---------- 本地持久化（localStorage） ---------- */
-  var LS_PREFIX = "tvsub.";
-  var state = { marks: {}, custom: [], hidden: [], editMode: false };
-
-  function lsGet(key, fallback) {
-    try {
-      var v = localStorage.getItem(LS_PREFIX + key);
-      return v ? JSON.parse(v) : fallback;
-    } catch (e) {
-      return fallback;
-    }
-  }
-
-  function lsSet(key, value) {
-    try {
-      localStorage.setItem(LS_PREFIX + key, JSON.stringify(value));
-    } catch (e) { /* 忽略存储失败（如隐私模式） */ }
-  }
-
-  function loadState() {
-    state.marks = lsGet("marks", {});
-    state.custom = lsGet("custom", []);
-    state.hidden = lsGet("hidden", []);
-    state.editMode = !!lsGet("editMode", false);
-  }
-
-  function saveMarks() { lsSet("marks", state.marks); }
-  function saveCustom() { lsSet("custom", state.custom); }
-  function saveHidden() { lsSet("hidden", state.hidden); }
-
-  function showKey(show) {
-    if (show.imdb_id) return "imdb|" + show.imdb_id;
-    return "title|" + (show.title || "");
-  }
-
-  function customKey(c) {
-    return showKey({ imdb_id: c.imdb_id || null, title: c.title });
-  }
-
-  function baseShows() {
-    return (data && data.shows) ? data.shows : [];
-  }
-
-  function mergedShows() {
-    var builtin = baseShows().map(function (s) {
-      s._key = showKey(s);
-      return s;
-    });
-    var customs = state.custom.map(function (c) {
-      return {
-        title: c.title,
-        name: c.name_zh || c.title,
-        original_name: c.original_name || "",
-        status: c.status || null,
-        status_zh: c.status_zh || "",
-        in_production: null,
-        first_air_date: c.first_air_date || "",
-        last_air_date: c.last_air_date || "",
-        poster: c.poster || null,
-        last_episode: c.last_episode || null,
-        next_episode: c.next_episode || null,
-        latest_season: c.latest_season || null,
-        networks: c.networks || [],
-        imdb_id: c.imdb_id || null,
-        tmdb_id: c.tmdb_id || null,
-        found: true,
-        custom: true,
-        _key: customKey(c)
-      };
-    });
-    return builtin.concat(customs).filter(function (s) {
-      return state.hidden.indexOf(s._key) < 0;
-    });
-  }
+  var editMode = false;
 
   /* ---------- 工具函数 ---------- */
   function statusClass(status) {
@@ -151,6 +75,37 @@
 
   function formatDate(d) { return d || "—"; }
 
+  function showKey(show) {
+    if (show.imdb_id) return "imdb|" + show.imdb_id;
+    return "title|" + (show.title || "");
+  }
+
+  function allShows() {
+    return (data && data.shows ? data.shows : []).map(function (s) {
+      s._key = showKey(s);
+      return s;
+    });
+  }
+
+  /* 把完整列表 POST 给 server.py 写盘，成功后刷新页面 */
+  function persistEntries(entries) {
+    fetch("/api/save-shows", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ entries: entries })
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function () { location.reload(); })
+      .catch(function (e) {
+        window.alert("写入 shows.json 失败：" + e.message + "（请确认 server.py 正在运行）");
+        render();
+      });
+  }
+
+  /* ---------- 卡片 ---------- */
   function seasonLine(season) {
     if (!season) return null;
     return "最新季 S" + season.season_number + " · " + formatDate(season.air_date);
@@ -162,18 +117,16 @@
     return link(episodeUrl(show.tmdb_id, ep.season, ep.episode), "ep-link", text);
   }
 
-  /* ---------- 卡片 ---------- */
   function detailUrl(show) {
     if (show.tmdb_id != null) return showUrl(show.tmdb_id);
-    if (show.custom) return searchUrl(show.title);
-    return "#";
+    return searchUrl(show.title || "");
   }
 
   function markBadge(show) {
-    var mark = state.marks[show._key] || "";
+    var mark = show.mark || "";
     var btn = el("button", "mark-btn", mark === "" ? "＋ 标记" : (mark === "finished" ? "已追完" : "已弃剧"));
     btn.type = "button";
-    btn.title = "选择观剧状态（存于本浏览器）";
+    btn.title = "标记观剧状态（直接写入 shows.json）";
     if (mark === "finished") btn.classList.add("mark-finished");
     if (mark === "dropped") btn.classList.add("mark-dropped");
     btn.addEventListener("click", function (ev) {
@@ -186,27 +139,22 @@
   function deleteBtn(show) {
     var btn = el("button", "del-btn", "×");
     btn.type = "button";
-    btn.title = "移除该剧（仅本浏览器隐藏）";
+    btn.title = "移除该剧（直接写入 shows.json）";
     btn.setAttribute("aria-label", "移除 " + (show.name || show.title));
     btn.addEventListener("click", function (ev) {
       ev.preventDefault();
       var label = show.name || show.title;
-      if (!window.confirm("确认移除「" + label + "」？\n仅在本浏览器隐藏，导出的 shows.json 将不再包含它。")) return;
-      if (show.custom) {
-        state.custom = state.custom.filter(function (c) { return customKey(c) !== show._key; });
-        saveCustom();
-      } else {
-        state.hidden.push(show._key);
-        saveHidden();
-      }
-      render();
+      if (!window.confirm("确认移除「" + label + "」？\n将立即从 shows.json 移除。")) return;
+      persistEntries(allShows().filter(function (s) { return s._key !== show._key; }));
     });
     return btn;
   }
 
   function card(show) {
     var c = el("div", "card");
-    if (state.marks[show._key] === "dropped") c.classList.add("dropped");
+    var mark = show.mark || "";
+    if (mark === "dropped") c.classList.add("dropped");
+    if (mark === "finished") c.classList.add("finished-card");
 
     var posterLink = link(detailUrl(show), "poster-link");
     if (show.poster) {
@@ -224,12 +172,12 @@
 
     var titleRow = el("div", "title-row");
     titleRow.appendChild(link(detailUrl(show), "title", show.name || show.title));
-    if (show.custom && !show.status) {
-      titleRow.appendChild(el("span", "badge badge-custom", "本地添加"));
+    if (show.status) {
+      titleRow.appendChild(el("span", "badge " + statusClass(show.status), show.status_zh || show.status));
     } else {
-      titleRow.appendChild(el("span", "badge " + statusClass(show.status), show.status_zh));
+      titleRow.appendChild(el("span", "badge badge-other", "待抓取"));
     }
-    if (state.editMode) {
+    if (editMode) {
       titleRow.appendChild(markBadge(show));
       titleRow.appendChild(deleteBtn(show));
     }
@@ -253,8 +201,8 @@
 
     var meta = el("div", "meta");
 
-    if (show.custom && !show.status) {
-      meta.appendChild(el("div", "line muted", "尚未抓取数据，运行 fetch_tv.py 后可获取完整信息"));
+    if (!show.status) {
+      meta.appendChild(el("div", "line muted", "尚未抓取数据，点击上方「更新数据」补齐"));
     } else {
       var lineSeason = seasonLine(show.latest_season);
       if (lineSeason) {
@@ -287,7 +235,7 @@
 
   /* ---------- 筛选与排序 ---------- */
   function initFilters() {
-    var shows = baseShows();
+    var shows = allShows();
     if (!shows.length) return;
 
     var statuses = {};
@@ -337,10 +285,10 @@
 
   /* ---------- 渲染 ---------- */
   function render() {
-    var merged = mergedShows();
+    var merged = allShows();
     if (merged.length === 0) {
       grid.innerHTML = "";
-      grid.appendChild(el("div", "empty", "暂无数据：请先运行 python3 fetch_tv.py 生成 data.js，或点击工具栏「＋ 添加」。"));
+      grid.appendChild(el("div", "empty", "暂无数据：点击「✎ 编辑」→「＋ 添加」录入剧集，或点「更新数据」全量抓取。"));
       resultCount.textContent = "";
       return;
     }
@@ -359,9 +307,10 @@
     var list = merged.filter(function (s) {
       if (status && s.status !== status) return false;
       if (network && (s.networks || []).indexOf(network) < 0) return false;
-      if (markFilter === "none" && state.marks[s._key]) return false;
-      if (markFilter === "finished" && state.marks[s._key] !== "finished") return false;
-      if (markFilter === "dropped" && state.marks[s._key] !== "dropped") return false;
+      var mark = s.mark || "";
+      if (markFilter === "none" && mark) return false;
+      if (markFilter === "finished" && mark !== "finished") return false;
+      if (markFilter === "dropped" && mark !== "dropped") return false;
       return true;
     });
 
@@ -393,26 +342,6 @@
   /* ---------- 添加弹窗（搜索 → 预览 → 确认） ---------- */
   var pendingPick = null;
   var pendingDetail = null;
-
-  function apiUrl(path) {
-    var u = TMDB_API + path;
-    return CORS_PROXY ? CORS_PROXY + encodeURIComponent(u) : u;
-  }
-
-  function apiFetch(path, timeoutMs) {
-    var ctrl = new AbortController();
-    var timer = setTimeout(function () { ctrl.abort(); }, timeoutMs || 10000);
-    return fetch(apiUrl(path), { signal: ctrl.signal })
-      .then(function (r) {
-        clearTimeout(timer);
-        if (!r.ok) throw new Error("接口返回 " + r.status);
-        return r.json();
-      })
-      .catch(function (e) {
-        clearTimeout(timer);
-        throw e;
-      });
-  }
 
   function openDialog() {
     overlay.hidden = false;
@@ -447,30 +376,6 @@
     viewManual.hidden = false;
   }
 
-  function confirmManual() {
-    var title = mTitle.value.trim();
-    if (!title) {
-      mTitle.focus();
-      return;
-    }
-    var entry = {
-      title: title,
-      name_zh: mZh.value.trim() || null,
-      imdb_id: mImdb.value.trim() || null
-    };
-    var key = customKey(entry);
-    var dup = mergedShows().some(function (s) { return s._key === key; });
-    if (dup) {
-      window.alert("该剧已在列表中，无需重复添加。");
-      closeDialog();
-      return;
-    }
-    state.custom.push(entry);
-    saveCustom();
-    closeDialog();
-    render();
-  }
-
   function doSearch() {
     var q = inputTitle.value.trim();
     if (!q) {
@@ -478,12 +383,12 @@
       inputTitle.focus();
       return;
     }
-    if (!API_KEY) {
-      searchHint.textContent = "未配置 TMDB API Key，请检查 config.js";
-      return;
-    }
     searchHint.textContent = "搜索中…";
-    apiFetch("/search/tv?api_key=" + encodeURIComponent(API_KEY) + "&language=zh-CN&query=" + encodeURIComponent(q))
+    fetch("/api/search?q=" + encodeURIComponent(q))
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
       .then(function (res) {
         var list = res.results || [];
         if (!list.length) {
@@ -495,14 +400,14 @@
         renderSearchResults(list);
       })
       .catch(function (e) {
-        searchHint.textContent = "搜索失败：" + (e.name === "AbortError" ? "请求超时" : e.message) + "（需能访问 api.themoviedb.org；可开启系统代理或配置 cors_proxy，或使用下方手动输入）";
+        searchHint.textContent = "搜索失败：" + e.message + "（请确认代理可用且 server.py 运行中）";
         searchResultsBox.innerHTML = "";
       });
   }
 
   function renderSearchResults(list) {
     searchResultsBox.innerHTML = "";
-    var existing = mergedShows().map(function (s) { return (s.title || "").trim().toLowerCase(); });
+    var existing = allShows().map(function (s) { return (s.title || "").trim().toLowerCase(); });
     list.forEach(function (r) {
       var item = el("button", "search-item");
       item.type = "button";
@@ -549,16 +454,19 @@
     showPreviewView();
     previewBox.innerHTML = "";
     previewBox.appendChild(el("div", "preview-loading", "加载详情中…"));
-    Promise.all([
-      apiFetch("/tv/" + r.id + "?api_key=" + encodeURIComponent(API_KEY) + "&language=zh-CN"),
-      apiFetch("/tv/" + r.id + "/external_ids?api_key=" + encodeURIComponent(API_KEY))
-    ]).then(function (arr) {
-      pendingDetail = buildCustomEntry(arr[0], arr[1], pendingPick);
-      renderPreview(pendingDetail);
-    }).catch(function (e) {
-      previewBox.innerHTML = "";
-      previewBox.appendChild(el("div", "preview-error", "加载失败：" + (e.name === "AbortError" ? "请求超时" : e.message)));
-    });
+    fetch("/api/show?id=" + encodeURIComponent(r.id))
+      .then(function (resp) {
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        return resp.json();
+      })
+      .then(function (res) {
+        pendingDetail = buildCustomEntry(res.detail, { imdb_id: res.imdb_id }, pendingPick);
+        renderPreview(pendingDetail);
+      })
+      .catch(function (e) {
+        previewBox.innerHTML = "";
+        previewBox.appendChild(el("div", "preview-error", "加载失败：" + e.message));
+      });
   }
 
   function buildCustomEntry(detail, ext, pick) {
@@ -615,17 +523,35 @@
 
   function confirmAdd() {
     if (!pendingDetail) return;
-    var key = customKey(pendingDetail);
-    var dup = mergedShows().some(function (s) { return s._key === key; });
+    var key = showKey(pendingDetail);
+    var dup = allShows().some(function (s) { return s._key === key; });
     if (dup) {
       window.alert("该剧已在列表中，无需重复添加。");
       closeDialog();
       return;
     }
-    state.custom.push(pendingDetail);
-    saveCustom();
-    closeDialog();
-    render();
+    persistEntries(allShows().concat([pendingDetail]));
+  }
+
+  function confirmManual() {
+    var title = mTitle.value.trim();
+    if (!title) {
+      mTitle.focus();
+      return;
+    }
+    var entry = {
+      title: title,
+      name_zh: mZh.value.trim() || null,
+      imdb_id: mImdb.value.trim() || null
+    };
+    var key = showKey(entry);
+    var dup = allShows().some(function (s) { return s._key === key; });
+    if (dup) {
+      window.alert("该剧已在列表中，无需重复添加。");
+      closeDialog();
+      return;
+    }
+    persistEntries(allShows().concat([entry]));
   }
 
   /* ---------- 标记弹窗 ---------- */
@@ -634,7 +560,7 @@
   function openMarkDialog(show) {
     pendingMark = show;
     markLabel.textContent = "标记「" + (show.name || show.title) + "」";
-    var current = state.marks[show._key] || "";
+    var current = show.mark || "";
     markOverlay.querySelectorAll(".mark-opt").forEach(function (btn) {
       btn.classList.toggle("selected", btn.dataset.mark === current);
     });
@@ -648,43 +574,48 @@
 
   function chooseMark(value) {
     if (!pendingMark) return;
-    if (value) state.marks[pendingMark._key] = value;
-    else delete state.marks[pendingMark._key];
-    saveMarks();
+    pendingMark.mark = value || null;
     closeMarkDialog();
-    render();
-  }
-
-  /* ---------- 导出 shows.json ---------- */
-  function exportShows() {
-    var list = mergedShows().map(function (s) {
-      var o = { title: s.title };
-      if (s.imdb_id) o.imdb_id = s.imdb_id;
-      if (s.name && s.name !== s.title) o.name_zh = s.name;
-      return o;
-    });
-    var blob = new Blob([JSON.stringify({ shows: list }, null, 2)], { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "shows.json";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    persistEntries(allShows());
   }
 
   /* ---------- 编辑模式 ---------- */
   function applyEditModeUI() {
-    btnEdit.classList.toggle("tb-btn-active", state.editMode);
-    btnEdit.textContent = state.editMode ? "✎ 编辑中" : "✎ 编辑";
-    btnAdd.hidden = !state.editMode;
+    btnEdit.classList.toggle("tb-btn-active", editMode);
+    btnEdit.textContent = editMode ? "✎ 编辑中" : "✎ 编辑";
+    btnAdd.hidden = !editMode;
   }
 
   function toggleEditMode() {
-    state.editMode = !state.editMode;
-    lsSet("editMode", state.editMode);
+    editMode = !editMode;
     applyEditModeUI();
     render();
+  }
+
+  /* ---------- 全量抓取 ---------- */
+  function refreshData() {
+    if (!window.confirm("将调用 fetch_tv.py 全量抓取所有剧集（需几分钟，需代理可用），继续？")) return;
+    btnRefresh.disabled = true;
+    var oldText = btnRefresh.textContent;
+    btnRefresh.textContent = "抓取中…";
+    fetch("/api/refresh", { method: "POST" })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        btnRefresh.disabled = false;
+        btnRefresh.textContent = oldText;
+        var tail = (res.log || "").split("\n").slice(-3).join("\n");
+        if (res.ok) {
+          window.alert("更新完成：\n" + tail);
+          location.reload();
+        } else {
+          window.alert("抓取失败：\n" + (tail || res.error || "未知错误"));
+        }
+      })
+      .catch(function (e) {
+        btnRefresh.disabled = false;
+        btnRefresh.textContent = oldText;
+        window.alert("请求失败：" + e.message);
+      });
   }
 
   /* ---------- 事件绑定 ---------- */
@@ -702,7 +633,7 @@
 
     btnEdit.addEventListener("click", toggleEditMode);
     btnAdd.addEventListener("click", openDialog);
-    btnExport.addEventListener("click", exportShows);
+    btnRefresh.addEventListener("click", refreshData);
     document.getElementById("add-cancel").addEventListener("click", closeDialog);
     document.getElementById("add-search-btn").addEventListener("click", doSearch);
     document.getElementById("add-back").addEventListener("click", function () {
@@ -743,7 +674,6 @@
     });
   }
 
-  loadState();
   initFilters();
   bindEvents();
   applyEditModeUI();

@@ -229,6 +229,7 @@ def process_item(api_key, item):
     entry = build_entry(title or display, raw)
     entry["tmdb_id"] = tmdb_id
     entry["imdb_id"] = (item.get("imdb_id") or "").strip() or None
+    entry["mark"] = (item.get("mark") or "").strip() or None
     print(f"[完成] {entry.get('name') or display} -> {entry.get('status_zh')}")
     return entry, changed
 

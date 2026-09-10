@@ -3,127 +3,152 @@
     {
       "title": "Game of Thrones",
       "imdb_id": "tt0944947",
-      "name_zh": "权力的游戏"
+      "name_zh": "权力的游戏",
+      "mark": "finished"
     },
     {
       "title": "Breaking Bad",
       "imdb_id": "tt0903747",
-      "name_zh": "绝命毒师"
+      "name_zh": "绝命毒师",
+      "mark": "finished"
     },
     {
       "title": "Westworld",
       "imdb_id": "tt0475784",
-      "name_zh": "西部世界"
+      "name_zh": "西部世界",
+      "mark": "finished"
     },
     {
       "title": "Prison Break",
       "imdb_id": "tt0455275",
-      "name_zh": "越狱"
+      "name_zh": "越狱",
+      "mark": "finished"
     },
     {
       "title": "Medici: Masters of Florence",
       "imdb_id": "tt5057130",
-      "name_zh": "美第奇家族：翡冷翠名门"
+      "name_zh": "美第奇家族：翡冷翠名门",
+      "mark": "dropped"
     },
     {
       "title": "Uncle",
       "imdb_id": "tt2546866",
-      "name_zh": "废柴舅舅"
+      "name_zh": "废柴舅舅",
+      "mark": "finished"
     },
     {
       "title": "Better Call Saul",
       "imdb_id": "tt3032476",
-      "name_zh": "风骚律师"
+      "name_zh": "风骚律师",
+      "mark": "finished"
     },
     {
       "title": "Silicon Valley",
       "imdb_id": "tt2575988",
-      "name_zh": "硅谷"
+      "name_zh": "硅谷",
+      "mark": "finished"
     },
     {
       "title": "You're the Worst",
       "imdb_id": "tt3228420",
-      "name_zh": "我爱上的人是奇葩"
+      "name_zh": "我爱上的人是奇葩",
+      "mark": "finished"
     },
     {
       "title": "Shameless",
       "imdb_id": "tt1586680",
-      "name_zh": "无耻之徒"
+      "name_zh": "无耻之徒",
+      "mark": "finished"
     },
     {
       "title": "The Vampire Diaries",
       "imdb_id": "tt1405406",
-      "name_zh": "吸血鬼日记"
+      "name_zh": "吸血鬼日记",
+      "mark": "finished"
     },
     {
       "title": "The Originals",
       "imdb_id": "tt2632424",
-      "name_zh": "初代吸血鬼"
+      "name_zh": "初代吸血鬼",
+      "mark": "finished"
     },
     {
       "title": "Agents of S.H.I.L.D.",
       "imdb_id": "tt2364582",
-      "name_zh": "神盾局特工"
+      "name_zh": "神盾局特工",
+      "mark": "dropped"
     },
     {
       "title": "Agent Carter",
       "imdb_id": "tt3475734",
-      "name_zh": "卡特特工"
+      "name_zh": "卡特特工",
+      "mark": "finished"
     },
     {
       "title": "The Strain",
       "imdb_id": "tt2654620",
-      "name_zh": "血族"
+      "name_zh": "血族",
+      "mark": "finished"
     },
     {
       "title": "This is Us",
       "imdb_id": "tt5555260",
-      "name_zh": "我们这一天"
+      "name_zh": "我们这一天",
+      "mark": "finished"
     },
     {
       "title": "A Discovery of Witches",
       "imdb_id": "tt2177461",
-      "name_zh": "发现女巫"
+      "name_zh": "发现女巫",
+      "mark": "dropped"
     },
     {
       "title": "The Purge",
       "imdb_id": "tt6110648",
-      "name_zh": "人类清除计划"
+      "name_zh": "人类清除计划",
+      "mark": "finished"
     },
     {
       "title": "My Brilliant Friend",
       "imdb_id": "tt7278862",
-      "name_zh": "我的天才女友"
+      "name_zh": "我的天才女友",
+      "mark": "dropped"
     },
     {
       "title": "The Gifted",
       "imdb_id": "tt4396630",
-      "name_zh": "天赋异禀"
+      "name_zh": "天赋异禀",
+      "mark": "finished"
     },
     {
       "title": "2 Broken Girls",
       "imdb_id": "tt1845307",
-      "name_zh": "破产姐妹"
+      "name_zh": "破产姐妹",
+      "mark": "finished"
     },
     {
       "title": "Legacies",
       "imdb_id": "tt8103070",
-      "name_zh": "吸血鬼后裔"
+      "name_zh": "吸血鬼后裔",
+      "mark": "dropped"
     },
     {
       "title": "The Walking Dead",
       "imdb_id": "tt1520211",
-      "name_zh": "行尸走肉"
+      "name_zh": "行尸走肉",
+      "mark": "finished"
     },
     {
       "title": "Chernobyl",
       "imdb_id": "tt7366338",
-      "name_zh": "切尔诺贝利"
+      "name_zh": "切尔诺贝利",
+      "mark": "finished"
     },
     {
       "title": "The Flash",
       "imdb_id": "tt3107288",
-      "name_zh": "闪电侠"
+      "name_zh": "闪电侠",
+      "mark": "dropped"
     },
     {
       "title": "Good Omens",
@@ -133,102 +158,120 @@
     {
       "title": "Killing Eve",
       "imdb_id": "tt7016936",
-      "name_zh": "杀死伊芙"
+      "name_zh": "杀死伊芙",
+      "mark": "finished"
     },
     {
       "title": "The Handmaid's Tale",
       "imdb_id": "tt5834204",
-      "name_zh": "使女的故事"
+      "name_zh": "使女的故事",
+      "mark": "finished"
     },
     {
       "title": "Euphoria",
       "imdb_id": "tt8772296",
-      "name_zh": "亢奋"
+      "name_zh": "亢奋",
+      "mark": "dropped"
     },
     {
       "title": "Horace and Pete",
       "imdb_id": "tt5425186",
-      "name_zh": "百年酒馆"
+      "name_zh": "百年酒馆",
+      "mark": "finished"
     },
     {
       "title": "The Marvelous Mrs. Maisel",
       "imdb_id": "tt5788792",
-      "name_zh": "了不起的麦瑟尔夫人"
+      "name_zh": "了不起的麦瑟尔夫人",
+      "mark": "finished"
     },
     {
       "title": "Stories from Our Future",
       "imdb_id": "tt10404752",
-      "name_zh": "来自未来的故事"
+      "name_zh": "来自未来的故事",
+      "mark": "finished"
     },
     {
       "title": "Picnic at Hanging Rock",
       "imdb_id": "tt6038954",
-      "name_zh": "悬崖上的野餐"
+      "name_zh": "悬崖上的野餐",
+      "mark": "finished"
     },
     {
       "title": "The Big Bang Theory",
       "imdb_id": "tt0898266",
-      "name_zh": "生活大爆炸"
+      "name_zh": "生活大爆炸",
+      "mark": "finished"
     },
     {
       "title": "Why Women Kill",
       "imdb_id": "tt9054904",
-      "name_zh": "致命女人"
+      "name_zh": "致命女人",
+      "mark": "finished"
     },
     {
       "title": "The Witcher",
       "imdb_id": "tt5180504",
-      "name_zh": "猎魔人"
+      "name_zh": "猎魔人",
+      "mark": "dropped"
     },
     {
       "title": "Love, Death & Robots",
-      "imdb_id": "tt9561862",
-      "name_zh": "Love, Death & Robots"
+      "imdb_id": "tt9561862"
     },
     {
       "title": "100 humans",
       "imdb_id": "tt11823088",
-      "name_zh": "百人社会实验"
+      "name_zh": "百人社会实验",
+      "mark": "finished"
     },
     {
       "title": "Sex Education",
       "imdb_id": "tt7767422",
-      "name_zh": "性爱自修室"
+      "name_zh": "性爱自修室",
+      "mark": "finished"
     },
     {
       "title": "Sherlock",
       "imdb_id": "tt1475582",
-      "name_zh": "神探夏洛克"
+      "name_zh": "神探夏洛克",
+      "mark": "finished"
     },
     {
       "title": "Fargo",
       "imdb_id": "tt2802850",
-      "name_zh": "冰血暴"
+      "name_zh": "冰血暴",
+      "mark": "dropped"
     },
     {
       "title": "Mrs. America",
       "imdb_id": "tt9244556",
-      "name_zh": "美国夫人"
+      "name_zh": "美国夫人",
+      "mark": "finished"
     },
     {
       "title": "Friends",
       "imdb_id": "tt0108778",
-      "name_zh": "老友记"
+      "name_zh": "老友记",
+      "mark": "finished"
     },
     {
       "title": "What We Do in the Shadows",
       "imdb_id": "tt7908628",
-      "name_zh": "吸血鬼生活"
+      "name_zh": "吸血鬼生活",
+      "mark": "dropped"
     },
     {
       "title": "Young Sheldon",
       "imdb_id": "tt6226232",
-      "name_zh": "小谢尔顿"
+      "name_zh": "小谢尔顿",
+      "mark": "finished"
     },
     {
       "title": "Raised by Wolves",
       "imdb_id": "tt9170108",
-      "name_zh": "异星灾变"
+      "name_zh": "异星灾变",
+      "mark": "dropped"
     },
     {
       "title": "Black Mirror",
@@ -238,17 +281,19 @@
     {
       "title": "Watchmen",
       "imdb_id": "tt7049682",
-      "name_zh": "守望者"
+      "name_zh": "守望者",
+      "mark": "finished"
     },
     {
       "title": "WandaVision",
       "imdb_id": "tt9140560",
-      "name_zh": "WandaVision"
+      "mark": "finished"
     },
     {
       "title": "The Queen's Gambit",
       "imdb_id": "tt10048342",
-      "name_zh": "后翼弃兵"
+      "name_zh": "后翼弃兵",
+      "mark": "finished"
     },
     {
       "title": "Staged",
@@ -258,47 +303,51 @@
     {
       "title": "The Falcon and the Winter Soldier",
       "imdb_id": "tt9208876",
-      "name_zh": "猎鹰与冬兵"
+      "name_zh": "猎鹰与冬兵",
+      "mark": "finished"
     },
     {
       "title": "The Mandalorian",
       "imdb_id": "tt8111088",
-      "name_zh": "曼达洛人"
+      "name_zh": "曼达洛人",
+      "mark": "finished"
     },
     {
       "title": "Shameless Hall of Shame",
       "imdb_id": "tt13653972",
-      "name_zh": "无耻之徒之无耻堂"
+      "name_zh": "无耻之徒之无耻堂",
+      "mark": "finished"
     },
     {
       "title": "Loki",
       "imdb_id": "tt9140554",
-      "name_zh": "洛基"
+      "name_zh": "洛基",
+      "mark": "finished"
     },
     {
       "title": "Obi-Wan Kenobi",
       "imdb_id": "tt8466564",
-      "name_zh": "Obi-Wan Kenobi"
+      "mark": "finished"
     },
     {
       "title": "The Book of Boba Fett",
       "imdb_id": "tt13668894",
-      "name_zh": "波巴·费特之书"
+      "name_zh": "波巴·费特之书",
+      "mark": "finished"
     },
     {
       "title": "Andor",
       "imdb_id": "tt9253284",
-      "name_zh": "Andor"
+      "mark": "finished"
     },
     {
       "title": "Ahsoka",
-      "imdb_id": "tt13622776",
-      "name_zh": "Ahsoka"
+      "imdb_id": "tt13622776"
     },
     {
       "title": "The Acolyte",
       "imdb_id": "tt12262202",
-      "name_zh": "The Acolyte"
+      "mark": "finished"
     },
     {
       "title": "Harley Quinn",
@@ -308,7 +357,8 @@
     {
       "title": "Lie to Me",
       "imdb_id": "tt1235099",
-      "name_zh": "千谎百计"
+      "name_zh": "千谎百计",
+      "mark": "finished"
     },
     {
       "title": "Rick and Morty",
@@ -318,7 +368,8 @@
     {
       "title": "Squid Game",
       "imdb_id": "tt10919420",
-      "name_zh": "鱿鱼游戏"
+      "name_zh": "鱿鱼游戏",
+      "mark": "finished"
     },
     {
       "title": "Only Murders in the Building",
@@ -328,7 +379,8 @@
     {
       "title": "Arcane",
       "imdb_id": "tt11126994",
-      "name_zh": "英雄联盟：双城之战"
+      "name_zh": "英雄联盟：双城之战",
+      "mark": "finished"
     },
     {
       "title": "Ling Cage",
@@ -338,7 +390,8 @@
     {
       "title": "Hawkeye",
       "imdb_id": "tt10160804",
-      "name_zh": "鹰眼"
+      "name_zh": "鹰眼",
+      "mark": "finished"
     },
     {
       "title": "Ghosts",
@@ -358,27 +411,30 @@
     {
       "title": "Inventing Anna",
       "imdb_id": "tt8740976",
-      "name_zh": "虚构安娜"
+      "name_zh": "虚构安娜",
+      "mark": "finished"
     },
     {
       "title": "Upload",
       "imdb_id": "tt7826376",
-      "name_zh": "上载新生"
+      "name_zh": "上载新生",
+      "mark": "finished"
     },
     {
       "title": "The Boys",
       "imdb_id": "tt1190634",
-      "name_zh": "黑袍纠察队"
+      "name_zh": "黑袍纠察队",
+      "mark": "finished"
     },
     {
       "title": "Ms. Marvel",
       "imdb_id": "tt10857164",
-      "name_zh": "Ms. Marvel"
+      "mark": "finished"
     },
     {
       "title": "She-Hulk: Attorney at Law",
       "imdb_id": "tt10857160",
-      "name_zh": "She-Hulk: Attorney at Law"
+      "mark": "finished"
     },
     {
       "title": "Our Great National Parks",
@@ -388,22 +444,26 @@
     {
       "title": "The Bear",
       "imdb_id": "tt14452776",
-      "name_zh": "熊家餐馆"
+      "name_zh": "熊家餐馆",
+      "mark": "dropped"
     },
     {
       "title": "Les 7 vies de Léa",
       "imdb_id": "tt14140886",
-      "name_zh": "莉亚的7重人生"
+      "name_zh": "莉亚的7重人生",
+      "mark": "finished"
     },
     {
       "title": "Stranger Things",
       "imdb_id": "tt4574334",
-      "name_zh": "怪奇物语"
+      "name_zh": "怪奇物语",
+      "mark": "finished"
     },
     {
       "title": "Modern Family",
       "imdb_id": "tt1442437",
-      "name_zh": "摩登家庭"
+      "name_zh": "摩登家庭",
+      "mark": "finished"
     },
     {
       "title": "How I Met Your Mother",
@@ -413,7 +473,8 @@
     {
       "title": "The Peripheral",
       "imdb_id": "tt8291284",
-      "name_zh": "边缘世界"
+      "name_zh": "边缘世界",
+      "mark": "finished"
     },
     {
       "title": "All Creatures Great & Small",
@@ -428,7 +489,8 @@
     {
       "title": "Cyberpunk: Edgerunners",
       "imdb_id": "tt12590266",
-      "name_zh": "赛博朋克：边缘行者"
+      "name_zh": "赛博朋克：边缘行者",
+      "mark": "finished"
     },
     {
       "title": "Downton Abbey",
@@ -438,12 +500,14 @@
     {
       "title": "Gen V",
       "imdb_id": "tt13159924",
-      "name_zh": "V世代"
+      "name_zh": "V世代",
+      "mark": "finished"
     },
     {
       "title": "Depp V Heard",
       "imdb_id": "tt27541298",
-      "name_zh": "德普大战希尔德"
+      "name_zh": "德普大战希尔德",
+      "mark": "finished"
     },
     {
       "title": "The Walking Dead: Daryl Dixon",
@@ -453,12 +517,12 @@
     {
       "title": "The Walking Dead: The Ones Who Live",
       "imdb_id": "tt9859436",
-      "name_zh": "行尸走肉：存活之人"
+      "name_zh": "行尸走肉：存活之人",
+      "mark": "finished"
     },
     {
       "title": "3 Body Problem",
-      "imdb_id": "tt13016388",
-      "name_zh": "3 Body Problem"
+      "imdb_id": "tt13016388"
     },
     {
       "title": "Clarkson's Farm",
@@ -468,7 +532,7 @@
     {
       "title": "Agatha All Along",
       "imdb_id": "tt15571732",
-      "name_zh": "Agatha All Along"
+      "mark": "finished"
     },
     {
       "title": "Dark",
@@ -508,12 +572,14 @@
     {
       "title": "The IT Crowd",
       "imdb_id": "tt0487831",
-      "name_zh": "IT狂人"
+      "name_zh": "IT狂人",
+      "mark": "finished"
     },
     {
       "title": "Black Books",
       "imdb_id": "tt0262150",
-      "name_zh": "布莱克书店"
+      "name_zh": "布莱克书店",
+      "mark": "finished"
     },
     {
       "title": "Haunted Hotel",
@@ -528,7 +594,110 @@
     {
       "title": "领风者",
       "imdb_id": "tt9878732",
-      "name_zh": "领风者"
+      "mark": "finished"
+    },
+    {
+      "title": "What If...?",
+      "imdb_id": "tt10168312",
+      "name_zh": "假如…？",
+      "mark": "finished"
+    },
+    {
+      "title": "Moon Knight",
+      "imdb_id": "tt10234724",
+      "name_zh": "月光骑士",
+      "mark": "finished"
+    },
+    {
+      "title": "Secret Invasion",
+      "imdb_id": "tt13157618",
+      "mark": "finished"
+    },
+    {
+      "title": "Echo",
+      "imdb_id": "tt13966962",
+      "name_zh": "回声",
+      "mark": "dropped"
+    },
+    {
+      "title": "X-Men '97",
+      "imdb_id": "tt16026746",
+      "name_zh": "X战警97"
+    },
+    {
+      "title": "Your Friendly Neighborhood Spider-Man",
+      "imdb_id": "tt16027074",
+      "name_zh": "你的友好邻居蜘蛛侠"
+    },
+    {
+      "title": "Daredevil: Born Again",
+      "imdb_id": "tt18923754",
+      "name_zh": "夜魔侠：重生",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's Daredevil",
+      "imdb_id": "tt3322312",
+      "name_zh": "夜魔侠",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's The Defenders",
+      "imdb_id": "tt4230076",
+      "name_zh": "捍卫者联盟",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's The Punisher",
+      "imdb_id": "tt5675620",
+      "name_zh": "惩罚者",
+      "mark": "finished"
+    },
+    {
+      "title": "Ironheart",
+      "imdb_id": "tt13623126",
+      "name_zh": "钢铁之心",
+      "mark": "dropped"
+    },
+    {
+      "title": "Eyes of Wakanda",
+      "imdb_id": "tt13968252",
+      "name_zh": "瓦坎达之眼",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel Zombies",
+      "imdb_id": "tt16027014",
+      "name_zh": "漫威丧尸"
+    },
+    {
+      "title": "Wonder Man",
+      "imdb_id": "tt21066182",
+      "name_zh": "奇迹人",
+      "mark": "finished"
+    },
+    {
+      "title": "Spider-Noir",
+      "imdb_id": "tt30460310",
+      "name_zh": "暗影蜘蛛侠",
+      "mark": "finished"
+    },
+    {
+      "title": "The Spectacular Spider-Man",
+      "imdb_id": "tt0976192",
+      "name_zh": "神奇蜘蛛侠",
+      "mark": "finished"
+    },
+    {
+      "title": "Marvel's Ultimate Spider-Man",
+      "imdb_id": "tt1722512",
+      "name_zh": "终极蜘蛛侠",
+      "mark": "finished"
+    },
+    {
+      "title": "The Sandman",
+      "imdb_id": "tt1751634",
+      "name_zh": "睡魔"
     }
   ]
 }
