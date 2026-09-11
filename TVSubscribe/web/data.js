@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-10 14:55:36",
+  "generated_at": "2026-09-11 10:12:58",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -30,7 +30,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1399,
       "imdb_id": "tt0944947",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Breaking Bad",
@@ -60,7 +61,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1396,
       "imdb_id": "tt0903747",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Westworld",
@@ -90,7 +92,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 63247,
       "imdb_id": "tt0475784",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Prison Break",
@@ -120,7 +123,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 2288,
       "imdb_id": "tt0455275",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Medici: Masters of Florence",
@@ -150,7 +154,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 66761,
       "imdb_id": "tt5057130",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Uncle",
@@ -180,7 +185,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 62019,
       "imdb_id": "tt2546866",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Better Call Saul",
@@ -210,7 +216,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 60059,
       "imdb_id": "tt3032476",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Silicon Valley",
@@ -240,7 +247,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 60573,
       "imdb_id": "tt2575988",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "You're the Worst",
@@ -271,7 +279,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 61118,
       "imdb_id": "tt3228420",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Shameless",
@@ -301,7 +310,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 34307,
       "imdb_id": "tt1586680",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Vampire Diaries",
@@ -331,7 +341,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 18165,
       "imdb_id": "tt1405406",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Originals",
@@ -361,7 +372,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 46896,
       "imdb_id": "tt2632424",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Agents of S.H.I.L.D.",
@@ -391,7 +403,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1403,
       "imdb_id": "tt2364582",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Agent Carter",
@@ -421,7 +434,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 61550,
       "imdb_id": "tt3475734",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Strain",
@@ -451,7 +465,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 47640,
       "imdb_id": "tt2654620",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "This is Us",
@@ -481,7 +496,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 67136,
       "imdb_id": "tt5555260",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "A Discovery of Witches",
@@ -512,7 +528,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 77236,
       "imdb_id": "tt2177461",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "The Purge",
@@ -542,7 +559,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 80213,
       "imdb_id": "tt6110648",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "My Brilliant Friend",
@@ -572,7 +590,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 78154,
       "imdb_id": "tt7278862",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "The Gifted",
@@ -602,7 +621,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 69629,
       "imdb_id": "tt4396630",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "2 Broken Girls",
@@ -632,7 +652,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 39340,
       "imdb_id": "tt1845307",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Legacies",
@@ -662,7 +683,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 79460,
       "imdb_id": "tt8103070",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "The Walking Dead",
@@ -692,7 +714,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1402,
       "imdb_id": "tt1520211",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Chernobyl",
@@ -722,7 +745,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 87108,
       "imdb_id": "tt7366338",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Flash",
@@ -752,7 +776,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 60735,
       "imdb_id": "tt3107288",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Good Omens",
@@ -782,7 +807,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 71915,
       "imdb_id": "tt1869454",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Killing Eve",
@@ -812,7 +838,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 72750,
       "imdb_id": "tt7016936",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Handmaid's Tale",
@@ -842,7 +869,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 69478,
       "imdb_id": "tt5834204",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Euphoria",
@@ -872,7 +900,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 85552,
       "imdb_id": "tt8772296",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Horace and Pete",
@@ -900,7 +929,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 65454,
       "imdb_id": "tt5425186",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Marvelous Mrs. Maisel",
@@ -930,7 +960,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 70796,
       "imdb_id": "tt5788792",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Stories from Our Future",
@@ -960,7 +991,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 106661,
       "imdb_id": "tt10404752",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Picnic at Hanging Rock",
@@ -990,7 +1022,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 78881,
       "imdb_id": "tt6038954",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Big Bang Theory",
@@ -1020,7 +1053,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1418,
       "imdb_id": "tt0898266",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Why Women Kill",
@@ -1051,7 +1085,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 87428,
       "imdb_id": "tt9054904",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Witcher",
@@ -1081,7 +1116,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 71912,
       "imdb_id": "tt5180504",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Love, Death & Robots",
@@ -1111,7 +1147,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 86831,
       "imdb_id": "tt9561862",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "100 humans",
@@ -1141,7 +1178,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 100429,
       "imdb_id": "tt11823088",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Sex Education",
@@ -1171,7 +1209,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 81356,
       "imdb_id": "tt7767422",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Sherlock",
@@ -1201,7 +1240,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 19885,
       "imdb_id": "tt1475582",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Fargo",
@@ -1231,7 +1271,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 60622,
       "imdb_id": "tt2802850",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Mrs. America",
@@ -1261,7 +1302,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 83605,
       "imdb_id": "tt9244556",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Friends",
@@ -1291,7 +1333,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1668,
       "imdb_id": "tt0108778",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "What We Do in the Shadows",
@@ -1321,7 +1364,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 83631,
       "imdb_id": "tt7908628",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Young Sheldon",
@@ -1351,7 +1395,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 71728,
       "imdb_id": "tt6226232",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Raised by Wolves",
@@ -1381,7 +1426,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 85723,
       "imdb_id": "tt9170108",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Black Mirror",
@@ -1412,7 +1458,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 42009,
       "imdb_id": "tt2085059",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Watchmen",
@@ -1442,7 +1489,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 79788,
       "imdb_id": "tt7049682",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "WandaVision",
@@ -1472,7 +1520,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 85271,
       "imdb_id": "tt9140560",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Queen's Gambit",
@@ -1502,7 +1551,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 87739,
       "imdb_id": "tt10048342",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Staged",
@@ -1533,7 +1583,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 104674,
       "imdb_id": "tt12369754",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Falcon and the Winter Soldier",
@@ -1563,7 +1614,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 88396,
       "imdb_id": "tt9208876",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Mandalorian",
@@ -1593,7 +1645,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 82856,
       "imdb_id": "tt8111088",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Shameless Hall of Shame",
@@ -1621,7 +1674,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 208736,
       "imdb_id": "tt13653972",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Loki",
@@ -1651,7 +1705,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 84958,
       "imdb_id": "tt9140554",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Obi-Wan Kenobi",
@@ -1681,7 +1736,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 92830,
       "imdb_id": "tt8466564",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Book of Boba Fett",
@@ -1711,7 +1767,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 115036,
       "imdb_id": "tt13668894",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Andor",
@@ -1741,7 +1798,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 83867,
       "imdb_id": "tt9253284",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Ahsoka",
@@ -1776,7 +1834,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 114461,
       "imdb_id": "tt13622776",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Acolyte",
@@ -1806,7 +1865,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 114479,
       "imdb_id": "tt12262202",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Harley Quinn",
@@ -1838,7 +1898,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 74440,
       "imdb_id": "tt7658402",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Lie to Me",
@@ -1868,7 +1929,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 8358,
       "imdb_id": "tt1235099",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Rick and Morty",
@@ -1898,7 +1960,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 60625,
       "imdb_id": "tt2861424",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Squid Game",
@@ -1928,7 +1991,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 93405,
       "imdb_id": "tt10919420",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Only Murders in the Building",
@@ -1963,7 +2027,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 107113,
       "imdb_id": "tt11691774",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Arcane",
@@ -1993,7 +2058,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 94605,
       "imdb_id": "tt11126994",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Ling Cage",
@@ -2023,7 +2089,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 91097,
       "imdb_id": "tt10827146",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Hawkeye",
@@ -2053,7 +2120,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 88329,
       "imdb_id": "tt10160804",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Ghosts",
@@ -2088,7 +2156,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 126027,
       "imdb_id": "tt11379026",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "American Horror Story",
@@ -2123,7 +2192,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1413,
       "imdb_id": "tt1844624",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "House of the Dragon",
@@ -2153,7 +2223,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 94997,
       "imdb_id": "tt11198330",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Inventing Anna",
@@ -2183,7 +2254,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 95665,
       "imdb_id": "tt8740976",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Upload",
@@ -2213,7 +2285,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 86248,
       "imdb_id": "tt7826376",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Boys",
@@ -2243,7 +2316,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 76479,
       "imdb_id": "tt1190634",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Ms. Marvel",
@@ -2273,7 +2347,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 92782,
       "imdb_id": "tt10857164",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "She-Hulk: Attorney at Law",
@@ -2303,7 +2378,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 92783,
       "imdb_id": "tt10857160",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Our Great National Parks",
@@ -2333,7 +2409,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 195258,
       "imdb_id": "tt18750552",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Bear",
@@ -2363,7 +2440,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 136315,
       "imdb_id": "tt14452776",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Les 7 vies de Léa",
@@ -2393,7 +2471,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 195928,
       "imdb_id": "tt14140886",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Stranger Things",
@@ -2423,7 +2502,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 66732,
       "imdb_id": "tt4574334",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Modern Family",
@@ -2453,7 +2533,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1421,
       "imdb_id": "tt1442437",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "How I Met Your Mother",
@@ -2483,7 +2564,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1100,
       "imdb_id": "tt0460649",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Peripheral",
@@ -2513,7 +2595,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 95403,
       "imdb_id": "tt8291284",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "All Creatures Great & Small",
@@ -2548,7 +2631,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 108255,
       "imdb_id": "tt10590066",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Lord of the Rings: The Rings of Power",
@@ -2583,7 +2667,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 84773,
       "imdb_id": "tt7631058",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Cyberpunk: Edgerunners",
@@ -2613,7 +2698,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 105248,
       "imdb_id": "tt12590266",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Downton Abbey",
@@ -2643,7 +2729,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 33907,
       "imdb_id": "tt1606375",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Gen V",
@@ -2673,7 +2760,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 205715,
       "imdb_id": "tt13159924",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Depp V Heard",
@@ -2703,7 +2791,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 227381,
       "imdb_id": "tt27541298",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Walking Dead: Daryl Dixon",
@@ -2733,7 +2822,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 211684,
       "imdb_id": "tt13062500",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Walking Dead: The Ones Who Live",
@@ -2763,7 +2853,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 206586,
       "imdb_id": "tt9859436",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "3 Body Problem",
@@ -2793,7 +2884,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 108545,
       "imdb_id": "tt13016388",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Clarkson's Farm",
@@ -2823,7 +2915,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 117648,
       "imdb_id": "tt10541088",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Agatha All Along",
@@ -2853,7 +2946,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138501,
       "imdb_id": "tt15571732",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Dark",
@@ -2883,7 +2977,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 70523,
       "imdb_id": "tt5753856",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The Pitt",
@@ -2914,7 +3009,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 250307,
       "imdb_id": "tt31938062",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Gravity Falls",
@@ -2945,7 +3041,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 40075,
       "imdb_id": "tt1865718",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Joy of Life",
@@ -2977,7 +3074,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 95842,
       "imdb_id": "tt11273352",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Sword Snow Stride",
@@ -3008,7 +3106,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 89614,
       "imdb_id": "tt12740306",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Chef's Table",
@@ -3038,7 +3137,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 62391,
       "imdb_id": "tt4295140",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "A Knight of the Seven Kingdoms",
@@ -3068,7 +3168,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 224372,
       "imdb_id": "tt27497448",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "The IT Crowd",
@@ -3098,7 +3199,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 2490,
       "imdb_id": "tt0487831",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Black Books",
@@ -3128,7 +3230,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 903,
       "imdb_id": "tt0262150",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Haunted Hotel",
@@ -3163,7 +3266,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 255752,
       "imdb_id": "tt32499579",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Scissor Seven",
@@ -3196,7 +3300,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 79141,
       "imdb_id": "tt10384610",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "领风者",
@@ -3226,7 +3331,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 86648,
       "imdb_id": "tt9878732",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "What If...?",
@@ -3256,7 +3362,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 91363,
       "imdb_id": "tt10168312",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Moon Knight",
@@ -3286,7 +3393,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 92749,
       "imdb_id": "tt10234724",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Secret Invasion",
@@ -3316,7 +3424,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 114472,
       "imdb_id": "tt13157618",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Echo",
@@ -3347,7 +3456,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 122226,
       "imdb_id": "tt13966962",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "X-Men '97",
@@ -3377,7 +3487,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138502,
       "imdb_id": "tt16026746",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Your Friendly Neighborhood Spider-Man",
@@ -3407,7 +3518,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138503,
       "imdb_id": "tt16027074",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Daredevil: Born Again",
@@ -3437,7 +3549,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 202555,
       "imdb_id": "tt18923754",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Marvel's Daredevil",
@@ -3467,7 +3580,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 61889,
       "imdb_id": "tt3322312",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Marvel's The Defenders",
@@ -3497,7 +3611,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 62285,
       "imdb_id": "tt4230076",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Marvel's The Punisher",
@@ -3527,7 +3642,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 67178,
       "imdb_id": "tt5675620",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Ironheart",
@@ -3557,7 +3673,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 114471,
       "imdb_id": "tt13623126",
-      "mark": "dropped"
+      "mark": "dropped",
+      "group": null
     },
     {
       "title": "Eyes of Wakanda",
@@ -3587,7 +3704,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 241388,
       "imdb_id": "tt13968252",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Marvel Zombies",
@@ -3617,7 +3735,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138505,
       "imdb_id": "tt16027014",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "Wonder Man",
@@ -3647,7 +3766,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 198178,
       "imdb_id": "tt21066182",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Spider-Noir",
@@ -3677,7 +3797,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 220102,
       "imdb_id": "tt30460310",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Spectacular Spider-Man",
@@ -3708,7 +3829,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 3854,
       "imdb_id": "tt0976192",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Marvel's Ultimate Spider-Man",
@@ -3738,7 +3860,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 34391,
       "imdb_id": "tt1722512",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "The Sandman",
@@ -3768,7 +3891,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 90802,
       "imdb_id": "tt1751634",
-      "mark": null
+      "mark": null,
+      "group": null
     },
     {
       "title": "中国奇谭",
@@ -3798,7 +3922,8 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 139162,
       "imdb_id": "tt26007176",
-      "mark": "finished"
+      "mark": "finished",
+      "group": null
     },
     {
       "title": "Lucky",
@@ -3830,7 +3955,44 @@ window.TV_DATA = {
       ],
       "found": true,
       "imdb_id": "tt34866681",
-      "mark": null
+      "mark": null,
+      "group": null
+    },
+    {
+      "title": "It",
+      "name": "小丑回魂",
+      "original_name": "It",
+      "status": "Ended",
+      "status_zh": "已完结",
+      "in_production": null,
+      "first_air_date": "1990-11-18",
+      "last_air_date": "1990-11-20",
+      "release_date": "",
+      "runtime": null,
+      "vote_average": null,
+      "poster": "https://image.tmdb.org/t/p/w200/4ybQ6gopB3H3cu0seVZLznDnIKo.jpg",
+      "last_episode": {
+        "season": 1,
+        "episode": 2,
+        "name": "第 2 集",
+        "air_date": "1990-11-20"
+      },
+      "next_episode": null,
+      "latest_season": {
+        "season_number": 1,
+        "air_date": "1990-11-18",
+        "episode_count": 2
+      },
+      "networks": [
+        "ABC"
+      ],
+      "collection": null,
+      "countries": null,
+      "found": true,
+      "imdb_id": "tt0099864",
+      "tmdb_id": 19614,
+      "mark": "finished",
+      "group": null
     }
   ]
 };

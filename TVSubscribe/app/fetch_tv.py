@@ -268,6 +268,12 @@ def build_entry(title, raw, kind="tv", api_key=None, collection_cache=None):
                 {"iso": c.get("iso_3166_1"), "name": c.get("name")}
                 for c in (raw.get("production_countries") or [])
             ],
+            "origin_country": [c for c in (raw.get("origin_country") or [])] if isinstance(raw.get("origin_country"), list) else [],
+            "original_language": raw.get("original_language"),
+            "spoken_languages": [
+                {"iso": l.get("iso_639_1"), "name": l.get("name")}
+                for l in (raw.get("spoken_languages") or [])
+            ],
             "found": True,
         }
 
@@ -497,6 +503,19 @@ def main():
     if sum(1 for s in results if s.get("found")) == 0:
         print("本次抓取全部失败（网络或代理异常），已保留现有数据文件，请检查 config.json 中的 proxy。")
         sys.exit(1)
+
+    # 抓取结果按 IMDb 去重：文本匹配歧义可能把不同片名配成同一部（如系列名与新作）
+    seen = set()
+    deduped = []
+    for r in results:
+        imdb = (r.get("imdb_id") or "").strip().lower()
+        if imdb and imdb in seen:
+            print(f"[去重] 与前面条目 IMDb 相同的重复结果已移除: {r.get('name') or r.get('title')} ({imdb})")
+            continue
+        if imdb:
+            seen.add(imdb)
+        deduped.append(r)
+    results = deduped
 
     payload = {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),

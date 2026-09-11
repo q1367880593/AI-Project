@@ -113,7 +113,7 @@
       "title": "The Odyssey",
       "imdb_id": "tt33764258",
       "name_zh": "奥德赛",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "诺兰系列"
     },
     {
@@ -219,14 +219,14 @@
       "title": "Prey",
       "imdb_id": "tt11866324",
       "name_zh": "铁血战士：狩猎",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "异形&铁血战士"
     },
     {
       "title": "Predator: Killer of Killers",
       "imdb_id": "tt36463894",
       "name_zh": "铁血战士：杀戮之王",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "异形&铁血战士"
     },
     {
@@ -848,7 +848,8 @@
       "title": "夜访吸血鬼",
       "imdb_id": "tt0110148",
       "mark": "finished",
-      "group": "1994"
+      "group": "1994",
+      "name_zh": "夜访吸血鬼"
     },
     {
       "title": "The Twilight Saga: Breaking Dawn - Part 2",
@@ -1146,19 +1147,19 @@
       "title": "Hannibal",
       "imdb_id": "tt0212985",
       "name_zh": "汉尼拔",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Red Dragon",
       "imdb_id": "tt0289765",
       "name_zh": "红龙",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Hannibal Rising",
       "imdb_id": "tt0367959",
       "name_zh": "汉尼拔崛起",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "汉尼拔·莱克特（系列）"
     },
     {
@@ -1277,43 +1278,43 @@
       "title": "Mission: Impossible",
       "imdb_id": "tt0117060",
       "name_zh": "碟中谍",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible II",
       "imdb_id": "tt0120755",
       "name_zh": "碟中谍2",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible III",
       "imdb_id": "tt0317919",
       "name_zh": "碟中谍3",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible - Ghost Protocol",
       "imdb_id": "tt1229238",
       "name_zh": "碟中谍4：幽灵协议",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible - Rogue Nation",
       "imdb_id": "tt2381249",
       "name_zh": "碟中谍5：神秘国度",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible - Fallout",
       "imdb_id": "tt4912910",
       "name_zh": "碟中谍6：全面瓦解",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible – Dead Reckoning Part One",
       "imdb_id": "tt9603212",
       "name_zh": "碟中谍7：致命清算（上）",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mission: Impossible - The Final Reckoning",
@@ -1325,7 +1326,7 @@
       "title": "Death on the Nile",
       "imdb_id": "tt7657566",
       "name_zh": "尼罗河上的惨案",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "尼罗河上的惨案"
     },
     {
@@ -1412,7 +1413,7 @@
       "title": "Death on the Nile",
       "imdb_id": "tt0077413",
       "name_zh": "尼罗河上的惨案",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "尼罗河上的惨案"
     },
     {
@@ -1452,8 +1453,9 @@
     {
       "title": "起风了",
       "imdb_id": "tt2013293",
-      "mark": "unwatched",
-      "group": "宫崎骏"
+      "mark": "dropped",
+      "group": "宫崎骏",
+      "name_zh": "起风了"
     },
     {
       "title": "The Boy and the Heron",
@@ -1522,14 +1524,14 @@
       "title": "Frozen II",
       "imdb_id": "tt4520988",
       "name_zh": "冰雪奇缘2",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "动画电影"
     },
     {
       "title": "Luca",
       "imdb_id": "tt12801262",
       "name_zh": "夏日友晴天",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "动画电影"
     },
     {
@@ -1543,244 +1545,31 @@
       "title": "Mad Max",
       "imdb_id": "tt1392190",
       "name_zh": "疯狂的麦克斯4：狂暴之路",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mad Max 2",
       "imdb_id": "tt0082694",
       "name_zh": "疯狂的麦克斯2",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mad Max Beyond Thunderdome",
       "imdb_id": "tt0089530",
       "name_zh": "疯狂的麦克斯3",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Furiosa: A Mad Max Saga",
       "imdb_id": "tt12037194",
       "name_zh": "疯狂的麦克斯：狂暴女神",
-      "mark": "unwatched"
+      "mark": "dropped"
     },
     {
       "title": "Mad Max: The Wasteland",
       "imdb_id": "tt4575512",
       "name_zh": "疯狂的麦克斯5：废土",
-      "mark": "unwatched"
-    },
-    {
-      "title": "Mad Max",
-      "imdb_id": "tt0079501",
-      "name_zh": "疯狂的麦克斯",
-      "mark": "unwatched"
-    },
-    {
-      "title": "Avatar",
-      "imdb_id": "tt0499549",
-      "name_zh": "阿凡达",
-      "mark": "finished"
-    },
-    {
-      "title": "Avatar：The Way of Water",
-      "imdb_id": "tt1630029",
-      "name_zh": "阿凡达：水之道",
-      "mark": "finished"
-    },
-    {
-      "title": "Avatar: Fire and Ash",
-      "imdb_id": "tt1757678",
-      "name_zh": "阿凡达：火与烬",
-      "mark": "finished"
-    },
-    {
-      "title": "Top Gun",
-      "imdb_id": "tt0092099",
-      "name_zh": "壮志凌云",
-      "mark": "finished"
-    },
-    {
-      "title": "Top Gun: Maverick",
-      "imdb_id": "tt1745960",
-      "name_zh": "壮志凌云2：独行侠",
-      "mark": "finished"
-    },
-    {
-      "title": "The Godfather",
-      "imdb_id": "tt0068646",
-      "name_zh": "教父",
-      "mark": "finished"
-    },
-    {
-      "title": "The Godfather: Part II",
-      "imdb_id": "tt0071562",
-      "name_zh": "教父2",
-      "mark": "finished"
-    },
-    {
-      "title": "The Godfather: Part III",
-      "imdb_id": "tt0099674",
-      "name_zh": "教父3",
-      "mark": "finished"
-    },
-    {
-      "title": "Knives Out",
-      "imdb_id": "tt8946378",
-      "name_zh": "利刃出鞘",
-      "mark": "finished"
-    },
-    {
-      "title": "Glass Onion: A Knives Out Mystery",
-      "imdb_id": "tt11564570",
-      "name_zh": "利刃出鞘2：抽丝剥茧",
-      "mark": "finished"
-    },
-    {
-      "title": "Wake Up Dead Man: A Knives Out Mystery",
-      "imdb_id": "tt14364480",
-      "name_zh": "利刃出鞘3：亡者归来",
-      "mark": "finished"
-    },
-    {
-      "title": "Sherlock Holmes",
-      "imdb_id": "tt0988045",
-      "name_zh": "大侦探福尔摩斯",
-      "mark": "finished"
-    },
-    {
-      "title": "Sherlock Holmes: A Game of Shadows",
-      "imdb_id": "tt1515091",
-      "name_zh": "大侦探福尔摩斯2：诡影游戏",
-      "mark": "finished"
-    },
-    {
-      "title": "Rise of the Planet of the Apes",
-      "imdb_id": "tt1318514",
-      "name_zh": "猩球崛起",
-      "mark": "finished"
-    },
-    {
-      "title": "Dawn of the Planet of the Apes",
-      "imdb_id": "tt2103281",
-      "name_zh": "猩球崛起2：黎明之战",
-      "mark": "finished"
-    },
-    {
-      "title": "Kick-Ass",
-      "imdb_id": "tt1250777",
-      "name_zh": "海扁王",
-      "mark": "finished"
-    },
-    {
-      "title": "Kick-Ass 2",
-      "imdb_id": "tt1650554",
-      "name_zh": "海扁王2",
-      "mark": "finished"
-    },
-    {
-      "title": "Downton Abbey",
-      "imdb_id": "tt6398184",
-      "name_zh": "唐顿庄园",
-      "mark": "unwatched"
-    },
-    {
-      "title": "Downton Abbey: A New Era",
-      "imdb_id": "tt11703710",
-      "name_zh": "唐顿庄园2",
-      "mark": "unwatched"
-    },
-    {
-      "title": "Dune",
-      "imdb_id": "tt1160419",
-      "name_zh": "沙丘",
-      "mark": "finished"
-    },
-    {
-      "title": "Dune: Part Two",
-      "imdb_id": "tt15239678",
-      "name_zh": "沙丘2",
-      "mark": "finished"
-    },
-    {
-      "title": "Now You See Me",
-      "imdb_id": "tt1670345",
-      "name_zh": "惊天魔盗团",
-      "mark": "finished"
-    },
-    {
-      "title": "Now You See Me 2",
-      "imdb_id": "tt3110958",
-      "name_zh": "惊天魔盗团2",
-      "mark": "finished"
-    },
-    {
-      "title": "Now You See Me: Now You Don't",
-      "imdb_id": "tt4712810",
-      "name_zh": "惊天魔盗团3",
-      "mark": "finished"
-    },
-    {
-      "title": "Shaun of the Dead",
-      "imdb_id": "tt0365748",
-      "name_zh": "僵尸肖恩",
-      "mark": "finished",
-      "group": "可爱多三部曲"
-    },
-    {
-      "title": "Hot Fuzz",
-      "imdb_id": "tt0425112",
-      "name_zh": "热血警探",
-      "mark": "finished",
-      "group": "可爱多三部曲"
-    },
-    {
-      "title": "Lucy",
-      "imdb_id": "tt2872732",
-      "name_zh": "超体",
-      "mark": "finished"
-    },
-    {
-      "title": "Roman Holiday",
-      "imdb_id": "tt0046250",
-      "name_zh": "罗马假日",
-      "mark": "finished"
-    },
-    {
-      "title": "Witness for the Prosecution",
-      "imdb_id": "tt0051201",
-      "name_zh": "控方证人",
-      "mark": "finished"
-    },
-    {
-      "title": "One Flew Over the Cuckoo's Nest",
-      "imdb_id": "tt0073486",
-      "name_zh": "飞越疯人院",
-      "mark": "finished"
-    },
-    {
-      "title": "Rocky",
-      "imdb_id": "tt0075148",
-      "name_zh": "洛奇",
-      "mark": "finished"
-    },
-    {
-      "title": "First Blood",
-      "imdb_id": "tt0083944",
-      "name_zh": "第一滴血",
-      "mark": "finished"
-    },
-    {
-      "title": "The Goonies",
-      "imdb_id": "tt0089218",
-      "name_zh": "七宝奇谋",
-      "mark": "finished"
-    },
-    {
-      "title": "The World's End",
-      "imdb_id": "tt1213663",
-      "name_zh": "世界尽头",
-      "mark": "finished",
-      "group": "可爱多三部曲"
+      "mark": "dropped"
     }
   ]
 }

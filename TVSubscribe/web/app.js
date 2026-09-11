@@ -23,6 +23,7 @@
       tagline: "追剧进度 · 完结状态 · 最新季播出时间",
       markFinished: "已追完",
       markDropped: "已弃剧",
+      markUnwatched: "未观看",
       searchPlaceholder: "输入剧名搜索，如 Westworld",
       manualTitleLabel: "剧名（英文 / 原文）",
       dialogTitle: "添加剧集",
@@ -45,6 +46,7 @@
       tagline: "观影记录 · 上映状态 · 上映日期",
       markFinished: "已看完",
       markDropped: "已放弃",
+      markUnwatched: "未观看",
       searchPlaceholder: "输入电影名搜索，如 Inception",
       manualTitleLabel: "电影名（英文 / 原文）",
       dialogTitle: "添加电影",
@@ -83,11 +85,15 @@
   var groupViewSel = document.getElementById("group-view");
   var groupOverlay = document.getElementById("group-overlay");
   var groupHint = document.getElementById("group-hint");
-  var groupSelect = document.getElementById("group-select");
+  var groupList = document.getElementById("group-list");
   var groupInput = document.getElementById("group-input");
   var btnGroupConfirm = document.getElementById("group-confirm");
   var btnGroupDismiss = document.getElementById("group-dismiss");
   var btnGroupCancel = document.getElementById("group-cancel");
+  var confirmOverlay = document.getElementById("confirm-overlay");
+  var confirmTitle = document.getElementById("confirm-title");
+  var confirmMsg = document.getElementById("confirm-msg");
+  var confirmActions = document.getElementById("confirm-actions");
   var btnImport = document.getElementById("btn-import");
   var importOverlay = document.getElementById("import-overlay");
   var importText = document.getElementById("import-text");
@@ -95,11 +101,15 @@
   var btnImportCancel = document.getElementById("import-cancel");
   var btnSelectAll = document.getElementById("btn-select-all");
   var btnBatchMark = document.getElementById("btn-batch-mark");
+  var searchInput = document.getElementById("search-input");
+  var searchClear = document.getElementById("search-clear");
   var markSel = document.getElementById("filter-mark");
   var markOptFinished = document.getElementById("mark-opt-finished");
   var markOptDropped = document.getElementById("mark-opt-dropped");
+  var markOptUnwatched = document.getElementById("mark-opt-unwatched");
   var markFilterFinished = document.getElementById("mark-filter-finished");
   var markFilterDropped = document.getElementById("mark-filter-dropped");
+  var markFilterUnwatched = document.getElementById("mark-filter-unwatched");
   var overlay = document.getElementById("add-overlay");
   var markOverlay = document.getElementById("mark-overlay");
   var markLabel = document.getElementById("mark-label");
@@ -141,14 +151,12 @@
   var editMode = false;
   var selection = [];   // 已勾选电影的 _key（仅电影 Tab 编辑模式，内存态）
 
-  var CHINESE_CODES = { CN: true, HK: true, TW: true };
-  var JAPAN_CODES = { JP: true };
-  var KOREA_CODES = { KR: true };
-  var WEST_CODES = {
-    US: true, CA: true, GB: true, IE: true, FR: true, DE: true, IT: true, ES: true,
-    PT: true, NL: true, BE: true, LU: true, AT: true, CH: true, DK: true, SE: true,
-    NO: true, FI: true, IS: true, PL: true, CZ: true, SK: true, HU: true, RO: true,
-    GR: true, AU: true, NZ: true
+  // 语言圈判定码：直接按 TMDB 原始语言 original_language 区分
+  var ZH_LANGS = { zh: true, cn: true, yue: true };
+  var WEST_LANGS = {
+    en: true, fr: true, de: true, it: true, es: true, pt: true,
+    nl: true, da: true, sv: true, no: true, fi: true, is: true,
+    pl: true, cs: true, sk: true, hu: true, ro: true, el: true
   };
 
   function isoSet(countries) {
@@ -161,21 +169,21 @@
   }
 
   function hasAny(set, codes) {
+    if (!set) return false;
     for (var k in codes) {
       if (set[k]) return true;
     }
     return false;
   }
 
-  /* 地区归类：华语 > 日本 > 韩国 > 欧美 > 其他；无产地数据为未知 */
+  /* 语言分类：原始语言 zh/cn(yue) → 华语；ja → 日本；ko → 韩国；欧美语言 → 欧美；其余 → 其他；无数据 → 未知 */
   function originTag(s) {
-    var cs = s.countries || [];
-    if (!cs.length) return "unknown";
-    var set = isoSet(cs);
-    if (hasAny(set, CHINESE_CODES)) return "chinese";
-    if (hasAny(set, JAPAN_CODES)) return "japan";
-    if (hasAny(set, KOREA_CODES)) return "korea";
-    if (hasAny(set, WEST_CODES)) return "west";
+    var l = ((s.original_language || "") + "").trim().toLowerCase();
+    if (!l) return "unknown";
+    if (ZH_LANGS[l]) return "chinese";
+    if (l === "ja") return "japan";
+    if (l === "ko") return "korea";
+    if (WEST_LANGS[l]) return "west";
     return "other";
   }
 
@@ -297,12 +305,15 @@
 
   function markBadge(show) {
     var mark = show.mark || "";
-    var text = mark === "" ? "＋ 标记" : (mark === "finished" ? cfg().markFinished : cfg().markDropped);
+    var text = mark === "" ? "＋ 标记" : (
+      mark === "finished" ? cfg().markFinished :
+      mark === "dropped" ? cfg().markDropped : cfg().markUnwatched);
     var btn = el("button", "mark-btn", text);
     btn.type = "button";
     btn.title = cfg().markTitlePrefix + "（直接写入 " + cfg().fileName + "）";
     if (mark === "finished") btn.classList.add("mark-finished");
     if (mark === "dropped") btn.classList.add("mark-dropped");
+    if (mark === "unwatched") btn.classList.add("mark-unwatched");
     btn.addEventListener("click", function (ev) {
       ev.preventDefault();
       openMarkDialog(show);
@@ -337,18 +348,44 @@
     return row;
   }
 
+  /* 未抓取提示 + 单独抓取按钮（剧集 / 电影通用） */
+  function unfetchedMeta(show) {
+    var meta = el("div", "meta");
+    meta.appendChild(el("div", "line muted", "尚未抓取数据"));
+    var btn = el("button", "fetch-one-btn", "单独抓取");
+    btn.type = "button";
+    btn.title = "仅抓取该条目（几秒完成）";
+    btn.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      fetchOne(show);
+    });
+    meta.appendChild(btn);
+    return meta;
+  }
+
+  /* 展示用地区：优先主产地（origin_country），否则用制片国列表 */
+  function displayCountryNames(show) {
+    var oc = show.origin_country || [];
+    if (oc.length) {
+      return oc.map(function (isoStr) {
+        var iso = (isoStr + "").trim().toUpperCase();
+        return COUNTRY_ZH[iso] || isoStr;
+      });
+    }
+    var names = [];
+    (show.countries || []).forEach(function (c) {
+      var n = countryName(c) || "";
+      if (n) names.push(n);
+    });
+    return names;
+  }
+
   function movieMeta(show) {
     var meta = el("div", "meta");
     if (!show.status) {
-      meta.appendChild(el("div", "line muted", "尚未抓取数据，点击上方「更新数据」补齐"));
-      return meta;
+      return unfetchedMeta(show);
     }
-    var cs = show.countries || [];
-    var cnames = [];
-    cs.forEach(function (c) {
-      var n = countryName(c) || "";
-      if (n) cnames.push(n);
-    });
+    var cnames = displayCountryNames(show);
     var dateStr = show.release_date ? formatDate(show.release_date) : "";
     if (dateStr || cnames.length) {
       var rl = el("div", "line");
@@ -386,8 +423,7 @@
   function tvMeta(show) {
     var meta = el("div", "meta");
     if (!show.status) {
-      meta.appendChild(el("div", "line muted", "尚未抓取数据，点击上方「更新数据」补齐"));
-      return meta;
+      return unfetchedMeta(show);
     }
     var season = show.latest_season;
     if (season) {
@@ -413,7 +449,7 @@
     return meta;
   }
 
-  /* 「未找到或抓取失败」条目的简化卡片（编辑模式下支持删除） */
+  /* 「未找到或抓取失败」条目的简化卡片（编辑模式下支持删除；可一键重新添加） */
   function failedCard(show) {
     var c = el("div", "card");
     var info = el("div", "info");
@@ -423,6 +459,19 @@
       titleRow.appendChild(deleteBtn(show));
     }
     info.appendChild(titleRow);
+    var kw = (show.title || "").trim();
+    if (kw) {
+      var fix = el("button", "fetch-one-btn", "重新添加");
+      fix.type = "button";
+      fix.title = "以「" + kw + "」为关键词进入添加流程";
+      fix.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        openAddWithKeyword(kw);
+      });
+      var meta = el("div", "meta");
+      meta.appendChild(fix);
+      info.appendChild(meta);
+    }
     c.appendChild(info);
     return c;
   }
@@ -565,6 +614,7 @@
     var markFilter = markSel.value;
     var originFilter = originSel.value;
     var asc = sortDirBtn.dataset.dir === "asc";
+    var q = searchInput.value.trim().toLowerCase();
 
     var list = merged.filter(function (s) {
       if (status && s.status !== status) return false;
@@ -573,7 +623,13 @@
       if (markFilter === "none" && mark) return false;
       if (markFilter === "finished" && mark !== "finished") return false;
       if (markFilter === "dropped" && mark !== "dropped") return false;
+      if (markFilter === "unwatched" && mark !== "unwatched") return false;
       if (originFilter && originTag(s) !== originFilter) return false;
+      if (q) {
+        // 中英文模糊匹配：中文名 / 原名 / 标题
+        var hay = ((s.name || "") + " " + (s.title || "") + " " + (s.original_name || "")).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
       return true;
     });
     return sortShows(list, sortSel.value, asc);
@@ -600,7 +656,8 @@
     footerCount.textContent = "共收录 " + merged.length + " 部" + cfg().itemLabel;
 
     var sorted = filteredList();
-    var hasFilter = statusSel.value || networkSel.value || markSel.value || originSel.value;
+    var hasFilter = statusSel.value || networkSel.value || markSel.value || originSel.value
+      || searchInput.value.trim();
 
     if (hasFilter) {
       resultCount.innerHTML = "当前 <b>" + sorted.length + "</b> / " + merged.length + " 部";
@@ -856,6 +913,11 @@
         countries: (detail.production_countries || []).map(function (c) {
           return { iso: c.iso_3166_1 || "", name: c.name || "" };
         }),
+        origin_country: (detail.origin_country || []).slice(),
+        original_language: detail.original_language || null,
+        spoken_languages: (detail.spoken_languages || []).map(function (l) {
+          return { iso: l.iso_639_1 || "", name: l.name || "" };
+        }),
         imdb_id: (ext && ext.imdb_id) || null,
         tmdb_id: detail.id,
         found: true
@@ -1026,27 +1088,51 @@
     render();
   }
 
-  /* ---------- 电影分组（批量多选） ---------- */
-  function openGroupDialog() {
-    if (!selection.length) return;
-    groupSelect.innerHTML = "";
-    var opt0 = el("option", null, "（选择已有分组）");
-    opt0.value = "";
-    groupSelect.appendChild(opt0);
-    // 候选：手动组名 ∪ 自动系列名
-    var names = {};
+  /* ---------- 电影分组（批量多选，可检索、系统/自定义标识） ---------- */
+  var groupItems = [];   // {name, type: 'auto'=TMDB系列 | 'manual'=自定义分组}
+
+  function buildGroupItems() {
+    var map = {};
     allShows().forEach(function (s) {
       var g = (s.group || "").trim();
-      if (g) names[g] = true;
+      if (g) map[g] = "manual";
+    });
+    allShows().forEach(function (s) {
       var c = s.collection;
       var cn = c && ((c.name_zh || c.name || "") + "").trim();
-      if (cn) names[cn] = true;
+      if (cn && !(cn in map)) map[cn] = "auto";
     });
-    Object.keys(names).sort(function (a, b) { return a.localeCompare(b); }).forEach(function (n) {
-      var o = el("option", null, n);
-      o.value = n;
-      groupSelect.appendChild(o);
+    return Object.keys(map).sort(function (a, b) { return a.localeCompare(b); }).map(function (n) {
+      return { name: n, type: map[n] };
     });
+  }
+
+  function renderGroupList(filter) {
+    groupList.innerHTML = "";
+    var q = (filter || "").trim().toLowerCase();
+    var items = groupItems.filter(function (g) {
+      return !q || g.name.toLowerCase().indexOf(q) >= 0;
+    });
+    if (!items.length) {
+      groupList.appendChild(el("div", "group-list-empty", q ? "没有匹配的分组" : "暂无分组：在上方输入新组名即可创建"));
+      return;
+    }
+    items.forEach(function (g) {
+      var item = el("button", "group-item" + (g.name === groupInput.value.trim() ? " selected" : ""));
+      item.type = "button";
+      item.appendChild(el("span", "group-item-name", g.name));
+      item.appendChild(el("span", "group-tag tag-" + g.type, g.type === "auto" ? "系列" : "自定义"));
+      item.addEventListener("click", function () {
+        groupInput.value = g.name;
+        renderGroupList(groupInput.value);
+      });
+      groupList.appendChild(item);
+    });
+  }
+
+  function openGroupDialog() {
+    if (!selection.length) return;
+    groupItems = buildGroupItems();
 
     // 选中电影的自动系列（一致时展示提示并预选）
     var collName = null, collSame = true;
@@ -1068,9 +1154,9 @@
       if (common === null) common = g;
       else if (g !== common) same = false;
     });
-    if (same && common) selectIfExists(groupSelect, common);
-    else if (collSame && collName) selectIfExists(groupSelect, collName);
-    groupInput.value = "";
+    var preset = (same && common) ? common : (collSame && collName ? collName : "");
+    groupInput.value = preset;
+    renderGroupList(preset || "");
     groupOverlay.hidden = false;
     groupInput.focus();
   }
@@ -1095,9 +1181,11 @@
   }
 
   function confirmGroup() {
-    var name = groupInput.value.trim() || groupSelect.value;
+    var name = groupInput.value.trim();
     if (!name) {
-      window.alert("请选择已有分组，或输入新组名。");
+      showDialog("电影分组", "请输入新组名，或从列表中选择已有分组。", [
+        { label: "关闭", value: false, primary: true }
+      ]);
       return;
     }
     applyGroup(name);
@@ -1161,15 +1249,20 @@
       newOnes.push(entry);
     });
     if (!newOnes.length) {
-      window.alert(dupCount ? ("导入的条目都已存在（跳过 " + dupCount + " 条重复）。") : "没有可导入的内容。");
+      showDialog("批量导入", dupCount ? ("导入的条目都已存在（跳过 " + dupCount + " 条重复）。") : "没有可导入的内容。", [
+        { label: "关闭", value: false, primary: true }
+      ]);
       return;
     }
     persistEntries(allShows().concat(newOnes), null, function () {
       closeImportDialog();
       var msg = "已导入 " + newOnes.length + " 条" + (dupCount ? "，跳过重复 " + dupCount + " 条" : "") + "。";
-      if (window.confirm(msg + "\n\n是否立即仅更新未抓取的数据？\n（「确定」立即抓取新导入的条目；「取消」稍后点「更新数据」全量更新）")) {
-        runRefresh(true);
-      }
+      showDialog("批量导入", msg + "\n是否立即仅更新未抓取的数据？", [
+        { label: "稍后再说", value: false },
+        { label: "立即更新", value: true, primary: true }
+      ]).then(function (ok) {
+        if (ok) runRefresh(true);
+      });
     });
   }
 
@@ -1216,8 +1309,10 @@
     networkLabel.textContent = c.networkLabel;
     markFilterFinished.textContent = c.markFinished;
     markFilterDropped.textContent = c.markDropped;
+    markFilterUnwatched.textContent = c.markUnwatched;
     markOptFinished.textContent = c.markFinished;
     markOptDropped.textContent = c.markDropped;
+    markOptUnwatched.textContent = c.markUnwatched;
     addTitleLabel.textContent = c.dialogTitle;
     inputTitle.placeholder = c.searchPlaceholder;
     mTitleLabel.textContent = c.manualTitleLabel;
@@ -1238,6 +1333,8 @@
     groupViewSel.value = "flat";
     originSel.value = "";
     markSel.value = "";
+    searchInput.value = "";
+    searchClear.hidden = true;
     sortDirBtn.dataset.dir = "desc";
     sortDirBtn.querySelector(".dir-text").textContent = "降序";
     resetSortOptions();
@@ -1263,7 +1360,8 @@
     origin: "origin",
     sort: "sort",
     dir: "dir",
-    view: "view"
+    view: "view",
+    q: "q"
   };
 
   function selectIfExists(sel, value) {
@@ -1286,7 +1384,8 @@
       origin: q.get(URL_PARAMS.origin) || "",
       sort: q.get(URL_PARAMS.sort) || "",
       dir: q.get(URL_PARAMS.dir) || "",
-      view: q.get(URL_PARAMS.view) || ""
+      view: q.get(URL_PARAMS.view) || "",
+      q: q.get(URL_PARAMS.q) || ""
     };
   }
 
@@ -1301,42 +1400,128 @@
     if (sortSel.value) q.set(URL_PARAMS.sort, sortSel.value);
     if (sortDirBtn.dataset.dir === "asc") q.set(URL_PARAMS.dir, "asc");
     if (kind === "movie" && groupViewSel.value === "grouped") q.set(URL_PARAMS.view, "grouped");
+    if (searchInput.value.trim()) q.set(URL_PARAMS.q, searchInput.value.trim());
     var s = q.toString();
     history.replaceState(null, "", window.location.pathname + (s ? "?" + s : ""));
   }
 
+  /* ---------- 通用确认 / 提示弹窗（Promise 风格） ---------- */
+  var confirmResolve = null;
+
+  function closeConfirmOverlay(value) {
+    if (confirmResolve) {
+      var r = confirmResolve;
+      confirmResolve = null;
+      r(value);
+    }
+    confirmOverlay.hidden = true;
+  }
+
+  function showDialog(title, message, buttons) {
+    return new Promise(function (resolve) {
+      confirmTitle.textContent = title;
+      confirmMsg.textContent = message;
+      confirmActions.innerHTML = "";
+      confirmResolve = resolve;
+      buttons.forEach(function (b) {
+        var btn = el("button", "tb-btn" + (b.primary ? " tb-btn-primary" : ""), b.label);
+        btn.type = "button";
+        btn.addEventListener("click", function () { closeConfirmOverlay(b.value); });
+        confirmActions.appendChild(btn);
+      });
+      confirmOverlay.hidden = false;
+    });
+  }
+
   /* ---------- 全量抓取 ---------- */
-  function runRefresh(onlyUnfetched) {
+  function requestRefresh(body) {
     btnRefresh.disabled = true;
     var oldText = btnRefresh.textContent;
     btnRefresh.textContent = "抓取中…";
-    fetch("/api/refresh", {
+    return fetch("/api/refresh", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind: kind, only_unfetched: onlyUnfetched })
+      body: JSON.stringify(body)
     })
       .then(function (r) { return r.json(); })
       .then(function (res) {
         btnRefresh.disabled = false;
         btnRefresh.textContent = oldText;
-        var tail = (res.log || "").split("\n").slice(-3).join("\n");
-        if (res.ok) {
-          window.alert("更新完成：\n" + tail);
-          location.reload();
-        } else {
-          window.alert("抓取失败：\n" + (tail || res.error || "未知错误"));
-        }
+        return res;
       })
       .catch(function (e) {
         btnRefresh.disabled = false;
         btnRefresh.textContent = oldText;
-        window.alert("请求失败：" + e.message);
+        throw e;
+      });
+  }
+
+  /* 单条抓取（未抓取卡片上的按钮） */
+  function fetchOne(show) {
+    var label = show.name || show.title || show.imdb_id || "";
+    var item = (show.imdb_id || show.title || "").trim();
+    if (!item) return;
+    showDialog("单独抓取", "抓取「" + label + "」？\n（按" + (show.imdb_id ? "IMDb 号精确" : "片名") + "匹配，几秒完成）", [
+      { label: "取消", value: false },
+      { label: "抓取", value: true, primary: true }
+    ]).then(function (ok) {
+      if (!ok) return;
+      requestRefresh({ kind: kind, item: item })
+        .then(function (res) {
+          var tail = (res.log || "").split("\n").slice(-3).join("\n");
+          if (res.ok) {
+            showDialog("抓取完成", tail, [
+              { label: "刷新页面", value: true, primary: true }
+            ]).then(function () { location.reload(); });
+          } else {
+            showDialog("抓取失败", tail || res.error || "未知错误", [
+              { label: "关闭", value: false, primary: true }
+            ]);
+          }
+        })
+        .catch(function (e) {
+          showDialog("请求失败", String(e.message || e), [
+            { label: "关闭", value: false, primary: true }
+          ]);
+        });
+    });
+  }
+
+  /* 以关键词进入添加搜索流程（未识别卡片上的按钮） */
+  function openAddWithKeyword(keyword) {
+    openDialog();
+    inputTitle.value = (keyword || "").trim();
+    if (inputTitle.value) doSearch();
+  }
+
+  function runRefresh(onlyUnfetched) {
+    requestRefresh({ kind: kind, only_unfetched: onlyUnfetched })
+      .then(function (res) {
+        var tail = (res.log || "").split("\n").slice(-3).join("\n");
+        if (res.ok) {
+          showDialog("更新完成", tail, [
+            { label: "刷新页面", value: true, primary: true }
+          ]).then(function () { location.reload(); });
+        } else {
+          showDialog("抓取失败", tail || res.error || "未知错误", [
+            { label: "关闭", value: false, primary: true }
+          ]);
+        }
+      })
+      .catch(function (e) {
+        showDialog("请求失败", String(e.message || e), [
+          { label: "关闭", value: false, primary: true }
+        ]);
       });
   }
 
   function refreshData() {
-    if (!window.confirm(cfg().refreshConfirm)) return;
-    runRefresh(false);
+    showDialog("更新数据", cfg().refreshConfirm, [
+      { label: "取消", value: false },
+      { label: "开始更新", value: true, primary: true }
+    ]).then(function (ok) {
+      if (ok) runRefresh(false);
+    });
   }
 
   /* ---------- 事件绑定 ---------- */
@@ -1350,6 +1535,15 @@
     markSel.addEventListener("change", render);
     originSel.addEventListener("change", render);
     sortSel.addEventListener("change", render);
+    searchInput.addEventListener("input", function () {
+      searchClear.hidden = !searchInput.value.trim();
+      render();
+    });
+    searchClear.addEventListener("click", function () {
+      searchInput.value = "";
+      searchClear.hidden = true;
+      render();
+    });
     groupViewSel.addEventListener("change", render);
     btnGroup.addEventListener("click", openGroupDialog);
     btnGroupConfirm.addEventListener("click", confirmGroup);
@@ -1357,6 +1551,12 @@
     btnGroupCancel.addEventListener("click", closeGroupDialog);
     groupOverlay.addEventListener("click", function (ev) {
       if (ev.target === groupOverlay) closeGroupDialog();
+    });
+    groupInput.addEventListener("input", function () {
+      renderGroupList(groupInput.value);
+    });
+    confirmOverlay.addEventListener("click", function (ev) {
+      if (ev.target === confirmOverlay) closeConfirmOverlay(null);
     });
     btnSelectAll.addEventListener("click", toggleSelectAll);
     btnBatchMark.addEventListener("click", openBatchMarkDialog);
@@ -1408,6 +1608,7 @@
       if (ev.key === "Escape") {
         if (!markOverlay.hidden) closeMarkDialog();
         if (!groupOverlay.hidden) closeGroupDialog();
+        if (!confirmOverlay.hidden) closeConfirmOverlay(null);
         if (!importOverlay.hidden) closeImportDialog();
         if (!overlay.hidden) closeDialog();
       }
@@ -1440,6 +1641,8 @@
   }
   groupViewSel.value = (kind === "movie" && urlState.view === "grouped") ? "grouped" : "flat";
   if (kind === "movie" && urlState.origin) originSel.value = urlState.origin;
+  searchInput.value = urlState.q || "";
+  searchClear.hidden = !urlState.q;
 
   bindEvents();
   applyEditModeUI();

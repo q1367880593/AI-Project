@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.MOVIE_DATA = {
-  "generated_at": "2026-09-11 13:25:47",
+  "generated_at": "2026-09-11 11:56:04",
   "shows": [
     {
       "title": "The Lion King",
@@ -31,7 +31,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -74,7 +73,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -116,7 +114,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -158,7 +155,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -212,7 +208,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -249,7 +244,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -287,7 +281,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "FR"
       ],
-      "original_language": "fr",
       "spoken_languages": [
         {
           "iso": "en",
@@ -333,7 +326,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -375,7 +367,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -418,7 +409,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -467,7 +457,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -510,7 +499,6 @@ window.MOVIE_DATA = {
         "GB",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -552,7 +540,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -596,7 +583,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -639,7 +625,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -692,7 +677,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "nl",
@@ -739,7 +723,6 @@ window.MOVIE_DATA = {
         "GB",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -749,7 +732,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 1368337,
       "imdb_id": "tt33764258",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "诺兰系列"
     },
     {
@@ -785,7 +768,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -836,7 +818,6 @@ window.MOVIE_DATA = {
         "US",
         "FR"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -890,7 +871,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -932,7 +912,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -978,7 +957,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1021,7 +999,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1070,7 +1047,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1116,7 +1092,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1158,7 +1133,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1204,7 +1178,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "gd",
@@ -1249,7 +1222,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1296,7 +1268,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1342,7 +1313,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1384,7 +1354,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1435,7 +1404,6 @@ window.MOVIE_DATA = {
         "CA",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1477,7 +1445,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1491,7 +1458,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 766507,
       "imdb_id": "tt11866324",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "异形&铁血战士"
     },
     {
@@ -1520,7 +1487,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1542,7 +1508,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 1376434,
       "imdb_id": "tt36463894",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "异形&铁血战士"
     },
     {
@@ -1587,7 +1553,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "it",
@@ -1634,7 +1599,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1676,7 +1640,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1718,7 +1681,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "es",
@@ -1764,7 +1726,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1806,7 +1767,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "zh",
@@ -1852,7 +1812,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1894,7 +1853,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -1932,7 +1890,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "qu",
@@ -1982,7 +1939,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "es",
@@ -2027,7 +1983,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2070,7 +2025,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2117,7 +2071,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2163,7 +2116,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2209,7 +2161,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2252,7 +2203,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2299,7 +2249,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2341,7 +2290,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2391,7 +2339,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2437,7 +2384,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2483,7 +2429,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2529,7 +2474,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2575,7 +2519,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2621,7 +2564,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2663,7 +2605,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2705,7 +2646,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2747,7 +2687,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2789,7 +2728,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "cn",
@@ -2844,7 +2782,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2890,7 +2827,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2936,7 +2872,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -2990,7 +2925,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3036,7 +2970,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3090,7 +3023,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "cn",
@@ -3152,7 +3084,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "ar",
@@ -3206,7 +3137,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3252,7 +3182,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3306,7 +3235,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3356,7 +3284,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3414,7 +3341,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3460,7 +3386,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3503,7 +3428,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3545,7 +3469,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3587,7 +3510,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3633,7 +3555,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3678,7 +3599,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3720,7 +3640,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3766,7 +3685,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3816,7 +3734,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3863,7 +3780,6 @@ window.MOVIE_DATA = {
         "GB",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "cs",
@@ -3909,7 +3825,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3947,7 +3862,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -3989,7 +3903,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4032,7 +3945,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4074,7 +3986,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4116,7 +4027,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4159,7 +4069,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "fr",
@@ -4205,7 +4114,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4251,7 +4159,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4289,7 +4196,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4331,7 +4237,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4373,7 +4278,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4415,7 +4319,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4457,7 +4360,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4499,7 +4401,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4541,7 +4442,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4583,7 +4483,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4625,7 +4524,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4667,7 +4565,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4705,7 +4602,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4743,7 +4639,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4793,7 +4688,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4847,7 +4741,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4897,7 +4790,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4940,7 +4832,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -4984,7 +4875,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5026,7 +4916,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5065,7 +4954,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5107,7 +4995,6 @@ window.MOVIE_DATA = {
         "ES",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5151,7 +5038,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5201,7 +5087,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5248,7 +5133,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5294,7 +5178,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5339,7 +5222,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5388,7 +5270,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5433,7 +5314,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5478,7 +5358,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5527,7 +5406,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5572,7 +5450,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5617,7 +5494,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5663,7 +5539,6 @@ window.MOVIE_DATA = {
         "GB",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5709,7 +5584,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5759,7 +5633,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5800,7 +5673,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5846,7 +5718,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5889,7 +5760,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5935,7 +5805,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -5982,7 +5851,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6029,7 +5897,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6071,7 +5938,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6117,7 +5983,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6162,7 +6027,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6205,7 +6069,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6247,7 +6110,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6290,7 +6152,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6333,7 +6194,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6378,7 +6238,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6425,7 +6284,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6468,7 +6326,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6511,7 +6368,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6554,7 +6410,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6597,7 +6452,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6640,7 +6494,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6682,7 +6535,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6724,7 +6576,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6766,7 +6617,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6807,7 +6657,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6848,7 +6697,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "la",
@@ -6907,7 +6755,6 @@ window.MOVIE_DATA = {
         "US",
         "FR"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6953,7 +6800,6 @@ window.MOVIE_DATA = {
         "US",
         "FR"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -6995,7 +6841,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7036,7 +6881,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7077,7 +6921,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7122,7 +6965,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7163,7 +7005,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7217,7 +7058,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7257,7 +7097,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7302,7 +7141,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7344,7 +7182,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7386,7 +7223,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7428,7 +7264,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7468,7 +7303,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7510,7 +7344,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7552,7 +7385,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7594,7 +7426,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7635,7 +7466,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7677,7 +7507,6 @@ window.MOVIE_DATA = {
         "CA",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7718,7 +7547,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7759,7 +7587,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7804,7 +7631,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7842,7 +7668,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7882,7 +7707,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7923,7 +7747,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -7984,7 +7807,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "zh",
@@ -8033,7 +7855,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "ar",
@@ -8086,7 +7907,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8135,7 +7955,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "ar",
@@ -8193,7 +8012,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8239,7 +8057,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8249,7 +8066,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 9740,
       "imdb_id": "tt0212985",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -8289,7 +8106,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8307,7 +8123,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 9533,
       "imdb_id": "tt0289765",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -8353,7 +8169,6 @@ window.MOVIE_DATA = {
         "GB",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8371,7 +8186,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 1248,
       "imdb_id": "tt0367959",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "汉尼拔·莱克特（系列）"
     },
     {
@@ -8404,7 +8219,6 @@ window.MOVIE_DATA = {
         "US",
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8441,7 +8255,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8479,7 +8292,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8523,7 +8335,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8561,7 +8372,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8602,7 +8412,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8652,7 +8461,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8705,7 +8513,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8742,7 +8549,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8789,7 +8595,6 @@ window.MOVIE_DATA = {
         "CA",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "es",
@@ -8835,7 +8640,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "de",
@@ -8886,7 +8690,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "cn",
@@ -8939,7 +8742,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -8985,7 +8787,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "es",
@@ -9039,7 +8840,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9089,7 +8889,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9135,7 +8934,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9153,7 +8951,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 954,
       "imdb_id": "tt0117060",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9189,7 +8987,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9199,7 +8996,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 955,
       "imdb_id": "tt0120755",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9235,7 +9032,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "de",
@@ -9265,7 +9061,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 956,
       "imdb_id": "tt0317919",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9297,7 +9093,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9323,7 +9118,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 56292,
       "imdb_id": "tt1229238",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9358,7 +9153,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "de",
@@ -9376,7 +9170,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 177677,
       "imdb_id": "tt2381249",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9407,7 +9201,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9421,7 +9214,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 353081,
       "imdb_id": "tt4912910",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9453,7 +9246,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "fr",
@@ -9475,7 +9267,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 575264,
       "imdb_id": "tt9603212",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -9507,7 +9299,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9561,7 +9352,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9579,7 +9369,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 505026,
       "imdb_id": "tt7657566",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "尼罗河上的惨案"
     },
     {
@@ -9617,7 +9407,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9655,7 +9444,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9705,7 +9493,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "ja",
@@ -9747,7 +9534,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9789,7 +9575,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9827,7 +9612,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9874,7 +9658,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -9912,7 +9695,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "zh",
@@ -9958,7 +9740,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10004,7 +9785,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10045,7 +9825,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10086,7 +9865,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10126,7 +9904,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "GB"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "de",
@@ -10148,7 +9925,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 4192,
       "imdb_id": "tt0077413",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "尼罗河上的惨案"
     },
     {
@@ -10181,7 +9958,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10223,7 +9999,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10263,7 +10038,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "JP"
       ],
-      "original_language": "ja",
       "spoken_languages": [
         {
           "iso": "ja",
@@ -10301,7 +10075,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "JP"
       ],
-      "original_language": "ja",
       "spoken_languages": [
         {
           "iso": "ja",
@@ -10339,7 +10112,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "JP"
       ],
-      "original_language": "ja",
       "spoken_languages": [
         {
           "iso": "ja",
@@ -10378,7 +10150,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "JP"
       ],
-      "original_language": "ja",
       "spoken_languages": [
         {
           "iso": "fr",
@@ -10400,7 +10171,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 149870,
       "imdb_id": "tt2013293",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "宫崎骏"
     },
     {
@@ -10428,7 +10199,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "JP"
       ],
-      "original_language": "ja",
       "spoken_languages": [
         {
           "iso": "ja",
@@ -10471,7 +10241,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10519,7 +10288,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10562,7 +10330,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10605,7 +10372,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10652,7 +10418,6 @@ window.MOVIE_DATA = {
         "US",
         "AU"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10695,7 +10460,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10735,7 +10499,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10778,7 +10541,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10822,7 +10584,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10832,7 +10593,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 330457,
       "imdb_id": "tt4520988",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "动画电影"
     },
     {
@@ -10862,7 +10623,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10876,7 +10636,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 508943,
       "imdb_id": "tt12801262",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": "动画电影"
     },
     {
@@ -10904,7 +10664,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10951,7 +10710,6 @@ window.MOVIE_DATA = {
         "AU",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -10961,7 +10719,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 76341,
       "imdb_id": "tt1392190",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -10993,7 +10751,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "AU"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -11003,7 +10760,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 8810,
       "imdb_id": "tt0082694",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -11035,7 +10792,6 @@ window.MOVIE_DATA = {
       "origin_country": [
         "AU"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -11045,7 +10801,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 9355,
       "imdb_id": "tt0089530",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -11082,7 +10838,6 @@ window.MOVIE_DATA = {
         "AU",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -11092,7 +10847,7 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 786892,
       "imdb_id": "tt12037194",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
     },
     {
@@ -11129,7 +10884,6 @@ window.MOVIE_DATA = {
         "AU",
         "US"
       ],
-      "original_language": "en",
       "spoken_languages": [
         {
           "iso": "en",
@@ -11139,1606 +10893,8 @@ window.MOVIE_DATA = {
       "found": true,
       "tmdb_id": 340023,
       "imdb_id": "tt4575512",
-      "mark": "unwatched",
+      "mark": "dropped",
       "group": null
-    },
-    {
-      "title": "Mad Max",
-      "name": "疯狂的麦克斯",
-      "original_name": "Mad Max",
-      "status": "Released",
-      "status_zh": "已上映",
-      "in_production": null,
-      "first_air_date": "",
-      "last_air_date": "",
-      "release_date": "1979-04-12",
-      "runtime": 91,
-      "vote_average": 6.682,
-      "poster": "https://image.tmdb.org/t/p/w200/dKrXmgXOh8kwcoM3innR5Epvmaa.jpg",
-      "last_episode": null,
-      "next_episode": null,
-      "latest_season": null,
-      "networks": [
-        "动作",
-        "惊悚",
-        "科幻"
-      ],
-      "collection": {
-        "id": 8945,
-        "name": "疯狂的麦克斯（系列）",
-        "name_zh": "疯狂的麦克斯（系列）"
-      },
-      "countries": [
-        {
-          "iso": "AU",
-          "name": "Australia"
-        }
-      ],
-      "origin_country": [
-        "AU"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "imdb_id": "tt0079501",
-      "tmdb_id": 9659,
-      "mark": "unwatched",
-      "group": null
-    },
-    {
-      "title": "Avatar",
-      "name": "阿凡达",
-      "original_name": "Avatar",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2009-12-16",
-      "runtime": 162,
-      "vote_average": 7.609,
-      "poster": "https://image.tmdb.org/t/p/w200/yTapYDvTQgxKUdilCYXRrGfpofj.jpg",
-      "networks": [
-        "科幻",
-        "动作",
-        "冒险"
-      ],
-      "collection": {
-        "id": 87096,
-        "name": "阿凡达（系列）",
-        "name_zh": "阿凡达（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        },
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "es",
-          "name": "Español"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 19995,
-      "imdb_id": "tt0499549",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Avatar：The Way of Water",
-      "name": "阿凡达：水之道",
-      "original_name": "Avatar: The Way of Water",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2022-12-14",
-      "runtime": 193,
-      "vote_average": 7.584,
-      "poster": "https://image.tmdb.org/t/p/w200/az6FndKaR11uuxnRQucKJ2mmglg.jpg",
-      "networks": [
-        "动作",
-        "冒险",
-        "科幻"
-      ],
-      "collection": {
-        "id": 87096,
-        "name": "阿凡达（系列）",
-        "name_zh": "阿凡达（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 76600,
-      "imdb_id": "tt1630029",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Avatar: Fire and Ash",
-      "name": "阿凡达：火与烬",
-      "original_name": "Avatar: Fire and Ash",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2025-12-17",
-      "runtime": 197,
-      "vote_average": 7.645,
-      "poster": "https://image.tmdb.org/t/p/w200/ngV9meip3kKZhqCofRPmM7jMZzs.jpg",
-      "networks": [
-        "科幻",
-        "冒险",
-        "奇幻"
-      ],
-      "collection": {
-        "id": 87096,
-        "name": "阿凡达（系列）",
-        "name_zh": "阿凡达（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 83533,
-      "imdb_id": "tt1757678",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Top Gun",
-      "name": "壮志凌云",
-      "original_name": "Top Gun",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1986-05-16",
-      "runtime": 110,
-      "vote_average": 7.072,
-      "poster": "https://image.tmdb.org/t/p/w200/iqM04MljgN7EQeM9zhqdO6kakX7.jpg",
-      "networks": [
-        "动作",
-        "剧情",
-        "爱情"
-      ],
-      "collection": {
-        "id": 531330,
-        "name": "壮志凌云（系列）",
-        "name_zh": "壮志凌云（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 744,
-      "imdb_id": "tt0092099",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Top Gun: Maverick",
-      "name": "壮志凌云2：独行侠",
-      "original_name": "Top Gun: Maverick",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2022-05-21",
-      "runtime": 131,
-      "vote_average": 8.157,
-      "poster": "https://image.tmdb.org/t/p/w200/aHniPlfAQykMFhmbUzfn5qtorC7.jpg",
-      "networks": [
-        "动作",
-        "剧情"
-      ],
-      "collection": {
-        "id": 531330,
-        "name": "壮志凌云（系列）",
-        "name_zh": "壮志凌云（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 361743,
-      "imdb_id": "tt1745960",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "The Godfather",
-      "name": "教父",
-      "original_name": "The Godfather",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1972-03-14",
-      "runtime": 175,
-      "vote_average": 8.686,
-      "poster": "https://image.tmdb.org/t/p/w200/y03tzUKvkRCYwJ5NWys4W4bnS9m.jpg",
-      "networks": [
-        "剧情",
-        "犯罪"
-      ],
-      "collection": {
-        "id": 230,
-        "name": "教父（系列）",
-        "name_zh": "教父（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "it",
-          "name": "Italiano"
-        },
-        {
-          "iso": "la",
-          "name": "Latin"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 238,
-      "imdb_id": "tt0068646",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "The Godfather: Part II",
-      "name": "教父2",
-      "original_name": "The Godfather Part II",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1974-12-20",
-      "runtime": 200,
-      "vote_average": 8.572,
-      "poster": "https://image.tmdb.org/t/p/w200/4J8jUmjgKPggRPJqqdkjWCj2k0D.jpg",
-      "networks": [
-        "剧情",
-        "犯罪"
-      ],
-      "collection": {
-        "id": 230,
-        "name": "教父（系列）",
-        "name_zh": "教父（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "it",
-          "name": "Italiano"
-        },
-        {
-          "iso": "la",
-          "name": "Latin"
-        },
-        {
-          "iso": "es",
-          "name": "Español"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 240,
-      "imdb_id": "tt0071562",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "The Godfather: Part III",
-      "name": "教父3",
-      "original_name": "The Godfather Part III",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1990-12-25",
-      "runtime": 162,
-      "vote_average": 7.418,
-      "poster": "https://image.tmdb.org/t/p/w200/p72l3ooMr3FWACrVxMJ1nXqWYr6.jpg",
-      "networks": [
-        "犯罪",
-        "剧情",
-        "惊悚"
-      ],
-      "collection": {
-        "id": 230,
-        "name": "教父（系列）",
-        "name_zh": "教父（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "it",
-          "name": "Italiano"
-        },
-        {
-          "iso": "de",
-          "name": "Deutsch"
-        },
-        {
-          "iso": "la",
-          "name": "Latin"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 242,
-      "imdb_id": "tt0099674",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Knives Out",
-      "name": "利刃出鞘",
-      "original_name": "Knives Out",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2019-11-27",
-      "runtime": 130,
-      "vote_average": 7.843,
-      "poster": "https://image.tmdb.org/t/p/w200/lyST2ENOPittfDEzcRUPd88uDd7.jpg",
-      "networks": [
-        "喜剧",
-        "犯罪",
-        "悬疑"
-      ],
-      "collection": {
-        "id": 722971,
-        "name": "利刃出鞘（系列）",
-        "name_zh": "利刃出鞘（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "es",
-          "name": "Español"
-        },
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 546554,
-      "imdb_id": "tt8946378",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Glass Onion: A Knives Out Mystery",
-      "name": "利刃出鞘2：抽丝剥茧",
-      "original_name": "Glass Onion: A Knives Out Mystery",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2022-11-23",
-      "runtime": 139,
-      "vote_average": 7.023,
-      "poster": "https://image.tmdb.org/t/p/w200/yCUAr9liJeqiD44iHEx9LuCp6ok.jpg",
-      "networks": [
-        "喜剧",
-        "犯罪",
-        "悬疑"
-      ],
-      "collection": {
-        "id": 722971,
-        "name": "利刃出鞘（系列）",
-        "name_zh": "利刃出鞘（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 661374,
-      "imdb_id": "tt11564570",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Wake Up Dead Man: A Knives Out Mystery",
-      "name": "利刃出鞘3：亡者归来",
-      "original_name": "Wake Up Dead Man: A Knives Out Mystery",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2025-11-26",
-      "runtime": 145,
-      "vote_average": 7.208,
-      "poster": "https://image.tmdb.org/t/p/w200/sjCFAMMcDwkiJHL8wAeoJ4gLSAr.jpg",
-      "networks": [
-        "惊悚",
-        "悬疑",
-        "喜剧"
-      ],
-      "collection": {
-        "id": 722971,
-        "name": "利刃出鞘（系列）",
-        "name_zh": "利刃出鞘（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 812583,
-      "imdb_id": "tt14364480",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Sherlock Holmes",
-      "name": "大侦探福尔摩斯",
-      "original_name": "Sherlock Holmes",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2009-12-23",
-      "runtime": 128,
-      "vote_average": 7.223,
-      "poster": "https://image.tmdb.org/t/p/w200/qZDlLFErloz1R3gTYAVPkr2wjiv.jpg",
-      "networks": [
-        "动作",
-        "冒险",
-        "悬疑"
-      ],
-      "collection": {
-        "id": 102322,
-        "name": "大侦探福尔摩斯（系列）",
-        "name_zh": "大侦探福尔摩斯（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        },
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        }
-      ],
-      "origin_country": [
-        "US",
-        "GB"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "fr",
-          "name": "Français"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 10528,
-      "imdb_id": "tt0988045",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Sherlock Holmes: A Game of Shadows",
-      "name": "大侦探福尔摩斯2：诡影游戏",
-      "original_name": "Sherlock Holmes: A Game of Shadows",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2011-11-22",
-      "runtime": 129,
-      "vote_average": 7.147,
-      "poster": "https://image.tmdb.org/t/p/w200/bcdtdmRsORS04Rhcy3k1Vflni4T.jpg",
-      "networks": [
-        "动作",
-        "冒险",
-        "悬疑"
-      ],
-      "collection": {
-        "id": 102322,
-        "name": "大侦探福尔摩斯（系列）",
-        "name_zh": "大侦探福尔摩斯（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 58574,
-      "imdb_id": "tt1515091",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Rise of the Planet of the Apes",
-      "name": "猩球崛起",
-      "original_name": "Rise of the Planet of the Apes",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2011-08-03",
-      "runtime": 105,
-      "vote_average": 7.353,
-      "poster": "https://image.tmdb.org/t/p/w200/54pptnrBIDuh9klyUSsn4DImvO9.jpg",
-      "networks": [
-        "惊悚",
-        "动作",
-        "剧情",
-        "科幻"
-      ],
-      "collection": {
-        "id": 173710,
-        "name": "猩球崛起（系列）",
-        "name_zh": "猩球崛起（系列）"
-      },
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 61791,
-      "imdb_id": "tt1318514",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Dawn of the Planet of the Apes",
-      "name": "猩球崛起2：黎明之战",
-      "original_name": "Dawn of the Planet of the Apes",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2014-07-08",
-      "runtime": 130,
-      "vote_average": 7.342,
-      "poster": "https://image.tmdb.org/t/p/w200/1OnUnJtq1WrE67YNn4TAAy352YN.jpg",
-      "networks": [
-        "科幻",
-        "动作",
-        "剧情",
-        "惊悚"
-      ],
-      "collection": {
-        "id": 173710,
-        "name": "猩球崛起（系列）",
-        "name_zh": "猩球崛起（系列）"
-      },
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 119450,
-      "imdb_id": "tt2103281",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Kick-Ass",
-      "name": "海扁王",
-      "original_name": "Kick-Ass",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2010-03-26",
-      "runtime": 118,
-      "vote_average": 7.124,
-      "poster": "https://image.tmdb.org/t/p/w200/byoEGXaQYHQw7xJbMG6jhhmTLPr.jpg",
-      "networks": [
-        "动作",
-        "犯罪"
-      ],
-      "collection": {
-        "id": 179892,
-        "name": "海扁王（系列）",
-        "name_zh": "海扁王（系列）"
-      },
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 23483,
-      "imdb_id": "tt1250777",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Kick-Ass 2",
-      "name": "海扁王2",
-      "original_name": "Kick-Ass 2",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2013-07-17",
-      "runtime": 103,
-      "vote_average": 6.405,
-      "poster": "https://image.tmdb.org/t/p/w200/rydDxelHmRilf6Pl028aAe1DPBt.jpg",
-      "networks": [
-        "动作",
-        "冒险",
-        "犯罪"
-      ],
-      "collection": {
-        "id": 179892,
-        "name": "海扁王（系列）",
-        "name_zh": "海扁王（系列）"
-      },
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "GB",
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 59859,
-      "imdb_id": "tt1650554",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Downton Abbey",
-      "name": "唐顿庄园",
-      "original_name": "Downton Abbey",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2019-09-12",
-      "runtime": 122,
-      "vote_average": 7.152,
-      "poster": "https://image.tmdb.org/t/p/w200/dqiEciKh2jbxecwVDDU4QE2EGLv.jpg",
-      "networks": [
-        "剧情",
-        "爱情",
-        "历史"
-      ],
-      "collection": {
-        "id": 925006,
-        "name": "唐顿庄园（系列）",
-        "name_zh": "唐顿庄园（系列）"
-      },
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "GB"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 535544,
-      "imdb_id": "tt6398184",
-      "mark": "unwatched",
-      "group": null
-    },
-    {
-      "title": "Downton Abbey: A New Era",
-      "name": "唐顿庄园2",
-      "original_name": "Downton Abbey: A New Era",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2022-04-27",
-      "runtime": 120,
-      "vote_average": 7.2,
-      "poster": "https://image.tmdb.org/t/p/w200/4aYzJHk3D0i12rpB4IEjEbJF4Gh.jpg",
-      "networks": [
-        "剧情",
-        "爱情"
-      ],
-      "collection": {
-        "id": 925006,
-        "name": "唐顿庄园（系列）",
-        "name_zh": "唐顿庄园（系列）"
-      },
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "GB"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "fr",
-          "name": "Français"
-        },
-        {
-          "iso": "pt",
-          "name": "Português"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 820446,
-      "imdb_id": "tt11703710",
-      "mark": "unwatched",
-      "group": null
-    },
-    {
-      "title": "Dune",
-      "name": "沙丘",
-      "original_name": "Dune",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2021-09-15",
-      "runtime": 156,
-      "vote_average": 7.784,
-      "poster": "https://image.tmdb.org/t/p/w200/6hsJknqlPceFxExOe87z5VGgNG9.jpg",
-      "networks": [
-        "科幻",
-        "冒险"
-      ],
-      "collection": {
-        "id": 726871,
-        "name": "沙丘（系列）",
-        "name_zh": "沙丘（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 438631,
-      "imdb_id": "tt1160419",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Dune: Part Two",
-      "name": "沙丘2",
-      "original_name": "Dune: Part Two",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2024-02-27",
-      "runtime": 166,
-      "vote_average": 8.135,
-      "poster": "https://image.tmdb.org/t/p/w200/9uaCR4HEZqxUqgORq0uZqTNm43G.jpg",
-      "networks": [
-        "科幻",
-        "冒险"
-      ],
-      "collection": {
-        "id": 726871,
-        "name": "沙丘（系列）",
-        "name_zh": "沙丘（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 693134,
-      "imdb_id": "tt15239678",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Now You See Me",
-      "name": "惊天魔盗团",
-      "original_name": "Now You See Me",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2013-05-29",
-      "runtime": 115,
-      "vote_average": 7.326,
-      "poster": "https://image.tmdb.org/t/p/w200/msyRoSgpO7hbq1oK646MRoS4ASN.jpg",
-      "networks": [
-        "惊悚",
-        "犯罪"
-      ],
-      "collection": {
-        "id": 382685,
-        "name": "惊天魔盗团（系列）",
-        "name_zh": "惊天魔盗团（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        },
-        {
-          "iso": "FR",
-          "name": "France"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "fr",
-          "name": "Français"
-        },
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 75656,
-      "imdb_id": "tt1670345",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Now You See Me 2",
-      "name": "惊天魔盗团2",
-      "original_name": "Now You See Me 2",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2016-06-02",
-      "runtime": 115,
-      "vote_average": 6.823,
-      "poster": "https://image.tmdb.org/t/p/w200/cNKpcoqjXIW2NKTLWD72bE5RUZl.jpg",
-      "networks": [
-        "犯罪",
-        "惊悚"
-      ],
-      "collection": {
-        "id": 382685,
-        "name": "惊天魔盗团（系列）",
-        "name_zh": "惊天魔盗团（系列）"
-      },
-      "countries": [
-        {
-          "iso": "HK",
-          "name": "Hong Kong"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "cn",
-          "name": "广州话 / 廣州話"
-        },
-        {
-          "iso": "zh",
-          "name": "普通话"
-        },
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 291805,
-      "imdb_id": "tt3110958",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Now You See Me: Now You Don't",
-      "name": "惊天魔盗团3",
-      "original_name": "Now You See Me: Now You Don't",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2025-11-12",
-      "runtime": 112,
-      "vote_average": 6.463,
-      "poster": "https://image.tmdb.org/t/p/w200/ew4YPi9d0korzDmAOC9N1SCjYp0.jpg",
-      "networks": [
-        "犯罪",
-        "惊悚"
-      ],
-      "collection": {
-        "id": 382685,
-        "name": "惊天魔盗团（系列）",
-        "name_zh": "惊天魔盗团（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 425274,
-      "imdb_id": "tt4712810",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Shaun of the Dead",
-      "name": "僵尸肖恩",
-      "original_name": "Shaun of the Dead",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2004-04-09",
-      "runtime": 99,
-      "vote_average": 7.545,
-      "poster": "https://image.tmdb.org/t/p/w200/wuzSDP5pWjBvZo0XpmcS4xrjzZf.jpg",
-      "networks": [
-        "恐怖",
-        "喜剧"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        }
-      ],
-      "origin_country": [
-        "GB"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 747,
-      "imdb_id": "tt0365748",
-      "mark": "finished",
-      "group": "可爱多三部曲"
-    },
-    {
-      "title": "Hot Fuzz",
-      "name": "热血警探",
-      "original_name": "Hot Fuzz",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2007-02-14",
-      "runtime": 121,
-      "vote_average": 7.57,
-      "poster": "https://image.tmdb.org/t/p/w200/rqxwQH1jwIyJFmWJ7zZGc1CwAXL.jpg",
-      "networks": [
-        "犯罪",
-        "动作",
-        "喜剧"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "FR",
-          "name": "France"
-        },
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        }
-      ],
-      "origin_country": [
-        "GB"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 4638,
-      "imdb_id": "tt0425112",
-      "mark": "finished",
-      "group": "可爱多三部曲"
-    },
-    {
-      "title": "Lucy",
-      "name": "超体",
-      "original_name": "Lucy",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "2014-07-25",
-      "runtime": 89,
-      "vote_average": 6.476,
-      "poster": "https://image.tmdb.org/t/p/w200/366Hd36QWNyUh4LW44EloWluV66.jpg",
-      "networks": [
-        "动作",
-        "科幻"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "FR",
-          "name": "France"
-        }
-      ],
-      "origin_country": [
-        "FR"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "zh",
-          "name": "普通话"
-        },
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "fr",
-          "name": "Français"
-        },
-        {
-          "iso": "es",
-          "name": "Español"
-        },
-        {
-          "iso": "ko",
-          "name": "한국어/조선말"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 240832,
-      "imdb_id": "tt2872732",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Roman Holiday",
-      "name": "罗马假日",
-      "original_name": "Roman Holiday",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1953-08-26",
-      "runtime": 119,
-      "vote_average": 7.892,
-      "poster": "https://image.tmdb.org/t/p/w200/aeBMNasmLkeegbIVQYCmSVZMgRc.jpg",
-      "networks": [
-        "爱情",
-        "喜剧",
-        "剧情"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "it",
-          "name": "Italiano"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 804,
-      "imdb_id": "tt0046250",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Witness for the Prosecution",
-      "name": "控方证人",
-      "original_name": "Witness for the Prosecution",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1957-12-17",
-      "runtime": 116,
-      "vote_average": 8.21,
-      "poster": "https://image.tmdb.org/t/p/w200/wye3YonBnbXEmfFWMHcf2mZgPRv.jpg",
-      "networks": [
-        "剧情",
-        "悬疑",
-        "犯罪"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "de",
-          "name": "Deutsch"
-        },
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 37257,
-      "imdb_id": "tt0051201",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "One Flew Over the Cuckoo's Nest",
-      "name": "飞越疯人院",
-      "original_name": "One Flew Over the Cuckoo's Nest",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1975-11-19",
-      "runtime": 135,
-      "vote_average": 8.406,
-      "poster": "https://image.tmdb.org/t/p/w200/iAUJA80BI8nsvN8TgeZSzm4tIdc.jpg",
-      "networks": [
-        "剧情"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 510,
-      "imdb_id": "tt0073486",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "Rocky",
-      "name": "洛奇",
-      "original_name": "Rocky",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1976-12-03",
-      "runtime": 120,
-      "vote_average": 7.799,
-      "poster": "https://image.tmdb.org/t/p/w200/nMOp5SRMVpy16knW1I24TSResxu.jpg",
-      "networks": [
-        "剧情"
-      ],
-      "collection": {
-        "id": 1575,
-        "name": "洛奇（系列）",
-        "name_zh": "洛奇（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "it",
-          "name": "Italiano"
-        },
-        {
-          "iso": "es",
-          "name": "Español"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 1366,
-      "imdb_id": "tt0075148",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "First Blood",
-      "name": "第一滴血",
-      "original_name": "First Blood",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1982-10-22",
-      "runtime": 93,
-      "vote_average": 7.518,
-      "poster": "https://image.tmdb.org/t/p/w200/cWFYBNWmj1ymG9onnSEW7ndhEY.jpg",
-      "networks": [
-        "动作",
-        "惊悚",
-        "剧情"
-      ],
-      "collection": {
-        "id": 5039,
-        "name": "第一滴血（系列）",
-        "name_zh": "第一滴血（系列）"
-      },
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        },
-        {
-          "iso": "AN",
-          "name": "Netherlands Antilles"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 1368,
-      "imdb_id": "tt0083944",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "The Goonies",
-      "name": "七宝奇谋",
-      "original_name": "The Goonies",
-      "status": "Released",
-      "status_zh": "已上映",
-      "release_date": "1985-06-07",
-      "runtime": 114,
-      "vote_average": 7.512,
-      "poster": "https://image.tmdb.org/t/p/w200/jdB4Z6TLO5wqro2u73r3GMNPjVV.jpg",
-      "networks": [
-        "冒险",
-        "喜剧",
-        "家庭"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        },
-        {
-          "iso": "it",
-          "name": "Italiano"
-        },
-        {
-          "iso": "es",
-          "name": "Español"
-        },
-        {
-          "iso": "cn",
-          "name": "广州话 / 廣州話"
-        }
-      ],
-      "found": true,
-      "tmdb_id": 9340,
-      "imdb_id": "tt0089218",
-      "mark": "finished",
-      "group": null
-    },
-    {
-      "title": "The World's End",
-      "name": "世界尽头",
-      "original_name": "The World's End",
-      "status": "Released",
-      "status_zh": "已上映",
-      "in_production": null,
-      "first_air_date": "",
-      "last_air_date": "",
-      "release_date": "2013-07-18",
-      "runtime": 109,
-      "vote_average": 6.81,
-      "poster": "https://image.tmdb.org/t/p/w200/763WCuiCXAiHIzouJrcagMekXRK.jpg",
-      "last_episode": null,
-      "next_episode": null,
-      "latest_season": null,
-      "networks": [
-        "喜剧",
-        "动作",
-        "科幻"
-      ],
-      "collection": null,
-      "countries": [
-        {
-          "iso": "GB",
-          "name": "United Kingdom"
-        },
-        {
-          "iso": "US",
-          "name": "United States of America"
-        }
-      ],
-      "origin_country": [
-        "GB"
-      ],
-      "original_language": "en",
-      "spoken_languages": [
-        {
-          "iso": "en",
-          "name": "English"
-        }
-      ],
-      "found": true,
-      "imdb_id": "tt1213663",
-      "tmdb_id": 107985,
-      "mark": "finished",
-      "group": "可爱多三部曲"
     }
   ]
 };

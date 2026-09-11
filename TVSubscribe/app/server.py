@@ -148,6 +148,9 @@ def save_entries(entries, kind="tv"):
                 "networks": e.get("networks") or [],
                 "collection": e.get("collection"),
                 "countries": e.get("countries"),
+                "origin_country": e.get("origin_country"),
+                "original_language": e.get("original_language"),
+                "spoken_languages": e.get("spoken_languages"),
                 "found": True,
             }
         candidate_imdb = (e.get("imdb_id") or "").strip()
@@ -159,6 +162,12 @@ def save_entries(entries, kind="tv"):
             item["collection"] = e.get("collection")
         if e.get("countries"):
             item["countries"] = e.get("countries")
+        if e.get("origin_country"):
+            item["origin_country"] = e.get("origin_country")
+        if e.get("original_language"):
+            item["original_language"] = e.get("original_language")
+        if e.get("spoken_languages"):
+            item["spoken_languages"] = e.get("spoken_languages")
         item["mark"] = (e.get("mark") or "").strip() or None
         item["group"] = (e.get("group") or "").strip() or None
         new_list.append(item)
@@ -315,11 +324,13 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/api/refresh":
             kind = "tv"
             only_unfetched = False
+            item = ""
             try:
                 if raw:
                     body = json.loads(raw.decode("utf-8"))
                     kind = body.get("kind") or "tv"
                     only_unfetched = bool(body.get("only_unfetched"))
+                    item = (body.get("item") or "").strip()
             except Exception:
                 pass
             if kind not in ("tv", "movie"):
@@ -329,7 +340,8 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 sys.argv = ["fetch_tv.py"] \
                     + (["--movies"] if kind == "movie" else []) \
-                    + (["--only-unfetched"] if only_unfetched else [])
+                    + (["--only-unfetched"] if only_unfetched else []) \
+                    + ([item] if item else [])
                 with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
                     ft.main()
                 self.send_json(200, {"ok": True, "log": buf.getvalue()})

@@ -33,6 +33,11 @@
       } catch (e) { /* 忽略 */ }
     })();
   </script>
+  <div class="searchbar" id="searchbar">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" id="search-input" placeholder="搜索片名 / 中文名（中英文模糊匹配）" autocomplete="off">
+    <button type="button" id="search-clear" class="search-clear" title="清空搜索" hidden>×</button>
+  </div>
   <div class="toolbar">
     <label class="field" id="status-field">
       <span class="field-label">状态</span>
@@ -45,6 +50,7 @@
       <select id="filter-mark">
         <option value="">全部</option>
         <option value="none">未标记</option>
+        <option value="unwatched" id="mark-filter-unwatched">未观看</option>
         <option value="finished" id="mark-filter-finished">已追完</option>
         <option value="dropped" id="mark-filter-dropped">已弃剧</option>
       </select>
@@ -56,7 +62,7 @@
       </select>
     </label>
     <label class="field" id="origin-field" hidden>
-      <span class="field-label">地区</span>
+      <span class="field-label">语言</span>
       <select id="filter-origin">
         <option value="">全部</option>
         <option value="chinese">华语</option>
@@ -151,26 +157,32 @@
       <h2 id="mark-label">标记</h2>
       <div class="mark-options">
         <button type="button" class="mark-opt" data-mark="">未标记</button>
+        <button type="button" class="mark-opt" data-mark="unwatched" id="mark-opt-unwatched">未观看</button>
         <button type="button" class="mark-opt" data-mark="finished" id="mark-opt-finished">已追完</button>
         <button type="button" class="mark-opt" data-mark="dropped" id="mark-opt-dropped">已弃剧</button>
       </div>
     </div>
   </div>
   <div class="overlay" id="group-overlay" hidden>
-    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="group-label">
+    <div class="dialog dialog-group" role="dialog" aria-modal="true" aria-labelledby="group-label">
       <h2 id="group-label">电影分组</h2>
       <p class="group-hint" id="group-hint"></p>
-      <label class="dlg-field">加入已有分组
-        <select id="group-select"></select>
-      </label>
-      <label class="dlg-field">或输入新组名
+      <label class="dlg-field">输入新组名或搜索已有分组
         <input type="text" id="group-input" placeholder="如 加勒比海盗系列">
       </label>
+      <div class="group-list" id="group-list"></div>
       <div class="dlg-actions group-actions">
         <button type="button" id="group-dismiss" class="tb-btn">移出分组</button>
         <button type="button" id="group-cancel" class="tb-btn">取消</button>
         <button type="button" id="group-confirm" class="tb-btn tb-btn-primary">加入</button>
       </div>
+    </div>
+  </div>
+  <div class="overlay" id="confirm-overlay" hidden>
+    <div class="dialog dialog-confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <h2 id="confirm-title"></h2>
+      <p class="confirm-msg" id="confirm-msg"></p>
+      <div class="dlg-actions" id="confirm-actions"></div>
     </div>
   </div>
   <div class="overlay" id="import-overlay" hidden>
