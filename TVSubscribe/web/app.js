@@ -81,7 +81,6 @@
   var btnEdit = document.getElementById("btn-edit");
   var editorRow = document.getElementById("editor-row");
   var btnGroup = document.getElementById("btn-group");
-  var groupViewField = document.getElementById("group-view-field");
   var groupViewSel = document.getElementById("group-view");
   var groupOverlay = document.getElementById("group-overlay");
   var groupLabel = document.getElementById("group-label");
@@ -1028,7 +1027,7 @@
     }
 
     names.forEach(function (n) { appendBlock(n, byName[n]); });
-    if (ungrouped.length) appendBlock("未分组", ungrouped);
+    if (ungrouped.length) appendBlock("默认分组", ungrouped);
   }
 
   /* ---------- 添加弹窗（搜索 → 预览 → 确认） ---------- */
