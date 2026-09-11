@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "username": "xiaolongbao",
+      "role": "admin",
+      "salt": "115d1aa40ca761e6aef37918fc427fed",
+      "hash": "391386f2f64f008d9b488cef2e4c1cd9a4a7dc314afab7896e9306832d8767e7",
+      "created_at": "2026-09-11 14:17:39"
+    }
+  ]
+}

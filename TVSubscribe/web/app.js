@@ -111,6 +111,23 @@
   var markFilterFinished = document.getElementById("mark-filter-finished");
   var markFilterDropped = document.getElementById("mark-filter-dropped");
   var markFilterUnwatched = document.getElementById("mark-filter-unwatched");
+  var btnSettings = document.getElementById("btn-settings");
+  var settingsLogout = document.getElementById("settings-logout");
+  var settingsUserName = document.getElementById("settings-user-name");
+  var settingsRole = document.getElementById("settings-role");
+  var settingsAvatar = document.getElementById("settings-avatar");
+  var settingsUsersSection = document.getElementById("settings-users-section");
+  var settingsUpdatedTv = document.getElementById("settings-updated-tv");
+  var settingsUpdatedMovie = document.getElementById("settings-updated-movie");
+  var settingsRefreshTv = document.getElementById("settings-refresh-tv");
+  var settingsRefreshMovie = document.getElementById("settings-refresh-movie");
+  var settingsOverlay = document.getElementById("settings-overlay");
+  var settingsAddName = document.getElementById("settings-add-name");
+  var settingsAddPass = document.getElementById("settings-add-pass");
+  var settingsAddBtn = document.getElementById("settings-add-btn");
+  var settingsError = document.getElementById("settings-error");
+  var settingsUserList = document.getElementById("settings-user-list");
+  var settingsClose = document.getElementById("settings-close");
   var overlay = document.getElementById("add-overlay");
   var markOverlay = document.getElementById("mark-overlay");
   var markLabel = document.getElementById("mark-label");
@@ -282,6 +299,10 @@
       body: JSON.stringify({ entries: entries, kind: kind })
     })
       .then(function (r) {
+        if (r.status === 401) {
+          redirectToLogin();
+          throw new Error("登录已失效");
+        }
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
@@ -651,6 +672,148 @@
     if (openRingPop && !openRingPop.contains(ev.target)) closeRingPop();
   });
 
+  /* ---------- 登录用户与用户管理（仅管理员可管理） ---------- */
+  var currentUser = null;
+
+  function redirectToLogin() {
+    window.location.href = "/login.html";
+  }
+
+  /* 统一 fetch：401 一律跳登录页；非 2xx 抛出后端 error 信息 */
+  function requestJSON(url, opts) {
+    return fetch(url, opts).then(function (r) {
+      if (r.status === 401) {
+        redirectToLogin();
+        throw new Error("登录已失效");
+      }
+      return r.json().then(function (j) {
+        if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+        return j;
+      });
+    });
+  }
+
+  function applyUserUI() {
+    if (!currentUser) return;
+    settingsUserName.textContent = currentUser.username;
+    settingsAvatar.textContent = (currentUser.username || "?").charAt(0).toUpperCase();
+    settingsRole.textContent = currentUser.is_admin ? "管理员" : "用户";
+    settingsUsersSection.hidden = !currentUser.is_admin;
+  }
+
+  function bootstrapUser() {
+    fetch("/api/me").then(function (r) {
+      if (r.status === 401) {
+        redirectToLogin();
+        return null;
+      }
+      return r.json();
+    }).then(function (info) {
+      if (!info) return;
+      currentUser = info;
+      applyUserUI();
+    });
+  }
+
+  function doLogout() {
+    fetch("/api/logout", { method: "POST" }).then(redirectToLogin).catch(redirectToLogin);
+  }
+
+  function settingsFlash(msg) {
+    settingsError.textContent = msg;
+    settingsError.hidden = false;
+  }
+
+  function loadSettingsUsers() {
+    requestJSON("/api/users").then(function (j) {
+      renderSettingsUsers(j.users || []);
+    }).catch(function (e) {
+      settingsFlash("加载用户失败：" + e.message);
+    });
+  }
+
+  function renderSettingsUsers(users) {
+    settingsUserList.innerHTML = "";
+    users.forEach(function (u) {
+      var row = el("div", "settings-user");
+      row.appendChild(el("span", "settings-user-name", u.username));
+      row.appendChild(el("span", "settings-user-role", u.role === "admin" ? "管理员" : "用户"));
+      if (u.role !== "admin") {
+        var del = el("button", "tb-btn settings-user-del", "删除");
+        del.type = "button";
+        del.addEventListener("click", function () {
+          if (!window.confirm("确认删除用户「" + u.username + "」？\n该用户的订阅数据文件会保留在服务器上。")) return;
+          requestJSON("/api/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "delete", username: u.username })
+          }).then(function () {
+            settingsFlash("已删除用户「" + u.username + "」");
+            loadSettingsUsers();
+          }).catch(function (e) { settingsFlash(e.message); });
+        });
+        row.appendChild(del);
+      }
+      var reset = el("button", "tb-btn settings-user-reset", "重置密码");
+      reset.type = "button";
+      reset.addEventListener("click", function () {
+        var np = window.prompt("为「" + u.username + "」设置新密码（至少 6 位）");
+        if (np == null) return;
+        if (np.length < 6) {
+          settingsFlash("密码至少 6 位");
+          return;
+        }
+        requestJSON("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "reset_password", username: u.username, password: np })
+        }).then(function () {
+          if (currentUser && u.username === currentUser.username) {
+            window.alert("管理员密码已修改，请重新登录。");
+            redirectToLogin();
+            return;
+          }
+          settingsFlash("已重置「" + u.username + "」的密码");
+        }).catch(function (e) { settingsFlash(e.message); });
+      });
+      row.appendChild(reset);
+      settingsUserList.appendChild(row);
+    });
+  }
+
+  function openSettings() {
+    settingsError.hidden = true;
+    settingsAddName.value = "";
+    settingsAddPass.value = "";
+    settingsUpdatedTv.textContent = SOURCES.tv.generated_at || "—";
+    settingsUpdatedMovie.textContent = SOURCES.movie.generated_at || "—";
+    if (currentUser && currentUser.is_admin) loadSettingsUsers();
+    settingsOverlay.hidden = false;
+  }
+
+  function closeSettings() {
+    settingsOverlay.hidden = true;
+  }
+
+  function addSettingsUser() {
+    var name = settingsAddName.value.trim();
+    var pass = settingsAddPass.value;
+    if (!name || !pass) {
+      settingsFlash("请填写用户名和密码");
+      return;
+    }
+    requestJSON("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "add", username: name, password: pass })
+    }).then(function () {
+      settingsFlash("已添加用户「" + name + "」，对方即可登录使用（数据独立）");
+      settingsAddName.value = "";
+      settingsAddPass.value = "";
+      loadSettingsUsers();
+    }).catch(function (e) { settingsFlash(e.message); });
+  }
+
   /* ---------- 筛选与排序 ---------- */
   function resetFilterOptions() {
     statusSel.innerHTML = "";
@@ -915,6 +1078,10 @@
     searchHint.textContent = "搜索中…";
     fetch("/api/search?q=" + encodeURIComponent(q) + "&kind=" + kind)
       .then(function (r) {
+        if (r.status === 401) {
+          redirectToLogin();
+          throw new Error("登录已失效");
+        }
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
@@ -1610,8 +1777,8 @@
     if (inputTitle.value) doSearch();
   }
 
-  function runRefresh(onlyUnfetched) {
-    requestRefresh({ kind: kind, only_unfetched: onlyUnfetched })
+  function runRefresh(onlyUnfetched, refKind) {
+    requestRefresh({ kind: refKind || kind, only_unfetched: onlyUnfetched })
       .then(function (res) {
         var tail = (res.log || "").split("\n").slice(-3).join("\n");
         if (res.ok) {
@@ -1640,6 +1807,17 @@
     });
   }
 
+  /* 设置页：指定分类刷新（tv / movie） */
+  function refreshKindConfirm(refKind) {
+    var c = KIND_CFG[refKind];
+    showDialog("更新" + c.itemLabel + "数据", c.refreshConfirm, [
+      { label: "取消", value: false },
+      { label: "开始更新", value: true, primary: true }
+    ]).then(function (ok) {
+      if (ok) runRefresh(false, refKind);
+    });
+  }
+
   /* ---------- 事件绑定 ---------- */
   function bindEvents() {
     tabs.querySelectorAll(".tab-btn").forEach(function (b) {
@@ -1662,6 +1840,15 @@
     });
     groupViewSel.addEventListener("change", render);
     btnGroup.addEventListener("click", openGroupDialog);
+    btnSettings.addEventListener("click", openSettings);
+    settingsLogout.addEventListener("click", doLogout);
+    settingsClose.addEventListener("click", closeSettings);
+    settingsAddBtn.addEventListener("click", addSettingsUser);
+    settingsRefreshTv.addEventListener("click", function () { refreshKindConfirm("tv"); });
+    settingsRefreshMovie.addEventListener("click", function () { refreshKindConfirm("movie"); });
+    settingsOverlay.addEventListener("click", function (ev) {
+      if (ev.target === settingsOverlay) closeSettings();
+    });
     btnGroupConfirm.addEventListener("click", confirmGroup);
     btnGroupDismiss.addEventListener("click", dismissGroup);
     btnGroupCancel.addEventListener("click", closeGroupDialog);
@@ -1724,6 +1911,7 @@
       if (ev.key === "Escape") {
         if (!markOverlay.hidden) closeMarkDialog();
         if (!groupOverlay.hidden) closeGroupDialog();
+        if (!settingsOverlay.hidden) closeSettings();
         if (!confirmOverlay.hidden) closeConfirmOverlay(null);
         if (!importOverlay.hidden) closeImportDialog();
         if (!overlay.hidden) closeDialog();
@@ -1763,4 +1951,5 @@
   bindEvents();
   applyEditModeUI();
   render();
+  bootstrapUser();
 })();

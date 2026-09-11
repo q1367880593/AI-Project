@@ -1,0 +1,14 @@
+services:
+  tvsubscribe:
+    image: python:3.13-slim
+    container_name: tvsubscribe
+    working_dir: /opt/tvsubscribe
+    command: ["python3", "app/server.py", "--no-open"]
+    volumes:
+      # 代码只读；数据目录可写，容器重建数据不丢
+      - ./app:/opt/tvsubscribe/app:ro
+      - ./web:/opt/tvsubscribe/web:ro
+      - ./data:/opt/tvsubscribe/data
+    ports:
+      - "38765:38765"
+    restart: unless-stopped

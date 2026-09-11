@@ -524,7 +524,8 @@
       "title": "The Bear",
       "imdb_id": "tt14452776",
       "name_zh": "熊家餐馆",
-      "mark": "dropped"
+      "mark": "dropped",
+      "watched_seasons": 1
     },
     {
       "title": "Les 7 vies de Léa",
@@ -622,7 +623,8 @@
       "title": "Clarkson's Farm",
       "imdb_id": "tt10541088",
       "name_zh": "克拉克森的农场",
-      "mark": "unwatched"
+      "mark": "unwatched",
+      "watched_seasons": 4
     },
     {
       "title": "Agatha All Along",

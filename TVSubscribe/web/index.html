@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>影视订阅</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="icon" type="image/png" sizes="128x128" href="favicon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>影视订阅</h1>
     <p class="tagline" id="tagline"></p>
+    <button type="button" id="btn-settings" class="icon-btn" title="设置" aria-label="设置">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    </button>
   </header>
   <nav class="tabs" id="tabs" role="tablist">
     <button type="button" class="tab-btn active" data-kind="tv" role="tab" aria-selected="true">剧集</button>
@@ -193,6 +194,43 @@
       <div class="dlg-actions">
         <button type="button" id="import-cancel" class="tb-btn">取消</button>
         <button type="button" id="import-confirm" class="tb-btn tb-btn-primary">导入</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="settings-overlay" hidden>
+    <div class="dialog dialog-settings" role="dialog" aria-modal="true" aria-labelledby="settings-label">
+      <h2 id="settings-label">设置</h2>
+      <section class="settings-section">
+        <h3>账号</h3>
+        <div class="settings-account">
+          <span class="settings-avatar" id="settings-avatar"></span>
+          <span class="settings-name" id="settings-user-name"></span>
+          <span class="settings-user-role" id="settings-role"></span>
+          <button type="button" id="settings-logout" class="tb-btn">退出登录</button>
+        </div>
+      </section>
+      <section class="settings-section" id="settings-users-section" hidden>
+        <h3>用户管理</h3>
+        <div class="settings-add">
+          <input type="text" id="settings-add-name" placeholder="新用户名（字母数字 _-）" autocomplete="off">
+          <input type="password" id="settings-add-pass" placeholder="密码（至少 6 位）" autocomplete="new-password">
+          <button type="button" id="settings-add-btn" class="tb-btn tb-btn-primary">添加</button>
+        </div>
+        <p class="settings-error" id="settings-error" hidden></p>
+        <div class="settings-list" id="settings-user-list"></div>
+      </section>
+      <section class="settings-section">
+        <h3>数据</h3>
+        <p class="settings-info">数据来源 TMDB（经服务端代理抓取）</p>
+        <div class="settings-info">剧集更新：<span id="settings-updated-tv">—</span></div>
+        <div class="settings-info">电影更新：<span id="settings-updated-movie">—</span></div>
+        <div class="settings-actions">
+          <button type="button" id="settings-refresh-tv" class="tb-btn">更新剧集数据</button>
+          <button type="button" id="settings-refresh-movie" class="tb-btn">更新电影数据</button>
+        </div>
+      </section>
+      <div class="dlg-actions">
+        <button type="button" id="settings-close" class="tb-btn">关闭</button>
       </div>
     </div>
   </div>

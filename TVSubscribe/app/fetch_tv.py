@@ -10,6 +10,7 @@ import json
 import os
 import re
 import sys
+import threading
 import time
 import urllib.parse
 import urllib.request
@@ -25,6 +26,48 @@ SHOWS_PATH = os.path.join(ROOT, "data", "shows.json")
 OUTPUT_PATH = os.path.join(ROOT, "web", "data.js")
 MOVIES_PATH = os.path.join(ROOT, "data", "movies.json")
 MOVIE_OUTPUT_PATH = os.path.join(ROOT, "web", "movies_data.js")
+
+# 多用户目录：data/users/<用户名>/shows.json、movies.json、data.js、movies_data.js
+USERS_DIR = os.path.join(ROOT, "data", "users")
+DEFAULT_USER = "xiaolongbao"   # 直接命令行抓取时默认归属的用户
+
+# 线程级当前用户：server.py 在处理请求时会 set_active_user / clear_active_user，
+# 保证并发请求互不串数据；命令行单独运行则回退 DEFAULT_USER / 旧版全局路径。
+_tls = threading.local()
+
+
+def set_active_user(username):
+    _tls.active_user = username
+
+
+def clear_active_user():
+    _tls.active_user = None
+
+
+def active_user():
+    return getattr(_tls, "active_user", None) or None
+
+
+def user_dir(username):
+    return os.path.join(USERS_DIR, username)
+
+
+def user_cfg_path(username, kind):
+    return os.path.join(user_dir(username), "movies.json" if kind == "movie" else "shows.json")
+
+
+def user_data_path(username, kind):
+    return os.path.join(user_dir(username), "movies_data.js" if kind == "movie" else "data.js")
+
+
+def resolve_paths(kind):
+    """返回 (cfg_path, data_path)：优先线程级用户，其次默认用户（目录存在时），否则旧版全局路径。"""
+    u = active_user() or DEFAULT_USER
+    if u and os.path.isdir(user_dir(u)):
+        return user_cfg_path(u, kind), user_data_path(u, kind)
+    if kind == "movie":
+        return MOVIES_PATH, MOVIE_OUTPUT_PATH
+    return SHOWS_PATH, OUTPUT_PATH
 
 STATUS_ZH = {
     "Returning Series": "在播",
@@ -404,8 +447,7 @@ def main():
     only_unfetched = "--only-unfetched" in args
     args = [a for a in args if a != "--only-unfetched"]
 
-    cfg_path = MOVIES_PATH if kind == "movie" else SHOWS_PATH
-    data_path = MOVIE_OUTPUT_PATH if kind == "movie" else OUTPUT_PATH
+    cfg_path, data_path = resolve_paths(kind)
     var_name = "MOVIE_DATA" if kind == "movie" else "TV_DATA"
     label = "电影" if kind == "movie" else "剧集"
 

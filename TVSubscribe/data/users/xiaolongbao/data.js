@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-11 13:48:40",
+  "generated_at": "2026-09-11 13:59:35",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -2499,7 +2499,8 @@ window.TV_DATA = {
       "tmdb_id": 136315,
       "imdb_id": "tt14452776",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Les 7 vies de Léa",
@@ -2982,7 +2983,8 @@ window.TV_DATA = {
       "tmdb_id": 117648,
       "imdb_id": "tt10541088",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "Agatha All Along",

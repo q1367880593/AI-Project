@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>登录 · TVSubscribe</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <h1 class="login-title">TVSubscribe</h1>
+    <p class="login-sub">登录后管理你的剧集与电影订阅</p>
+    <label class="dlg-field"><span>用户名</span>
+      <input type="text" id="login-username" autocomplete="username" autofocus>
+    </label>
+    <label class="dlg-field"><span>密码</span>
+      <input type="password" id="login-password" autocomplete="current-password">
+    </label>
+    <p class="login-error" id="login-error" hidden></p>
+    <button type="button" id="login-btn" class="tb-btn tb-btn-primary login-btn">登 录</button>
+  </div>
+  <script>
+    (function () {
+      var u = document.getElementById("login-username");
+      var p = document.getElementById("login-password");
+      var err = document.getElementById("login-error");
+      var btn = document.getElementById("login-btn");
+      function submit() {
+        if (btn.disabled) return;
+        err.hidden = true;
+        btn.disabled = true;
+        fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: u.value.trim(), password: p.value })
+        }).then(function (r) {
+          return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+        }).then(function (res) {
+          if (res.ok) {
+            window.location.href = "/";
+            return;
+          }
+          err.textContent = res.j.error || "登录失败";
+          err.hidden = false;
+          btn.disabled = false;
+          p.focus();
+        }).catch(function () {
+          err.textContent = "网络错误，请重试";
+          err.hidden = false;
+          btn.disabled = false;
+        });
+      }
+      btn.addEventListener("click", submit);
+      [u, p].forEach(function (el) {
+        el.addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter") submit();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
