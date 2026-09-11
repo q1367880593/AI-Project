@@ -10,6 +10,7 @@ import contextlib
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.parse
@@ -88,6 +89,26 @@ def save_entries(entries, kind="tv"):
     cfg_path = ft.MOVIES_PATH if kind == "movie" else ft.SHOWS_PATH
     data_path = ft.MOVIE_OUTPUT_PATH if kind == "movie" else ft.OUTPUT_PATH
     var_name = "MOVIE_DATA" if kind == "movie" else "TV_DATA"
+
+    # 0) 写盘前去重：IMDb 号相同必去重；片名相同仅在任一方无 IMDb 时去重（双方 IMDb 不同视为重名不同片）
+    seen_imdb = set()
+    seen_title = {}   # 归一化片名 → 该条目的 imdb
+    unique = []
+    for e in entries:
+        imdb = (e.get("imdb_id") or "").strip()
+        title = " ".join((e.get("title") or "").strip().lower().split())
+        if imdb and imdb in seen_imdb:
+            continue
+        if title and title in seen_title:
+            prev_imdb = seen_title[title]
+            if not (imdb and prev_imdb and imdb != prev_imdb):
+                continue
+        if imdb:
+            seen_imdb.add(imdb)
+        if title:
+            seen_title[title] = imdb
+        unique.append(e)
+    entries = unique
 
     # 1) 订阅配置（仅配置字段）
     config_items = [clean_config_item(e) for e in entries]
@@ -189,7 +210,13 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json(500, {"error": "config.json 缺少 api_key"})
                 return
             endpoint = "search/movie" if kind == "movie" else "search/tv"
-            url = tmdb_url("/%s?language=zh-CN&query=%s" % (endpoint, urllib.parse.quote(q)))
+            clean_q = re.sub(ft._YEAR_RE, "", q).strip() or q
+            extra = ""
+            year = ft.parse_year(q)
+            if year:
+                key = "primary_release_year" if kind == "movie" else "first_air_date_year"
+                extra = "&%s=%d" % (key, year)
+            url = tmdb_url("/%s?language=zh-CN&query=%s%s" % (endpoint, urllib.parse.quote(clean_q), extra))
             try:
                 self.send_json(200, ft.http_get_json(url))
             except Exception as e:
@@ -287,10 +314,12 @@ class Handler(BaseHTTPRequestHandler):
 
         elif path == "/api/refresh":
             kind = "tv"
+            only_unfetched = False
             try:
                 if raw:
                     body = json.loads(raw.decode("utf-8"))
                     kind = body.get("kind") or "tv"
+                    only_unfetched = bool(body.get("only_unfetched"))
             except Exception:
                 pass
             if kind not in ("tv", "movie"):
@@ -298,7 +327,9 @@ class Handler(BaseHTTPRequestHandler):
             buf = io.StringIO()
             saved_argv = sys.argv[:]
             try:
-                sys.argv = ["fetch_tv.py"] + (["--movies"] if kind == "movie" else [])
+                sys.argv = ["fetch_tv.py"] \
+                    + (["--movies"] if kind == "movie" else []) \
+                    + (["--only-unfetched"] if only_unfetched else [])
                 with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
                     ft.main()
                 self.send_json(200, {"ok": True, "log": buf.getvalue()})

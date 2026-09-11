@@ -34,7 +34,7 @@
     })();
   </script>
   <div class="toolbar">
-    <label class="field">
+    <label class="field" id="status-field">
       <span class="field-label">状态</span>
       <select id="filter-status">
         <option value="">全部</option>
@@ -88,10 +88,15 @@
       <span class="dir-text">降序</span>
     </button>
     <span class="tb-divider"></span>
-    <button id="btn-edit" class="tb-btn" title="编辑模式下才能添加 / 删除 / 标记">✎ 编辑</button>
-    <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加" hidden>＋ 添加</button>
-    <button id="btn-group" class="tb-btn" title="勾选电影后加入 / 移出分组" hidden>分组</button>
-    <button id="btn-refresh" class="tb-btn" title="调用 fetch_tv.py 全量抓取（需几分钟）">更新数据</button>
+    <button id="btn-edit" class="tb-btn" title="编辑模式下才能添加 / 删除 / 标记">✎</button>
+    <div class="editor-row" id="editor-row" hidden>
+      <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加">＋ 添加</button>
+      <button id="btn-select-all" class="tb-btn" title="勾选 / 取消勾选当前列表全部电影">全选</button>
+      <button id="btn-group" class="tb-btn" title="勾选电影后加入 / 移出分组" hidden>分组</button>
+      <button id="btn-batch-mark" class="tb-btn" title="批量标记勾选的电影" hidden>标记</button>
+      <button id="btn-import" class="tb-btn tb-btn-add" title="批量粘贴导入（片名或 IMDb 号，每行一条）">导入</button>
+      <button id="btn-refresh" class="tb-btn" title="调用 fetch_tv.py 全量抓取（需几分钟）">更新数据</button>
+    </div>
     <span class="tb-count" id="result-count"></span>
   </div>
   <main id="grid" class="grid"></main>
@@ -165,6 +170,17 @@
         <button type="button" id="group-dismiss" class="tb-btn">移出分组</button>
         <button type="button" id="group-cancel" class="tb-btn">取消</button>
         <button type="button" id="group-confirm" class="tb-btn tb-btn-primary">加入</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="import-overlay" hidden>
+    <div class="dialog dialog-import" role="dialog" aria-modal="true" aria-labelledby="import-label">
+      <h2 id="import-label">批量导入</h2>
+      <p class="group-hint">每行一条：片名，或「片名,IMDb号」。Excel 复制的列可直接粘贴。</p>
+      <textarea id="import-text" rows="10" spellcheck="false" placeholder="Inception&#10;The Lion King (2019)&#10;Pirates of the Caribbean: Dead Man&#39;s Chest"></textarea>
+      <div class="dlg-actions">
+        <button type="button" id="import-cancel" class="tb-btn">取消</button>
+        <button type="button" id="import-confirm" class="tb-btn tb-btn-primary">导入</button>
       </div>
     </div>
   </div>

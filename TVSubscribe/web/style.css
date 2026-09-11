@@ -14,6 +14,10 @@
 
 * { box-sizing: border-box; }
 
+[hidden] {
+  display: none !important;
+}
+
 ::selection { background: rgba(59, 130, 246, 0.22); }
 
 body {
@@ -179,6 +183,20 @@ h1::before {
   align-self: stretch;
   margin: 3px 6px;
   background: var(--border);
+}
+
+/* 编辑模式下展开的功能行（强制另起一行） */
+.editor-row {
+  flex: 1 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.editor-row[hidden] {
+  display: none;
 }
 
 .sort-dir {
@@ -786,6 +804,26 @@ footer {
 
 .group-actions > :first-child {
   margin-right: auto;
+}
+
+.dialog-import textarea {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  resize: vertical;
+}
+
+.dialog-import textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
 }
 
 .dlg-actions {

@@ -64,6 +64,7 @@
   var tagline = document.getElementById("tagline");
   var tabs = document.getElementById("tabs");
   var statusSel = document.getElementById("filter-status");
+  var statusField = document.getElementById("status-field");
   var networkSel = document.getElementById("filter-network");
   var networkLabel = document.getElementById("network-label");
   var originField = document.getElementById("origin-field");
@@ -76,6 +77,7 @@
   var btnAdd = document.getElementById("btn-add");
   var btnRefresh = document.getElementById("btn-refresh");
   var btnEdit = document.getElementById("btn-edit");
+  var editorRow = document.getElementById("editor-row");
   var btnGroup = document.getElementById("btn-group");
   var groupViewField = document.getElementById("group-view-field");
   var groupViewSel = document.getElementById("group-view");
@@ -86,6 +88,13 @@
   var btnGroupConfirm = document.getElementById("group-confirm");
   var btnGroupDismiss = document.getElementById("group-dismiss");
   var btnGroupCancel = document.getElementById("group-cancel");
+  var btnImport = document.getElementById("btn-import");
+  var importOverlay = document.getElementById("import-overlay");
+  var importText = document.getElementById("import-text");
+  var btnImportConfirm = document.getElementById("import-confirm");
+  var btnImportCancel = document.getElementById("import-cancel");
+  var btnSelectAll = document.getElementById("btn-select-all");
+  var btnBatchMark = document.getElementById("btn-batch-mark");
   var markSel = document.getElementById("filter-mark");
   var markOptFinished = document.getElementById("mark-opt-finished");
   var markOptDropped = document.getElementById("mark-opt-dropped");
@@ -404,6 +413,20 @@
     return meta;
   }
 
+  /* 「未找到或抓取失败」条目的简化卡片（编辑模式下支持删除） */
+  function failedCard(show) {
+    var c = el("div", "card");
+    var info = el("div", "info");
+    var titleRow = el("div", "title-row");
+    titleRow.appendChild(el("div", "title", "未找到或抓取失败：" + (show.title || show.imdb_id || "")));
+    if (editMode) {
+      titleRow.appendChild(deleteBtn(show));
+    }
+    info.appendChild(titleRow);
+    c.appendChild(info);
+    return c;
+  }
+
   function card(show) {
     var c = el("div", "card");
     var mark = show.mark || "";
@@ -440,10 +463,12 @@
       titleRow.appendChild(check);
     }
     titleRow.appendChild(link(detailUrl(show), "title", show.name || show.title));
-    if (show.status) {
-      titleRow.appendChild(el("span", "badge " + statusClass(show.status), show.status_zh || statusZh(show.status)));
-    } else {
-      titleRow.appendChild(el("span", "badge badge-other", "待抓取"));
+    if (kind !== "movie") {
+      if (show.status) {
+        titleRow.appendChild(el("span", "badge " + statusClass(show.status), show.status_zh || statusZh(show.status)));
+      } else {
+        titleRow.appendChild(el("span", "badge badge-other", "待抓取"));
+      }
     }
     if (editMode) {
       titleRow.appendChild(markBadge(show));
@@ -532,6 +557,28 @@
     });
   }
 
+  /* 按当前筛选条件过滤并排序后的列表（渲染与全选共用） */
+  function filteredList() {
+    var merged = allShows();
+    var status = statusSel.value;
+    var network = networkSel.value;
+    var markFilter = markSel.value;
+    var originFilter = originSel.value;
+    var asc = sortDirBtn.dataset.dir === "asc";
+
+    var list = merged.filter(function (s) {
+      if (status && s.status !== status) return false;
+      if (network && (s.networks || []).indexOf(network) < 0) return false;
+      var mark = s.mark || "";
+      if (markFilter === "none" && mark) return false;
+      if (markFilter === "finished" && mark !== "finished") return false;
+      if (markFilter === "dropped" && mark !== "dropped") return false;
+      if (originFilter && originTag(s) !== originFilter) return false;
+      return true;
+    });
+    return sortShows(list, sortSel.value, asc);
+  }
+
   /* ---------- 渲染 ---------- */
   function render() {
     syncURL();
@@ -552,27 +599,10 @@
     }
     footerCount.textContent = "共收录 " + merged.length + " 部" + cfg().itemLabel;
 
-    var status = statusSel.value;
-    var network = networkSel.value;
-    var markFilter = markSel.value;
-    var originFilter = originSel.value;
-    var key = sortSel.value;
-    var asc = sortDirBtn.dataset.dir === "asc";
+    var sorted = filteredList();
+    var hasFilter = statusSel.value || networkSel.value || markSel.value || originSel.value;
 
-    var list = merged.filter(function (s) {
-      if (status && s.status !== status) return false;
-      if (network && (s.networks || []).indexOf(network) < 0) return false;
-      var mark = s.mark || "";
-      if (markFilter === "none" && mark) return false;
-      if (markFilter === "finished" && mark !== "finished") return false;
-      if (markFilter === "dropped" && mark !== "dropped") return false;
-      if (originFilter && originTag(s) !== originFilter) return false;
-      return true;
-    });
-
-    var sorted = sortShows(list, key, asc);
-
-    if (status || network || markFilter || originFilter) {
+    if (hasFilter) {
       resultCount.innerHTML = "当前 <b>" + sorted.length + "</b> / " + merged.length + " 部";
     } else {
       resultCount.innerHTML = "共 <b>" + merged.length + "</b> 部";
@@ -590,7 +620,7 @@
     sorted.forEach(function (show, idx) {
       var node;
       if (!show.found) {
-        node = el("div", "card", "未找到或抓取失败：" + (show.title || ""));
+        node = failedCard(show);
       } else {
         node = card(show);
       }
@@ -650,7 +680,7 @@
       items.forEach(function (show) {
         var node;
         if (!show.found) {
-          node = el("div", "card", "未找到或抓取失败：" + (show.title || ""));
+          node = failedCard(show);
         } else {
           node = card(show);
         }
@@ -918,8 +948,10 @@
 
   /* ---------- 标记弹窗 ---------- */
   var pendingMark = null;
+  var batchMarkMode = false;
 
   function openMarkDialog(show) {
+    batchMarkMode = false;
     pendingMark = show;
     markLabel.textContent = "标记「" + (show.name || show.title) + "」";
     var current = show.mark || "";
@@ -932,6 +964,7 @@
   function closeMarkDialog() {
     markOverlay.hidden = true;
     pendingMark = null;
+    batchMarkMode = false;
   }
 
   function chooseMark(value) {
@@ -943,6 +976,54 @@
     persistEntries(allShows(), function () {
       show.mark = oldMark; // 写盘失败则回滚
     });
+  }
+
+  /* ---------- 批量标记（作用于勾选的电影） ---------- */
+  function openBatchMarkDialog() {
+    if (!selection.length) return;
+    batchMarkMode = true;
+    pendingMark = null;
+    markLabel.textContent = "批量标记 " + selection.length + " 部电影";
+    markOverlay.querySelectorAll(".mark-opt").forEach(function (btn) {
+      btn.classList.toggle("selected", false);
+    });
+    markOverlay.hidden = false;
+  }
+
+  function chooseBatchMark(value) {
+    var sel = {};
+    selection.forEach(function (k) { sel[k] = true; });
+    var entries = allShows().map(function (s) {
+      if (sel[s._key]) s.mark = value || null;
+      return s;
+    });
+    selection.length = 0;
+    closeMarkDialog();
+    applyEditModeUI();
+    persistEntries(entries);
+  }
+
+  /* ---------- 全选（当前筛选条件下可见的条目） ---------- */
+  function toggleSelectAll() {
+    var visible = filteredList().map(function (s) { return s._key; });
+    if (!visible.length) return;
+    var allSelected = visible.every(function (k) { return selection.indexOf(k) >= 0; });
+    if (allSelected) {
+      var drop = {};
+      visible.forEach(function (k) { drop[k] = true; });
+      selection = selection.filter(function (k) { return !drop[k]; });
+    } else {
+      var have = {};
+      selection.forEach(function (k) { have[k] = true; });
+      visible.forEach(function (k) {
+        if (!have[k]) {
+          have[k] = true;
+          selection.push(k);
+        }
+      });
+    }
+    applyEditModeUI();
+    render();
   }
 
   /* ---------- 电影分组（批量多选） ---------- */
@@ -1026,16 +1107,90 @@
     applyGroup(null);
   }
 
+  /* ---------- 批量导入（每行一条：片名 或 «片名,IMDb号»） ---------- */
+  function normalizeTitle(t) {
+    return (t || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  function openImportDialog() {
+    importText.value = "";
+    importOverlay.hidden = false;
+    importText.focus();
+  }
+
+  function closeImportDialog() {
+    importOverlay.hidden = true;
+  }
+
+  function confirmImport() {
+    var lines = importText.value.split(/\r?\n/);
+    var known = {};
+    var knownTitles = {};
+    allShows().forEach(function (s) {
+      known[s._key] = true;
+      var nt = normalizeTitle(s.title);
+      if (nt && !(nt in knownTitles)) knownTitles[nt] = s.imdb_id || "";
+    });
+    var newOnes = [];
+    var dupCount = 0;
+    lines.forEach(function (line) {
+      var t = line.trim();
+      if (!t) return;
+      var title = t, imdb = null;
+      var m = t.match(/^(.*?)[,，\t]\s*(tt\d+)\s*$/i);
+      if (m) {
+        title = m[1].trim();
+        imdb = m[2].trim();
+      } else if (/^tt\d+$/i.test(t)) {
+        title = "";
+        imdb = t;
+      }
+      // Excel 年份列残留：«片名\t1994» → «片名 (1994)»
+      title = title.replace(/\t\s*(\d{4})\s*$/, " ($1)");
+      if (!title && !imdb) return;
+      var entry = { title: title, imdb_id: imdb || null, name: null, name_zh: null, found: true };
+      var key = showKey(entry);
+      var nt = normalizeTitle(title);
+      // 去重：IMDb 相同；或片名相同且任一方无 IMDb（双方 IMDb 不同视为重名不同片）
+      var prevImdb = nt && (nt in knownTitles) ? knownTitles[nt] : null;
+      var titleDup = !!nt && (nt in knownTitles)
+        && !(imdb && prevImdb && imdb.toLowerCase() !== String(prevImdb).toLowerCase());
+      if (known[key] || titleDup) { dupCount++; return; }
+      known[key] = true;
+      if (nt && !(nt in knownTitles)) knownTitles[nt] = imdb || "";
+      newOnes.push(entry);
+    });
+    if (!newOnes.length) {
+      window.alert(dupCount ? ("导入的条目都已存在（跳过 " + dupCount + " 条重复）。") : "没有可导入的内容。");
+      return;
+    }
+    persistEntries(allShows().concat(newOnes), null, function () {
+      closeImportDialog();
+      var msg = "已导入 " + newOnes.length + " 条" + (dupCount ? "，跳过重复 " + dupCount + " 条" : "") + "。";
+      if (window.confirm(msg + "\n\n是否立即仅更新未抓取的数据？\n（「确定」立即抓取新导入的条目；「取消」稍后点「更新数据」全量更新）")) {
+        runRefresh(true);
+      }
+    });
+  }
+
   /* ---------- 编辑模式 ---------- */
   function applyEditModeUI() {
     btnEdit.classList.toggle("tb-btn-active", editMode);
-    btnEdit.textContent = editMode ? "✎ 编辑中" : "✎ 编辑";
-    btnAdd.hidden = !editMode;
-    var groupVisible = editMode && kind === "movie";
-    btnGroup.hidden = !groupVisible;
-    if (groupVisible) {
+    btnEdit.textContent = "✎";
+    editorRow.hidden = !editMode;
+    var extraVisible = editMode && kind === "movie";
+    btnGroup.hidden = !extraVisible;
+    btnSelectAll.hidden = !extraVisible;
+    btnBatchMark.hidden = !extraVisible;
+    if (extraVisible) {
       btnGroup.textContent = selection.length ? "分组(" + selection.length + ")" : "分组";
       btnGroup.disabled = selection.length === 0;
+      btnBatchMark.textContent = selection.length ? "标记(" + selection.length + ")" : "标记";
+      btnBatchMark.disabled = selection.length === 0;
+      var visible = filteredList();
+      var allSelected = visible.length > 0
+        && visible.every(function (s) { return selection.indexOf(s._key) >= 0; });
+      btnSelectAll.textContent = allSelected ? "取消全选" : "全选";
     }
   }
 
@@ -1068,6 +1223,7 @@
     mTitleLabel.textContent = c.manualTitleLabel;
     groupViewField.hidden = kind !== "movie";
     originField.hidden = kind !== "movie";
+    statusField.hidden = kind !== "tv";
   }
 
   function switchKind(newKind) {
@@ -1138,7 +1294,7 @@
   function syncURL() {
     var q = new URLSearchParams();
     if (kind === "movie") q.set(URL_PARAMS.tab, "movie");
-    if (statusSel.value) q.set(URL_PARAMS.status, statusSel.value);
+    if (kind === "tv" && statusSel.value) q.set(URL_PARAMS.status, statusSel.value);
     if (markSel.value) q.set(URL_PARAMS.mark, markSel.value);
     if (networkSel.value) q.set(URL_PARAMS.net, networkSel.value);
     if (originSel.value) q.set(URL_PARAMS.origin, originSel.value);
@@ -1150,15 +1306,14 @@
   }
 
   /* ---------- 全量抓取 ---------- */
-  function refreshData() {
-    if (!window.confirm(cfg().refreshConfirm)) return;
+  function runRefresh(onlyUnfetched) {
     btnRefresh.disabled = true;
     var oldText = btnRefresh.textContent;
     btnRefresh.textContent = "抓取中…";
     fetch("/api/refresh", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind: kind })
+      body: JSON.stringify({ kind: kind, only_unfetched: onlyUnfetched })
     })
       .then(function (r) { return r.json(); })
       .then(function (res) {
@@ -1179,6 +1334,11 @@
       });
   }
 
+  function refreshData() {
+    if (!window.confirm(cfg().refreshConfirm)) return;
+    runRefresh(false);
+  }
+
   /* ---------- 事件绑定 ---------- */
   function bindEvents() {
     tabs.querySelectorAll(".tab-btn").forEach(function (b) {
@@ -1197,6 +1357,14 @@
     btnGroupCancel.addEventListener("click", closeGroupDialog);
     groupOverlay.addEventListener("click", function (ev) {
       if (ev.target === groupOverlay) closeGroupDialog();
+    });
+    btnSelectAll.addEventListener("click", toggleSelectAll);
+    btnBatchMark.addEventListener("click", openBatchMarkDialog);
+    btnImport.addEventListener("click", openImportDialog);
+    btnImportConfirm.addEventListener("click", confirmImport);
+    btnImportCancel.addEventListener("click", closeImportDialog);
+    importOverlay.addEventListener("click", function (ev) {
+      if (ev.target === importOverlay) closeImportDialog();
     });
     sortDirBtn.addEventListener("click", function () {
       var asc = sortDirBtn.dataset.dir !== "asc";
@@ -1232,13 +1400,15 @@
     });
     markOverlay.querySelectorAll(".mark-opt").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        chooseMark(btn.dataset.mark);
+        if (batchMarkMode) chooseBatchMark(btn.dataset.mark);
+        else chooseMark(btn.dataset.mark);
       });
     });
     document.addEventListener("keydown", function (ev) {
       if (ev.key === "Escape") {
         if (!markOverlay.hidden) closeMarkDialog();
         if (!groupOverlay.hidden) closeGroupDialog();
+        if (!importOverlay.hidden) closeImportDialog();
         if (!overlay.hidden) closeDialog();
       }
       if (ev.key === "Enter" && !overlay.hidden) {
@@ -1260,7 +1430,7 @@
   resetFilterOptions();
 
   // 从地址栏恢复筛选 / 排序（当前数据集中存在的选项才生效）
-  if (urlState.status) selectIfExists(statusSel, urlState.status);
+  if (kind === "tv" && urlState.status) selectIfExists(statusSel, urlState.status);
   if (urlState.mark) markSel.value = urlState.mark;
   if (urlState.net) selectIfExists(networkSel, urlState.net);
   if (urlState.sort) selectIfExists(sortSel, urlState.sort);

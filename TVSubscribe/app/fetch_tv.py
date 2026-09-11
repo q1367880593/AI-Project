@@ -8,6 +8,7 @@
 
 import json
 import os
+import re
 import sys
 import time
 import urllib.parse
@@ -61,8 +62,21 @@ def set_proxy(proxy):
     _opener = urllib.request.build_opener(*handlers)
 
 
+_last_req_ts = 0.0
+REQ_INTERVAL = 0.25  # 请求最小间隔（秒）：批量抓取时防止触发 TMDB 限流
+
+
+def _throttle():
+    global _last_req_ts
+    now = time.time()
+    wait = _last_req_ts + REQ_INTERVAL - now
+    if wait > 0:
+        time.sleep(wait)
+    _last_req_ts = time.time()
+
+
 def http_get_json(url, retries=2):
-    """请求 JSON，失败时自动重试（网络抖动容错）。"""
+    """请求 JSON，失败时自动重试（网络抖动容错）；内置限速。"""
     headers = {
         "User-Agent": "TVSubscribe/1.0 (local script)",
         "Accept": "application/json",
@@ -70,6 +84,7 @@ def http_get_json(url, retries=2):
     last_err = None
     for attempt in range(retries + 1):
         try:
+            _throttle()
             req = urllib.request.Request(url, headers=headers)
             with _opener.open(req, timeout=30) as resp:
                 return json.loads(resp.read().decode("utf-8"))
@@ -80,14 +95,31 @@ def http_get_json(url, retries=2):
     raise last_err
 
 
+_YEAR_RE = re.compile(r"[\(（]?(\d{4})[\)）]?\s*$")
+
+
+def parse_year(title):
+    """从片名末尾提取 4 位年份（如 The Lion King (2019) → 2019），无则返回 None。"""
+    m = _YEAR_RE.search((title or "").strip())
+    if not m:
+        return None
+    y = int(m.group(1))
+    return y if 1900 <= y <= 2100 else None
+
+
 def search_item(api_key, title, kind="tv"):
-    params = urllib.parse.urlencode({
-        "query": title,
+    clean = _YEAR_RE.sub("", (title or "").strip()).strip() or title
+    params = {
+        "query": clean,
         "api_key": api_key,
         "language": "en-US",
-    })
+    }
+    year = parse_year(title)
+    if year:
+        key = "primary_release_year" if kind == "movie" else "first_air_date_year"
+        params[key] = year
     endpoint = "search/movie" if kind == "movie" else "search/tv"
-    url = f"{BASE_URL}/{endpoint}?{params}"
+    url = f"{BASE_URL}/{endpoint}?" + urllib.parse.urlencode(params)
     data = http_get_json(url)
     results = data.get("results", [])
     if not results:
@@ -358,6 +390,8 @@ def main():
     args = list(sys.argv[1:])
     kind = "movie" if "--movies" in args else "tv"
     args = [a for a in args if a != "--movies"]
+    only_unfetched = "--only-unfetched" in args
+    args = [a for a in args if a != "--only-unfetched"]
 
     cfg_path = MOVIES_PATH if kind == "movie" else SHOWS_PATH
     data_path = MOVIE_OUTPUT_PATH if kind == "movie" else OUTPUT_PATH
@@ -422,10 +456,32 @@ def main():
     results = []
     changed = False
     collection_cache = {}  # 系列中文名缓存（同系列去重请求）
+
+    def config_key(item):
+        imdb = (item.get("imdb_id") or "").strip()
+        if imdb:
+            return "imdb|" + imdb
+        return "title|" + (item.get("title") or "").strip()
+
+    old_map = {}
+    if only_unfetched:
+        old_payload = load_data_payload(data_path, var_name)
+        for s in old_payload.get("shows", []):
+            old_map.setdefault(config_key(s), s)
+
     for item in shows:
         display = (item.get("title") or "").strip() or (item.get("imdb_id") or "").strip()
         if not display and not item.get("tmdb_id"):
             continue
+        if only_unfetched:
+            cached = old_map.get(config_key(item))
+            if cached and cached.get("found") and cached.get("status"):
+                # 已抓取：直接复用旧缓存，只同步标记与分组
+                cached["mark"] = (item.get("mark") or "").strip() or None
+                cached["group"] = (item.get("group") or "").strip() or None
+                results.append(cached)
+                print(f"[跳过] 已抓取: {cached.get('name') or display}")
+                continue
         try:
             entry, ch = process_item(api_key, item, kind, collection_cache)
             changed = changed or ch
