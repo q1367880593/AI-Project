@@ -97,9 +97,9 @@
     <button id="btn-edit" class="tb-btn" title="编辑模式下才能添加 / 删除 / 标记">✎</button>
     <div class="editor-row" id="editor-row" hidden>
       <button id="btn-add" class="tb-btn tb-btn-add" title="手动添加">＋ 添加</button>
-      <button id="btn-select-all" class="tb-btn" title="勾选 / 取消勾选当前列表全部电影">全选</button>
-      <button id="btn-group" class="tb-btn" title="勾选电影后加入 / 移出分组" hidden>分组</button>
-      <button id="btn-batch-mark" class="tb-btn" title="批量标记勾选的电影" hidden>标记</button>
+      <button id="btn-select-all" class="tb-btn" title="勾选 / 取消勾选当前列表全部条目">全选</button>
+      <button id="btn-group" class="tb-btn" title="勾选后加入 / 移出分组" hidden>分组</button>
+      <button id="btn-batch-mark" class="tb-btn" title="批量标记勾选的条目" hidden>标记</button>
       <button id="btn-import" class="tb-btn tb-btn-add" title="批量粘贴导入（片名或 IMDb 号，每行一条）">导入</button>
       <button id="btn-refresh" class="tb-btn" title="调用 fetch_tv.py 全量抓取（需几分钟）">更新数据</button>
     </div>
@@ -165,10 +165,10 @@
   </div>
   <div class="overlay" id="group-overlay" hidden>
     <div class="dialog dialog-group" role="dialog" aria-modal="true" aria-labelledby="group-label">
-      <h2 id="group-label">电影分组</h2>
+      <h2 id="group-label">分组</h2>
       <p class="group-hint" id="group-hint"></p>
       <label class="dlg-field">输入新组名或搜索已有分组
-        <input type="text" id="group-input" placeholder="如 加勒比海盗系列">
+        <input type="text" id="group-input" placeholder="如 自定义组名或系列名">
       </label>
       <div class="group-list" id="group-list"></div>
       <div class="dlg-actions group-actions">

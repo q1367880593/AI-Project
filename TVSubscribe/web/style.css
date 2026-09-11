@@ -338,6 +338,7 @@ h1::before {
 }
 
 .card {
+  position: relative;
   display: flex;
   gap: 14px;
   background: var(--card);
@@ -732,6 +733,113 @@ footer {
 .mark-unwatched:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* 卡片右下角看剧进度圆环 + 点击快速标记弹窗 */
+.ring-wrap {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.ring-svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 3;
+}
+
+.ring-fg {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.ring-wrap.ring-open {
+  z-index: 50;
+}
+
+.ring-pop {
+  display: none;
+  position: absolute;
+  bottom: 24px;
+  right: -6px;
+  width: 236px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+  padding: 10px;
+  cursor: default;
+}
+
+.ring-wrap.ring-open .ring-pop {
+  display: block;
+}
+
+.ring-pop-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ring-pop-title {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ring-clear {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 11px;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.ring-clear:hover {
+  text-decoration: underline;
+}
+
+.ring-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.season-dot {
+  font-size: 11px;
+  padding: 4px 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #f8fafc;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.season-dot:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.season-dot.seen {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
 }
 
 /* 卡片内的行动按钮（单独抓取 / 重新添加） */

@@ -37,7 +37,7 @@ STATIC_OK = {
     "apple-touch-icon.png": "image/png",
 }
 
-CONFIG_FIELDS = ("title", "imdb_id", "name_zh", "mark", "group")
+CONFIG_FIELDS = ("title", "imdb_id", "name_zh", "mark", "group", "watched_seasons")
 
 TMDB_BASE = "https://api.themoviedb.org/3"
 
@@ -81,6 +81,12 @@ def clean_config_item(e):
     group = (e.get("group") or "").strip()
     if group:
         out["group"] = group
+    ws = e.get("watched_seasons")
+    if ws is not None:
+        try:
+            out["watched_seasons"] = int(ws)
+        except (TypeError, ValueError):
+            pass
     return out
 
 
@@ -170,6 +176,14 @@ def save_entries(entries, kind="tv"):
             item["spoken_languages"] = e.get("spoken_languages")
         item["mark"] = (e.get("mark") or "").strip() or None
         item["group"] = (e.get("group") or "").strip() or None
+        try:
+            ws = int(e.get("watched_seasons")) if e.get("watched_seasons") is not None else None
+        except (TypeError, ValueError):
+            ws = None
+        if ws is not None:
+            item["watched_seasons"] = ws
+        else:
+            item.pop("watched_seasons", None)
         new_list.append(item)
 
     ft.write_output({

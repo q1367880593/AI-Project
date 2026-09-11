@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-11 10:12:58",
+  "generated_at": "2026-09-11 13:48:40",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -31,7 +31,8 @@ window.TV_DATA = {
       "tmdb_id": 1399,
       "imdb_id": "tt0944947",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 8
     },
     {
       "title": "Breaking Bad",
@@ -62,7 +63,8 @@ window.TV_DATA = {
       "tmdb_id": 1396,
       "imdb_id": "tt0903747",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Westworld",
@@ -93,7 +95,8 @@ window.TV_DATA = {
       "tmdb_id": 63247,
       "imdb_id": "tt0475784",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "Prison Break",
@@ -124,7 +127,8 @@ window.TV_DATA = {
       "tmdb_id": 2288,
       "imdb_id": "tt0455275",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Medici: Masters of Florence",
@@ -186,7 +190,8 @@ window.TV_DATA = {
       "tmdb_id": 62019,
       "imdb_id": "tt2546866",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Better Call Saul",
@@ -217,7 +222,8 @@ window.TV_DATA = {
       "tmdb_id": 60059,
       "imdb_id": "tt3032476",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 6
     },
     {
       "title": "Silicon Valley",
@@ -248,7 +254,8 @@ window.TV_DATA = {
       "tmdb_id": 60573,
       "imdb_id": "tt2575988",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 6
     },
     {
       "title": "You're the Worst",
@@ -280,7 +287,8 @@ window.TV_DATA = {
       "tmdb_id": 61118,
       "imdb_id": "tt3228420",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Shameless",
@@ -311,7 +319,8 @@ window.TV_DATA = {
       "tmdb_id": 34307,
       "imdb_id": "tt1586680",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 11
     },
     {
       "title": "The Vampire Diaries",
@@ -342,7 +351,8 @@ window.TV_DATA = {
       "tmdb_id": 18165,
       "imdb_id": "tt1405406",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 8
     },
     {
       "title": "The Originals",
@@ -373,7 +383,8 @@ window.TV_DATA = {
       "tmdb_id": 46896,
       "imdb_id": "tt2632424",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Agents of S.H.I.L.D.",
@@ -435,7 +446,8 @@ window.TV_DATA = {
       "tmdb_id": 61550,
       "imdb_id": "tt3475734",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "The Strain",
@@ -466,7 +478,8 @@ window.TV_DATA = {
       "tmdb_id": 47640,
       "imdb_id": "tt2654620",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "This is Us",
@@ -497,7 +510,8 @@ window.TV_DATA = {
       "tmdb_id": 67136,
       "imdb_id": "tt5555260",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 6
     },
     {
       "title": "A Discovery of Witches",
@@ -560,7 +574,8 @@ window.TV_DATA = {
       "tmdb_id": 80213,
       "imdb_id": "tt6110648",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "My Brilliant Friend",
@@ -622,7 +637,8 @@ window.TV_DATA = {
       "tmdb_id": 69629,
       "imdb_id": "tt4396630",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "2 Broken Girls",
@@ -653,7 +669,8 @@ window.TV_DATA = {
       "tmdb_id": 39340,
       "imdb_id": "tt1845307",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 6
     },
     {
       "title": "Legacies",
@@ -715,7 +732,8 @@ window.TV_DATA = {
       "tmdb_id": 1402,
       "imdb_id": "tt1520211",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 11
     },
     {
       "title": "Chernobyl",
@@ -746,7 +764,8 @@ window.TV_DATA = {
       "tmdb_id": 87108,
       "imdb_id": "tt7366338",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Flash",
@@ -807,7 +826,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 71915,
       "imdb_id": "tt1869454",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -839,7 +858,8 @@ window.TV_DATA = {
       "tmdb_id": 72750,
       "imdb_id": "tt7016936",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "The Handmaid's Tale",
@@ -870,7 +890,8 @@ window.TV_DATA = {
       "tmdb_id": 69478,
       "imdb_id": "tt5834204",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 6
     },
     {
       "title": "Euphoria",
@@ -930,7 +951,8 @@ window.TV_DATA = {
       "tmdb_id": 65454,
       "imdb_id": "tt5425186",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Marvelous Mrs. Maisel",
@@ -961,7 +983,8 @@ window.TV_DATA = {
       "tmdb_id": 70796,
       "imdb_id": "tt5788792",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Stories from Our Future",
@@ -992,7 +1015,8 @@ window.TV_DATA = {
       "tmdb_id": 106661,
       "imdb_id": "tt10404752",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Picnic at Hanging Rock",
@@ -1023,7 +1047,8 @@ window.TV_DATA = {
       "tmdb_id": 78881,
       "imdb_id": "tt6038954",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Big Bang Theory",
@@ -1054,7 +1079,8 @@ window.TV_DATA = {
       "tmdb_id": 1418,
       "imdb_id": "tt0898266",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 12
     },
     {
       "title": "Why Women Kill",
@@ -1086,7 +1112,8 @@ window.TV_DATA = {
       "tmdb_id": 87428,
       "imdb_id": "tt9054904",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "The Witcher",
@@ -1147,8 +1174,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 86831,
       "imdb_id": "tt9561862",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "100 humans",
@@ -1179,7 +1207,8 @@ window.TV_DATA = {
       "tmdb_id": 100429,
       "imdb_id": "tt11823088",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Sex Education",
@@ -1210,7 +1239,8 @@ window.TV_DATA = {
       "tmdb_id": 81356,
       "imdb_id": "tt7767422",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "Sherlock",
@@ -1241,7 +1271,8 @@ window.TV_DATA = {
       "tmdb_id": 19885,
       "imdb_id": "tt1475582",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "Fargo",
@@ -1303,7 +1334,8 @@ window.TV_DATA = {
       "tmdb_id": 83605,
       "imdb_id": "tt9244556",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Friends",
@@ -1334,7 +1366,8 @@ window.TV_DATA = {
       "tmdb_id": 1668,
       "imdb_id": "tt0108778",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 10
     },
     {
       "title": "What We Do in the Shadows",
@@ -1396,7 +1429,8 @@ window.TV_DATA = {
       "tmdb_id": 71728,
       "imdb_id": "tt6226232",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 7
     },
     {
       "title": "Raised by Wolves",
@@ -1458,8 +1492,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 42009,
       "imdb_id": "tt2085059",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 7
     },
     {
       "title": "Watchmen",
@@ -1490,7 +1525,8 @@ window.TV_DATA = {
       "tmdb_id": 79788,
       "imdb_id": "tt7049682",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "WandaVision",
@@ -1521,7 +1557,8 @@ window.TV_DATA = {
       "tmdb_id": 85271,
       "imdb_id": "tt9140560",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Queen's Gambit",
@@ -1552,7 +1589,8 @@ window.TV_DATA = {
       "tmdb_id": 87739,
       "imdb_id": "tt10048342",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Staged",
@@ -1583,7 +1621,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 104674,
       "imdb_id": "tt12369754",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -1615,7 +1653,8 @@ window.TV_DATA = {
       "tmdb_id": 88396,
       "imdb_id": "tt9208876",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Mandalorian",
@@ -1646,7 +1685,8 @@ window.TV_DATA = {
       "tmdb_id": 82856,
       "imdb_id": "tt8111088",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Shameless Hall of Shame",
@@ -1675,7 +1715,8 @@ window.TV_DATA = {
       "tmdb_id": 208736,
       "imdb_id": "tt13653972",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Loki",
@@ -1706,7 +1747,8 @@ window.TV_DATA = {
       "tmdb_id": 84958,
       "imdb_id": "tt9140554",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Obi-Wan Kenobi",
@@ -1737,7 +1779,8 @@ window.TV_DATA = {
       "tmdb_id": 92830,
       "imdb_id": "tt8466564",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Book of Boba Fett",
@@ -1768,7 +1811,8 @@ window.TV_DATA = {
       "tmdb_id": 115036,
       "imdb_id": "tt13668894",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Andor",
@@ -1799,7 +1843,8 @@ window.TV_DATA = {
       "tmdb_id": 83867,
       "imdb_id": "tt9253284",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Ahsoka",
@@ -1834,7 +1879,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 114461,
       "imdb_id": "tt13622776",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -1866,7 +1911,8 @@ window.TV_DATA = {
       "tmdb_id": 114479,
       "imdb_id": "tt12262202",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Harley Quinn",
@@ -1898,7 +1944,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 74440,
       "imdb_id": "tt7658402",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -1930,7 +1976,8 @@ window.TV_DATA = {
       "tmdb_id": 8358,
       "imdb_id": "tt1235099",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Rick and Morty",
@@ -1960,8 +2007,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 60625,
       "imdb_id": "tt2861424",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 9
     },
     {
       "title": "Squid Game",
@@ -1992,7 +2040,8 @@ window.TV_DATA = {
       "tmdb_id": 93405,
       "imdb_id": "tt10919420",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Only Murders in the Building",
@@ -2027,7 +2076,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 107113,
       "imdb_id": "tt11691774",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2059,7 +2108,8 @@ window.TV_DATA = {
       "tmdb_id": 94605,
       "imdb_id": "tt11126994",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Ling Cage",
@@ -2089,8 +2139,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 91097,
       "imdb_id": "tt10827146",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Hawkeye",
@@ -2121,7 +2172,8 @@ window.TV_DATA = {
       "tmdb_id": 88329,
       "imdb_id": "tt10160804",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Ghosts",
@@ -2156,7 +2208,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 126027,
       "imdb_id": "tt11379026",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2192,7 +2244,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1413,
       "imdb_id": "tt1844624",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2223,8 +2275,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 94997,
       "imdb_id": "tt11198330",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Inventing Anna",
@@ -2255,7 +2308,8 @@ window.TV_DATA = {
       "tmdb_id": 95665,
       "imdb_id": "tt8740976",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Upload",
@@ -2286,7 +2340,8 @@ window.TV_DATA = {
       "tmdb_id": 86248,
       "imdb_id": "tt7826376",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "The Boys",
@@ -2317,7 +2372,8 @@ window.TV_DATA = {
       "tmdb_id": 76479,
       "imdb_id": "tt1190634",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Ms. Marvel",
@@ -2348,7 +2404,8 @@ window.TV_DATA = {
       "tmdb_id": 92782,
       "imdb_id": "tt10857164",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "She-Hulk: Attorney at Law",
@@ -2379,7 +2436,8 @@ window.TV_DATA = {
       "tmdb_id": 92783,
       "imdb_id": "tt10857160",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Our Great National Parks",
@@ -2409,7 +2467,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 195258,
       "imdb_id": "tt18750552",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2472,7 +2530,8 @@ window.TV_DATA = {
       "tmdb_id": 195928,
       "imdb_id": "tt14140886",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Stranger Things",
@@ -2503,7 +2562,8 @@ window.TV_DATA = {
       "tmdb_id": 66732,
       "imdb_id": "tt4574334",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 5
     },
     {
       "title": "Modern Family",
@@ -2534,7 +2594,8 @@ window.TV_DATA = {
       "tmdb_id": 1421,
       "imdb_id": "tt1442437",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 11
     },
     {
       "title": "How I Met Your Mother",
@@ -2564,7 +2625,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 1100,
       "imdb_id": "tt0460649",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2596,7 +2657,8 @@ window.TV_DATA = {
       "tmdb_id": 95403,
       "imdb_id": "tt8291284",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "All Creatures Great & Small",
@@ -2631,7 +2693,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 108255,
       "imdb_id": "tt10590066",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2667,7 +2729,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 84773,
       "imdb_id": "tt7631058",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2699,7 +2761,8 @@ window.TV_DATA = {
       "tmdb_id": 105248,
       "imdb_id": "tt12590266",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Downton Abbey",
@@ -2729,7 +2792,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 33907,
       "imdb_id": "tt1606375",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2761,7 +2824,8 @@ window.TV_DATA = {
       "tmdb_id": 205715,
       "imdb_id": "tt13159924",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Depp V Heard",
@@ -2792,7 +2856,8 @@ window.TV_DATA = {
       "tmdb_id": 227381,
       "imdb_id": "tt27541298",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Walking Dead: Daryl Dixon",
@@ -2822,7 +2887,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 211684,
       "imdb_id": "tt13062500",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2854,7 +2919,8 @@ window.TV_DATA = {
       "tmdb_id": 206586,
       "imdb_id": "tt9859436",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "3 Body Problem",
@@ -2884,7 +2950,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 108545,
       "imdb_id": "tt13016388",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2915,7 +2981,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 117648,
       "imdb_id": "tt10541088",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -2947,7 +3013,8 @@ window.TV_DATA = {
       "tmdb_id": 138501,
       "imdb_id": "tt15571732",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Dark",
@@ -2977,7 +3044,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 70523,
       "imdb_id": "tt5753856",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3009,7 +3076,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 250307,
       "imdb_id": "tt31938062",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3041,7 +3108,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 40075,
       "imdb_id": "tt1865718",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3074,7 +3141,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 95842,
       "imdb_id": "tt11273352",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3106,7 +3173,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 89614,
       "imdb_id": "tt12740306",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3137,7 +3204,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 62391,
       "imdb_id": "tt4295140",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3168,7 +3235,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 224372,
       "imdb_id": "tt27497448",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3200,7 +3267,8 @@ window.TV_DATA = {
       "tmdb_id": 2490,
       "imdb_id": "tt0487831",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "Black Books",
@@ -3231,7 +3299,8 @@ window.TV_DATA = {
       "tmdb_id": 903,
       "imdb_id": "tt0262150",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Haunted Hotel",
@@ -3266,8 +3335,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 255752,
       "imdb_id": "tt32499579",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Scissor Seven",
@@ -3300,7 +3370,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 79141,
       "imdb_id": "tt10384610",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3332,7 +3402,8 @@ window.TV_DATA = {
       "tmdb_id": 86648,
       "imdb_id": "tt9878732",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "What If...?",
@@ -3363,7 +3434,8 @@ window.TV_DATA = {
       "tmdb_id": 91363,
       "imdb_id": "tt10168312",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Moon Knight",
@@ -3394,7 +3466,8 @@ window.TV_DATA = {
       "tmdb_id": 92749,
       "imdb_id": "tt10234724",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Secret Invasion",
@@ -3425,7 +3498,8 @@ window.TV_DATA = {
       "tmdb_id": 114472,
       "imdb_id": "tt13157618",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Echo",
@@ -3487,8 +3561,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138502,
       "imdb_id": "tt16026746",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Your Friendly Neighborhood Spider-Man",
@@ -3518,7 +3593,7 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138503,
       "imdb_id": "tt16027074",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3550,7 +3625,8 @@ window.TV_DATA = {
       "tmdb_id": 202555,
       "imdb_id": "tt18923754",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Marvel's Daredevil",
@@ -3581,7 +3657,8 @@ window.TV_DATA = {
       "tmdb_id": 61889,
       "imdb_id": "tt3322312",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 3
     },
     {
       "title": "Marvel's The Defenders",
@@ -3612,7 +3689,8 @@ window.TV_DATA = {
       "tmdb_id": 62285,
       "imdb_id": "tt4230076",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Marvel's The Punisher",
@@ -3643,7 +3721,8 @@ window.TV_DATA = {
       "tmdb_id": 67178,
       "imdb_id": "tt5675620",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Ironheart",
@@ -3705,7 +3784,8 @@ window.TV_DATA = {
       "tmdb_id": 241388,
       "imdb_id": "tt13968252",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Marvel Zombies",
@@ -3735,8 +3815,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 138505,
       "imdb_id": "tt16027014",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Wonder Man",
@@ -3767,7 +3848,8 @@ window.TV_DATA = {
       "tmdb_id": 198178,
       "imdb_id": "tt21066182",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "Spider-Noir",
@@ -3798,7 +3880,8 @@ window.TV_DATA = {
       "tmdb_id": 220102,
       "imdb_id": "tt30460310",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "The Spectacular Spider-Man",
@@ -3830,7 +3913,8 @@ window.TV_DATA = {
       "tmdb_id": 3854,
       "imdb_id": "tt0976192",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Marvel's Ultimate Spider-Man",
@@ -3861,7 +3945,8 @@ window.TV_DATA = {
       "tmdb_id": 34391,
       "imdb_id": "tt1722512",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 4
     },
     {
       "title": "The Sandman",
@@ -3891,8 +3976,9 @@ window.TV_DATA = {
       "found": true,
       "tmdb_id": 90802,
       "imdb_id": "tt1751634",
-      "mark": null,
-      "group": null
+      "mark": "unwatched",
+      "group": null,
+      "watched_seasons": 1
     },
     {
       "title": "中国奇谭",
@@ -3923,7 +4009,8 @@ window.TV_DATA = {
       "tmdb_id": 139162,
       "imdb_id": "tt26007176",
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 2
     },
     {
       "title": "Lucky",
@@ -3955,7 +4042,7 @@ window.TV_DATA = {
       ],
       "found": true,
       "imdb_id": "tt34866681",
-      "mark": null,
+      "mark": "unwatched",
       "group": null
     },
     {
@@ -3992,7 +4079,8 @@ window.TV_DATA = {
       "imdb_id": "tt0099864",
       "tmdb_id": 19614,
       "mark": "finished",
-      "group": null
+      "group": null,
+      "watched_seasons": 1
     }
   ]
 };

@@ -4,25 +4,29 @@
       "title": "Game of Thrones",
       "imdb_id": "tt0944947",
       "name_zh": "权力的游戏",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 8
     },
     {
       "title": "Breaking Bad",
       "imdb_id": "tt0903747",
       "name_zh": "绝命毒师",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Westworld",
       "imdb_id": "tt0475784",
       "name_zh": "西部世界",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "Prison Break",
       "imdb_id": "tt0455275",
       "name_zh": "越狱",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Medici: Masters of Florence",
@@ -34,43 +38,50 @@
       "title": "Uncle",
       "imdb_id": "tt2546866",
       "name_zh": "废柴舅舅",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Better Call Saul",
       "imdb_id": "tt3032476",
       "name_zh": "风骚律师",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 6
     },
     {
       "title": "Silicon Valley",
       "imdb_id": "tt2575988",
       "name_zh": "硅谷",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 6
     },
     {
       "title": "You're the Worst",
       "imdb_id": "tt3228420",
       "name_zh": "我爱上的人是奇葩",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Shameless",
       "imdb_id": "tt1586680",
       "name_zh": "无耻之徒",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 11
     },
     {
       "title": "The Vampire Diaries",
       "imdb_id": "tt1405406",
       "name_zh": "吸血鬼日记",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 8
     },
     {
       "title": "The Originals",
       "imdb_id": "tt2632424",
       "name_zh": "初代吸血鬼",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Agents of S.H.I.L.D.",
@@ -82,19 +93,22 @@
       "title": "Agent Carter",
       "imdb_id": "tt3475734",
       "name_zh": "卡特特工",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "The Strain",
       "imdb_id": "tt2654620",
       "name_zh": "血族",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "This is Us",
       "imdb_id": "tt5555260",
       "name_zh": "我们这一天",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 6
     },
     {
       "title": "A Discovery of Witches",
@@ -106,7 +120,8 @@
       "title": "The Purge",
       "imdb_id": "tt6110648",
       "name_zh": "人类清除计划",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "My Brilliant Friend",
@@ -118,13 +133,15 @@
       "title": "The Gifted",
       "imdb_id": "tt4396630",
       "name_zh": "天赋异禀",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "2 Broken Girls",
       "imdb_id": "tt1845307",
       "name_zh": "破产姐妹",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 6
     },
     {
       "title": "Legacies",
@@ -136,13 +153,15 @@
       "title": "The Walking Dead",
       "imdb_id": "tt1520211",
       "name_zh": "行尸走肉",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 11
     },
     {
       "title": "Chernobyl",
       "imdb_id": "tt7366338",
       "name_zh": "切尔诺贝利",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Flash",
@@ -153,19 +172,22 @@
     {
       "title": "Good Omens",
       "imdb_id": "tt1869454",
-      "name_zh": "好兆头"
+      "name_zh": "好兆头",
+      "mark": "unwatched"
     },
     {
       "title": "Killing Eve",
       "imdb_id": "tt7016936",
       "name_zh": "杀死伊芙",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "The Handmaid's Tale",
       "imdb_id": "tt5834204",
       "name_zh": "使女的故事",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 6
     },
     {
       "title": "Euphoria",
@@ -177,37 +199,43 @@
       "title": "Horace and Pete",
       "imdb_id": "tt5425186",
       "name_zh": "百年酒馆",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Marvelous Mrs. Maisel",
       "imdb_id": "tt5788792",
       "name_zh": "了不起的麦瑟尔夫人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Stories from Our Future",
       "imdb_id": "tt10404752",
       "name_zh": "来自未来的故事",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Picnic at Hanging Rock",
       "imdb_id": "tt6038954",
       "name_zh": "悬崖上的野餐",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Big Bang Theory",
       "imdb_id": "tt0898266",
       "name_zh": "生活大爆炸",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 12
     },
     {
       "title": "Why Women Kill",
       "imdb_id": "tt9054904",
       "name_zh": "致命女人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "The Witcher",
@@ -218,25 +246,30 @@
     {
       "title": "Love, Death & Robots",
       "imdb_id": "tt9561862",
-      "name_zh": "爱，死亡和机器人"
+      "name_zh": "爱，死亡和机器人",
+      "mark": "unwatched",
+      "watched_seasons": 4
     },
     {
       "title": "100 humans",
       "imdb_id": "tt11823088",
       "name_zh": "百人社会实验",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Sex Education",
       "imdb_id": "tt7767422",
       "name_zh": "性爱自修室",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "Sherlock",
       "imdb_id": "tt1475582",
       "name_zh": "神探夏洛克",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "Fargo",
@@ -248,13 +281,15 @@
       "title": "Mrs. America",
       "imdb_id": "tt9244556",
       "name_zh": "美国夫人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Friends",
       "imdb_id": "tt0108778",
       "name_zh": "老友记",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 10
     },
     {
       "title": "What We Do in the Shadows",
@@ -266,7 +301,8 @@
       "title": "Young Sheldon",
       "imdb_id": "tt6226232",
       "name_zh": "小谢尔顿",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 7
     },
     {
       "title": "Raised by Wolves",
@@ -277,177 +313,212 @@
     {
       "title": "Black Mirror",
       "imdb_id": "tt2085059",
-      "name_zh": "黑镜"
+      "name_zh": "黑镜",
+      "mark": "unwatched",
+      "watched_seasons": 7
     },
     {
       "title": "Watchmen",
       "imdb_id": "tt7049682",
       "name_zh": "守望者",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "WandaVision",
       "imdb_id": "tt9140560",
       "name_zh": "旺达幻视",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Queen's Gambit",
       "imdb_id": "tt10048342",
       "name_zh": "后翼弃兵",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Staged",
       "imdb_id": "tt12369754",
-      "name_zh": "舞台剧"
+      "name_zh": "舞台剧",
+      "mark": "unwatched"
     },
     {
       "title": "The Falcon and the Winter Soldier",
       "imdb_id": "tt9208876",
       "name_zh": "猎鹰与冬兵",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Mandalorian",
       "imdb_id": "tt8111088",
       "name_zh": "曼达洛人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Shameless Hall of Shame",
       "imdb_id": "tt13653972",
       "name_zh": "无耻之徒之无耻堂",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Loki",
       "imdb_id": "tt9140554",
       "name_zh": "洛基",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Obi-Wan Kenobi",
       "imdb_id": "tt8466564",
       "name_zh": "欧比旺·克诺比",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Book of Boba Fett",
       "imdb_id": "tt13668894",
       "name_zh": "波巴·费特之书",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Andor",
       "imdb_id": "tt9253284",
       "name_zh": "星球大战：安多",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Ahsoka",
       "imdb_id": "tt13622776",
-      "name_zh": "阿索卡"
+      "name_zh": "阿索卡",
+      "mark": "unwatched"
     },
     {
       "title": "The Acolyte",
       "imdb_id": "tt12262202",
       "name_zh": "星球大战：侍者",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Harley Quinn",
       "imdb_id": "tt7658402",
-      "name_zh": "哈莉·奎茵"
+      "name_zh": "哈莉·奎茵",
+      "mark": "unwatched"
     },
     {
       "title": "Lie to Me",
       "imdb_id": "tt1235099",
       "name_zh": "千谎百计",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Rick and Morty",
       "imdb_id": "tt2861424",
-      "name_zh": "瑞克和莫蒂"
+      "name_zh": "瑞克和莫蒂",
+      "mark": "unwatched",
+      "watched_seasons": 9
     },
     {
       "title": "Squid Game",
       "imdb_id": "tt10919420",
       "name_zh": "鱿鱼游戏",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Only Murders in the Building",
       "imdb_id": "tt11691774",
-      "name_zh": "大楼里只有谋杀"
+      "name_zh": "大楼里只有谋杀",
+      "mark": "unwatched"
     },
     {
       "title": "Arcane",
       "imdb_id": "tt11126994",
       "name_zh": "英雄联盟：双城之战",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Ling Cage",
       "imdb_id": "tt10827146",
-      "name_zh": "灵笼"
+      "name_zh": "灵笼",
+      "mark": "unwatched",
+      "watched_seasons": 2
     },
     {
       "title": "Hawkeye",
       "imdb_id": "tt10160804",
       "name_zh": "鹰眼",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Ghosts",
       "imdb_id": "tt11379026",
-      "name_zh": "鬼屋欢乐送"
+      "name_zh": "鬼屋欢乐送",
+      "mark": "unwatched"
     },
     {
       "title": "American Horror Story",
       "imdb_id": "tt1844624",
-      "name_zh": "美国恐怖故事"
+      "name_zh": "美国恐怖故事",
+      "mark": "unwatched"
     },
     {
       "title": "House of the Dragon",
       "imdb_id": "tt11198330",
-      "name_zh": "权力的游戏前传：龙族"
+      "name_zh": "权力的游戏前传：龙族",
+      "mark": "unwatched",
+      "watched_seasons": 2
     },
     {
       "title": "Inventing Anna",
       "imdb_id": "tt8740976",
       "name_zh": "虚构安娜",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Upload",
       "imdb_id": "tt7826376",
       "name_zh": "上载新生",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "The Boys",
       "imdb_id": "tt1190634",
       "name_zh": "黑袍纠察队",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Ms. Marvel",
       "imdb_id": "tt10857164",
       "name_zh": "惊奇少女",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "She-Hulk: Attorney at Law",
       "imdb_id": "tt10857160",
       "name_zh": "女浩克",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Our Great National Parks",
       "imdb_id": "tt18750552",
-      "name_zh": "全球绝美国家公园"
+      "name_zh": "全球绝美国家公园",
+      "mark": "unwatched"
     },
     {
       "title": "The Bear",
@@ -459,170 +530,202 @@
       "title": "Les 7 vies de Léa",
       "imdb_id": "tt14140886",
       "name_zh": "莉亚的7重人生",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Stranger Things",
       "imdb_id": "tt4574334",
       "name_zh": "怪奇物语",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 5
     },
     {
       "title": "Modern Family",
       "imdb_id": "tt1442437",
       "name_zh": "摩登家庭",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 11
     },
     {
       "title": "How I Met Your Mother",
       "imdb_id": "tt0460649",
-      "name_zh": "老爸老妈的浪漫史"
+      "name_zh": "老爸老妈的浪漫史",
+      "mark": "unwatched"
     },
     {
       "title": "The Peripheral",
       "imdb_id": "tt8291284",
       "name_zh": "边缘世界",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "All Creatures Great & Small",
       "imdb_id": "tt10590066",
-      "name_zh": "万物生灵"
+      "name_zh": "万物生灵",
+      "mark": "unwatched"
     },
     {
       "title": "The Lord of the Rings: The Rings of Power",
       "imdb_id": "tt7631058",
-      "name_zh": "指环王：力量之戒"
+      "name_zh": "指环王：力量之戒",
+      "mark": "unwatched"
     },
     {
       "title": "Cyberpunk: Edgerunners",
       "imdb_id": "tt12590266",
       "name_zh": "赛博朋克：边缘行者",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Downton Abbey",
       "imdb_id": "tt1606375",
-      "name_zh": "唐顿庄园"
+      "name_zh": "唐顿庄园",
+      "mark": "unwatched"
     },
     {
       "title": "Gen V",
       "imdb_id": "tt13159924",
       "name_zh": "V世代",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Depp V Heard",
       "imdb_id": "tt27541298",
       "name_zh": "德普大战希尔德",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Walking Dead: Daryl Dixon",
       "imdb_id": "tt13062500",
-      "name_zh": "行尸走肉：达里尔·迪克森"
+      "name_zh": "行尸走肉：达里尔·迪克森",
+      "mark": "unwatched"
     },
     {
       "title": "The Walking Dead: The Ones Who Live",
       "imdb_id": "tt9859436",
       "name_zh": "行尸走肉：存活之人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "3 Body Problem",
       "imdb_id": "tt13016388",
-      "name_zh": "3体"
+      "name_zh": "3体",
+      "mark": "unwatched"
     },
     {
       "title": "Clarkson's Farm",
       "imdb_id": "tt10541088",
-      "name_zh": "克拉克森的农场"
+      "name_zh": "克拉克森的农场",
+      "mark": "unwatched"
     },
     {
       "title": "Agatha All Along",
       "imdb_id": "tt15571732",
       "name_zh": "女巫阿加莎",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Dark",
       "imdb_id": "tt5753856",
-      "name_zh": "暗黑"
+      "name_zh": "暗黑",
+      "mark": "unwatched"
     },
     {
       "title": "The Pitt",
       "imdb_id": "tt31938062",
-      "name_zh": "匹兹堡医护前线"
+      "name_zh": "匹兹堡医护前线",
+      "mark": "unwatched"
     },
     {
       "title": "Gravity Falls",
       "imdb_id": "tt1865718",
-      "name_zh": "怪诞小镇"
+      "name_zh": "怪诞小镇",
+      "mark": "unwatched"
     },
     {
       "title": "Joy of Life",
       "imdb_id": "tt11273352",
-      "name_zh": "庆余年"
+      "name_zh": "庆余年",
+      "mark": "unwatched"
     },
     {
       "title": "Sword Snow Stride",
       "imdb_id": "tt12740306",
-      "name_zh": "雪中悍刀行"
+      "name_zh": "雪中悍刀行",
+      "mark": "unwatched"
     },
     {
       "title": "Chef's Table",
       "imdb_id": "tt4295140",
-      "name_zh": "主厨的餐桌"
+      "name_zh": "主厨的餐桌",
+      "mark": "unwatched"
     },
     {
       "title": "A Knight of the Seven Kingdoms",
       "imdb_id": "tt27497448",
-      "name_zh": "七王国的骑士"
+      "name_zh": "七王国的骑士",
+      "mark": "unwatched"
     },
     {
       "title": "The IT Crowd",
       "imdb_id": "tt0487831",
       "name_zh": "IT狂人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "Black Books",
       "imdb_id": "tt0262150",
       "name_zh": "布莱克书店",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Haunted Hotel",
       "imdb_id": "tt32499579",
-      "name_zh": "酒店有鬼"
+      "name_zh": "酒店有鬼",
+      "mark": "unwatched",
+      "watched_seasons": 1
     },
     {
       "title": "Scissor Seven",
       "imdb_id": "tt10384610",
-      "name_zh": "刺客伍六七"
+      "name_zh": "刺客伍六七",
+      "mark": "unwatched"
     },
     {
       "title": "领风者",
       "imdb_id": "tt9878732",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "What If...?",
       "imdb_id": "tt10168312",
       "name_zh": "假如…？",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Moon Knight",
       "imdb_id": "tt10234724",
       "name_zh": "月光骑士",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Secret Invasion",
       "imdb_id": "tt13157618",
       "name_zh": "秘密入侵",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Echo",
@@ -633,36 +736,43 @@
     {
       "title": "X-Men '97",
       "imdb_id": "tt16026746",
-      "name_zh": "X战警97"
+      "name_zh": "X战警97",
+      "mark": "unwatched",
+      "watched_seasons": 1
     },
     {
       "title": "Your Friendly Neighborhood Spider-Man",
       "imdb_id": "tt16027074",
-      "name_zh": "你的友好邻居蜘蛛侠"
+      "name_zh": "你的友好邻居蜘蛛侠",
+      "mark": "unwatched"
     },
     {
       "title": "Daredevil: Born Again",
       "imdb_id": "tt18923754",
       "name_zh": "夜魔侠：重生",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Marvel's Daredevil",
       "imdb_id": "tt3322312",
       "name_zh": "夜魔侠",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 3
     },
     {
       "title": "Marvel's The Defenders",
       "imdb_id": "tt4230076",
       "name_zh": "捍卫者联盟",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Marvel's The Punisher",
       "imdb_id": "tt5675620",
       "name_zh": "惩罚者",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Ironheart",
@@ -674,57 +784,69 @@
       "title": "Eyes of Wakanda",
       "imdb_id": "tt13968252",
       "name_zh": "瓦坎达之眼",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Marvel Zombies",
       "imdb_id": "tt16027014",
-      "name_zh": "漫威丧尸"
+      "name_zh": "漫威丧尸",
+      "mark": "unwatched",
+      "watched_seasons": 1
     },
     {
       "title": "Wonder Man",
       "imdb_id": "tt21066182",
       "name_zh": "奇迹人",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "Spider-Noir",
       "imdb_id": "tt30460310",
       "name_zh": "暗影蜘蛛侠",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     },
     {
       "title": "The Spectacular Spider-Man",
       "imdb_id": "tt0976192",
       "name_zh": "神奇蜘蛛侠",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Marvel's Ultimate Spider-Man",
       "imdb_id": "tt1722512",
       "name_zh": "终极蜘蛛侠",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 4
     },
     {
       "title": "The Sandman",
       "imdb_id": "tt1751634",
-      "name_zh": "睡魔"
+      "name_zh": "睡魔",
+      "mark": "unwatched",
+      "watched_seasons": 1
     },
     {
       "title": "中国奇谭",
       "imdb_id": "tt26007176",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 2
     },
     {
       "title": "Lucky",
       "imdb_id": "tt34866681",
-      "name_zh": "幸运女神"
+      "name_zh": "幸运女神",
+      "mark": "unwatched"
     },
     {
       "title": "It",
       "imdb_id": "tt0099864",
       "name_zh": "小丑回魂",
-      "mark": "finished"
+      "mark": "finished",
+      "watched_seasons": 1
     }
   ]
 }

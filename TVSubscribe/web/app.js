@@ -84,6 +84,7 @@
   var groupViewField = document.getElementById("group-view-field");
   var groupViewSel = document.getElementById("group-view");
   var groupOverlay = document.getElementById("group-overlay");
+  var groupLabel = document.getElementById("group-label");
   var groupHint = document.getElementById("group-hint");
   var groupList = document.getElementById("group-list");
   var groupInput = document.getElementById("group-input");
@@ -149,7 +150,7 @@
   };
 
   var editMode = false;
-  var selection = [];   // 已勾选电影的 _key（仅电影 Tab 编辑模式，内存态）
+  var selection = [];   // 已勾选条目的 _key（编辑模式，内存态）
 
   // 语言圈判定码：直接按 TMDB 原始语言 original_language 区分
   var ZH_LANGS = { zh: true, cn: true, yue: true };
@@ -497,7 +498,7 @@
     var info = el("div", "info");
 
     var titleRow = el("div", "title-row");
-    if (editMode && kind === "movie") {
+    if (editMode) {
       var check = el("input", "card-check");
       check.type = "checkbox";
       check.checked = selection.indexOf(show._key) >= 0;
@@ -534,8 +535,121 @@
 
     info.appendChild(kind === "movie" ? movieMeta(show) : tvMeta(show));
     c.appendChild(info);
+    if (kind === "tv" && show.found && seasonTotal(show) > 0) {
+      c.appendChild(progressRing(show));
+    }
     return c;
   }
+
+  /* ---------- 看剧进度圆环（卡片右下角，点击弹出快速标记「看到第几季」） ---------- */
+  var openRingPop = null;   // 当前展开的圆环弹窗（同一时刻只开一个）
+
+  function closeRingPop() {
+    if (openRingPop) {
+      openRingPop.classList.remove("ring-open");
+      openRingPop = null;
+    }
+  }
+
+  function seasonTotal(show) {
+    if (show.number_of_seasons && show.number_of_seasons > 0) return show.number_of_seasons;
+    if (show.latest_season && show.latest_season.season_number > 0) return show.latest_season.season_number;
+    return 0;
+  }
+
+  function watchedSeasons(show) {
+    var w = show.watched_seasons;
+    return (typeof w === "number" && w >= 0) ? w : 0;
+  }
+
+  function svgEl(tag, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+
+  function progressRing(show) {
+    var total = seasonTotal(show);
+    var watched = Math.min(watchedSeasons(show), total);
+    var pct = Math.round(watched / total * 100);
+
+    var wrap = el("div", "ring-wrap");
+    wrap.title = "看剧进度 " + watched + "/" + total + " 季";
+
+    var svg = svgEl("svg", { viewBox: "0 0 36 36", "class": "ring-svg" });
+    svg.appendChild(svgEl("circle", { cx: 18, cy: 18, r: 15.5, "class": "ring-bg" }));
+    var C = 2 * Math.PI * 15.5;
+    var fg = svgEl("circle", { cx: 18, cy: 18, r: 15.5, "class": "ring-fg" });
+    fg.setAttribute("stroke-dasharray", C.toFixed(2));
+    fg.setAttribute("stroke-dashoffset", (C * (1 - pct / 100)).toFixed(2));
+    svg.appendChild(fg);
+    wrap.appendChild(svg);
+
+    wrap.appendChild(seasonPopup(show, total, watched));
+
+    wrap.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (wrap.classList.contains("ring-open")) {
+        closeRingPop();
+      } else {
+        closeRingPop();
+        wrap.classList.add("ring-open");
+        openRingPop = wrap;
+      }
+    });
+    return wrap;
+  }
+
+  function seasonPopup(show, total, watched) {
+    var pop = el("div", "ring-pop");
+
+    var head = el("div", "ring-pop-head");
+    head.appendChild(el("span", "ring-pop-title", "标记看到第几季"));
+    if (watched > 0) {
+      var clear = el("button", "ring-clear", "清零");
+      clear.type = "button";
+      clear.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        setWatched(show, 0);
+      });
+      head.appendChild(clear);
+    }
+    pop.appendChild(head);
+
+    var grid = el("div", "ring-grid");
+    for (var n = 1; n <= total; n++) {
+      (function (n) {
+        var b = el("button", "season-dot" + (n <= watched ? " seen" : ""), "S" + n);
+        b.type = "button";
+        b.title = "标记看到第 " + n + " 季";
+        b.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          setWatched(show, n);
+        });
+        grid.appendChild(b);
+      })(n);
+    }
+    pop.appendChild(grid);
+    return pop;
+  }
+
+  /* 写入 watched_seasons；失败回滚（成功后 persistEntries 自动重渲染） */
+  function setWatched(show, value) {
+    closeRingPop();
+    var old = show.watched_seasons;
+    show.watched_seasons = value > 0 ? value : null;
+    persistEntries(allShows(), function () {
+      show.watched_seasons = old;
+    });
+  }
+
+  /* 点击圆环以外区域时关闭弹窗 */
+  document.addEventListener("click", function (ev) {
+    if (openRingPop && !openRingPop.contains(ev.target)) closeRingPop();
+  });
 
   /* ---------- 筛选与排序 ---------- */
   function resetFilterOptions() {
@@ -670,7 +784,7 @@
       grid.appendChild(el("div", "empty", cfg().emptyFiltered));
       return;
     }
-    if (kind === "movie" && groupViewSel.value === "grouped") {
+    if (groupViewSel.value === "grouped") {
       renderGrouped(sorted);
       return;
     }
@@ -698,7 +812,7 @@
     return "";
   }
 
-  /* 按分组聚合渲染（仅电影）：组内沿用全局排序，组间按组内最新上映日期降序，未分组放最后 */
+  /* 按分组聚合渲染：组内沿用全局排序，组间按组内最新上映日期降序，未分组放最后 */
   function renderGrouped(list) {
     var byName = {};
     var ungrouped = [];
@@ -715,7 +829,8 @@
     function latestOf(items) {
       var d = "";
       items.forEach(function (s) {
-        if (s.release_date && s.release_date > d) d = s.release_date;
+        var v = (kind === "tv" ? (s.last_air_date || s.first_air_date) : s.release_date) || "";
+        if (v && v > d) d = v;
       });
       return d;
     }
@@ -1040,12 +1155,12 @@
     });
   }
 
-  /* ---------- 批量标记（作用于勾选的电影） ---------- */
+  /* ---------- 批量标记（作用于勾选的条目） ---------- */
   function openBatchMarkDialog() {
     if (!selection.length) return;
     batchMarkMode = true;
     pendingMark = null;
-    markLabel.textContent = "批量标记 " + selection.length + " 部电影";
+    markLabel.textContent = "批量标记 " + selection.length + " 部" + cfg().itemLabel;
     markOverlay.querySelectorAll(".mark-opt").forEach(function (btn) {
       btn.classList.toggle("selected", false);
     });
@@ -1088,7 +1203,7 @@
     render();
   }
 
-  /* ---------- 电影分组（批量多选，可检索、系统/自定义标识） ---------- */
+  /* ---------- 批量分组（多选，可检索、系统/自定义标识） ---------- */
   var groupItems = [];   // {name, type: 'auto'=TMDB系列 | 'manual'=自定义分组}
 
   function buildGroupItems() {
@@ -1143,7 +1258,7 @@
       if (collName === null) collName = cn;
       else if (cn !== collName) collSame = false;
     });
-    groupHint.textContent = "已选 " + selection.length + " 部电影"
+    groupHint.textContent = "已选 " + selection.length + " 部" + cfg().itemLabel
       + (collSame && collName ? " · TMDB 系列：" + collName : "");
 
     // 预选：手动组相同优先；否则自动系列相同则预选系列名
@@ -1183,7 +1298,7 @@
   function confirmGroup() {
     var name = groupInput.value.trim();
     if (!name) {
-      showDialog("电影分组", "请输入新组名，或从列表中选择已有分组。", [
+      showDialog(cfg().itemLabel + "分组", "请输入新组名，或从列表中选择已有分组。", [
         { label: "关闭", value: false, primary: true }
       ]);
       return;
@@ -1271,7 +1386,7 @@
     btnEdit.classList.toggle("tb-btn-active", editMode);
     btnEdit.textContent = "✎";
     editorRow.hidden = !editMode;
-    var extraVisible = editMode && kind === "movie";
+    var extraVisible = editMode;
     btnGroup.hidden = !extraVisible;
     btnSelectAll.hidden = !extraVisible;
     btnBatchMark.hidden = !extraVisible;
@@ -1316,7 +1431,8 @@
     addTitleLabel.textContent = c.dialogTitle;
     inputTitle.placeholder = c.searchPlaceholder;
     mTitleLabel.textContent = c.manualTitleLabel;
-    groupViewField.hidden = kind !== "movie";
+    groupLabel.textContent = c.itemLabel + "分组";
+    btnGroup.title = "勾选" + c.itemLabel + "后加入 / 移出分组";
     originField.hidden = kind !== "movie";
     statusField.hidden = kind !== "tv";
   }
@@ -1399,7 +1515,7 @@
     if (originSel.value) q.set(URL_PARAMS.origin, originSel.value);
     if (sortSel.value) q.set(URL_PARAMS.sort, sortSel.value);
     if (sortDirBtn.dataset.dir === "asc") q.set(URL_PARAMS.dir, "asc");
-    if (kind === "movie" && groupViewSel.value === "grouped") q.set(URL_PARAMS.view, "grouped");
+    if (groupViewSel.value === "grouped") q.set(URL_PARAMS.view, "grouped");
     if (searchInput.value.trim()) q.set(URL_PARAMS.q, searchInput.value.trim());
     var s = q.toString();
     history.replaceState(null, "", window.location.pathname + (s ? "?" + s : ""));
@@ -1639,7 +1755,7 @@
     sortDirBtn.dataset.dir = "asc";
     sortDirBtn.querySelector(".dir-text").textContent = "升序";
   }
-  groupViewSel.value = (kind === "movie" && urlState.view === "grouped") ? "grouped" : "flat";
+  groupViewSel.value = urlState.view === "grouped" ? "grouped" : "flat";
   if (kind === "movie" && urlState.origin) originSel.value = urlState.origin;
   searchInput.value = urlState.q || "";
   searchClear.hidden = !urlState.q;

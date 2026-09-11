@@ -303,6 +303,7 @@ def build_entry(title, raw, kind="tv", api_key=None, collection_cache=None):
         "last_episode": episode(last_ep),
         "next_episode": episode(next_ep),
         "latest_season": pick_latest_season(raw.get("seasons")),
+        "number_of_seasons": raw.get("number_of_seasons"),
         "networks": [n.get("name") for n in (raw.get("networks") or []) if n.get("name")],
         "found": True,
     }
@@ -377,6 +378,10 @@ def process_item(api_key, item, kind="tv", collection_cache=None):
     entry["imdb_id"] = (item.get("imdb_id") or "").strip() or None
     entry["mark"] = (item.get("mark") or "").strip() or None
     entry["group"] = (item.get("group") or "").strip() or None
+    try:
+        entry["watched_seasons"] = int(item.get("watched_seasons")) if item.get("watched_seasons") is not None else None
+    except (TypeError, ValueError):
+        entry["watched_seasons"] = None
     print(f"[完成] {entry.get('name') or display} -> {entry.get('status_zh')}")
     return entry, changed
 
