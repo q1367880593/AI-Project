@@ -706,7 +706,8 @@
       "title": "领风者",
       "imdb_id": "tt9878732",
       "mark": "finished",
-      "watched_seasons": 1
+      "watched_seasons": 1,
+      "name_zh": "领风者"
     },
     {
       "title": "What If...?",
@@ -835,7 +836,8 @@
       "title": "中国奇谭",
       "imdb_id": "tt26007176",
       "mark": "finished",
-      "watched_seasons": 2
+      "watched_seasons": 2,
+      "name_zh": "中国奇谭"
     },
     {
       "title": "Lucky",

@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-11 13:59:35",
+  "generated_at": "2026-09-11 18:02:30",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -24,8 +24,14 @@ window.TV_DATA = {
         "air_date": "2019-04-14",
         "episode_count": 6
       },
+      "number_of_seasons": 8,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 1399,
@@ -56,8 +62,13 @@ window.TV_DATA = {
         "air_date": "2012-07-15",
         "episode_count": 16
       },
+      "number_of_seasons": 5,
       "networks": [
         "AMC"
+      ],
+      "genres": [
+        "剧情",
+        "犯罪"
       ],
       "found": true,
       "tmdb_id": 1396,
@@ -88,8 +99,13 @@ window.TV_DATA = {
         "air_date": "2022-06-26",
         "episode_count": 8
       },
+      "number_of_seasons": 4,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "西部"
       ],
       "found": true,
       "tmdb_id": 63247,
@@ -120,8 +136,14 @@ window.TV_DATA = {
         "air_date": "2017-04-04",
         "episode_count": 9
       },
+      "number_of_seasons": 5,
       "networks": [
         "FOX"
+      ],
+      "genres": [
+        "动作冒险",
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 2288,
@@ -152,14 +174,20 @@ window.TV_DATA = {
         "air_date": "2019-12-02",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "Rai 1"
+      ],
+      "genres": [
+        "剧情",
+        "War & Politics"
       ],
       "found": true,
       "tmdb_id": 66761,
       "imdb_id": "tt5057130",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Uncle",
@@ -183,8 +211,12 @@ window.TV_DATA = {
         "air_date": "2017-01-01",
         "episode_count": 7
       },
+      "number_of_seasons": 3,
       "networks": [
         "BBC Three"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 62019,
@@ -215,8 +247,13 @@ window.TV_DATA = {
         "air_date": "2022-04-18",
         "episode_count": 13
       },
+      "number_of_seasons": 6,
       "networks": [
         "AMC"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 60059,
@@ -247,8 +284,12 @@ window.TV_DATA = {
         "air_date": "2019-10-27",
         "episode_count": 7
       },
+      "number_of_seasons": 6,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 60573,
@@ -279,9 +320,14 @@ window.TV_DATA = {
         "air_date": "2019-01-09",
         "episode_count": 13
       },
+      "number_of_seasons": 5,
       "networks": [
         "FX",
         "FXX"
+      ],
+      "genres": [
+        "喜剧",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 61118,
@@ -312,8 +358,13 @@ window.TV_DATA = {
         "air_date": "2020-12-06",
         "episode_count": 12
       },
+      "number_of_seasons": 11,
       "networks": [
         "Showtime"
+      ],
+      "genres": [
+        "剧情",
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 34307,
@@ -344,8 +395,13 @@ window.TV_DATA = {
         "air_date": "2016-10-21",
         "episode_count": 16
       },
+      "number_of_seasons": 8,
       "networks": [
         "The CW"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 18165,
@@ -376,8 +432,14 @@ window.TV_DATA = {
         "air_date": "2018-04-18",
         "episode_count": 13
       },
+      "number_of_seasons": 5,
       "networks": [
         "The CW"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 46896,
@@ -408,14 +470,21 @@ window.TV_DATA = {
         "air_date": "2020-05-27",
         "episode_count": 13
       },
+      "number_of_seasons": 7,
       "networks": [
         "ABC"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 1403,
       "imdb_id": "tt2364582",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Agent Carter",
@@ -439,8 +508,13 @@ window.TV_DATA = {
         "air_date": "2016-01-19",
         "episode_count": 10
       },
+      "number_of_seasons": 2,
       "networks": [
         "ABC"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 61550,
@@ -471,8 +545,14 @@ window.TV_DATA = {
         "air_date": "2017-07-16",
         "episode_count": 10
       },
+      "number_of_seasons": 4,
       "networks": [
         "FX"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 47640,
@@ -503,8 +583,12 @@ window.TV_DATA = {
         "air_date": "2022-01-04",
         "episode_count": 18
       },
+      "number_of_seasons": 6,
       "networks": [
         "NBC"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 67136,
@@ -535,15 +619,21 @@ window.TV_DATA = {
         "air_date": "2022-01-07",
         "episode_count": 7
       },
+      "number_of_seasons": 3,
       "networks": [
         "Sky One",
         "Sky Max"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 77236,
       "imdb_id": "tt2177461",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Purge",
@@ -567,8 +657,14 @@ window.TV_DATA = {
         "air_date": "2019-10-15",
         "episode_count": 10
       },
+      "number_of_seasons": 2,
       "networks": [
         "USA Network"
+      ],
+      "genres": [
+        "悬疑",
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 80213,
@@ -599,14 +695,19 @@ window.TV_DATA = {
         "air_date": "2024-11-11",
         "episode_count": 10
       },
+      "number_of_seasons": 4,
       "networks": [
         "Rai 1"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 78154,
       "imdb_id": "tt7278862",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Gifted",
@@ -630,8 +731,14 @@ window.TV_DATA = {
         "air_date": "2018-09-25",
         "episode_count": 16
       },
+      "number_of_seasons": 2,
       "networks": [
         "FOX"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 69629,
@@ -662,8 +769,12 @@ window.TV_DATA = {
         "air_date": "2016-10-10",
         "episode_count": 21
       },
+      "number_of_seasons": 6,
       "networks": [
         "CBS"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 39340,
@@ -694,14 +805,20 @@ window.TV_DATA = {
         "air_date": "2021-10-14",
         "episode_count": 20
       },
+      "number_of_seasons": 4,
       "networks": [
         "The CW"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 79460,
       "imdb_id": "tt8103070",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Walking Dead",
@@ -725,8 +842,14 @@ window.TV_DATA = {
         "air_date": "2021-08-22",
         "episode_count": 24
       },
+      "number_of_seasons": 11,
       "networks": [
         "AMC"
+      ],
+      "genres": [
+        "动作冒险",
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 1402,
@@ -757,8 +880,12 @@ window.TV_DATA = {
         "air_date": "2019-05-06",
         "episode_count": 5
       },
+      "number_of_seasons": 1,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 87108,
@@ -789,14 +916,20 @@ window.TV_DATA = {
         "air_date": "2023-02-08",
         "episode_count": 13
       },
+      "number_of_seasons": 9,
       "networks": [
         "The CW"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 60735,
       "imdb_id": "tt3107288",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Good Omens",
@@ -820,14 +953,21 @@ window.TV_DATA = {
         "air_date": "2026-05-13",
         "episode_count": 1
       },
+      "number_of_seasons": 3,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "喜剧",
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 71915,
       "imdb_id": "tt1869454",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Killing Eve",
@@ -851,8 +991,13 @@ window.TV_DATA = {
         "air_date": "2022-02-27",
         "episode_count": 8
       },
+      "number_of_seasons": 4,
       "networks": [
         "BBC America"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 72750,
@@ -883,8 +1028,14 @@ window.TV_DATA = {
         "air_date": "2025-04-08",
         "episode_count": 10
       },
+      "number_of_seasons": 6,
       "networks": [
         "Hulu"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 69478,
@@ -915,14 +1066,19 @@ window.TV_DATA = {
         "air_date": "2026-04-11",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 85552,
       "imdb_id": "tt8772296",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Horace and Pete",
@@ -946,7 +1102,12 @@ window.TV_DATA = {
         "air_date": "2016-01-30",
         "episode_count": 10
       },
+      "number_of_seasons": 1,
       "networks": [],
+      "genres": [
+        "剧情",
+        "喜剧"
+      ],
       "found": true,
       "tmdb_id": 65454,
       "imdb_id": "tt5425186",
@@ -976,8 +1137,13 @@ window.TV_DATA = {
         "air_date": "2023-04-13",
         "episode_count": 9
       },
+      "number_of_seasons": 5,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "喜剧",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 70796,
@@ -1008,9 +1174,11 @@ window.TV_DATA = {
         "air_date": "2019-06-10",
         "episode_count": 3
       },
+      "number_of_seasons": 1,
       "networks": [
         "YouTube"
       ],
+      "genres": [],
       "found": true,
       "tmdb_id": 106661,
       "imdb_id": "tt10404752",
@@ -1040,8 +1208,13 @@ window.TV_DATA = {
         "air_date": "2018-05-06",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "showcase"
+      ],
+      "genres": [
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 78881,
@@ -1072,8 +1245,12 @@ window.TV_DATA = {
         "air_date": "2018-09-24",
         "episode_count": 24
       },
+      "number_of_seasons": 12,
       "networks": [
         "CBS"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 1418,
@@ -1104,9 +1281,15 @@ window.TV_DATA = {
         "air_date": "2021-06-03",
         "episode_count": 10
       },
+      "number_of_seasons": 2,
       "networks": [
         "CBS All Access",
         "Paramount+"
+      ],
+      "genres": [
+        "喜剧",
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 87428,
@@ -1137,14 +1320,21 @@ window.TV_DATA = {
         "air_date": "2025-10-30",
         "episode_count": 8
       },
+      "number_of_seasons": 4,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 71912,
       "imdb_id": "tt5180504",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Love, Death & Robots",
@@ -1168,8 +1358,13 @@ window.TV_DATA = {
         "air_date": "2025-05-15",
         "episode_count": 10
       },
+      "number_of_seasons": 4,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动画",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 86831,
@@ -1200,8 +1395,13 @@ window.TV_DATA = {
         "air_date": "2020-03-13",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "纪录",
+        "真人秀"
       ],
       "found": true,
       "tmdb_id": 100429,
@@ -1232,8 +1432,13 @@ window.TV_DATA = {
         "air_date": "2023-09-21",
         "episode_count": 8
       },
+      "number_of_seasons": 4,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "喜剧",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 81356,
@@ -1264,8 +1469,14 @@ window.TV_DATA = {
         "air_date": "2017-01-01",
         "episode_count": 3
       },
+      "number_of_seasons": 4,
       "networks": [
         "BBC One"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 19885,
@@ -1296,14 +1507,20 @@ window.TV_DATA = {
         "air_date": "2023-11-21",
         "episode_count": 10
       },
+      "number_of_seasons": 5,
       "networks": [
         "FX"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 60622,
       "imdb_id": "tt2802850",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Mrs. America",
@@ -1327,8 +1544,12 @@ window.TV_DATA = {
         "air_date": "2020-04-15",
         "episode_count": 9
       },
+      "number_of_seasons": 1,
       "networks": [
         "Hulu"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 83605,
@@ -1359,8 +1580,12 @@ window.TV_DATA = {
         "air_date": "2003-09-25",
         "episode_count": 17
       },
+      "number_of_seasons": 10,
       "networks": [
         "NBC"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 1668,
@@ -1391,14 +1616,20 @@ window.TV_DATA = {
         "air_date": "2024-10-21",
         "episode_count": 11
       },
+      "number_of_seasons": 6,
       "networks": [
         "FX"
+      ],
+      "genres": [
+        "喜剧",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 83631,
       "imdb_id": "tt7908628",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Young Sheldon",
@@ -1422,8 +1653,14 @@ window.TV_DATA = {
         "air_date": "2024-02-15",
         "episode_count": 14
       },
+      "number_of_seasons": 7,
       "networks": [
         "CBS"
+      ],
+      "genres": [
+        "喜剧",
+        "家庭",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 71728,
@@ -1454,14 +1691,20 @@ window.TV_DATA = {
         "air_date": "2022-02-03",
         "episode_count": 8
       },
+      "number_of_seasons": 2,
       "networks": [
         "HBO Max"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 85723,
       "imdb_id": "tt9170108",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Black Mirror",
@@ -1485,9 +1728,15 @@ window.TV_DATA = {
         "air_date": "2025-04-10",
         "episode_count": 6
       },
+      "number_of_seasons": 7,
       "networks": [
         "Channel 4",
         "Netflix"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 42009,
@@ -1518,8 +1767,15 @@ window.TV_DATA = {
         "air_date": "2019-10-20",
         "episode_count": 9
       },
+      "number_of_seasons": 1,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "剧情",
+        "犯罪",
+        "Sci-Fi & Fantasy",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 79788,
@@ -1550,8 +1806,14 @@ window.TV_DATA = {
         "air_date": "2021-01-15",
         "episode_count": 9
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "悬疑",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 85271,
@@ -1582,8 +1844,12 @@ window.TV_DATA = {
         "air_date": "2020-10-23",
         "episode_count": 7
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 87739,
@@ -1614,15 +1880,20 @@ window.TV_DATA = {
         "air_date": "2022-11-24",
         "episode_count": 6
       },
+      "number_of_seasons": 3,
       "networks": [
         "BBC One",
         "BritBox"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 104674,
       "imdb_id": "tt12369754",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Falcon and the Winter Soldier",
@@ -1646,8 +1917,13 @@ window.TV_DATA = {
         "air_date": "2021-03-19",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "动作冒险",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 88396,
@@ -1678,8 +1954,13 @@ window.TV_DATA = {
         "air_date": "2023-03-01",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 82856,
@@ -1710,7 +1991,11 @@ window.TV_DATA = {
         "air_date": "2020-12-22",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [],
+      "genres": [
+        "剧情"
+      ],
       "found": true,
       "tmdb_id": 208736,
       "imdb_id": "tt13653972",
@@ -1740,8 +2025,13 @@ window.TV_DATA = {
         "air_date": "2023-10-05",
         "episode_count": 6
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 84958,
@@ -1772,8 +2062,13 @@ window.TV_DATA = {
         "air_date": "2022-05-26",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 92830,
@@ -1804,8 +2099,13 @@ window.TV_DATA = {
         "air_date": "2021-12-29",
         "episode_count": 7
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "动作冒险",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 115036,
@@ -1836,8 +2136,14 @@ window.TV_DATA = {
         "air_date": "2025-04-22",
         "episode_count": 12
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 83867,
@@ -1873,14 +2179,20 @@ window.TV_DATA = {
         "air_date": "2027-01-19",
         "episode_count": 8
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 114461,
       "imdb_id": "tt13622776",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Acolyte",
@@ -1904,8 +2216,14 @@ window.TV_DATA = {
         "air_date": "2024-06-04",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "悬疑",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 114479,
@@ -1936,16 +2254,24 @@ window.TV_DATA = {
         "air_date": "2025-01-16",
         "episode_count": 10
       },
+      "number_of_seasons": 5,
       "networks": [
         "DC Universe",
         "HBO Max",
         "Max"
       ],
+      "genres": [
+        "动作冒险",
+        "动画",
+        "喜剧",
+        "Sci-Fi & Fantasy"
+      ],
       "found": true,
       "tmdb_id": 74440,
       "imdb_id": "tt7658402",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Lie to Me",
@@ -1969,8 +2295,14 @@ window.TV_DATA = {
         "air_date": "2010-10-04",
         "episode_count": 13
       },
+      "number_of_seasons": 3,
       "networks": [
         "FOX"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 8358,
@@ -2001,8 +2333,15 @@ window.TV_DATA = {
         "air_date": "2026-05-24",
         "episode_count": 10
       },
+      "number_of_seasons": 9,
       "networks": [
         "Adult Swim"
+      ],
+      "genres": [
+        "动画",
+        "喜剧",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 60625,
@@ -2033,8 +2372,14 @@ window.TV_DATA = {
         "air_date": "2025-06-27",
         "episode_count": 6
       },
+      "number_of_seasons": 3,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动作冒险",
+        "悬疑",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 93405,
@@ -2070,14 +2415,21 @@ window.TV_DATA = {
         "air_date": "2026-12-08",
         "episode_count": 1
       },
+      "number_of_seasons": 6,
       "networks": [
         "Hulu"
+      ],
+      "genres": [
+        "喜剧",
+        "悬疑",
+        "犯罪"
       ],
       "found": true,
       "tmdb_id": 107113,
       "imdb_id": "tt11691774",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Arcane",
@@ -2101,8 +2453,14 @@ window.TV_DATA = {
         "air_date": "2024-11-09",
         "episode_count": 9
       },
+      "number_of_seasons": 2,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动画",
+        "动作冒险",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 94605,
@@ -2133,8 +2491,16 @@ window.TV_DATA = {
         "air_date": "2025-05-23",
         "episode_count": 12
       },
+      "number_of_seasons": 2,
       "networks": [
         "bilibili"
+      ],
+      "genres": [
+        "动画",
+        "Sci-Fi & Fantasy",
+        "动作冒险",
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 91097,
@@ -2165,8 +2531,14 @@ window.TV_DATA = {
         "air_date": "2021-11-24",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "剧情",
+        "喜剧",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 88329,
@@ -2202,14 +2574,20 @@ window.TV_DATA = {
         "air_date": "2026-10-29",
         "episode_count": 4
       },
+      "number_of_seasons": 6,
       "networks": [
         "CBS"
+      ],
+      "genres": [
+        "喜剧",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 126027,
       "imdb_id": "tt11379026",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "American Horror Story",
@@ -2238,14 +2616,21 @@ window.TV_DATA = {
         "air_date": "2026-09-24",
         "episode_count": 13
       },
+      "number_of_seasons": 13,
       "networks": [
         "FX"
+      ],
+      "genres": [
+        "剧情",
+        "悬疑",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 1413,
       "imdb_id": "tt1844624",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "House of the Dragon",
@@ -2269,8 +2654,14 @@ window.TV_DATA = {
         "air_date": "2026-06-21",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 94997,
@@ -2301,8 +2692,12 @@ window.TV_DATA = {
         "air_date": "2022-02-11",
         "episode_count": 9
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 95665,
@@ -2333,8 +2728,14 @@ window.TV_DATA = {
         "air_date": "2025-08-25",
         "episode_count": 4
       },
+      "number_of_seasons": 4,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "喜剧",
+        "Sci-Fi & Fantasy",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 86248,
@@ -2365,8 +2766,13 @@ window.TV_DATA = {
         "air_date": "2026-04-08",
         "episode_count": 8
       },
+      "number_of_seasons": 5,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 76479,
@@ -2397,8 +2803,14 @@ window.TV_DATA = {
         "air_date": "2022-06-08",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险",
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 92782,
@@ -2429,8 +2841,13 @@ window.TV_DATA = {
         "air_date": "2022-08-18",
         "episode_count": 9
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "喜剧",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 92783,
@@ -2461,14 +2878,19 @@ window.TV_DATA = {
         "air_date": "2022-04-13",
         "episode_count": 5
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "纪录"
       ],
       "found": true,
       "tmdb_id": 195258,
       "imdb_id": "tt18750552",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Bear",
@@ -2492,8 +2914,13 @@ window.TV_DATA = {
         "air_date": "2026-06-25",
         "episode_count": 8
       },
+      "number_of_seasons": 5,
       "networks": [
         "Hulu"
+      ],
+      "genres": [
+        "剧情",
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 136315,
@@ -2524,8 +2951,13 @@ window.TV_DATA = {
         "air_date": "2022-04-28",
         "episode_count": 7
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "剧情",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 195928,
@@ -2556,8 +2988,14 @@ window.TV_DATA = {
         "air_date": "2025-11-26",
         "episode_count": 8
       },
+      "number_of_seasons": 5,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动作冒险",
+        "悬疑",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 66732,
@@ -2588,8 +3026,12 @@ window.TV_DATA = {
         "air_date": "2019-09-25",
         "episode_count": 18
       },
+      "number_of_seasons": 11,
       "networks": [
         "ABC"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 1421,
@@ -2620,14 +3062,19 @@ window.TV_DATA = {
         "air_date": "2013-09-23",
         "episode_count": 24
       },
+      "number_of_seasons": 9,
       "networks": [
         "CBS"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 1100,
       "imdb_id": "tt0460649",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Peripheral",
@@ -2651,8 +3098,13 @@ window.TV_DATA = {
         "air_date": "2022-10-20",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 95403,
@@ -2688,14 +3140,20 @@ window.TV_DATA = {
         "air_date": "2026-09-17",
         "episode_count": 6
       },
+      "number_of_seasons": 7,
       "networks": [
         "5"
+      ],
+      "genres": [
+        "剧情",
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 108255,
       "imdb_id": "tt10590066",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Lord of the Rings: The Rings of Power",
@@ -2724,14 +3182,21 @@ window.TV_DATA = {
         "air_date": "2026-11-10",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "动作冒险",
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 84773,
       "imdb_id": "tt7631058",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Cyberpunk: Edgerunners",
@@ -2755,8 +3220,15 @@ window.TV_DATA = {
         "air_date": "2022-09-13",
         "episode_count": 10
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动画",
+        "动作冒险",
+        "Sci-Fi & Fantasy",
+        "犯罪"
       ],
       "found": true,
       "tmdb_id": 105248,
@@ -2787,14 +3259,19 @@ window.TV_DATA = {
         "air_date": "2015-09-20",
         "episode_count": 8
       },
+      "number_of_seasons": 6,
       "networks": [
         "ITV1"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 33907,
       "imdb_id": "tt1606375",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Gen V",
@@ -2818,8 +3295,14 @@ window.TV_DATA = {
         "air_date": "2025-09-17",
         "episode_count": 8
       },
+      "number_of_seasons": 2,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "动作冒险",
+        "剧情",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 205715,
@@ -2850,8 +3333,13 @@ window.TV_DATA = {
         "air_date": "2023-05-21",
         "episode_count": 3
       },
+      "number_of_seasons": 1,
       "networks": [
         "Channel 4"
+      ],
+      "genres": [
+        "真人秀",
+        "纪录"
       ],
       "found": true,
       "tmdb_id": 227381,
@@ -2882,14 +3370,21 @@ window.TV_DATA = {
         "air_date": "2025-09-06",
         "episode_count": 7
       },
+      "number_of_seasons": 4,
       "networks": [
         "AMC"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 211684,
       "imdb_id": "tt13062500",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Walking Dead: The Ones Who Live",
@@ -2913,8 +3408,13 @@ window.TV_DATA = {
         "air_date": "2024-02-25",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "AMC"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 206586,
@@ -2945,14 +3445,21 @@ window.TV_DATA = {
         "air_date": "2024-03-21",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "悬疑",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 108545,
       "imdb_id": "tt13016388",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Clarkson's Farm",
@@ -2976,8 +3483,13 @@ window.TV_DATA = {
         "air_date": "2026-06-03",
         "episode_count": 8
       },
+      "number_of_seasons": 5,
       "networks": [
         "Prime Video"
+      ],
+      "genres": [
+        "真人秀",
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 117648,
@@ -3008,8 +3520,13 @@ window.TV_DATA = {
         "air_date": "2024-09-18",
         "episode_count": 9
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 138501,
@@ -3040,14 +3557,22 @@ window.TV_DATA = {
         "air_date": "2020-06-27",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情",
+        "Sci-Fi & Fantasy",
+        "悬疑"
       ],
       "found": true,
       "tmdb_id": 70523,
       "imdb_id": "tt5753856",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The Pitt",
@@ -3071,15 +3596,20 @@ window.TV_DATA = {
         "air_date": "2026-01-08",
         "episode_count": 15
       },
+      "number_of_seasons": 3,
       "networks": [
         "Max",
         "HBO Max"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 250307,
       "imdb_id": "tt31938062",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Gravity Falls",
@@ -3103,15 +3633,25 @@ window.TV_DATA = {
         "air_date": "2014-08-01",
         "episode_count": 20
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney Channel",
         "Disney XD"
+      ],
+      "genres": [
+        "动作冒险",
+        "动画",
+        "喜剧",
+        "家庭",
+        "悬疑",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 40075,
       "imdb_id": "tt1865718",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Joy of Life",
@@ -3135,16 +3675,24 @@ window.TV_DATA = {
         "air_date": "2024-05-16",
         "episode_count": 36
       },
+      "number_of_seasons": 3,
       "networks": [
         "CCTV-8",
         "Zhejiang Television",
         "Tencent Video"
       ],
+      "genres": [
+        "剧情",
+        "喜剧",
+        "Sci-Fi & Fantasy",
+        "War & Politics"
+      ],
       "found": true,
       "tmdb_id": 95842,
       "imdb_id": "tt11273352",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Sword Snow Stride",
@@ -3168,15 +3716,20 @@ window.TV_DATA = {
         "air_date": "2021-12-15",
         "episode_count": 38
       },
+      "number_of_seasons": 1,
       "networks": [
         "CCTV-8",
         "Tencent Video"
+      ],
+      "genres": [
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 89614,
       "imdb_id": "tt12740306",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Chef's Table",
@@ -3200,14 +3753,19 @@ window.TV_DATA = {
         "air_date": "2024-11-27",
         "episode_count": 4
       },
+      "number_of_seasons": 7,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "纪录"
       ],
       "found": true,
       "tmdb_id": 62391,
       "imdb_id": "tt4295140",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "A Knight of the Seven Kingdoms",
@@ -3231,14 +3789,21 @@ window.TV_DATA = {
         "air_date": "2026-01-18",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "HBO"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 224372,
       "imdb_id": "tt27497448",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "The IT Crowd",
@@ -3262,8 +3827,12 @@ window.TV_DATA = {
         "air_date": "2010-06-25",
         "episode_count": 6
       },
+      "number_of_seasons": 4,
       "networks": [
         "Channel 4"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 2490,
@@ -3294,8 +3863,12 @@ window.TV_DATA = {
         "air_date": "2004-03-11",
         "episode_count": 6
       },
+      "number_of_seasons": 3,
       "networks": [
         "Channel 4"
+      ],
+      "genres": [
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 903,
@@ -3331,8 +3904,13 @@ window.TV_DATA = {
         "air_date": "2026-10-09",
         "episode_count": 1
       },
+      "number_of_seasons": 2,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动画",
+        "喜剧"
       ],
       "found": true,
       "tmdb_id": 255752,
@@ -3363,17 +3941,25 @@ window.TV_DATA = {
         "air_date": "2024-10-02",
         "episode_count": 10
       },
+      "number_of_seasons": 5,
       "networks": [
         "iQiyi",
         "Youku",
         "bilibili",
         "Tencent Video"
       ],
+      "genres": [
+        "动画",
+        "喜剧",
+        "动作冒险",
+        "Sci-Fi & Fantasy"
+      ],
       "found": true,
       "tmdb_id": 79141,
       "imdb_id": "tt10384610",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "领风者",
@@ -3397,8 +3983,14 @@ window.TV_DATA = {
         "air_date": "2019-01-28",
         "episode_count": 7
       },
+      "number_of_seasons": 1,
       "networks": [
         "bilibili"
+      ],
+      "genres": [
+        "动画",
+        "剧情",
+        "War & Politics"
       ],
       "found": true,
       "tmdb_id": 86648,
@@ -3429,8 +4021,14 @@ window.TV_DATA = {
         "air_date": "2024-12-22",
         "episode_count": 8
       },
+      "number_of_seasons": 3,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "动画",
+        "动作冒险",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 91363,
@@ -3461,8 +4059,14 @@ window.TV_DATA = {
         "air_date": "2022-03-30",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "悬疑",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 92749,
@@ -3493,8 +4097,14 @@ window.TV_DATA = {
         "air_date": "2023-06-21",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "剧情",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 114472,
@@ -3525,15 +4135,22 @@ window.TV_DATA = {
         "air_date": "2024-01-09",
         "episode_count": 5
       },
+      "number_of_seasons": 1,
       "networks": [
         "Hulu",
         "Disney+"
+      ],
+      "genres": [
+        "动作冒险",
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 122226,
       "imdb_id": "tt13966962",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "X-Men '97",
@@ -3557,8 +4174,14 @@ window.TV_DATA = {
         "air_date": "2026-07-01",
         "episode_count": 9
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "动画",
+        "动作冒险",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 138502,
@@ -3589,14 +4212,21 @@ window.TV_DATA = {
         "air_date": "2025-01-27",
         "episode_count": 10
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "动画",
+        "动作冒险",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 138503,
       "imdb_id": "tt16027074",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Daredevil: Born Again",
@@ -3620,8 +4250,14 @@ window.TV_DATA = {
         "air_date": "2026-03-24",
         "episode_count": 8
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "剧情",
+        "动作冒险",
+        "犯罪"
       ],
       "found": true,
       "tmdb_id": 202555,
@@ -3652,8 +4288,14 @@ window.TV_DATA = {
         "air_date": "2018-10-19",
         "episode_count": 13
       },
+      "number_of_seasons": 3,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "犯罪",
+        "剧情",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 61889,
@@ -3684,8 +4326,14 @@ window.TV_DATA = {
         "air_date": "2017-08-18",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动作冒险",
+        "犯罪"
       ],
       "found": true,
       "tmdb_id": 62285,
@@ -3716,8 +4364,14 @@ window.TV_DATA = {
         "air_date": "2019-01-18",
         "episode_count": 13
       },
+      "number_of_seasons": 2,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "动作冒险",
+        "犯罪",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 67178,
@@ -3748,14 +4402,21 @@ window.TV_DATA = {
         "air_date": "2025-06-24",
         "episode_count": 6
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "犯罪",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 114471,
       "imdb_id": "tt13623126",
       "mark": "dropped",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "Eyes of Wakanda",
@@ -3779,8 +4440,14 @@ window.TV_DATA = {
         "air_date": "2025-08-01",
         "episode_count": 4
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "动画",
+        "Sci-Fi & Fantasy",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 241388,
@@ -3811,8 +4478,14 @@ window.TV_DATA = {
         "air_date": "2025-09-24",
         "episode_count": 4
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "动画",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 138505,
@@ -3843,8 +4516,13 @@ window.TV_DATA = {
         "air_date": "2026-01-26",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "Disney+"
+      ],
+      "genres": [
+        "喜剧",
+        "剧情"
       ],
       "found": true,
       "tmdb_id": 198178,
@@ -3875,8 +4553,14 @@ window.TV_DATA = {
         "air_date": "2026-05-25",
         "episode_count": 8
       },
+      "number_of_seasons": 1,
       "networks": [
         "MGM+"
+      ],
+      "genres": [
+        "剧情",
+        "悬疑",
+        "犯罪"
       ],
       "found": true,
       "tmdb_id": 220102,
@@ -3907,9 +4591,16 @@ window.TV_DATA = {
         "air_date": "2009-06-22",
         "episode_count": 13
       },
+      "number_of_seasons": 2,
       "networks": [
         "Disney XD",
         "The CW"
+      ],
+      "genres": [
+        "动作冒险",
+        "动画",
+        "儿童",
+        "家庭"
       ],
       "found": true,
       "tmdb_id": 3854,
@@ -3940,8 +4631,15 @@ window.TV_DATA = {
         "air_date": "2016-02-21",
         "episode_count": 26
       },
+      "number_of_seasons": 4,
       "networks": [
         "Disney XD"
+      ],
+      "genres": [
+        "动画",
+        "动作冒险",
+        "喜剧",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 34391,
@@ -3972,8 +4670,14 @@ window.TV_DATA = {
         "air_date": "2025-07-03",
         "episode_count": 12
       },
+      "number_of_seasons": 2,
       "networks": [
         "Netflix"
+      ],
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "剧情",
+        "动作冒险"
       ],
       "found": true,
       "tmdb_id": 90802,
@@ -4004,8 +4708,13 @@ window.TV_DATA = {
         "air_date": "2026-01-01",
         "episode_count": 9
       },
+      "number_of_seasons": 2,
       "networks": [
         "bilibili"
+      ],
+      "genres": [
+        "动画",
+        "Sci-Fi & Fantasy"
       ],
       "found": true,
       "tmdb_id": 139162,
@@ -4020,12 +4729,9 @@ window.TV_DATA = {
       "original_name": "Lucky",
       "status": "Ended",
       "status_zh": "已完结",
-      "in_production": null,
+      "in_production": false,
       "first_air_date": "2026-07-14",
       "last_air_date": "2026-08-18",
-      "release_date": "",
-      "runtime": null,
-      "vote_average": null,
       "poster": "https://image.tmdb.org/t/p/w200/9gCX7hf1nDovg3E5WHRzxFdzOm1.jpg",
       "last_episode": {
         "season": 1,
@@ -4039,13 +4745,20 @@ window.TV_DATA = {
         "air_date": "2026-07-14",
         "episode_count": 7
       },
+      "number_of_seasons": 1,
       "networks": [
         "Apple TV"
       ],
+      "genres": [
+        "剧情",
+        "犯罪"
+      ],
       "found": true,
+      "tmdb_id": 278624,
       "imdb_id": "tt34866681",
       "mark": "unwatched",
-      "group": null
+      "group": null,
+      "watched_seasons": null
     },
     {
       "title": "It",
@@ -4053,12 +4766,9 @@ window.TV_DATA = {
       "original_name": "It",
       "status": "Ended",
       "status_zh": "已完结",
-      "in_production": null,
+      "in_production": false,
       "first_air_date": "1990-11-18",
       "last_air_date": "1990-11-20",
-      "release_date": "",
-      "runtime": null,
-      "vote_average": null,
       "poster": "https://image.tmdb.org/t/p/w200/4ybQ6gopB3H3cu0seVZLznDnIKo.jpg",
       "last_episode": {
         "season": 1,
@@ -4072,14 +4782,18 @@ window.TV_DATA = {
         "air_date": "1990-11-18",
         "episode_count": 2
       },
+      "number_of_seasons": 1,
       "networks": [
         "ABC"
       ],
-      "collection": null,
-      "countries": null,
+      "genres": [
+        "悬疑",
+        "Sci-Fi & Fantasy",
+        "剧情"
+      ],
       "found": true,
-      "imdb_id": "tt0099864",
       "tmdb_id": 19614,
+      "imdb_id": "tt0099864",
       "mark": "finished",
       "group": null,
       "watched_seasons": 1

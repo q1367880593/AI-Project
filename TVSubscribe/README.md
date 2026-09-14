@@ -24,7 +24,7 @@
 
 ## 账号与数据
 
-- 账号存于 [data/users.json](data/users.json)：用户名 + PBKDF2 加盐哈希，密码不落明文；会话有效期 30 天，服务重启后需重新登录
+- 账号存于 [data/users.json](data/users.json)：用户名 + PBKDF2 加盐哈希，密码不落明文；会话有效期 30 天，并持久化到 `data/sessions.json`，服务 / 容器重启后保持登录态
 - 每用户数据独立存放于 `data/users/<用户名>/`：
   - `shows.json` / `movies.json` 订阅配置（标题、IMDB 号、中文名、标记、分组、已看季数）
   - `data.js` / `movies_data.js` 抓取结果快照（自动生成，勿手改）

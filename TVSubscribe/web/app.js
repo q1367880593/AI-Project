@@ -15,9 +15,9 @@
       itemLabel: "剧集",
       fileName: "shows.json",
       sortOptions: [
-        { value: "last_air_date", text: "最后更新时间" },
-        { value: "first_air_date", text: "首季播出时间" },
-        { value: "latest_season", text: "最新季播出时间" }
+        { value: "last_air_date", text: "最近更新" },
+        { value: "first_air_date", text: "首播时间" },
+        { value: "latest_season", text: "最新一季" }
       ],
       networkLabel: "出品方",
       tagline: "追剧进度 · 完结状态 · 最新季播出时间",
@@ -69,6 +69,8 @@
   var statusField = document.getElementById("status-field");
   var networkSel = document.getElementById("filter-network");
   var networkLabel = document.getElementById("network-label");
+  var genreField = document.getElementById("genre-field");
+  var genreSel = document.getElementById("filter-genre");
   var originField = document.getElementById("origin-field");
   var originSel = document.getElementById("filter-origin");
   var sortSel = document.getElementById("sort-key");
@@ -532,7 +534,18 @@
       });
       titleRow.appendChild(check);
     }
-    titleRow.appendChild(link(detailUrl(show), "title", show.name || show.title));
+    var titleLink = link(detailUrl(show), "title", show.name || show.title);
+    var shown = (show.name || show.title || "").trim();
+    var orig = (show.original_name || show.title || "").trim();
+    if (orig && orig !== shown) {
+      // 中文名下不再常显英文名，悬浮标题时以毛玻璃浮窗展示英文名
+      var tw = el("span", "title-wrap");
+      tw.appendChild(titleLink);
+      tw.appendChild(el("span", "title-tip", orig));
+      titleRow.appendChild(tw);
+    } else {
+      titleRow.appendChild(titleLink);
+    }
     if (kind !== "movie") {
       if (show.status) {
         titleRow.appendChild(el("span", "badge " + statusClass(show.status), show.status_zh || statusZh(show.status)));
@@ -546,12 +559,9 @@
     }
     info.appendChild(titleRow);
 
-    var chips = chipRow(show.networks, kind === "movie" ? 6 : 2);
+    var chipSource = kind === "movie" ? show.networks : (show.genres && show.genres.length ? show.genres : show.networks);
+    var chips = chipRow(chipSource, 6);
     if (chips) info.appendChild(chips);
-
-    if (show.original_name && show.original_name !== show.name && show.original_name !== show.title) {
-      info.appendChild(el("div", "original", show.original_name));
-    }
 
     info.appendChild(kind === "movie" ? movieMeta(show) : tvMeta(show));
     c.appendChild(info);
@@ -817,12 +827,16 @@
   function resetFilterOptions() {
     statusSel.innerHTML = "";
     networkSel.innerHTML = "";
+    genreSel.innerHTML = "";
     var so = el("option", null, "全部");
     so.value = "";
     statusSel.appendChild(so);
     var no = el("option", null, "全部");
     no.value = "";
     networkSel.appendChild(no);
+    var go = el("option", null, "全部");
+    go.value = "";
+    genreSel.appendChild(go);
 
     var shows = allShows();
     if (!shows.length) return;
@@ -851,6 +865,16 @@
       var o = el("option", null, n);
       o.value = n;
       networkSel.appendChild(o);
+    });
+
+    var gens = {};
+    shows.forEach(function (s) {
+      (s.genres || []).forEach(function (g) { if (g) gens[g] = true; });
+    });
+    Object.keys(gens).sort(function (a, b) { return a.localeCompare(b); }).forEach(function (g) {
+      var o = el("option", null, g);
+      o.value = g;
+      genreSel.appendChild(o);
     });
   }
 
@@ -887,6 +911,7 @@
     var merged = allShows();
     var status = statusSel.value;
     var network = networkSel.value;
+    var genreFilter = genreSel.value;
     var markFilter = markSel.value;
     var originFilter = originSel.value;
     var asc = sortDirBtn.dataset.dir === "asc";
@@ -895,6 +920,7 @@
     var list = merged.filter(function (s) {
       if (status && s.status !== status) return false;
       if (network && (s.networks || []).indexOf(network) < 0) return false;
+      if (genreFilter && (s.genres || []).indexOf(genreFilter) < 0) return false;
       var mark = s.mark || "";
       if (markFilter === "none" && mark) return false;
       if (markFilter === "finished" && mark !== "finished") return false;
@@ -932,7 +958,7 @@
     footerCount.textContent = "共收录 " + merged.length + " 部" + cfg().itemLabel;
 
     var sorted = filteredList();
-    var hasFilter = statusSel.value || networkSel.value || markSel.value || originSel.value
+    var hasFilter = statusSel.value || networkSel.value || genreSel.value || markSel.value || originSel.value
       || searchInput.value.trim();
 
     if (hasFilter) {
@@ -1600,6 +1626,7 @@
     groupLabel.textContent = c.itemLabel + "分组";
     btnGroup.title = "勾选" + c.itemLabel + "后加入 / 移出分组";
     originField.hidden = kind !== "movie";
+    genreField.hidden = kind !== "tv";
     statusField.hidden = kind !== "tv";
   }
 
@@ -1615,6 +1642,7 @@
     groupViewSel.value = "flat";
     originSel.value = "";
     markSel.value = "";
+    genreSel.value = "";
     searchInput.value = "";
     searchClear.hidden = true;
     sortDirBtn.dataset.dir = "desc";
@@ -1639,6 +1667,7 @@
     status: "status",
     mark: "mark",
     net: "net",
+    genre: "genre",
     origin: "origin",
     sort: "sort",
     dir: "dir",
@@ -1663,6 +1692,7 @@
       status: q.get(URL_PARAMS.status) || "",
       mark: q.get(URL_PARAMS.mark) || "",
       net: q.get(URL_PARAMS.net) || "",
+      genre: q.get(URL_PARAMS.genre) || "",
       origin: q.get(URL_PARAMS.origin) || "",
       sort: q.get(URL_PARAMS.sort) || "",
       dir: q.get(URL_PARAMS.dir) || "",
@@ -1678,6 +1708,7 @@
     if (kind === "tv" && statusSel.value) q.set(URL_PARAMS.status, statusSel.value);
     if (markSel.value) q.set(URL_PARAMS.mark, markSel.value);
     if (networkSel.value) q.set(URL_PARAMS.net, networkSel.value);
+    if (genreSel.value) q.set(URL_PARAMS.genre, genreSel.value);
     if (originSel.value) q.set(URL_PARAMS.origin, originSel.value);
     if (sortSel.value) q.set(URL_PARAMS.sort, sortSel.value);
     if (sortDirBtn.dataset.dir === "asc") q.set(URL_PARAMS.dir, "asc");
@@ -1825,6 +1856,7 @@
 
     statusSel.addEventListener("change", render);
     networkSel.addEventListener("change", render);
+    genreSel.addEventListener("change", render);
     markSel.addEventListener("change", render);
     originSel.addEventListener("change", render);
     sortSel.addEventListener("change", render);
@@ -1937,6 +1969,7 @@
   if (kind === "tv" && urlState.status) selectIfExists(statusSel, urlState.status);
   if (urlState.mark) markSel.value = urlState.mark;
   if (urlState.net) selectIfExists(networkSel, urlState.net);
+  if (kind === "tv" && urlState.genre) selectIfExists(genreSel, urlState.genre);
   if (urlState.sort) selectIfExists(sortSel, urlState.sort);
   if (urlState.dir === "asc") {
     sortDirBtn.dataset.dir = "asc";

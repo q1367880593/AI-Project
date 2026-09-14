@@ -348,6 +348,7 @@ def build_entry(title, raw, kind="tv", api_key=None, collection_cache=None):
         "latest_season": pick_latest_season(raw.get("seasons")),
         "number_of_seasons": raw.get("number_of_seasons"),
         "networks": [n.get("name") for n in (raw.get("networks") or []) if n.get("name")],
+        "genres": [g.get("name") for g in (raw.get("genres") or []) if g.get("name")],
         "found": True,
     }
 

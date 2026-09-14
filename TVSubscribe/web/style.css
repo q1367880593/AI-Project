@@ -229,6 +229,7 @@ h1::before {
 #filter-status,
 #filter-network,
 #filter-mark,
+#filter-genre,
 #filter-origin,
 #group-view {
   width: 82px;
@@ -353,6 +354,7 @@ h1::before {
   border-color: #d5dce6;
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
   transform: translateY(-3px);
+  z-index: 5;
 }
 
 .poster-link {
@@ -444,13 +446,44 @@ h1::before {
   color: var(--muted);
 }
 
-.original {
-  margin-top: 2px;
+.title-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.title-tip {
+  display: block;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  max-width: 300px;
+  padding: 6px 12px;
   font-size: 12px;
-  color: var(--muted);
+  font-weight: 500;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-3px);
+  transition: opacity 0.12s ease, visibility 0s linear 0.12s, transform 0.12s ease;
+}
+
+.title-wrap:hover .title-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.18s ease 0.5s, visibility 0s linear 0.5s, transform 0.18s ease 0.5s;
 }
 
 .card-check {

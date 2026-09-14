@@ -40,12 +40,6 @@
     <button type="button" id="search-clear" class="search-clear" title="清空搜索" hidden>×</button>
   </div>
   <div class="toolbar">
-    <label class="field" id="status-field">
-      <span class="field-label">状态</span>
-      <select id="filter-status">
-        <option value="">全部</option>
-      </select>
-    </label>
     <label class="field">
       <span class="field-label">观剧</span>
       <select id="filter-mark">
@@ -56,9 +50,21 @@
         <option value="dropped" id="mark-filter-dropped">已弃剧</option>
       </select>
     </label>
+    <label class="field" id="genre-field" hidden>
+      <span class="field-label">类型</span>
+      <select id="filter-genre">
+        <option value="">全部</option>
+      </select>
+    </label>
     <label class="field">
       <span class="field-label" id="network-label">出品方</span>
       <select id="filter-network">
+        <option value="">全部</option>
+      </select>
+    </label>
+    <label class="field" id="status-field">
+      <span class="field-label">状态</span>
+      <select id="filter-status">
         <option value="">全部</option>
       </select>
     </label>

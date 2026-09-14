@@ -50,6 +50,7 @@ CONFIG_FIELDS = ("title", "imdb_id", "name_zh", "mark", "group", "watched_season
 TMDB_BASE = "https://api.themoviedb.org/3"
 
 USERS_PATH = os.path.join(ROOT, "data", "users.json")
+SESSIONS_PATH = os.path.join(ROOT, "data", "sessions.json")
 COOKIE_NAME = "tvsub_session"
 SESSION_TTL = 30 * 24 * 3600   # 会话有效期 30 天
 
@@ -173,36 +174,77 @@ def ensure_users():
 
 # ---------------- 会话 ----------------
 
+def save_sessions():
+    with SESSIONS_LOCK:
+        payload = dict(SESSIONS)
+    tmp = SESSIONS_PATH + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False)
+            f.write("\n")
+        os.replace(tmp, SESSIONS_PATH)
+    except OSError as e:
+        print("[会话] 持久化失败: %s" % e)
+
+
+def load_sessions():
+    """服务启动时恢复历史会话（过滤已过期）。"""
+    try:
+        with open(SESSIONS_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return
+    if not isinstance(data, dict):
+        return
+    now = time.time()
+    restored = 0
+    with SESSIONS_LOCK:
+        for token, s in data.items():
+            if isinstance(s, dict) and s.get("username") and s.get("expires", 0) > now:
+                SESSIONS[token] = {"username": s["username"], "expires": s["expires"]}
+                restored += 1
+    if restored:
+        print("[会话] 已恢复 %d 个登录会话" % restored)
+
+
 def create_session(username):
     token = secrets.token_urlsafe(32)
     with SESSIONS_LOCK:
         SESSIONS[token] = {"username": username, "expires": time.time() + SESSION_TTL}
+    save_sessions()
     return token
 
 
 def get_session_user(token):
     if not token:
         return None
+    cleaned = False
     with SESSIONS_LOCK:
         s = SESSIONS.get(token)
         if not s:
             return None
         if s["expires"] < time.time():
             SESSIONS.pop(token, None)
-            return None
-        return s["username"]
+            cleaned = True
+        else:
+            return s["username"]
+    if cleaned:
+        save_sessions()
+    return None
 
 
 def drop_sessions(username):
     with SESSIONS_LOCK:
         for t in [t for t, s in SESSIONS.items() if s["username"] == username]:
             SESSIONS.pop(t, None)
+    save_sessions()
 
 
 def drop_session_token(token):
     if token:
         with SESSIONS_LOCK:
             SESSIONS.pop(token, None)
+        save_sessions()
 
 
 # ---------------- 数据写盘 ----------------
@@ -314,6 +356,7 @@ def save_entries(entries, kind="tv", username=None):
                 "next_episode": e.get("next_episode"),
                 "latest_season": e.get("latest_season"),
                 "networks": e.get("networks") or [],
+                "genres": e.get("genres") or [],
                 "collection": e.get("collection"),
                 "countries": e.get("countries"),
                 "origin_country": e.get("origin_country"),
@@ -336,6 +379,8 @@ def save_entries(entries, kind="tv", username=None):
             item["original_language"] = e.get("original_language")
         if e.get("spoken_languages"):
             item["spoken_languages"] = e.get("spoken_languages")
+        if e.get("genres"):
+            item["genres"] = e.get("genres")
         item["mark"] = (e.get("mark") or "").strip() or None
         item["group"] = (e.get("group") or "").strip() or None
         try:
@@ -763,6 +808,7 @@ def main():
     except Exception as e:
         print("初始化用户失败：%s" % e)
         sys.exit(1)
+    load_sessions()
     try:
         server = ThreadingHTTPServer((HOST, PORT), Handler)
     except OSError as e:
