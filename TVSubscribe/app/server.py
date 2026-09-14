@@ -12,7 +12,6 @@
 import contextlib
 import hashlib
 import http.cookies
-import io
 import json
 import os
 import re
@@ -418,6 +417,51 @@ def read_file(name):
         return f.read()
 
 
+class _LineStream:
+    """逐行把 fetch_tv 的 stdout/stderr 转发到 HTTP 响应（配合 redirect_stdout 实时流式输出），
+    同时可选地把完整日志写入落盘文件，供失败后排查分析。"""
+
+    def __init__(self, handler, logfile=None):
+        self.handler = handler
+        self.logfile = logfile
+        self._buf = ""
+
+    def write(self, s):
+        if not s:
+            return 0
+        self._buf += s
+        while "\n" in self._buf:
+            line, self._buf = self._buf.split("\n", 1)
+            self._emit(line)
+        return len(s)
+
+    def _emit(self, line):
+        line = line.rstrip("\r")
+        if not line:
+            return
+        if self.logfile:
+            try:
+                self.logfile.write(line + "\n")
+                self.logfile.flush()
+            except OSError:
+                pass
+        try:
+            self.handler.wfile.write((line + "\n").encode("utf-8"))
+            self.handler.wfile.flush()
+        except OSError:
+            pass
+
+    def put(self, line):
+        """显式输出一行（用于结果标记）。"""
+        self.flush()
+        self._emit(line)
+
+    def flush(self):
+        if self._buf:
+            self._emit(self._buf)
+            self._buf = ""
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         sys.stderr.write("[http] %s\n" % (fmt % args))
@@ -772,7 +816,37 @@ class Handler(BaseHTTPRequestHandler):
                 pass
             if kind not in ("tv", "movie"):
                 kind = "tv"
-            buf = io.StringIO()
+            # 流式响应：把抓取日志逐行发给前端（close-delimited，无 Content-Length），
+            # 前端收到 [进度] x/y 名称 行实时渲染进度条，[结果] 行判定成功/失败；
+            # 同时把完整日志落盘到 data/logs/，失败时用户可把该文件提供出来排查
+            log_file = None
+            log_name = None
+            log_dir = os.path.join(ROOT, "data", "logs")
+            try:
+                os.makedirs(log_dir, exist_ok=True)
+                # 顺手清理 7 天前的旧日志
+                cutoff = time.time() - 7 * 24 * 3600
+                for name in os.listdir(log_dir):
+                    fp = os.path.join(log_dir, name)
+                    if name.startswith("refresh_") and os.path.isfile(fp) \
+                            and os.path.getmtime(fp) < cutoff:
+                        try:
+                            os.remove(fp)
+                        except OSError:
+                            pass
+                safe_u = re.sub(r"[^\w\-]", "_", u or "default")
+                log_name = "refresh_%s_%s_%s.log" % (
+                    kind, safe_u, datetime.now().strftime("%Y%m%d_%H%M%S"))
+                log_file = open(os.path.join(log_dir, log_name), "a", encoding="utf-8")
+            except OSError:
+                log_file = None
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("X-Accel-Buffering", "no")
+            self.send_header("Connection", "close")
+            self.end_headers()
+            stream = _LineStream(self, log_file)
             saved_argv = sys.argv[:]
             try:
                 sys.argv = ["fetch_tv.py"] \
@@ -781,17 +855,40 @@ class Handler(BaseHTTPRequestHandler):
                     + ([item] if item else [])
                 ft.set_active_user(u)   # 刷新读写到该用户目录
                 try:
-                    with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+                    with contextlib.redirect_stdout(stream), contextlib.redirect_stderr(stream):
                         ft.main()
                 finally:
                     ft.clear_active_user()
-                self.send_json(200, {"ok": True, "log": buf.getvalue()})
+                if log_name:
+                    stream.put("[日志] 完整日志已保存: data/logs/%s" % log_name)
+                stream.put("[结果] ok")
             except SystemExit as e:
-                self.send_json(500, {"ok": False, "code": e.code, "log": buf.getvalue()})
+                stream.flush()
+                if (e.code or 0) == 0:
+                    if log_name:
+                        stream.put("[日志] 完整日志已保存: data/logs/%s" % log_name)
+                    stream.put("[结果] ok")
+                else:
+                    if log_name:
+                        stream.put("[日志] 完整日志已保存: data/logs/%s" % log_name)
+                    stream.put("[结果] 失败(退出码 %s)" % e.code)
             except Exception as e:
-                self.send_json(500, {"ok": False, "error": str(e), "log": buf.getvalue()})
+                stream.flush()
+                if log_name:
+                    stream.put("[日志] 完整日志已保存: data/logs/%s" % log_name)
+                stream.put("[结果] 失败: %s" % e)
             finally:
                 sys.argv = saved_argv
+                if log_file:
+                    try:
+                        log_file.close()
+                    except OSError:
+                        pass
+                try:
+                    self.wfile.flush()
+                except OSError:
+                    pass
+                self.close_connection = True
 
         else:
             self.send_json(404, {"error": "not found"})

@@ -1,6 +1,6 @@
 // 本文件由 fetch_tv.py 自动生成，请勿手动编辑
 window.TV_DATA = {
-  "generated_at": "2026-09-11 18:02:30",
+  "generated_at": "2026-09-14 10:18:12",
   "shows": [
     {
       "title": "Game of Thrones",
@@ -1494,7 +1494,7 @@ window.TV_DATA = {
       "in_production": false,
       "first_air_date": "2014-04-15",
       "last_air_date": "2024-01-16",
-      "poster": "https://image.tmdb.org/t/p/w200/ck4OUAw65awqGc9ZYpbKAHUOqST.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/l2Ol0oKG3pOZMNjAmLWYmamTz4E.jpg",
       "last_episode": {
         "season": 5,
         "episode": 10,
@@ -2598,11 +2598,11 @@ window.TV_DATA = {
       "in_production": true,
       "first_air_date": "2011-10-05",
       "last_air_date": "2024-04-24",
-      "poster": "https://image.tmdb.org/t/p/w200/fNxVexXhSUqboE34rs7PWB0cAjA.jpg",
+      "poster": "https://image.tmdb.org/t/p/w200/j2Uix4JYiunJhoiS2DLPYSkOZ8Q.jpg",
       "last_episode": {
         "season": 12,
         "episode": 9,
-        "name": "电影导演",
+        "name": "大师",
         "air_date": "2024-04-24"
       },
       "next_episode": {

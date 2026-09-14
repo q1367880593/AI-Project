@@ -231,8 +231,14 @@
         <div class="settings-info">剧集更新：<span id="settings-updated-tv">—</span></div>
         <div class="settings-info">电影更新：<span id="settings-updated-movie">—</span></div>
         <div class="settings-actions">
-          <button type="button" id="settings-refresh-tv" class="tb-btn">更新剧集数据</button>
-          <button type="button" id="settings-refresh-movie" class="tb-btn">更新电影数据</button>
+          <div class="settings-refresh-item">
+            <button type="button" id="settings-refresh-tv" class="tb-btn">更新剧集数据</button>
+            <span class="refresh-status" id="refresh-status-tv"></span>
+          </div>
+          <div class="settings-refresh-item">
+            <button type="button" id="settings-refresh-movie" class="tb-btn">更新电影数据</button>
+            <span class="refresh-status" id="refresh-status-movie"></span>
+          </div>
         </div>
       </section>
       <div class="dlg-actions">

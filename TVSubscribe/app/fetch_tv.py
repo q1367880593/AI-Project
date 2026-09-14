@@ -518,14 +518,52 @@ def main():
         return "title|" + (item.get("title") or "").strip()
 
     old_map = {}
-    if only_unfetched:
-        old_payload = load_data_payload(data_path, var_name)
-        for s in old_payload.get("shows", []):
-            old_map.setdefault(config_key(s), s)
+    old_payload = load_data_payload(data_path, var_name)
+    for s in old_payload.get("shows", []):
+        old_map.setdefault(config_key(s), s)
 
-    for item in shows:
+    # 断点续传：全量抓取时把已完成的条目写入检查点文件，中断后下次从断点继续；
+    # 抓取全部成功后删除检查点。串行循环内写盘频率低，性能无影响。
+    use_ckpt = not only_unfetched
+    ckpt_path = os.path.join(ROOT, "data", ".fetch_ckpt_%s.json" % kind)
+    ckpt = {"items": {}}
+    if use_ckpt:
+        try:
+            with open(ckpt_path, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+            if isinstance(loaded, dict) and isinstance(loaded.get("items"), dict):
+                ckpt = loaded
+        except (FileNotFoundError, json.JSONDecodeError):
+            pass
+        if ckpt["items"]:
+            print("[续跑] 发现未完成的抓取检查点，已恢复 %d 条结果，从断点继续" % len(ckpt["items"]))
+
+    def save_ckpt():
+        if not use_ckpt:
+            return
+        try:
+            tmp = ckpt_path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(ckpt, f, ensure_ascii=False)
+            os.replace(tmp, ckpt_path)
+        except OSError:
+            pass
+
+    candidates = [it for it in shows
+                  if (it.get("title") or "").strip() or (it.get("imdb_id") or "").strip() or it.get("tmdb_id")]
+    total = len(candidates)
+    idx = 0
+    for item in candidates:
         display = (item.get("title") or "").strip() or (item.get("imdb_id") or "").strip()
-        if not display and not item.get("tmdb_id"):
+        idx += 1
+        # 实时进度行：前端解析 [进度] x/y 名称 渲染进度条
+        shown = (item.get("name_zh") or item.get("name") or display or "").strip()
+        print("[进度] %d/%d %s" % (idx, total, shown), flush=True)
+        if use_ckpt and config_key(item) in ckpt["items"]:
+            cached = ckpt["items"][config_key(item)]
+            results.append(cached["entry"])
+            changed = changed or cached.get("changed", False)
+            print("[续跑] %s" % (cached["entry"].get("name") or display))
             continue
         if only_unfetched:
             cached = old_map.get(config_key(item))
@@ -540,9 +578,17 @@ def main():
             entry, ch = process_item(api_key, item, kind, collection_cache)
             changed = changed or ch
             results.append(entry)
+            ckpt["items"][config_key(item)] = {"entry": entry, "changed": ch}
+            save_ckpt()
         except Exception as e:
+            # 网络异常：保留该条目的旧数据，避免把好数据覆盖成失败占位；
+            # 失败条目不写入检查点，下次续跑时会重新尝试抓取
             print(f"[失败] {display}: {e}")
-            results.append({"title": display, "found": False, "error": str(e)})
+            fallback = old_map.get(config_key(item))
+            if fallback and fallback.get("found"):
+                results.append(fallback)
+            else:
+                results.append({"title": display, "found": False, "error": str(e)})
 
     if changed:
         save_shows(shows_cfg, cfg_path)
@@ -570,6 +616,13 @@ def main():
         "shows": results,
     }
     write_output(payload, data_path, var_name)
+
+    # 全部完成：清理检查点
+    if use_ckpt:
+        try:
+            os.remove(ckpt_path)
+        except OSError:
+            pass
 
 
 def write_output(payload, path=None, var_name="TV_DATA"):

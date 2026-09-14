@@ -122,6 +122,8 @@
   var settingsUpdatedMovie = document.getElementById("settings-updated-movie");
   var settingsRefreshTv = document.getElementById("settings-refresh-tv");
   var settingsRefreshMovie = document.getElementById("settings-refresh-movie");
+  var refreshStatusTv = document.getElementById("refresh-status-tv");
+  var refreshStatusMovie = document.getElementById("refresh-status-movie");
   var settingsOverlay = document.getElementById("settings-overlay");
   var settingsAddName = document.getElementById("settings-add-name");
   var settingsAddPass = document.getElementById("settings-add-pass");
@@ -352,8 +354,13 @@
     btn.addEventListener("click", function (ev) {
       ev.preventDefault();
       var label = show.name || show.title;
-      if (!window.confirm("确认移除「" + label + "」？\n将立即从 " + cfg().fileName + " 移除。")) return;
-      persistEntries(allShows().filter(function (s) { return s._key !== show._key; }));
+      showDialog("确认移除", "确认移除「" + label + "」？\n将立即从 " + cfg().fileName + " 移除。", [
+        { label: "取消", value: false },
+        { label: "移除", value: true, primary: true }
+      ]).then(function (ok) {
+        if (!ok) return;
+        persistEntries(allShows().filter(function (s) { return s._key !== show._key; }));
+      });
     });
     return btn;
   }
@@ -751,15 +758,20 @@
         var del = el("button", "tb-btn settings-user-del", "删除");
         del.type = "button";
         del.addEventListener("click", function () {
-          if (!window.confirm("确认删除用户「" + u.username + "」？\n该用户的订阅数据文件会保留在服务器上。")) return;
-          requestJSON("/api/users", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "delete", username: u.username })
-          }).then(function () {
-            settingsFlash("已删除用户「" + u.username + "」");
-            loadSettingsUsers();
-          }).catch(function (e) { settingsFlash(e.message); });
+          showDialog("确认删除", "确认删除用户「" + u.username + "」？\n该用户的订阅数据文件会保留在服务器上。", [
+            { label: "取消", value: false },
+            { label: "删除", value: true, primary: true }
+          ]).then(function (ok) {
+            if (!ok) return;
+            requestJSON("/api/users", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "delete", username: u.username })
+            }).then(function () {
+              settingsFlash("已删除用户「" + u.username + "」");
+              loadSettingsUsers();
+            }).catch(function (e) { settingsFlash(e.message); });
+          });
         });
         row.appendChild(del);
       }
@@ -1746,25 +1758,109 @@
     });
   }
 
-  /* ---------- 全量抓取 ---------- */
-  function requestRefresh(body) {
+  /* 复制文本（兼容局域网 http 下不可用的 navigator.clipboard） */
+  function copyText(text) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).catch(function () { return fallback(); });
+    }
+    return Promise.resolve(fallback());
+  }
+
+  /* 在失败弹窗里追加「复制完整日志」按钮，方便把日志提供出来排查 */
+  function addCopyLogButton(log) {
+    if (!log) return;
+    var btn = el("button", "tb-btn", "复制完整日志");
+    btn.type = "button";
+    btn.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      copyText(log).then(function () {
+        btn.textContent = "已复制";
+        setTimeout(function () { btn.textContent = "复制完整日志"; }, 1500);
+      });
+    });
+    confirmActions.insertBefore(btn, confirmActions.firstChild);
+  }
+
+  /* ---------- 全量抓取（服务端流式返回日志，onLine 逐行回调） ---------- */
+  /* 结果弹窗只显示日志尾部一小段，防止超长日志撑出巨型对话框 */
+  function shortTail(log) {
+    var lines = (log || "").split("\n").filter(function (l) {
+      return l && l.indexOf("[结果]") !== 0;
+    });
+    var t = lines.slice(-6).join("\n").trim();
+    if (t.length > 500) t = t.slice(t.length - 500);
+    return t;
+  }
+
+  function requestRefresh(body, onLine) {
     btnRefresh.disabled = true;
     var oldText = btnRefresh.textContent;
     btnRefresh.textContent = "抓取中…";
+    var logs = [];
+    function done() {
+      btnRefresh.disabled = false;
+      btnRefresh.textContent = oldText;
+    }
+    function feed(line) {
+      if (line) {
+        logs.push(line);
+        if (onLine) onLine(line);
+      }
+    }
     return fetch("/api/refresh", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     })
-      .then(function (r) { return r.json(); })
-      .then(function (res) {
-        btnRefresh.disabled = false;
-        btnRefresh.textContent = oldText;
-        return res;
+      .then(function (resp) {
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        var reader = resp.body.getReader();
+        var dec = new TextDecoder("utf-8");
+        var buf = "";
+        function pump() {
+          return reader.read().then(function (r) {
+            if (r.done) {
+              if (buf.trim()) feed(buf);
+              return;
+            }
+            buf += dec.decode(r.value, { stream: true });
+            var lines = buf.split("\n");
+            buf = lines.pop();
+            lines.forEach(feed);
+            return pump();
+          });
+        }
+        return pump();
+      })
+      .then(function () {
+        done();
+        var text = logs.join("\n");
+        var t = text.trim();
+        if (t.charAt(0) === "{") {
+          /* 旧版服务端兼容：一次性返回 JSON（{"ok":..., "log":...}），
+             避免把整段 JSON 当纯文本塞进弹窗撑出巨型对话框 */
+          try {
+            var j = JSON.parse(t);
+            return { ok: !!j.ok, log: j.log || j.error || "" };
+          } catch (err) { /* 解析失败则按流式文本处理 */ }
+        }
+        var last = logs[logs.length - 1] || "";
+        return { ok: last.indexOf("[结果] ok") === 0, log: text };
       })
       .catch(function (e) {
-        btnRefresh.disabled = false;
-        btnRefresh.textContent = oldText;
+        done();
         throw e;
       });
   }
@@ -1781,7 +1877,7 @@
       if (!ok) return;
       requestRefresh({ kind: kind, item: item })
         .then(function (res) {
-          var tail = (res.log || "").split("\n").slice(-3).join("\n");
+          var tail = shortTail(res.log);
           if (res.ok) {
             showDialog("抓取完成", tail, [
               { label: "刷新页面", value: true, primary: true }
@@ -1790,6 +1886,7 @@
             showDialog("抓取失败", tail || res.error || "未知错误", [
               { label: "关闭", value: false, primary: true }
             ]);
+            addCopyLogButton(res.log || res.error || "");
           }
         })
         .catch(function (e) {
@@ -1807,10 +1904,48 @@
     if (inputTitle.value) doSearch();
   }
 
+  /* ---------- 更新按钮上的实时进度 ---------- */
+  function setRefreshStatus(refKind, text, cls) {
+    var el = refKind === "tv" ? refreshStatusTv : refreshStatusMovie;
+    if (!el) return;
+    el.textContent = text || "";
+    el.className = "refresh-status" + (cls ? " " + cls : "");
+  }
+
+  function setUpdatingUI(refKind) {
+    settingsRefreshTv.disabled = true;
+    settingsRefreshMovie.disabled = true;
+    setRefreshStatus("tv", refKind === "tv" ? "更新中…" : "", "updating");
+    setRefreshStatus("movie", refKind === "movie" ? "更新中…" : "", "updating");
+  }
+
+  /* 进度显示在设置弹窗对应分类按钮下方的状态行（更新中 xx%），
+     编辑区「更新数据」按钮同步显示百分比 */
+  function updateBtnProgress(cur, total, refKind) {
+    var pct = total > 0 ? Math.round(cur / total * 100) : 0;
+    var label = "更新中 " + pct + "%";
+    setRefreshStatus(refKind, label + "（" + cur + "/" + total + "）", "updating");
+    if (refKind === kind) btnRefresh.textContent = label;
+  }
+
+  function setUpdatingDone(refKind, ok) {
+    setRefreshStatus(refKind, ok ? "更新完成" : "更新失败", ok ? "done" : "failed");
+    settingsRefreshTv.disabled = false;
+    settingsRefreshMovie.disabled = false;
+    settingsRefreshTv.textContent = "更新剧集数据";
+    settingsRefreshMovie.textContent = "更新电影数据";
+  }
+
   function runRefresh(onlyUnfetched, refKind) {
-    requestRefresh({ kind: refKind || kind, only_unfetched: onlyUnfetched })
+    var rk = refKind || kind;
+    setUpdatingUI(rk);
+    requestRefresh({ kind: rk, only_unfetched: onlyUnfetched }, function (line) {
+      var m = line.match(/^\[进度\]\s+(\d+)\s*\/\s*(\d+)/);
+      if (m) updateBtnProgress(parseInt(m[1], 10), parseInt(m[2], 10), rk);
+    })
       .then(function (res) {
-        var tail = (res.log || "").split("\n").slice(-3).join("\n");
+        setUpdatingDone(rk, res.ok);
+        var tail = shortTail(res.log);
         if (res.ok) {
           showDialog("更新完成", tail, [
             { label: "刷新页面", value: true, primary: true }
@@ -1819,9 +1954,11 @@
           showDialog("抓取失败", tail || res.error || "未知错误", [
             { label: "关闭", value: false, primary: true }
           ]);
+          addCopyLogButton(res.log || res.error || "");
         }
       })
       .catch(function (e) {
+        setUpdatingDone(rk, false);
         showDialog("请求失败", String(e.message || e), [
           { label: "关闭", value: false, primary: true }
         ]);
