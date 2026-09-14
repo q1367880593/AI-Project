@@ -311,8 +311,9 @@
       })
       .then(function () {
         data.shows = entries;
-        render();
+        // 先执行回调（如清空选择、关弹窗），再渲染，保证勾选状态等已更新
         if (onSuccess) onSuccess();
+        render();
       })
       .catch(function (e) {
         if (onFail) onFail();
@@ -1268,6 +1269,7 @@
       next_episode: ep(detail.next_episode_to_air),
       latest_season: latest,
       networks: (detail.networks || []).map(function (n) { return n.name; }),
+      genres: (detail.genres || []).map(function (g) { return g.name; }),
       imdb_id: (ext && ext.imdb_id) || null,
       tmdb_id: detail.id,
       found: true
@@ -1804,6 +1806,45 @@
     return t;
   }
 
+  /* 更新完成后只刷新数据内容：重新拉取当前用户的 data.js / movies_data.js 并重渲染，
+     不整页刷新；加载失败才回退整页刷新 */
+  function reloadDataFiles() {
+    var q = "?v=" + Date.now();
+    return Promise.all([
+      fetch("data.js" + q, { credentials: "same-origin" }).then(function (r) {
+        if (!r.ok) throw new Error("data.js HTTP " + r.status);
+        return r.text();
+      }),
+      fetch("movies_data.js" + q, { credentials: "same-origin" }).then(function (r) {
+        if (!r.ok) throw new Error("movies_data.js HTTP " + r.status);
+        return r.text();
+      })
+    ]).then(function (texts) {
+      window.eval(texts[0]);
+      window.eval(texts[1]);
+      SOURCES.tv = window.TV_DATA || { shows: [] };
+      SOURCES.movie = window.MOVIE_DATA || { shows: [] };
+      data = SOURCES[kind];
+      render();
+      if (!settingsOverlay.hidden) {
+        settingsUpdatedTv.textContent = SOURCES.tv.generated_at || "—";
+        settingsUpdatedMovie.textContent = SOURCES.movie.generated_at || "—";
+      }
+    });
+  }
+
+  function showRefreshDone(title, tail) {
+    reloadDataFiles().then(function () {
+      showDialog(title, tail, [
+        { label: "关闭", value: true, primary: true }
+      ]);
+    }).catch(function () {
+      showDialog(title, tail, [
+        { label: "刷新页面", value: true, primary: true }
+      ]).then(function () { location.reload(); });
+    });
+  }
+
   function requestRefresh(body, onLine) {
     btnRefresh.disabled = true;
     var oldText = btnRefresh.textContent;
@@ -1879,9 +1920,7 @@
         .then(function (res) {
           var tail = shortTail(res.log);
           if (res.ok) {
-            showDialog("抓取完成", tail, [
-              { label: "刷新页面", value: true, primary: true }
-            ]).then(function () { location.reload(); });
+            showRefreshDone("抓取完成", tail);
           } else {
             showDialog("抓取失败", tail || res.error || "未知错误", [
               { label: "关闭", value: false, primary: true }
@@ -1947,9 +1986,7 @@
         setUpdatingDone(rk, res.ok);
         var tail = shortTail(res.log);
         if (res.ok) {
-          showDialog("更新完成", tail, [
-            { label: "刷新页面", value: true, primary: true }
-          ]).then(function () { location.reload(); });
+          showRefreshDone("更新完成", tail);
         } else {
           showDialog("抓取失败", tail || res.error || "未知错误", [
             { label: "关闭", value: false, primary: true }
