@@ -1,0 +1,32 @@
+{
+  "说明": "源数据瑕疵的受控修正（Leaguepedia wiki 录入错误）。由 load.py 的 apply_data_fixes 应用，幂等。",
+  "series_updates": [
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1", "field": "score1", "fixed_value": 2, "reason": "核实为 BO3 2:0（IG 胜），MatchSchedule 误写 3:0"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1", "field": "best_of", "fixed_value": 3, "reason": "核实为 BO3，MatchSchedule 误写 Bo5"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2", "field": "score1", "fixed_value": 2, "reason": "核实为 BO3 2:0（Newbee 胜），MatchSchedule 误写 3:0"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2", "field": "best_of", "fixed_value": 3, "reason": "核实为 BO3，MatchSchedule 误写 Bo5"}
+  ],
+  "game_updates": [
+    {"target_key": "LPL/2014 Season/Summer Season_Week 10_2_1", "field": "score2_after", "fixed_value": 1, "reason": "源比分 0:0，LGD 实际 1:0 领先（系列 996 G1）"},
+    {"target_key": "LPL/2014 Season/Summer Season_Week 10_2_2", "field": "score2_after", "fixed_value": 1, "reason": "源比分 1:0，实际 1:1 平（系列 996 G2）"},
+    {"target_key": "LPL/2017 Season/Summer Season_Week 4_6_3", "field": "score1_after", "fixed_value": 1, "reason": "源行列颠倒：SN 列 2 分实为 IG 的（系列 2242 G3）"},
+    {"target_key": "LPL/2017 Season/Summer Season_Week 4_6_3", "field": "score2_after", "fixed_value": 2, "reason": "源行列颠倒：IG 列 1 分实为 SN 的（系列 2242 G3）"},
+    {"target_key": "LPL/2017 Season/Spring Season_Week 9_5_2", "field": "score1_after", "fixed_value": 2, "reason": "QG 第 2 局后总分应为 2，源未累加（系列 3015 G2）"},
+    {"target_key": "LPL/2016 Season/Summer Season_Week 2_5_2", "field": "score1_after", "fixed_value": 0, "reason": "源行列颠倒：OMG 列 2 分实为 RNG 的（系列 3552 G2）"},
+    {"target_key": "LPL/2016 Season/Summer Season_Week 2_5_2", "field": "score2_after", "fixed_value": 2, "reason": "源行列颠倒：RNG 列 1 分实为 OMG 的（系列 3552 G2）"},
+
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1_2", "field": "game_no", "fixed_value": 1, "reason": "BO3 系列，源 GameId 序号整体 +1 错位，该行实为第 1 局（系列 1607）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1_2", "field": "gamename", "fixed_value": "Game 1", "reason": "同上：恢复正确局标签（系列 1607）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1_2", "field": "score2_after", "fixed_value": 1, "reason": "该行即真实 G1，IG 总分为 1（系列 1607）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1_3", "field": "game_no", "fixed_value": 2, "reason": "BO3 系列，源 GameId 序号整体 +1 错位，该行实为第 2 局（系列 1607）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1_3", "field": "gamename", "fixed_value": "Game 2", "reason": "同上：恢复正确局标签（系列 1607）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_1_3", "field": "score1_after", "fixed_value": 2, "reason": "该行即真实 G2，IG 总分为 2（系列 1607）"},
+
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2_2", "field": "game_no", "fixed_value": 1, "reason": "BO3 系列，源 GameId 序号整体 +1 错位，该行实为第 1 局（系列 1609）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2_2", "field": "gamename", "fixed_value": "Game 1", "reason": "同上：恢复正确局标签（系列 1609）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2_2", "field": "score1_after", "fixed_value": 1, "reason": "该行即真实 G1，Newbee 总分为 1（系列 1609）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2_3", "field": "game_no", "fixed_value": 2, "reason": "BO3 系列，源 GameId 序号整体 +1 错位，该行实为第 2 局（系列 1609）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2_3", "field": "gamename", "fixed_value": "Game 2", "reason": "同上：恢复正确局标签（系列 1609）"},
+    {"target_key": "LPL/2017 Season/Summer Playoffs_Round 1_2_3", "field": "score1_after", "fixed_value": 2, "reason": "该行即真实 G2，Newbee 总分为 2（系列 1609）"}
+  ]
+}

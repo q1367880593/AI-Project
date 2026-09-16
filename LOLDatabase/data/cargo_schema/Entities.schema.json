@@ -1,0 +1,1 @@
+{"cargofields":{"Entity":{"type":"String"},"EntityName":{"type":"String"},"EntityPage":{"type":"String"},"EntityType":{"type":"String"},"Display":{"type":"String"},"IsLowercase":{"type":"Boolean"},"DisambigSentence":{"type":"Wikitext"},"AnnounceNew":{"type":"Boolean"},"DontAnnounceNew":{"type":"Boolean"}}}

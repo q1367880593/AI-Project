@@ -1,0 +1,345 @@
+{
+  "说明": "2017 季后赛两场缺局的整局补全（game_imports）",
+  "game_imports": [
+    {
+      "game_id_src": "LPL/2017 Season/Summer Playoffs_Round 1_1_2",
+      "game_length_min": 27.8,
+      "game_length_text": "27:48",
+      "datetime_utc": "2017-08-22 06:20:49",
+      "patch": "7.16",
+      "sides": {
+        "1": {
+          "team": "Suning",
+          "bans": [
+            "Cassiopeia",
+            "Rumble",
+            "Twitch",
+            "Kennen",
+            "Orianna"
+          ],
+          "picks": [
+            "Maokai",
+            "Gragas",
+            "Lucian",
+            "Kog'Maw",
+            "Lulu"
+          ]
+        },
+        "2": {
+          "team": "Invictus Gaming",
+          "bans": [
+            "Kassadin",
+            "Thresh",
+            "Elise",
+            "Taliyah",
+            "Jax"
+          ],
+          "picks": [
+            "Cho'Gath",
+            "Jarvan IV",
+            "Corki",
+            "Tristana",
+            "Blitzcrank"
+          ]
+        }
+      },
+      "kills_by_side": {
+        "1": 11,
+        "2": 17
+      },
+      "players": [
+        {
+          "player": "Langx",
+          "team": "Suning",
+          "side": 1,
+          "role": "top",
+          "champion": "Maokai",
+          "kills": 2,
+          "deaths": 4,
+          "assists": 5,
+          "gold": 11612,
+          "cs": 231
+        },
+        {
+          "player": "H4cker",
+          "team": "Suning",
+          "side": 1,
+          "role": "jng",
+          "champion": "Gragas",
+          "kills": 1,
+          "deaths": 4,
+          "assists": 7,
+          "gold": 6093,
+          "cs": 131
+        },
+        {
+          "player": "Fenfen",
+          "team": "Suning",
+          "side": 1,
+          "role": "mid",
+          "champion": "Lucian",
+          "kills": 1,
+          "deaths": 3,
+          "assists": 3,
+          "gold": 11672,
+          "cs": 272
+        },
+        {
+          "player": "Fury",
+          "team": "Suning",
+          "side": 1,
+          "role": "bot",
+          "champion": "Kog'Maw",
+          "kills": 7,
+          "deaths": 2,
+          "assists": 4,
+          "gold": 26747,
+          "cs": 235
+        },
+        {
+          "player": "Yoon",
+          "team": "Suning",
+          "side": 1,
+          "role": "sup",
+          "champion": "Lulu",
+          "kills": 0,
+          "deaths": 4,
+          "assists": 10,
+          "gold": 1614,
+          "cs": 8
+        },
+        {
+          "player": "TheShy",
+          "team": "Invictus Gaming",
+          "side": 2,
+          "role": "top",
+          "champion": "Cho'Gath",
+          "kills": 3,
+          "deaths": 2,
+          "assists": 5,
+          "gold": 13182,
+          "cs": 238
+        },
+        {
+          "player": "Ning",
+          "team": "Invictus Gaming",
+          "side": 2,
+          "role": "jng",
+          "champion": "Jarvan IV",
+          "kills": 2,
+          "deaths": 4,
+          "assists": 8,
+          "gold": 5285,
+          "cs": 109
+        },
+        {
+          "player": "Rookie",
+          "team": "Invictus Gaming",
+          "side": 2,
+          "role": "mid",
+          "champion": "Corki",
+          "kills": 6,
+          "deaths": 1,
+          "assists": 7,
+          "gold": 21055,
+          "cs": 261
+        },
+        {
+          "player": "West",
+          "team": "Invictus Gaming",
+          "side": 2,
+          "role": "bot",
+          "champion": "Tristana",
+          "kills": 6,
+          "deaths": 2,
+          "assists": 8,
+          "gold": 19887,
+          "cs": 296
+        },
+        {
+          "player": "Baolan",
+          "team": "Invictus Gaming",
+          "side": 2,
+          "role": "sup",
+          "champion": "Blitzcrank",
+          "kills": 0,
+          "deaths": 2,
+          "assists": 12,
+          "gold": 4587,
+          "cs": 8
+        }
+      ],
+      "reason": "数据来源: Oracle's Elixir 2017 LPL match data（用户整理的数据补充.xlsx）；ban 有顺序，pick 顺序源数据未收录（slot=NULL）"
+    },
+    {
+      "game_id_src": "LPL/2017 Season/Summer Playoffs_Round 1_2_2",
+      "game_length_min": 32.32,
+      "game_length_text": "32:19",
+      "datetime_utc": "2017-08-22 08:56:44",
+      "patch": "7.16",
+      "sides": {
+        "1": {
+          "team": "Newbee",
+          "bans": [
+            "Tristana",
+            "Jarvan IV",
+            "Maokai",
+            "Elise",
+            "Rek'Sai"
+          ],
+          "picks": [
+            "Gnar",
+            "Gragas",
+            "Orianna",
+            "Xayah",
+            "Rakan"
+          ]
+        },
+        "2": {
+          "team": "Snake Esports",
+          "bans": [
+            "Jayce",
+            "Rumble",
+            "Kog'Maw",
+            "Cassiopeia",
+            "Corki"
+          ],
+          "picks": [
+            "Cho'Gath",
+            "Ivern",
+            "Lucian",
+            "Kalista",
+            "Alistar"
+          ]
+        }
+      },
+      "kills_by_side": {
+        "1": 16,
+        "2": 7
+      },
+      "players": [
+        {
+          "player": "Skye",
+          "team": "Newbee",
+          "side": 1,
+          "role": "top",
+          "champion": "Gnar",
+          "kills": 3,
+          "deaths": 2,
+          "assists": 7,
+          "gold": 12583,
+          "cs": 255
+        },
+        {
+          "player": "Swift",
+          "team": "Newbee",
+          "side": 1,
+          "role": "jng",
+          "champion": "Gragas",
+          "kills": 0,
+          "deaths": 2,
+          "assists": 10,
+          "gold": 5099,
+          "cs": 115
+        },
+        {
+          "player": "Coco",
+          "team": "Newbee",
+          "side": 1,
+          "role": "mid",
+          "champion": "Orianna",
+          "kills": 5,
+          "deaths": 1,
+          "assists": 10,
+          "gold": 26225,
+          "cs": 256
+        },
+        {
+          "player": "Lwx",
+          "team": "Newbee",
+          "side": 1,
+          "role": "bot",
+          "champion": "Xayah",
+          "kills": 8,
+          "deaths": 1,
+          "assists": 6,
+          "gold": 31272,
+          "cs": 311
+        },
+        {
+          "player": "Crisp",
+          "team": "Newbee",
+          "side": 1,
+          "role": "sup",
+          "champion": "Rakan",
+          "kills": 0,
+          "deaths": 1,
+          "assists": 16,
+          "gold": 3949,
+          "cs": 21
+        },
+        {
+          "player": "Flandre",
+          "team": "Snake Esports",
+          "side": 2,
+          "role": "top",
+          "champion": "Cho'Gath",
+          "kills": 2,
+          "deaths": 2,
+          "assists": 5,
+          "gold": 12658,
+          "cs": 271
+        },
+        {
+          "player": "SofM",
+          "team": "Snake Esports",
+          "side": 2,
+          "role": "jng",
+          "champion": "Ivern",
+          "kills": 1,
+          "deaths": 1,
+          "assists": 6,
+          "gold": 4547,
+          "cs": 114
+        },
+        {
+          "player": "Zz1tai",
+          "team": "Snake Esports",
+          "side": 2,
+          "role": "mid",
+          "champion": "Lucian",
+          "kills": 3,
+          "deaths": 4,
+          "assists": 2,
+          "gold": 14850,
+          "cs": 288
+        },
+        {
+          "player": "kRYST4L",
+          "team": "Snake Esports",
+          "side": 2,
+          "role": "bot",
+          "champion": "Kalista",
+          "kills": 1,
+          "deaths": 5,
+          "assists": 5,
+          "gold": 7088,
+          "cs": 309
+        },
+        {
+          "player": "Hudie",
+          "team": "Snake Esports",
+          "side": 2,
+          "role": "sup",
+          "champion": "Alistar",
+          "kills": 0,
+          "deaths": 4,
+          "assists": 4,
+          "gold": 3487,
+          "cs": 38
+        }
+      ],
+      "reason": "数据来源: Oracle's Elixir 2017 LPL match data（用户整理的数据补充.xlsx）；ban 有顺序，pick 顺序源数据未收录（slot=NULL）"
+    }
+  ]
+}

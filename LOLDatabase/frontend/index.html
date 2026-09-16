@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LPL 数据档案馆</title>
+<link rel="preconnect" href="https://fonts.loli.net" crossorigin>
+<link href="https://fonts.loli.net/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.loli.net/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div id="errBanner" class="err-banner" hidden></div>
+<div class="bg-glow bg-glow-a"></div>
+<div class="bg-glow bg-glow-b"></div>
+<div class="bg-grid"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">LPL</span>
+    <div class="brand-text">
+      <h1>数据档案馆</h1>
+      <p>2013 — 至今 · 职业联赛赛事数据终端</p>
+    </div>
+  </div>
+  <div class="stats-chips" id="statsChips">
+    <span class="chip skeleton"></span><span class="chip skeleton"></span><span class="chip skeleton"></span><span class="chip skeleton"></span>
+  </div>
+</header>
+
+<nav class="filters" aria-label="筛选条件">
+  <label class="field">
+    <span>年份</span>
+    <select id="selYear"><option value="">全部</option></select>
+  </label>
+  <label class="field grow">
+    <span>赛段</span>
+    <select id="selTournament"><option value="">全部赛段</option></select>
+  </label>
+  <label class="field">
+    <span>队伍</span>
+    <select id="selTeam"><option value="">全部队伍</option></select>
+  </label>
+  <label class="field grow">
+    <span>选手</span>
+    <div class="player-search">
+      <input id="playerInput" type="text" placeholder="输入选手 ID / 姓名…" autocomplete="off">
+      <div class="player-drop" id="playerDrop" hidden></div>
+    </div>
+  </label>
+  <button class="btn-reset" id="btnReset" title="重置筛选">重置</button>
+</nav>
+
+<main class="layout">
+  <section class="series-panel" aria-label="系列赛列表">
+    <div class="panel-head">
+      <h2>系列赛</h2>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <div class="series-list" id="seriesList">
+      <div class="empty">加载中…</div>
+    </div>
+    <div class="pager" id="pager" hidden>
+      <button id="btnPrev">← 上一页</button>
+      <span id="pageInfo"></span>
+      <button id="btnNext">下一页 →</button>
+    </div>
+  </section>
+
+  <aside class="detail-panel glass" id="detailPanel" aria-label="小局明细">
+    <div class="empty">
+      <div class="empty-symbol">◈</div>
+      <p>选择一个系列赛<br>查看小局、BP 与选手数据</p>
+    </div>
+  </aside>
+</main>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+  <div class="modal glass" id="modalBox" role="dialog" aria-modal="true"></div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
