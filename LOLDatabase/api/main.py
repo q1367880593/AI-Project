@@ -9,7 +9,6 @@ from contextlib import closing
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from collectors import config
@@ -99,20 +98,32 @@ def overview():
 
 
 @app.get("/api/tournaments")
-def tournaments(year: str | None = None):
+def tournaments(year: str | None = None, scope: str | None = None):
     sql = (
         "SELECT t.id, t.name, t.overview_page, t.year, t.split, "
         "t.is_playoffs, t.date_start, t.date_end, "
+        "l.short_name AS league_short, l.is_international, "
         "(SELECT COUNT(*) FROM series s WHERE s.tournament_id=t.id) AS series_count, "
         "(SELECT COUNT(*) FROM games g WHERE g.tournament_id=t.id) AS games_count "
-        "FROM tournaments t"
+        "FROM tournaments t JOIN leagues l ON l.id=t.league_id"
     )
-    params: tuple = ()
+    where, params = [], []
     if year:
-        sql += " WHERE substr(t.year,1,4)=?"
-        params = (year,)
+        where.append("substr(t.year,1,4)=?")
+        params.append(year)
+    if scope == "intl":
+        where.append("l.is_international=1")
+    elif scope:
+        # 具体联赛名（LPL/LCK/LEC/LCS）
+        where.append("l.name=?")
+        params.append(scope)
+    if where:
+        sql += " WHERE " + " AND ".join(where)
     sql += " ORDER BY t.date_start, t.id"
-    return rows(sql, params)
+    result = rows(sql, tuple(params))
+    for r in result:
+        r["name_cn"] = _cn(r.get("name") or "") or None
+    return result
 
 
 @app.get("/api/teams")
@@ -177,13 +188,94 @@ def players(
 
 # ---------- 系列赛 ----------
 
+# 赛段/阶段英文 → 中文（长词优先，忽略大小写）
+TOURNAMENT_NAME_CN = (
+    ("China Regional Finals", "LPL 区域资格赛"),
+    ("Regional Finals", "区域资格赛"),
+    ("First Stand", "全球先锋赛"),
+    ("Mid-Season Invitational", "季中冠军赛"),
+    ("Mid-Season Cup", "季中杯"),
+    ("Rift Rivals", "洲际对抗赛"),
+    ("World Championship", "全球总决赛"),
+    ("Grand Finals", "总决赛"),
+    ("Main Event", "正赛"),
+    ("Play-In", "入围赛"),
+    ("Group Stage", "小组赛"),
+    ("Knockout Stage", "淘汰赛"),
+    ("Swiss Stage", "瑞士轮"),
+    ("Regular Season", "常规赛"),
+    ("Summer Playoffs", "夏季赛 季后赛"),
+    ("Spring Playoffs", "春季赛 季后赛"),
+    ("Winter Playoffs", "冬季赛 季后赛"),
+    ("Summer Season", "夏季赛"),
+    ("Spring Season", "春季赛"),
+    ("Winter Season", "冬季赛"),
+    ("Summer Split", "夏季赛"),
+    ("Spring Split", "春季赛"),
+    ("Summer", "夏季赛"),
+    ("Spring", "春季赛"),
+    ("Winter", "冬季赛"),
+    ("Split 1", "第一赛段"),
+    ("Split 2", "第二赛段"),
+    ("Split 3", "第三赛段"),
+    ("Promotion Tournament", "升降级赛"),
+    ("Promotion", "升降级赛"),
+    ("Playoffs", "季后赛"),
+    ("Qualifying Series", "资格赛"),
+    ("Qualifier", "资格赛"),
+    ("Qualifiers", "资格赛"),
+    ("Worlds", "全球总决赛"),
+    ("MSI", "季中冠军赛"),
+    ("Finals", "决赛"),
+    ("Final", "决赛"),
+    ("Split", "赛段"),
+    ("Season", "赛季"),
+)
+
+# 阶段词（Round Robin / 八强 / 半决赛 / 季军赛等）
+PHASE_CN = (
+    ("Round Robin", "循环赛"),
+    ("Third-Place Match", "季军赛"),
+    ("Third Place", "季军赛"),
+    ("Quarterfinals", "八强赛"),
+    ("Quarterfinal", "八强赛"),
+    ("Semifinals", "半决赛"),
+    ("Semifinal", "半决赛"),
+    ("Tiebreaker", "加赛"),
+)
+
+
+def _cn(text: str) -> str:
+    """英文赛段名 → 中文（长词优先，忽略大小写）。"""
+    if not text:
+        return text or ""
+    out = str(text)
+    out = re.sub(r"\bRound\s+(\d+)\b", r"第 \1 轮", out, flags=re.IGNORECASE)
+    out = re.sub(r"\bMatch\s+(\d+)\b", r"第 \1 场", out, flags=re.IGNORECASE)
+    out = re.sub(r"\bGame\s+(\d+)\b", r"第 \1 局", out, flags=re.IGNORECASE)
+    out = re.sub(r"\bDay\s+(\d+)\b", r"第 \1 天", out, flags=re.IGNORECASE)
+    for en, zh in PHASE_CN + TOURNAMENT_NAME_CN:
+        out = re.sub(re.escape(en), zh, out, flags=re.IGNORECASE)
+    return out
+
+
+def _phase_cn(text: str) -> str:
+    """阶段/轮次名 → 中文；无法映射时返回空串（前端回退原文）。"""
+    if not text:
+        return ""
+    cn = _cn(text)
+    return cn if cn != str(text) else ""
+
+
 SERIES_BRIEF = (
     "SELECT s.id, s.start_time_utc, s.best_of, s.phase, s.shown_round, s.patch, "
     "s.score1, s.score2, s.winner_id, s.overview_page, "
     "t.id AS tournament_id, t.name AS tournament_name, t.year AS tournament_year, "
+    "l.short_name AS league_short, l.is_international AS league_intl, "
     "s.team1_id, s.team2_id, "
     "(SELECT COUNT(*) FROM games g WHERE g.series_id=s.id) AS game_count "
-    "FROM series s JOIN tournaments t ON t.id=s.tournament_id"
+    "FROM series s JOIN tournaments t ON t.id=s.tournament_id "
+    "JOIN leagues l ON l.id=t.league_id"
 )
 
 
@@ -194,6 +286,10 @@ def _series_briefs(sql: str, params: tuple) -> list[dict]:
         t2 = r.pop("team2_id")
         r["team1"] = _team_brief(t1)
         r["team2"] = _team_brief(t2)
+        r["tournament_name_cn"] = _cn(r.get("tournament_name") or "") or None
+        r["phase_cn"] = _phase_cn(
+            r.get("shown_round") or r.get("phase") or ""
+        ) or None
     return result
 
 
@@ -203,6 +299,7 @@ def series(
     team_id: int | None = None,
     player_id: int | None = None,
     year: int | None = None,
+    scope: str | None = None,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
 ):
@@ -223,9 +320,18 @@ def series(
     if year:
         where.append("substr(t.year,1,4)=?")
         params.append(str(year))
+    if scope == "intl":
+        where.append("l.is_international=1")
+    elif scope:
+        where.append("l.name=?")
+        params.append(scope)
     where_sql = (" WHERE " + " AND ".join(where)) if where else ""
 
-    total = scalar(f"SELECT COUNT(*) FROM series s JOIN tournaments t ON t.id=s.tournament_id{where_sql}", tuple(params))
+    join_sql = (
+        " FROM series s JOIN tournaments t ON t.id=s.tournament_id "
+        "JOIN leagues l ON l.id=t.league_id"
+    )
+    total = scalar(f"SELECT COUNT(*) {join_sql}{where_sql}", tuple(params))
     sql = (
         SERIES_BRIEF + where_sql +
         " ORDER BY (s.winner_id IS NULL) ASC, "
@@ -441,9 +547,5 @@ def team_detail(tid: int):
 app.mount("/images", StaticFiles(directory=ASSET_DIR), name="images")
 
 if FRONTEND_DIR.exists():
+    # 静态前端（含 /favicon.ico，位于 frontend/）
     app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
-
-
-@app.get("/favicon.ico", include_in_schema=False)
-def favicon():
-    return FileResponse(ASSET_DIR / "favicon.ico") if (ASSET_DIR / "favicon.ico").exists() else HTTPException(404)

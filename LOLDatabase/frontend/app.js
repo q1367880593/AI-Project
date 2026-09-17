@@ -4,7 +4,7 @@ var $ = function (sel, root) { return (root || document).querySelector(sel); };
 var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
 var state = {
-  year: "", tournament: "", team: "", playerId: null,
+  scope: "", year: "", tournament: "", team: "", playerId: null,
   page: 1, pageSize: 20, total: 0,
   activeSeries: null, activeGame: 0,
 };
@@ -78,14 +78,33 @@ function loadOverview() {
 }
 
 function loadTournaments() {
-  var url = state.year ? "/api/tournaments?year=" + encodeURIComponent(state.year) : "/api/tournaments";
-  return api(url).then(function (list) {
+  var params = new URLSearchParams();
+  if (state.year) params.set("year", state.year);
+  if (state.scope) params.set("scope", state.scope);
+  var qs = params.toString();
+  return api("/api/tournaments" + (qs ? "?" + qs : "")).then(function (list) {
     var sel = $("#selTournament");
     var keep = state.tournament;
-    sel.innerHTML = '<option value="">全部赛段</option>' + list.map(function (t) {
-      return '<option value="' + t.id + '">[' + t.year + "] " + esc(t.name) + "（" + t.series_count + " 场）</option>";
-    }).join("");
-    if (list.some(function (t) { return String(t.id) === keep; })) sel.value = keep;
+    // 只展示有比赛的赛段（Worlds 系列母页等无比赛行隐藏）
+    var opts = list.filter(function (t) { return t.series_count > 0 || t.games_count > 0; });
+    function optsHtml(arr) {
+      return arr.map(function (t) {
+        return '<option value="' + t.id + '">' +
+          (t.is_international
+            ? "[" + esc(t.league_short) + "][" + t.year + "] "
+            : "[" + t.year + "] ") + esc(t.name_cn || t.name) + "（" + t.series_count + " 场）</option>";
+      }).join("");
+    }
+    // 分组：LPL / LCK / LEC / LCS / 国际赛
+    var groups = [];
+    ["LPL", "LCK", "LEC", "LCS"].forEach(function (lg) {
+      var arr = opts.filter(function (t) { return !t.is_international && t.league_short === lg; });
+      if (arr.length) groups.push('<optgroup label="' + lg + '">' + optsHtml(arr) + "</optgroup>");
+    });
+    var intlArr = opts.filter(function (t) { return !!t.is_international; });
+    if (intlArr.length) groups.push('<optgroup label="国际赛">' + optsHtml(intlArr) + "</optgroup>");
+    sel.innerHTML = '<option value="">全部赛段</option>' + groups.join("");
+    if (opts.some(function (t) { return String(t.id) === keep; })) sel.value = keep;
   });
 }
 
@@ -126,6 +145,13 @@ $("#playerInput").addEventListener("input", function () {
 $("#playerInput").addEventListener("blur", function () { setTimeout(hidePlayerDrop, 150); });
 function hidePlayerDrop() { $("#playerDrop").hidden = true; }
 
+/* 联赛标签：国际赛金色、其它赛区蓝色；LPL 不显示 */
+function leagueBadge(s) {
+  if (!s.league_short || s.league_short === "LPL") return "";
+  return '<span class="lg-badge' + (s.league_intl ? "" : " rgn") + '">' +
+    esc(s.league_short) + "</span> ";
+}
+
 /* ---------- 系列列表 ---------- */
 
 function fetchSeries(page) {
@@ -136,6 +162,7 @@ function fetchSeries(page) {
   if (state.tournament) params.set("tournament_id", state.tournament);
   if (state.team) params.set("team_id", state.team);
   if (state.playerId) params.set("player_id", state.playerId);
+  if (state.scope) params.set("scope", state.scope);
   if (state.year && !state.tournament) params.set("year", state.year);
 
   var listEl = $("#seriesList");
@@ -161,7 +188,8 @@ function fetchSeries(page) {
           '<span class="bo">BO' + val(s.best_of, "?") + " · " + s.game_count + " 局</span></div>" +
         '<div class="teams-line">' + teamBadge(s.team1, w1 ? "win" : "loser") + teamBadge(s.team2, w2 ? "win" : "loser") + "</div>" +
         '<div class="score-line">' + score + "</div>" +
-        '<div class="series-meta">' + (s.patch ? esc(s.patch) + " · " : "") + esc(s.tournament_name || "") + "</div></div>";
+        '<div class="series-meta">' + leagueBadge(s) +
+        (s.patch ? esc(s.patch) + " · " : "") + esc(s.tournament_name_cn || s.tournament_name || "") + "</div></div>";
     }).join("");
 
     $$(".series-row", listEl).forEach(function (el) {
@@ -208,7 +236,10 @@ function renderDetail(s) {
 
   panel.innerHTML =
     '<div class="detail-head">' +
-      '<div class="tour">' + esc(s.tournament_name) + " · " + esc(s.shown_round || s.phase || "") +
+      '<div class="tour">' + leagueBadge(s) +
+        esc(s.tournament_name_cn || s.tournament_name) +
+        ((s.phase_cn || s.shown_round || s.phase)
+          ? " · " + esc(s.phase_cn || s.shown_round || s.phase || "") : "") +
         (s.start_time_utc ? " · " + fmtTime(s.start_time_utc) : "") + "</div>" +
       '<div class="versus">' +
         '<span class="t ' + (w1 ? "win" : "") + '">' + esc(s.team1 ? s.team1.name : "?") + "</span>" +
@@ -312,7 +343,7 @@ function renderGameBody(s) {
     var tri = triIcon
       ? '<span class="it tri" title="' + esc(triIcon.name) + '">' +
           (triIcon.icon
-            ? '<img src="' + esc(triIcon.icon) + '" alt="" loading="lazy"><span class="tn">' + esc(triIcon.name) + "</span>"
+            ? '<img src="' + esc(triIcon.icon) + '" alt="" loading="lazy">'
             : esc(triIcon.name)) +
         "</span>"
       : "";
@@ -326,9 +357,13 @@ function renderGameBody(s) {
     // 显示用比赛 ID；弹窗用数字档案主键（避免同名不同人如 Viper 串档）
     var pidText = p.pkey || p.link_used || "?";
     var pidKey = p.player_id !== null && p.player_id !== undefined ? String(p.player_id) : "";
+    // 出装区：6 装备格 + 1 饰品格，饰品放外侧（左半区在格子左边、右半区在格子右边）
+    var equipInner = rev
+      ? '<div class="grid">' + tiles + "</div>" + tri
+      : tri + '<div class="grid">' + tiles + "</div>";
     var cells = [];
     cells.push(
-      '<div class="mc equip' + wn + '"><div class="grid">' + tiles + "</div>" + tri + "</div>",
+      '<div class="mc equip' + wn + '">' + equipInner + "</div>",
       '<div class="mc kda' + wn + '"><span class="k">' + val(p.kills, 0) + "</span>/" +
         '<span class="d">' + val(p.deaths, 0) + "</span>/" +
         '<span class="a">' + val(p.assists, 0) + "</span></div>",
@@ -451,6 +486,12 @@ document.addEventListener("keydown", function (e) { if (e.key === "Escape") clos
 
 /* ---------- 事件绑定与启动 ---------- */
 
+$("#selScope").addEventListener("change", function (e) {
+  state.scope = e.target.value;
+  state.tournament = "";
+  loadTournaments().then(function () { fetchSeries(1); });
+});
+
 $("#selYear").addEventListener("change", function (e) {
   state.year = e.target.value;
   state.tournament = "";
@@ -468,8 +509,8 @@ $("#selTeam").addEventListener("change", function (e) {
 });
 
 $("#btnReset").addEventListener("click", function () {
-  state.year = ""; state.tournament = ""; state.team = ""; state.playerId = null;
-  $("#selYear").value = ""; $("#selTeam").value = ""; $("#playerInput").value = "";
+  state.scope = ""; state.year = ""; state.tournament = ""; state.team = ""; state.playerId = null;
+  $("#selScope").value = ""; $("#selYear").value = ""; $("#selTeam").value = ""; $("#playerInput").value = "";
   loadTournaments().then(function () { fetchSeries(1); });
 });
 

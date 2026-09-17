@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LPL 数据档案馆</title>
+<title>LOL 档案馆</title>
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.loli.net" crossorigin>
 <link href="https://fonts.loli.net/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.loli.net/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
@@ -17,9 +18,9 @@
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark">LPL</span>
+    <span class="brand-mark">LOL</span>
     <div class="brand-text">
-      <h1>数据档案馆</h1>
+      <h1>档案馆</h1>
       <p>2013 — 至今 · 职业联赛赛事数据终端</p>
     </div>
   </div>
@@ -29,6 +30,17 @@
 </header>
 
 <nav class="filters" aria-label="筛选条件">
+  <label class="field">
+    <span>联赛</span>
+    <select id="selScope">
+      <option value="">全部</option>
+      <option value="LPL">LPL</option>
+      <option value="LCK">LCK</option>
+      <option value="LEC">LEC</option>
+      <option value="LCS">LCS</option>
+      <option value="intl">国际赛</option>
+    </select>
+  </label>
   <label class="field">
     <span>年份</span>
     <select id="selYear"><option value="">全部</option></select>

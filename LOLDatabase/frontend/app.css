@@ -244,6 +244,23 @@ select:focus, .player-search input:focus { box-shadow: 0 0 0 3px var(--red-soft)
   white-space: normal; word-break: break-all; min-width: 0;
 }
 
+/* 国际赛联赛标签（Worlds / MSI / MSC / 洲际赛 / FST） */
+.lg-badge {
+  display: inline-block; vertical-align: baseline;
+  font-family: var(--mono); font-size: 10px; line-height: 1;
+  color: #f3cd7e;
+  padding: 3px 7px; margin-right: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 180, 76, 0.38);
+  background: rgba(232, 180, 76, 0.10);
+}
+/* 其它赛区联赛标签（LCK / LEC / LCS）：蓝色 */
+.lg-badge.rgn {
+  color: #8fb8ff;
+  border-color: rgba(96, 143, 224, 0.4);
+  background: rgba(96, 143, 224, 0.12);
+}
+
 .fallback-badge {
   font-family: var(--display); color: var(--gold);
 }
@@ -397,14 +414,14 @@ select:focus, .player-search input:focus { box-shadow: 0 0 0 3px var(--red-soft)
 
 .mu-scroll { overflow-x: auto; }
 
-.mu-table { min-width: 800px; }
+.mu-table { min-width: 844px; }
 
 .mu-head, .mu-row {
   display: grid;
-  /* 出装与技能列弹性伸缩，其余固定，总最小宽 ≈ 800px */
+  /* 出装与技能列弹性伸缩，其余固定，总最小宽 ≈ 844px（出装列含外侧饰品格） */
   grid-template-columns:
-    minmax(96px, 1.3fr) 54px 42px 34px minmax(70px, 1fr) 80px 36px
-    80px minmax(70px, 1fr) 34px 42px 54px minmax(96px, 1.3fr);
+    minmax(124px, 1.35fr) 54px 42px 34px minmax(70px, 1fr) 80px 36px
+    80px minmax(70px, 1fr) 34px 42px 54px minmax(124px, 1.35fr);
   align-items: stretch;
 }
 
@@ -431,9 +448,12 @@ select:focus, .player-search input:focus { box-shadow: 0 0 0 3px var(--red-soft)
 .mu-row .mc:nth-child(6), .mu-row .mc.role { border-right: none; }
 .mu-row .mc.win { background: var(--red-soft); }
 
-/* 出装：3×2 装备槽 + 饰品（最后一行通栏） */
-.mc.equip { padding: 6px 3px; }
-.mc.equip .grid { display: grid; grid-template-columns: repeat(3, 28px); gap: 4px; }
+/* 出装：6 格装备（3×2）+ 同尺寸饰品格贴外侧并垂直居中 */
+.mc.equip { padding: 6px 3px; gap: 4px; align-items: center; }
+.mc.equip .grid {
+  display: grid; grid-template-columns: repeat(3, 26px); gap: 4px;
+  flex: none; align-content: center;
+}
 .mc.equip .it {
   height: 24px; border-radius: 5px; border: 1px solid var(--border);
   background: var(--panel-strong); font-size: 8.5px; line-height: 1;
@@ -443,15 +463,9 @@ select:focus, .player-search input:focus { box-shadow: 0 0 0 3px var(--red-soft)
 }
 .mc.equip .it img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
 .mc.equip .it.no { background: rgba(255,255,255,.02); border-style: dashed; }
+/* 饰品格：与装备格同样式同尺寸，垂直居于两行装备格中间 */
 .mc.equip .it.tri {
-  grid-column: 1 / -1; height: 22px; font-size: 9px; gap: 5px;
-  padding: 0 5px; justify-content: flex-start;
-  color: var(--gold); border-color: rgba(232,180,76,.35);
-}
-.mc.equip .it.tri img { width: 16px; height: 16px; flex: none; padding: 0; }
-.mc.equip .it.tri .tn {
-  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; font-size: 9px; color: var(--gold);
+  flex: none; width: 26px;
 }
 
 /* KDA */

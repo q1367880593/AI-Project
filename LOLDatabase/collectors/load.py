@@ -169,6 +169,15 @@ def init_db(db_path: Path | None = None) -> sqlite3.Connection:
     )
     if not has_year:
         print("  schema 迁移: media_assets.year 已添加", flush=True)
+    # 迁移：leagues.is_international（国际赛/国内赛分类，展示分离用）
+    has_intl = conn.execute(
+        "SELECT name FROM pragma_table_info('leagues') WHERE name='is_international'"
+    ).fetchone()
+    if not has_intl:
+        conn.execute(
+            "ALTER TABLE leagues ADD COLUMN is_international INTEGER DEFAULT 0"
+        )
+        print("  schema 迁移: leagues.is_international 已添加", flush=True)
     # 迁移：picks_bans.slot 需为可空（补录数据可能无 BP 顺序）
     slot_notnull = conn.execute(
         "SELECT \"notnull\" FROM pragma_table_info('picks_bans') "
@@ -226,12 +235,35 @@ def read_pages(rel_dir: str) -> list:
 
 # ---------- 各阶段加载 ----------
 
+# 国际赛 OverviewPage 特征子串 → (联赛名, 短名, 区域)。按顺序匹配。
+INTL_LEAGUE_PATTERNS = (
+    ("Worlds Qualifying Series", ("World Championship", "Worlds", "International")),
+    ("World Championship", ("World Championship", "Worlds", "International")),
+    ("Mid-Season Invitational", ("Mid-Season Invitational", "MSI", "International")),
+    ("Mid-Season Cup", ("Mid-Season Cup", "MSC", "International")),
+    ("Rift Rivals", ("Rift Rivals", "洲际赛", "International")),
+    ("First Stand", ("First Stand", "FST", "International")),
+)
+
+
+# 其它赛区的历史联赛名合并映射（前身 → 现名）：
+# EU LCS(2013-2018) → LEC；NA LCS(2013-2020) → LCS。
+REGIONAL_LEAGUE_MAP = {
+    "LCK": ("LCK", "LCK", "Korea"),
+    "EU LCS": ("LEC", "LEC", "Europe"),
+    "LEC": ("LEC", "LEC", "Europe"),
+    "NA LCS": ("LCS", "LCS", "North America"),
+    "LCS": ("LCS", "LCS", "North America"),
+}
+
+
 class Loader:
     def __init__(self, conn: sqlite3.Connection):
         self.conn = conn
         self.team_ids: dict[str, int] = {}
         self.player_ids: dict[str, int] = {}
         self.champ_ids: dict[str, int] = {}
+        self.skip_pages: set[str] = set()  # 表演赛等不入库的赛段页
 
     # -- 英雄 --
 
@@ -244,6 +276,10 @@ class Loader:
         for entry in data:
             alias_en = s(entry.get("alias")) or s(entry.get("name"))
             if not alias_en:
+                continue
+            # communitydragon zh_cn 摘要混入 68 个 'Jade_*'（2026 活动皮肤）和
+            # 1 个 'None' 占位，非真实英雄，必须过滤
+            if alias_en == "None" or alias_en.startswith("Jade_"):
                 continue
             upsert(
                 self.conn,
@@ -269,12 +305,18 @@ class Loader:
 
     def champ_id_by_page(self, page_name: str) -> int | None:
         """英雄页面名（如 'Kai'Sa' / 'Nunu & Willump'）→ 本库 champions.id。"""
-        key = norm_champ(page_name)
+        if not page_name:
+            return None
+        pn = page_name.strip()
+        # wiki 老数据用 'None' 表示无 BAN/无英雄，不能映射到任何英雄
+        if pn.lower() in ("none", "null", "tbd", "n/a"):
+            return None
+        key = norm_champ(pn)
         key = config.CHAMP_OVERRIDES.get(key, key)
         if key in self.champ_ids:
             return self.champ_ids[key]
         row = self.conn.execute(
-            "SELECT id FROM champions WHERE name=?", (page_name,)
+            "SELECT id FROM champions WHERE name=?", (pn,)
         ).fetchone()
         if row:
             self.champ_ids[key] = row[0]
@@ -286,24 +328,45 @@ class Loader:
     def load_leagues_tournaments(self) -> tuple[int, int]:
         league_ids: dict[str, int] = {}
         n_t = 0
-        rows = read_pages("lpl/tournaments")
+        rows = read_pages("lpl/tournaments") + read_pages("intl/tournaments") + read_pages("regions/tournaments")
         for row in rows:
-            # 联赛名以 OverviewPage 首段为准（'LPL/2025 Season/...' → LPL），
-            # Cargo League 字段存的是 'Tencent LoL Pro League' 等非标准值，仅作兜底
             overview = s(row.get("OverviewPage")) or ""
-            league_name = overview.split("/")[0] if overview else (
-                s(row.get("League")) or config.LPL_LEAGUE
-            )
+            # 表演赛（TournamentLevel='Showmatch'，含 All-Star 全明星与 LPL 表演赛）不入库
+            if s(row.get("TournamentLevel")) == "Showmatch":
+                if overview:
+                    self.skip_pages.add(overview)
+                continue
+            intl = self._intl_league(overview)
+            if intl:
+                # 国际赛：按 OverviewPage 特征归类到拳头发起赛事的联赛
+                league_name, short, region = intl
+                level = "International"
+            else:
+                # 联赛名以 OverviewPage 首段为准（'LPL/2025 Season/...' → LPL），
+                # Cargo League 字段存的是 'Tencent LoL Pro League' 等非标准值，仅作兜底；
+                # 其它赛区按历史联赛名合并（EU LCS→LEC、NA LCS→LCS）
+                league_name = overview.split("/")[0] if overview else (
+                    s(row.get("League")) or config.LPL_LEAGUE
+                )
+                meta = REGIONAL_LEAGUE_MAP.get(league_name)
+                if meta:
+                    league_name, short, region = meta
+                    level = "Primary"
+                else:
+                    short = league_name
+                    region = s(row.get("Region")) or {
+                        "LPL": "China", "LDL": "China",
+                    }.get(league_name)
+                    level = None
             if league_name not in league_ids:
-                region = s(row.get("Region")) or {
-                    "LPL": "China", "LDL": "China",
-                }.get(league_name)
                 upsert(
                     self.conn, "leagues", ["name"],
                     {
                         "name": league_name,
-                        "short_name": league_name,
+                        "short_name": short,
                         "region": region,
+                        "level": level,
+                        "is_international": 1 if intl else 0,
                     },
                 )
                 league_ids[league_name] = self.conn.execute(
@@ -331,6 +394,13 @@ class Loader:
         print(f"  leagues/tournaments: {len(league_ids)} 联赛 / {n_t} 赛段", flush=True)
         return len(league_ids), n_t
 
+    def _intl_league(self, overview: str) -> tuple[str, str, str] | None:
+        """OverviewPage → (联赛名, 短名, 区域)；非国际赛返回 None。"""
+        for feat, meta in INTL_LEAGUE_PATTERNS:
+            if feat in overview:
+                return meta
+        return None
+
     # -- 战队 --
 
     def team_id(self, page_name: str) -> int | None:
@@ -354,66 +424,72 @@ class Loader:
 
     def load_series(self) -> int:
         n = 0
-        for pf in (config.RAW_DIR / "lpl" / "matchschedule").rglob("page_*.json"):
-            for raw_row in json.loads(pf.read_text(encoding="utf-8")):
-                row = {k.replace(" ", "_"): v for k, v in raw_row.items()}
-                overview = s(row.get("OverviewPage"))
-                tab = s(row.get("Tab"))
-                n_in_tab = i(row.get("N_MatchInTab"))
-                match_id = s(row.get("MatchId"))
-                key = match_id or f"LP_FB:{overview}|{tab}|{n_in_tab}"
-                t1, t2 = self.team_id(s(row.get("Team1"))), self.team_id(s(row.get("Team2")))
-                side = winner_side(row.get("Winner"))
-                w_raw = s(row.get("Winner"))
-                if side is None and w_raw == s(row.get("Team1")):
-                    side = 1
-                elif side is None and w_raw == s(row.get("Team2")):
-                    side = 2
-                score1, score2 = i(row.get("Team1Score")), i(row.get("Team2Score"))
-                winner = None
-                if side == 1:
-                    winner = t1
-                elif side == 2:
-                    winner = t2
-                elif score1 is not None and score2 is not None:
-                    if score1 > score2:
+        for scope in ("lpl", "intl", "regions"):
+            root = config.RAW_DIR / scope / "matchschedule"
+            if not root.exists():
+                continue
+            for pf in root.rglob("page_*.json"):
+                for raw_row in json.loads(pf.read_text(encoding="utf-8")):
+                    row = {k.replace(" ", "_"): v for k, v in raw_row.items()}
+                    overview = s(row.get("OverviewPage"))
+                    if overview in self.skip_pages:
+                        continue
+                    tab = s(row.get("Tab"))
+                    n_in_tab = i(row.get("N_MatchInTab"))
+                    match_id = s(row.get("MatchId"))
+                    key = match_id or f"LP_FB:{overview}|{tab}|{n_in_tab}"
+                    t1, t2 = self.team_id(s(row.get("Team1"))), self.team_id(s(row.get("Team2")))
+                    side = winner_side(row.get("Winner"))
+                    w_raw = s(row.get("Winner"))
+                    if side is None and w_raw == s(row.get("Team1")):
+                        side = 1
+                    elif side is None and w_raw == s(row.get("Team2")):
+                        side = 2
+                    score1, score2 = i(row.get("Team1Score")), i(row.get("Team2Score"))
+                    winner = None
+                    if side == 1:
                         winner = t1
-                    elif score2 > score1:
+                    elif side == 2:
                         winner = t2
-                mvp = s(row.get("MVP"))
-                mvp_id = None
-                if mvp:
-                    mvp_id = self.player_id_by_link(strip_wikilink(mvp))
-                upsert(
-                    self.conn, "series", ["match_id_src"],
-                    {
-                        "match_id_src": key,
-                        "unique_match": s(row.get("UniqueMatch")),
-                        "tournament_id": self._tournament_id(overview),
-                        "overview_page": overview,
-                        "tab": tab,
-                        "phase": s(row.get("Phase")),
-                        "round": s(row.get("Round")),
-                        "shown_round": s(row.get("ShownRound")),
-                        "best_of": i(row.get("BestOf")),
-                        "team1_id": t1, "team2_id": t2,
-                        "score1": score1, "score2": score2,
-                        "winner_id": winner,
-                        "ff": i(row.get("FF")),
-                        "is_nullified": b(row.get("IsNullified")),
-                        "is_tiebreaker": b(row.get("IsTiebreaker")),
-                        "start_time_utc": s(row.get("DateTime_UTC")),
-                        "has_time": b(row.get("HasTime")),
-                        "patch": s(row.get("Patch")),
-                        "patch_page": s(row.get("PatchPage")),
-                        "venue": s(row.get("Venue")),
-                        "mvp_player_id": mvp_id,
-                        "mvp_points": i(row.get("MVPPoints")),
-                        "disabled_champions": s(row.get("DisabledChampions")),
-                    },
-                )
-                self._sr("series", key, match_id, overview, row)
-                n += 1
+                    elif score1 is not None and score2 is not None:
+                        if score1 > score2:
+                            winner = t1
+                        elif score2 > score1:
+                            winner = t2
+                    mvp = s(row.get("MVP"))
+                    mvp_id = None
+                    if mvp:
+                        mvp_id = self.player_id_by_link(strip_wikilink(mvp))
+                    upsert(
+                        self.conn, "series", ["match_id_src"],
+                        {
+                            "match_id_src": key,
+                            "unique_match": s(row.get("UniqueMatch")),
+                            "tournament_id": self._tournament_id(overview),
+                            "overview_page": overview,
+                            "tab": tab,
+                            "phase": s(row.get("Phase")),
+                            "round": s(row.get("Round")),
+                            "shown_round": s(row.get("ShownRound")),
+                            "best_of": i(row.get("BestOf")),
+                            "team1_id": t1, "team2_id": t2,
+                            "score1": score1, "score2": score2,
+                            "winner_id": winner,
+                            "ff": i(row.get("FF")),
+                            "is_nullified": b(row.get("IsNullified")),
+                            "is_tiebreaker": b(row.get("IsTiebreaker")),
+                            "start_time_utc": s(row.get("DateTime_UTC")),
+                            "has_time": b(row.get("HasTime")),
+                            "patch": s(row.get("Patch")),
+                            "patch_page": s(row.get("PatchPage")),
+                            "venue": s(row.get("Venue")),
+                            "mvp_player_id": mvp_id,
+                            "mvp_points": i(row.get("MVPPoints")),
+                            "disabled_champions": s(row.get("DisabledChampions")),
+                        },
+                    )
+                    self._sr("series", key, match_id, overview, row)
+                    n += 1
         print(f"  series: {n} 场", flush=True)
         return n
 
@@ -602,10 +678,17 @@ class Loader:
                 if len(parts) == 3:
                     series_fallback[(overview, int(parts[2]))] = sid
         n_g = n_pb = n_ts = 0
-        for pf in (config.RAW_DIR / "lpl" / "scoreboardgames").rglob("page_*.json"):
+        game_files = []
+        for scope in ("lpl", "intl", "regions"):
+            root = config.RAW_DIR / scope / "scoreboardgames"
+            if root.exists():
+                game_files.extend(sorted(root.rglob("page_*.json")))
+        for pf in game_files:
             for raw_row in json.loads(pf.read_text(encoding="utf-8")):
                 row = {k.replace(" ", "_"): v for k, v in raw_row.items()}
                 overview = s(row.get("OverviewPage"))
+                if overview in self.skip_pages:
+                    continue
                 game_id = s(row.get("GameId")) or ("LP_GL:" + s(row.get("UniqueLine")) or "")
                 t1, t2 = self.team_id(s(row.get("Team1"))), self.team_id(s(row.get("Team2")))
                 match_id = s(row.get("MatchId"))
@@ -719,9 +802,16 @@ class Loader:
             "primary_tree", "secondary_tree", "stats_page",
         )
         update_cols = [c for c in gp_cols if c != "unique_line"]
-        for pf in (config.RAW_DIR / "lpl" / "scoreboardplayers").rglob("page_*.json"):
+        gp_files = []
+        for scope in ("lpl", "intl", "regions"):
+            root = config.RAW_DIR / scope / "scoreboardplayers"
+            if root.exists():
+                gp_files.extend(sorted(root.rglob("page_*.json")))
+        for pf in gp_files:
             for raw_row in json.loads(pf.read_text(encoding="utf-8")):
                 row = {k.replace(" ", "_"): v for k, v in raw_row.items()}
+                if s(row.get("OverviewPage")) in self.skip_pages:
+                    continue
                 ul = s(row.get("UniqueLine"))
                 if not ul:
                     continue

@@ -80,9 +80,69 @@ def stage_tournaments() -> list:
     )
 
 
-def _stage_per_page(kind: str, page: str, fields: str):
+# 国际赛 = 拳头发起的官方国际赛事（Worlds / MSI / MSC / 洲际赛 / First Stand）。
+# 各联赛在 Cargo 中字段命名不一，按 OverviewPage/League 混合匹配：
+# - Worlds 的 League='World Championship'，但同联赛还挂各国 Regional Finals（国内赛，排除）；
+# - S1 Qualifiers（区域预选）属国内，排除；RR 的 Showmatches（表演赛）排除；
+# - All-Star 全明星（TournamentLevel='Showmatch'）与各种表演赛不需要，不采集。
+INTL_TOURNAMENT_WHERE = (
+    "("
+    "(OverviewPage LIKE '%World Championship%' AND OverviewPage NOT LIKE '%/Qualifiers%') "
+    "OR OverviewPage='2023 Worlds Qualifying Series' "
+    "OR League='Mid-Season Invitational' "
+    "OR OverviewPage LIKE '%Mid-Season Cup%' "
+    "OR OverviewPage LIKE 'Rift Rivals%' "
+    "OR League='First Stand'"
+    ") "
+    "AND OverviewPage NOT LIKE '%/Showmatches%' "
+    "AND OverviewPage NOT LIKE 'IEM%' "
+    "AND OverviewPage NOT LIKE 'IeSF%'"
+)
+
+
+def stage_intl_tournaments() -> list:
+    """阶段 1（国际赛）：Riot 官方国际赛事全部赛段（Cargo: Tournaments）。"""
+    key = "intl/tournaments/all"
+    return client.fetch_all(
+        key,
+        {
+            "action": "cargoquery",
+            "tables": "Tournaments",
+            "fields": TOURNAMENT_FIELDS,
+            "where": INTL_TOURNAMENT_WHERE,
+            "order_by": "DateStart",
+        },
+    )
+
+
+# 三大主力赛区：LCK（2015 成立）/ LEC（2013-2018 名 EU LCS）/ LCS（2013-2020 名 NA LCS）。
+# 二级联赛（LCK CL、LCS Academy）是独立前缀（'LCK CL/'、'LCS Academy/'），不会混入。
+# 表演赛在加载层统一按 TournamentLevel='Showmatch' 过滤。
+REGIONAL_TOURNAMENT_WHERE = (
+    "OverviewPage LIKE 'LCK/%' OR OverviewPage LIKE 'EU LCS/%' "
+    "OR OverviewPage LIKE 'LEC/%' OR OverviewPage LIKE 'NA LCS/%' "
+    "OR OverviewPage LIKE 'LCS/%'"
+)
+
+
+def stage_regional_tournaments() -> list:
+    """阶段 1（其它赛区）：LCK / LEC / LCS 全部赛段（Cargo: Tournaments）。"""
+    key = "regions/tournaments/all"
+    return client.fetch_all(
+        key,
+        {
+            "action": "cargoquery",
+            "tables": "Tournaments",
+            "fields": TOURNAMENT_FIELDS,
+            "where": REGIONAL_TOURNAMENT_WHERE,
+            "order_by": "DateStart",
+        },
+    )
+
+
+def _stage_per_page(kind: str, page: str, fields: str, scope: str = "lpl"):
     """按赛段页拉取 MatchSchedule / ScoreboardGames / ScoreboardPlayers。"""
-    key = f"lpl/{kind}/{slug(page)}"
+    key = f"{scope}/{kind}/{slug(page)}"
     return client.fetch_all(
         key,
         {
@@ -98,29 +158,30 @@ def _stage_per_page(kind: str, page: str, fields: str):
     )
 
 
-def stage_match_schedule(page: str):
-    return _stage_per_page("matchschedule", page, MATCH_FIELDS)
+def stage_match_schedule(page: str, scope: str = "lpl"):
+    return _stage_per_page("matchschedule", page, MATCH_FIELDS, scope)
 
 
-def stage_scoreboard_games(page: str):
-    return _stage_per_page("scoreboardgames", page, GAME_FIELDS)
+def stage_scoreboard_games(page: str, scope: str = "lpl"):
+    return _stage_per_page("scoreboardgames", page, GAME_FIELDS, scope)
 
 
-def stage_scoreboard_players(page: str):
-    return _stage_per_page("scoreboardplayers", page, PLAYERGAME_FIELDS)
+def stage_scoreboard_players(page: str, scope: str = "lpl"):
+    return _stage_per_page("scoreboardplayers", page, PLAYERGAME_FIELDS, scope)
 
 
 def collect_links_from_raw() -> list:
-    """从已拉取的小局选手数据中收集全部选手 Link（比赛当时所用 ID）。"""
+    """从已拉取的小局选手数据（LPL + 国际赛 + 其它赛区）中收集全部选手 Link。"""
     links = set()
-    root = config.RAW_DIR / "lpl" / "scoreboardplayers"
-    if not root.exists():
-        return []
-    for pf in sorted(root.rglob("page_*.json")):
-        rows = json.loads(pf.read_text(encoding="utf-8"))
-        for row in rows:
-            if row.get("Link"):
-                links.add(row["Link"])
+    for scope in ("lpl", "intl", "regions"):
+        root = config.RAW_DIR / scope / "scoreboardplayers"
+        if not root.exists():
+            continue
+        for pf in sorted(root.rglob("page_*.json")):
+            rows = json.loads(pf.read_text(encoding="utf-8"))
+            for row in rows:
+                if row.get("Link"):
+                    links.add(row["Link"])
     return sorted(links)
 
 
