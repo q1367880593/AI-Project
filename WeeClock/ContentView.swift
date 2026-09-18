@@ -78,6 +78,9 @@ final class WorkClockViewModel: ObservableObject {
 struct ContentView: View {
     @StateObject private var vm = WorkClockViewModel()
     @State private var savedFrame: NSRect = .zero
+    @State private var ghostWindow: NSWindow? = nil
+    @State private var dragStartOrigin: NSPoint? = nil
+    @State private var dragStartMouse: NSPoint? = nil
 
     var body: some View {
         ZStack {
@@ -329,7 +332,43 @@ struct ContentView: View {
         .padding(.vertical, 8)
         .frame(width: 210, height: 52)
         .background(.clear)
-        .glassEffect(.regular, in: Capsule())
+        .glassEffect(.clear, in: Capsule())
+        .gesture(ghostDragGesture)
+    }
+
+    // MARK: 窗口拖拽手势
+    // 用屏幕坐标 NSEvent.mouseLocation 计算窗口位置，避免 SwiftUI 局部坐标系随窗口移动产生抖动
+    private var ghostDragGesture: some Gesture {
+        DragGesture(minimumDistance: 2)
+            .onChanged { _ in
+                guard let window = ghostWindow else { return }
+                if dragStartOrigin == nil {
+                    dragStartOrigin = window.frame.origin
+                    dragStartMouse = NSEvent.mouseLocation
+                }
+                guard let startOrigin = dragStartOrigin,
+                      let startMouse = dragStartMouse else { return }
+                let current = NSEvent.mouseLocation
+                var origin = NSPoint(
+                    x: startOrigin.x + (current.x - startMouse.x),
+                    y: startOrigin.y + (current.y - startMouse.y)
+                )
+                // 限制窗口整体不超出所在屏幕范围（含菜单栏和 Dock 区域，可拖到最底部）
+                let mouseScreen = NSScreen.screens.first {
+                    NSMouseInRect(current, $0.frame, false)
+                } ?? window.screen ?? NSScreen.main
+                if let screen = mouseScreen {
+                    let bounds = screen.frame
+                    let size = window.frame.size
+                    origin.x = min(max(origin.x, bounds.minX), bounds.maxX - size.width)
+                    origin.y = min(max(origin.y, bounds.minY), bounds.maxY - size.height)
+                }
+                window.setFrameOrigin(origin)
+            }
+            .onEnded { _ in
+                dragStartOrigin = nil
+                dragStartMouse = nil
+            }
     }
 
     // MARK: 窗口模式切换
@@ -341,6 +380,7 @@ struct ContentView: View {
         else { return }
 
         if isGhost {
+            ghostWindow = window
             // 保存当前 frame，便于退出时恢复
             if savedFrame == .zero {
                 savedFrame = window.frame
@@ -375,6 +415,7 @@ struct ContentView: View {
                 )
             }
         } else {
+            ghostWindow = nil
             let target = savedFrame == .zero
                 ? NSRect(x: 0, y: 0, width: 500, height: 480)
                 : savedFrame
