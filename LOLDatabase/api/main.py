@@ -3,9 +3,14 @@
 组合查询入口: /api/series（赛段/队伍/选手/年份筛选 + 分页）。
 """
 
+import json
 import re
 import sqlite3
+import subprocess
+import sys
+import threading
 from contextlib import closing
+from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
@@ -94,6 +99,9 @@ def overview():
             "SELECT DISTINCT substr(year,1,4) AS y FROM tournaments "
             "WHERE year IS NOT NULL ORDER BY y DESC"
         )],
+        "latest_game_date": scalar(
+            "SELECT MAX(datetime_utc) FROM games WHERE datetime_utc IS NOT NULL"
+        ),
     }
 
 
@@ -540,6 +548,194 @@ def team_detail(tid: int):
     )
     t["yearly"] = yearly
     return t
+
+
+# ---------- 选手排行 ----------
+
+# 排序维度 → 聚合别名（SQL 里同名输出列，ORDER BY 用别名，白名单防注入）
+RANK_SORTS = {
+    "games": "games",
+    "wins": "wins",
+    "winrate": "winrate",
+    "kills": "kills",
+    "deaths": "deaths",
+    "assists": "assists",
+    "kda": "kda",
+    "pentakills": "pentakills",
+    "mvp": "mvp",
+    "avg_kills": "avg_kills",
+    "avg_gold": "avg_gold",
+    "avg_cs": "avg_cs",
+    "avg_damage": "avg_damage",
+}
+
+RANK_AGG = (
+    "COUNT(gps.id) AS games, "
+    "SUM(CASE WHEN gps.player_win=1 THEN 1 ELSE 0 END) AS wins, "
+    "ROUND(100.0 * SUM(CASE WHEN gps.player_win=1 THEN 1 ELSE 0 END) "
+    "/ COUNT(gps.id), 1) AS winrate, "
+    "SUM(gps.kills) AS kills, SUM(gps.deaths) AS deaths, "
+    "SUM(gps.assists) AS assists, "
+    "CASE WHEN SUM(gps.deaths)=0 THEN NULL "
+    "ELSE ROUND((SUM(gps.kills)+SUM(gps.assists))*1.0/SUM(gps.deaths), 2) END AS kda, "
+    "SUM(gps.pentakills) AS pentakills, "
+    "(SELECT COUNT(*) FROM series s WHERE s.mvp_player_id=p.id) AS mvp, "
+    "ROUND(AVG(gps.kills), 2) AS avg_kills, "
+    "ROUND(AVG(gps.gold), 0) AS avg_gold, "
+    "ROUND(AVG(gps.cs), 1) AS avg_cs, "
+    "ROUND(AVG(gps.damage_to_champions), 0) AS avg_damage, "
+    "COUNT(DISTINCT gps.champion_id) AS champs "
+)
+
+
+@app.get("/api/player-rank")
+def player_rank(
+    sort: str = "games",
+    order: str = "desc",
+    scope: str | None = None,
+    role: str | None = None,
+    min_games: int = Query(default=10, ge=0, le=500),
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=50, ge=1, le=200),
+):
+    sort_col = RANK_SORTS.get(sort)
+    if not sort_col:
+        raise HTTPException(400, f"未知排序维度: {sort}")
+    order = "ASC" if order.lower() == "asc" else "DESC"
+
+    joins = ""
+    where = []
+    params: list = []
+    if role:
+        # 分路过滤：按比赛当时位置（Top/Jungle/Mid/Bot/Support）
+        if role in ("Top", "Jungle", "Mid", "Bot", "Support"):
+            where.append("gps.role=?")
+            params.append(role)
+    if scope == "intl":
+        joins = (
+            " JOIN games g ON g.id=gps.game_id "
+            "JOIN tournaments t ON t.id=g.tournament_id "
+            "JOIN leagues l ON l.id=t.league_id"
+        )
+        where.append("l.is_international=1")
+    elif scope:
+        joins = (
+            " JOIN games g ON g.id=gps.game_id "
+            "JOIN tournaments t ON t.id=g.tournament_id "
+            "JOIN leagues l ON l.id=t.league_id"
+        )
+        where.append("l.name=?")
+        params.append(scope)
+    where_sql = (" WHERE " + " AND ".join(where)) if where else ""
+
+    base = (
+        "SELECT p.id, p.player_id, p.native_name, p.name, p.country, p.role, "
+        f"p.is_retired, {RANK_AGG} "
+        "FROM game_player_stats gps JOIN players p ON p.id=gps.player_id"
+        + joins + where_sql + " GROUP BY p.id"
+    )
+    total = scalar(
+        f"SELECT COUNT(*) FROM ({base} HAVING games >= ?)", (*params, min_games)
+    )
+    items = rows(
+        base + f" HAVING games >= ? ORDER BY {sort_col} {order}, games DESC, p.id "
+        "LIMIT ? OFFSET ?",
+        (*params, min_games, page_size, (page - 1) * page_size),
+    )
+    for r in items:
+        r["photo"] = _media("player", r["id"])
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "sort": sort,
+        "order": order.lower(),
+        "items": items,
+    }
+
+
+# ---------- 增量同步 ----------
+
+SYNC_STATUS_FILE = ROOT / "data" / "sync_status.json"
+_sync_lock = threading.Lock()
+
+
+def _sync_status_read() -> dict:
+    try:
+        return json.loads(SYNC_STATUS_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def _sync_status_write(status: dict):
+    SYNC_STATUS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    SYNC_STATUS_FILE.write_text(
+        json.dumps(status, ensure_ascii=False), encoding="utf-8"
+    )
+
+
+def _now() -> str:
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _tail(r: subprocess.CompletedProcess) -> str:
+    return ((r.stdout or "") + (r.stderr or ""))[-800:]
+
+
+def _run_sync_job():
+    """后台执行：scripts/sync_latest.py（增量拉取）→ scripts/load_lpl.py（入库）。"""
+    try:
+        _sync_status_write({
+            "status": "running", "started_at": _now(),
+            "message": "拉取最新数据…", "last_error": None,
+        })
+        r1 = subprocess.run(
+            [sys.executable, "scripts/sync_latest.py"], cwd=ROOT,
+            capture_output=True, text=True, timeout=7200,
+        )
+        if r1.returncode != 0:
+            raise RuntimeError("增量拉取失败:\n" + _tail(r1))
+        _sync_status_write({
+            "status": "running", "started_at": _now(),
+            "message": "数据入库中…", "last_error": None,
+        })
+        r2 = subprocess.run(
+            [sys.executable, "scripts/load_lpl.py"], cwd=ROOT,
+            capture_output=True, text=True, timeout=3600,
+        )
+        if r2.returncode != 0:
+            raise RuntimeError("数据入库失败:\n" + _tail(r2))
+        _sync_status_write({
+            "status": "done", "finished_at": _now(),
+            "message": "更新完成", "last_error": None,
+        })
+    except Exception as exc:  # noqa: BLE001 —— 后台线程兜底，状态供前端轮询
+        _sync_status_write({
+            "status": "error", "finished_at": _now(),
+            "message": "更新失败", "last_error": str(exc)[-1000:],
+        })
+
+
+@app.post("/api/sync")
+def trigger_sync():
+    st = _sync_status_read()
+    if st.get("status") == "running":
+        raise HTTPException(409, "同步正在进行中")
+    with _sync_lock:
+        if _sync_status_read().get("status") == "running":
+            raise HTTPException(409, "同步正在进行中")
+        threading.Thread(target=_run_sync_job, daemon=True).start()
+    return {"status": "started"}
+
+
+@app.get("/api/sync/status")
+def sync_status():
+    st = _sync_status_read()
+    st.setdefault("status", "idle")
+    st["latest_game_date"] = scalar(
+        "SELECT MAX(datetime_utc) FROM games WHERE datetime_utc IS NOT NULL"
+    )
+    return st
 
 
 # ---------- 静态资源 ----------

@@ -87,8 +87,71 @@
   </aside>
 </main>
 
+<section class="rank-view" id="rankView" hidden>
+  <div class="rank-head">
+    <button class="back-btn" id="btnRankBack">← 返回赛程</button>
+    <h2>选手数据排行</h2>
+    <span class="rank-total" id="rankTotal"></span>
+  </div>
+  <div class="rank-tools">
+    <label class="field">
+      <span>范围</span>
+      <select id="rankScope">
+        <option value="">全部</option>
+        <option value="LPL">LPL</option>
+        <option value="LCK">LCK</option>
+        <option value="LEC">LEC</option>
+        <option value="LCS">LCS</option>
+        <option value="intl">国际赛</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>分路</span>
+      <select id="rankRole">
+        <option value="">全部位置</option>
+        <option value="Top">上单</option>
+        <option value="Jungle">打野</option>
+        <option value="Mid">中单</option>
+        <option value="Bot">下路</option>
+        <option value="Support">辅助</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>最少场次</span>
+      <select id="rankMin">
+        <option value="10">≥ 10 场</option>
+        <option value="30">≥ 30 场</option>
+        <option value="50">≥ 50 场</option>
+        <option value="100">≥ 100 场</option>
+      </select>
+    </label>
+    <label class="field grow">
+      <span>排序维度</span>
+      <select id="rankSort"></select>
+    </label>
+    <button class="order-btn" id="rankOrderBtn" title="切换升降序">↓ 降序</button>
+  </div>
+  <div class="rank-scroll">
+    <table class="rank-table" id="rankTable">
+      <tbody><tr><td class="empty" colspan="15">加载中…</td></tr></tbody>
+    </table>
+  </div>
+  <div class="pager" id="rankPager" hidden>
+    <button id="rankPrev">← 上一页</button>
+    <span id="rankPageInfo"></span>
+    <button id="rankNext">下一页 →</button>
+  </div>
+</section>
+
 <div class="modal-backdrop" id="modalBackdrop" hidden>
   <div class="modal glass" id="modalBox" role="dialog" aria-modal="true"></div>
+</div>
+
+<div class="data-foot" id="dataFoot">
+  <button class="foot-sync" id="btnSync" title="拉取最新数据" aria-label="拉取最新数据">
+    <svg viewBox="0 0 24 24"><path d="M17.65 6.35A8 8 0 1 0 19.73 14h-2.08a6 6 0 1 1-1.56-5.72L13 11h7V4l-2.35 2.35z"/></svg>
+  </button>
+  <span class="foot-date" id="footDate">数据更新至 —</span>
 </div>
 
 <script src="/app.js"></script>

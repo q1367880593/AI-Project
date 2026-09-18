@@ -33,6 +33,16 @@ class CargoClient:
         self.authenticated = False
         self.username: str | None = None
 
+    def invalidate(self, key: str) -> None:
+        """使某个任务缓存失效（删除 done.ok 与所有分页文件），下次 fetch_all 全量重拉。"""
+        out_dir = self.out_root / key
+        if not out_dir.exists():
+            return
+        for p in out_dir.glob("page_*.json"):
+            p.unlink()
+        (out_dir / "done.ok").unlink(missing_ok=True)
+        print(f"  ↻ {key}: 缓存已失效，将重新拉取", flush=True)
+
     def login(self, username: str, password: str) -> str:
         """以机器人密码（BotPasswords）登录；登录后自动解除匿名配额限制。"""
         data = self._plain_get(

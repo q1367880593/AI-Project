@@ -54,8 +54,8 @@ function teamBadge(team, cls) {
     '<span class="tname">' + name + '</span></span>';
 }
 
-function api(url) {
-  return fetch(url).then(function (r) {
+function api(url, opts) {
+  return fetch(url, opts).then(function (r) {
     if (!r.ok) throw new Error(url + " → HTTP " + r.status);
     return r.json();
   });
@@ -65,10 +65,20 @@ function api(url) {
 
 function loadOverview() {
   return api("/api/overview").then(function (o) {
-    var chips = [["赛段", o.tournaments], ["系列", o.series], ["小局", o.games], ["选手", o.players]];
-    $("#statsChips").innerHTML = chips.map(function (c) {
-      return '<span class="chip">' + c[0] + ' <b>' + c[1].toLocaleString() + "</b></span>";
+    $("#statsChips").innerHTML = [
+      ["赛段", o.tournaments, ""],
+      ["系列", o.series, ""],
+      ["小局", o.games, ""],
+      ["选手", o.players, "rank-entry"],
+    ].map(function (c) {
+      return '<span class="chip ' + c[2] + '"' + (c[0] === "选手" ? ' id="chipPlayers" title="选手数据排行"' : "") + ">" +
+        c[0] + " <b>" + c[1].toLocaleString() + "</b></span>";
     }).join("");
+
+    setFootDate(o.latest_game_date);
+
+    var chipP = $("#chipPlayers");
+    if (chipP) chipP.addEventListener("click", openRankView);
 
     var sel = $("#selYear");
     sel.innerHTML = '<option value="">全部年份</option>' + (o.years || []).map(function (y) {
@@ -76,6 +86,97 @@ function loadOverview() {
     }).join("");
   });
 }
+
+/* ---------- 右下角：数据更新说明 + 增量拉取 ---------- */
+
+function footDateText(utc) {
+  return utc ? String(utc).slice(0, 10) : "—";
+}
+
+function setFootDate(utc) {
+  $("#footDate").textContent = "数据更新至 " + footDateText(utc);
+}
+
+function setFootSpinning(on, text) {
+  $("#btnSync").classList.toggle("spin", !!on);
+  $("#btnSync").title = on ? "拉取中…" : "拉取最新数据";
+  if (text) $("#footDate").textContent = text;
+}
+
+var syncPollTimer = null;
+
+function pollSync() {
+  api("/api/sync/status").then(function (st) {
+    if (st.status === "running") {
+      setFootSpinning(true, st.message || "同步中…");
+      syncPollTimer = setTimeout(pollSync, 2000);
+      return;
+    }
+    clearTimeout(syncPollTimer);
+    syncPollTimer = null;
+    setFootSpinning(false);
+    if (!st.status || st.status === "idle") {
+      setFootDate(st.latest_game_date);
+      return;
+    }
+    if (st.status === "done") {
+      closeModal();
+      setFootDate(st.latest_game_date);
+      showError("数据更新完成，页面即将刷新");
+      setTimeout(function () { location.reload(); }, 1200);
+    } else if (st.status === "error") {
+      closeModal();
+      setFootDate(st.latest_game_date);
+      showError("更新失败：" + String(st.last_error || "").split("\n")[0]);
+    }
+  }).catch(function (err) {
+    clearTimeout(syncPollTimer);
+    syncPollTimer = null;
+    setFootSpinning(false);
+    showError(err.message);
+  });
+}
+
+function confirmSyncModal() {
+  $("#modalBackdrop").hidden = false;
+  $("#modalBox").innerHTML =
+    '<button class="close" data-close>✕</button>' +
+    '<div class="confirm-box">' +
+      "<h3>拉取最新数据</h3>" +
+      "<p>将对比全部赛段的赛程表并拉取近期赛段的完整数据（约 15-30 分钟），完成后自动刷新页面。</p>" +
+      '<div class="confirm-actions">' +
+        '<button class="btn-plain" data-close>取消</button>' +
+        '<button class="btn-ok" id="btnSyncOk">确认拉取</button>' +
+      "</div>" +
+    "</div>";
+  $$("#modalBox [data-close]").forEach(function (b) { b.addEventListener("click", closeModal); });
+  $("#btnSyncOk").addEventListener("click", function () {
+    $("#modalBox").innerHTML =
+      '<div class="confirm-box center"><h3>拉取中…</h3><p id="syncMsg">正在从 Leaguepedia 增量获取</p></div>';
+    api("/api/sync", { method: "POST" }).then(function () {
+      setFootSpinning(true, "同步中…");
+      pollSync();
+    }).catch(function (err) {
+      closeModal();
+      showError(err.message);
+    });
+  });
+}
+
+$("#btnSync").addEventListener("click", function () {
+  if (syncPollTimer) { showError("同步进行中，请稍候"); return; }
+  api("/api/sync/status").then(function (st) {
+    if (st.status === "running") {
+      // 已在同步中（可能是别处触发）：直接进入轮询
+      setFootSpinning(true, st.message || "同步中…");
+      pollSync();
+      return;
+    }
+    confirmSyncModal();
+  }).catch(function (err) { showError(err.message); });
+});
+
+/* ---------- 队伍 ---------- */
 
 function loadTournaments() {
   var params = new URLSearchParams();
@@ -439,6 +540,176 @@ function renderGameBody(s) {
   });
 }
 
+/* ---------- 选手排行 ---------- */
+
+var rankState = {
+  sort: "games", order: "desc", scope: "", role: "", min: 10,
+  page: 1, pageSize: 50, total: 0,
+};
+
+var RANK_COLS = [
+  ["rank", "#", null],
+  ["player", "选手", null],
+  ["games", "出场", "games"],
+  ["wins", "胜场", "wins"],
+  ["winrate", "胜率%", "winrate"],
+  ["kills", "击杀", "kills"],
+  ["deaths", "死亡", "deaths"],
+  ["assists", "助攻", "assists"],
+  ["kda", "KDA", "kda"],
+  ["pentakills", "五杀", "pentakills"],
+  ["mvp", "MVP", "mvp"],
+  ["avg_kills", "场均击杀", "avg_kills"],
+  ["avg_gold", "场均经济", "avg_gold"],
+  ["avg_cs", "场均补刀", "avg_cs"],
+  ["avg_damage", "场均伤害", "avg_damage"],
+];
+
+function fmtRG(v) { return v == null ? "—" : (v / 1000).toFixed(1) + "k"; }
+function fmtRD(v) { return v == null ? "—" : Math.round(v).toLocaleString(); }
+
+function openRankView() {
+  $(".filters").hidden = true;
+  $(".layout").hidden = true;
+  $("#rankView").hidden = false;
+  loadRank(1);
+}
+
+function closeRankView() {
+  $("#rankView").hidden = true;
+  $(".filters").hidden = false;
+  $(".layout").hidden = false;
+}
+
+function rankOrderText() {
+  return rankState.order === "desc" ? "↓ 降序" : "↑ 升序";
+}
+
+function setRankSort(col, keepOrder) {
+  if (!keepOrder || rankState.sort !== col) rankState.order = "desc";
+  rankState.sort = col;
+  $("#rankSort").value = col;
+  $("#rankOrderBtn").textContent = rankOrderText();
+  loadRank(1);
+}
+
+function renderRankTable(items) {
+  var cur = rankState.sort;
+  var head = "<thead><tr>" + RANK_COLS.map(function (c) {
+    var cls = c[2] === cur ? " current" : "";
+    var arrow = c[2] === cur ? (rankState.order === "desc" ? " ▼" : " ▲") : "";
+    if (!c[2]) {
+      return '<th class="' + c[0] + cls + '">' + c[1] + "</th>";
+    }
+    return '<th class="' + c[0] + cls + '" data-sort="' + c[2] + '" role="button" tabindex="0">' +
+      c[1] + arrow + "</th>";
+  }).join("") + "</tr></thead>";
+
+  var start = (rankState.page - 1) * rankState.pageSize;
+  function td(key, text) {
+    return '<td class="c-' + key + (key === cur ? " current" : "") + '">' + text + "</td>";
+  }
+  var body = "<tbody>" + items.map(function (r, i) {
+    var nm = r.native_name || r.name || r.player_id || "";
+    var photo = r.photo
+      ? '<img class="pp" src="' + esc(r.photo) + '" alt="" loading="lazy">'
+      : '<span class="pp no">' + esc((r.player_id || "?").charAt(0)) + "</span>";
+    return '<tr class="rank-row" data-key="' + r.id + '" tabindex="0">' +
+      '<td class="r-num">' + (start + i + 1) + "</td>" +
+      '<td class="r-player"><div class="r-pcell">' + photo +
+        '<div class="r-names"><b>' + esc(r.player_id || "?") + "</b>" +
+        "<small>" + esc(nm) + "</small></div></div></td>" +
+      td("games", (r.games || 0).toLocaleString()) +
+      td("wins", (r.wins || 0).toLocaleString()) +
+      td("winrate", r.winrate != null ? r.winrate : "—") +
+      td("kills", (r.kills || 0).toLocaleString()) +
+      td("deaths", (r.deaths || 0).toLocaleString()) +
+      td("assists", (r.assists || 0).toLocaleString()) +
+      td("kda", r.kda != null ? r.kda : "∞") +
+      td("pentakills", r.pentakills || 0) +
+      td("mvp", r.mvp || 0) +
+      td("avg_kills", r.avg_kills != null ? r.avg_kills : "—") +
+      td("avg_gold", fmtRG(r.avg_gold)) +
+      td("avg_cs", r.avg_cs != null ? r.avg_cs : "—") +
+      td("avg_damage", fmtRD(r.avg_damage)) +
+    "</tr>";
+  }).join("") + "</tbody>";
+
+  var table = $("#rankTable");
+  table.innerHTML = head + body;
+
+  $$("th[data-sort]", table).forEach(function (th) {
+    function pick() {
+      var col = th.getAttribute("data-sort");
+      setRankSort(col, true);
+    }
+    th.addEventListener("click", pick);
+    th.addEventListener("keydown", function (e) { if (e.key === "Enter") pick(); });
+  });
+  $$(".rank-row", table).forEach(function (tr) {
+    function open() { openPlayerModalByKey(tr.getAttribute("data-key")); }
+    tr.addEventListener("click", open);
+    tr.addEventListener("keydown", function (e) { if (e.key === "Enter") open(); });
+  });
+}
+
+function loadRank(page) {
+  rankState.page = page || 1;
+  var params = new URLSearchParams();
+  params.set("sort", rankState.sort);
+  params.set("order", rankState.order);
+  if (rankState.scope) params.set("scope", rankState.scope);
+  if (rankState.role) params.set("role", rankState.role);
+  params.set("min_games", String(rankState.min));
+  params.set("page", String(rankState.page));
+  params.set("page_size", String(rankState.pageSize));
+
+  $("#rankTable").innerHTML = '<tbody><tr><td class="empty" colspan="15">加载中…</td></tr></tbody>';
+  api("/api/player-rank?" + params.toString()).then(function (d) {
+    rankState.total = d.total;
+    $("#rankTotal").textContent = "共 " + d.total.toLocaleString() + " 位选手";
+    renderRankTable(d.items);
+    var pages = Math.max(1, Math.ceil(d.total / rankState.pageSize));
+    $("#rankPageInfo").textContent = "第 " + rankState.page + " / " + pages + " 页";
+    $("#rankPager").hidden = false;
+    $("#rankPrev").disabled = rankState.page <= 1;
+    $("#rankNext").disabled = rankState.page >= pages;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }).catch(function (err) { showError(err.message); });
+}
+
+(function initRank() {
+  var sel = $("#rankSort");
+  sel.innerHTML = RANK_COLS.filter(function (c) { return c[2]; }).map(function (c) {
+    return '<option value="' + c[2] + '">' + c[1] + "</option>";
+  }).join("");
+  sel.value = rankState.sort;
+
+  $("#btnRankBack").addEventListener("click", closeRankView);
+  $("#rankScope").addEventListener("change", function (e) {
+    rankState.scope = e.target.value;
+    loadRank(1);
+  });
+  $("#rankRole").addEventListener("change", function (e) {
+    rankState.role = e.target.value;
+    loadRank(1);
+  });
+  $("#rankMin").addEventListener("change", function (e) {
+    rankState.min = Number(e.target.value);
+    loadRank(1);
+  });
+  $("#rankSort").addEventListener("change", function (e) {
+    setRankSort(e.target.value, true);
+  });
+  $("#rankOrderBtn").addEventListener("click", function () {
+    rankState.order = rankState.order === "desc" ? "asc" : "desc";
+    $("#rankOrderBtn").textContent = rankOrderText();
+    loadRank(1);
+  });
+  $("#rankPrev").addEventListener("click", function () { loadRank(rankState.page - 1); });
+  $("#rankNext").addEventListener("click", function () { loadRank(rankState.page + 1); });
+})();
+
 /* ---------- 选手弹窗 ---------- */
 
 function openPlayerModalByKey(key) {
@@ -523,6 +794,15 @@ $("#btnNext").addEventListener("click", function () { fetchSeries(state.page + 1
   step = step.then(loadTournaments);
   step = step.then(loadTeams);
   step = step.then(function () { fetchSeries(1); });
+  // 恢复后台同步状态（页面刷新时同步可能仍在进行）
+  step = step.then(function () {
+    return api("/api/sync/status").then(function (st) {
+      if (st.status === "running") {
+        setFootSpinning(true, st.message || "同步中…");
+        pollSync();
+      }
+    }).catch(function () { /* 忽略 */ });
+  });
   step.catch(function (err) {
     showError("初始化失败: " + err.message + "（请确认服务已在 8765 端口运行）");
     $("#seriesList").innerHTML = '<div class="empty">加载失败：' + esc(err.message) + "</div>";

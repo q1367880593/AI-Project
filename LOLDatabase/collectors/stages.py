@@ -185,20 +185,26 @@ def collect_links_from_raw() -> list:
     return sorted(links)
 
 
-def stage_players(links: list):
+def stage_players(links: list, incr: bool = False):
     """阶段 5：选手档案。
 
     1) 用 PlayerRedirects 把 Link（可能是曾用名）解析到 OverviewPage；
     2) 按 OverviewPage 批量拉 Players 表。
+
+    incr=True 用于增量同步：缓存键加 incr_ 前缀（独立子目录），
+    不触碰全量同步的批次缓存（增量新增 Link 会改变全量分批的边界，
+    新 Link 必须单独成批，read_pages 会递归读到两份缓存）。
     """
     if not links:
         print("  ! 没有选手 Link（请先跑小局选手阶段）", flush=True)
         return
 
+    prefix = "incr_" if incr else ""
+
     # 1) 重定向解析（分批 IN 查询）
     for i in range(0, len(links), IN_BATCH):
         chunk = links[i : i + IN_BATCH]
-        key = f"lpl/players/redirects/batch_{i:04d}"
+        key = f"lpl/players/redirects/{prefix}batch_{i:04d}"
         client.fetch_all(
             key,
             {
@@ -221,7 +227,7 @@ def stage_players(links: list):
     pages = sorted({redirects.get(l, l) for l in links})
     for i in range(0, len(pages), IN_BATCH):
         chunk = pages[i : i + IN_BATCH]
-        key = f"lpl/players/players/batch_{i:04d}"
+        key = f"lpl/players/players/{prefix}batch_{i:04d}"
         client.fetch_all(
             key,
             {
