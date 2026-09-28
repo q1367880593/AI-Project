@@ -37,6 +37,12 @@ if [ -f "${WORK_DIR}/WeeClock.icns" ]; then
     echo "🎨 图标已嵌入"
 fi
 
+# 拷贝调休数据
+if [ -f "${WORK_DIR}/Holidays.json" ]; then
+    cp "${WORK_DIR}/Holidays.json" "${RESOURCES_DIR}/Holidays.json"
+    echo "📅 调休数据已嵌入"
+fi
+
 # 写入 Info.plist
 cat > "${CONTENTS_DIR}/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
