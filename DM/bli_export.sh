@@ -11,7 +11,7 @@ path=$1
 
 echo $path
 # 调用 Python 脚本并传递参数
-python3 bili.py "$path"
+python3 /Users/xiaolongbao/Movies/bilibili/scrips/bili.py "$path"
 cd $path
 # 原格式导出
 # ffmpeg -i a.mp4 -i b.mp3 -c:v copy -c:a aac c.mp4
@@ -19,9 +19,9 @@ cd $path
 ffmpeg -i a.mp4 -i b.mp3 -c:v libx265 -crf 28 -preset medium -c:a aac -movflags +faststart -tag:v hvc1 c.mp4
 
 
-python3 make_nfo_poster.py
+python3 /Users/xiaolongbao/Movies/bilibili/scrips/make_nfo_poster.py
 
-python3 convert_dm_to_ass.py
+python3 /Users/xiaolongbao/Movies/bilibili/scrips/convert_dm_to_ass.py
 
 
 

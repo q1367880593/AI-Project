@@ -376,7 +376,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     scale = layout_scale(args.width, args.height)
     title = load_video_title()
-    output_path = Path("out") / f"{title}.ass"
+    output_path = Path(f"{title}") / f"{title}.ass"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     ass = format_ass(
         comments=all_comments,
@@ -397,7 +397,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 
     # 将 A 文件移动到 B 目录，并重命名为 C
-    shutil.move("c.mp4", f"out/{title}.mp4")
+    shutil.move("c.mp4", f"{title}/{title}.mp4")
     return 0
 
 

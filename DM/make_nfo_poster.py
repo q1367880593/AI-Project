@@ -159,7 +159,7 @@ def main() -> int:
     parser.add_argument("-i", "--input-json", default="videoInfo.json", help="Input metadata JSON file.")
     parser.add_argument("-o", "--output-nfo", default=None, help="Output NFO file. Defaults to out/<title>.nfo.")
     parser.add_argument("--cover", default="image.jpg", help="Input cover image.")
-    parser.add_argument("--poster", default=None, help="Output poster image. Defaults to out/<title>-poster.jpg.")
+    parser.add_argument("--poster", default=None, help="Output poster image. Defaults to out/<title>.jpg.")
     args = parser.parse_args()
 
     input_json = Path(args.input_json)
@@ -171,9 +171,9 @@ def main() -> int:
 
     title = str(info.get("title") or info.get("groupTitle") or "video")
     base_name = safe_filename(title)
-    output_dir = input_json.parent / "out"
+    output_dir = input_json.parent / f"{title}"
     output_nfo = Path(args.output_nfo) if args.output_nfo else output_dir / f"{base_name}.nfo"
-    poster = Path(args.poster) if args.poster else output_dir / f"{base_name}-poster.jpg"
+    poster = Path(args.poster) if args.poster else output_dir / f"{base_name}.jpg"
 
     output_nfo.parent.mkdir(parents=True, exist_ok=True)
     output_nfo.write_text(build_nfo(info, poster.name), encoding="utf-8")

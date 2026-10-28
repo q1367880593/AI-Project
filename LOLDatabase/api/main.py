@@ -654,6 +654,111 @@ def player_rank(
     }
 
 
+# ---------- 赛段阵容 ----------
+
+FLAG_CN = {
+    "cn": "中国", "kr": "韩国", "tw": "中国台湾", "hk": "中国香港", "mo": "中国澳门",
+    "us": "美国", "ca": "加拿大", "mx": "墨西哥", "br": "巴西", "ar": "阿根廷",
+    "cl": "智利", "pe": "秘鲁", "jp": "日本", "vn": "越南", "th": "泰国",
+    "ph": "菲律宾", "sg": "新加坡", "my": "马来西亚", "id": "印度尼西亚",
+    "au": "澳大利亚", "nz": "新西兰", "dk": "丹麦", "se": "瑞典", "no": "挪威",
+    "fi": "芬兰", "de": "德国", "fr": "法国", "es": "西班牙", "pt": "葡萄牙",
+    "gb": "英国", "uk": "英国", "nl": "荷兰", "be": "比利时", "pl": "波兰",
+    "cz": "捷克", "sk": "斯洛伐克", "at": "奥地利", "ch": "瑞士", "it": "意大利",
+    "ru": "俄罗斯", "tr": "土耳其", "gr": "希腊", "ro": "罗马尼亚", "bg": "保加利亚",
+    "hr": "克罗地亚", "rs": "塞尔维亚", "si": "斯洛文尼亚", "hu": "匈牙利", "ua": "乌克兰",
+    "il": "以色列", "sa": "沙特阿拉伯", "ae": "阿联酋", "in": "印度", "eg": "埃及",
+    "ma": "摩洛哥", "za": "南非", "tn": "突尼斯",
+}
+
+ROLE_CN = {"t": "上单", "j": "打野", "m": "中单", "a": "下路", "s": "辅助", "c": "教练"}
+
+
+@app.get("/api/tournament-rosters")
+def tournament_rosters(tournament_id: int):
+    t = one(
+        "SELECT t.id, t.name, t.year, l.short_name AS league_short FROM tournaments t "
+        "JOIN leagues l ON l.id=t.league_id WHERE t.id=?",
+        (tournament_id,),
+    )
+    if not t:
+        raise HTTPException(404, "赛段不存在")
+    t["name_cn"] = _cn(t.get("name") or "") or None
+
+    rows_ = rows(
+        "SELECT team_name, team_id, members FROM tournament_rosters "
+        "WHERE tournament_id=? ORDER BY id",
+        (tournament_id,),
+    )
+
+    # 选手 ID 批量解析（教练不在 players 表，只按 flag 展示）
+    all_keys = set()
+    for r in rows_:
+        for m in json.loads(r["members"] or "[]"):
+            key = (m.get("player") or "").split("(")[0].strip()
+            if key:
+                all_keys.add(key)
+    by_key: dict[str, dict] = {}
+    if all_keys:
+        ph = ",".join("?" * len(all_keys))
+        for pr in rows(
+            f"SELECT id, player_id, native_name, name, name_full, "
+            f"country, primary_nationality "
+            f"FROM players WHERE player_id IN ({ph})",
+            tuple(sorted(all_keys)),
+        ):
+            by_key[pr["player_id"]] = pr
+        # 别名兜底
+        for pr in rows(
+            f"SELECT p.id, p.player_id, p.native_name, p.name, p.name_full, "
+            f"p.country, p.primary_nationality, a.alias FROM players p "
+            f"JOIN player_aliases a ON a.player_id=p.id WHERE a.alias IN ({ph})",
+            tuple(sorted(all_keys)),
+        ):
+            by_key.setdefault(pr["alias"], pr)
+
+    def _member(m: dict) -> dict:
+        raw = m.get("player") or ""
+        key = raw.split("(")[0].strip() or raw
+        in_paren = raw[raw.find("(") + 1: raw.find(")")] if "(" in raw and ")" in raw else ""
+        flag = (m.get("flag") or "").lower()
+        role = (m.get("role") or "").lower()
+        prof = by_key.get(key)
+        # 姓名回退链：native_name（中文/本国文字）→ name_full → name
+        # （越南等选手 wiki 无 native_name，真名就在 name）
+        native = None
+        if prof:
+            prof_name = (prof.get("name") or "").strip()
+            native = prof.get("native_name") or None
+            if not native:
+                native = prof.get("name_full") or None
+            if not native and prof_name and prof_name != key:
+                native = prof_name
+        return {
+            "id": key,
+            "real_name": in_paren,
+            "flag": flag,
+            "flag_cn": FLAG_CN.get(flag, flag.upper() if flag else ""),
+            "role": role,
+            "role_cn": ROLE_CN.get(role, role),
+            "player_id": prof["id"] if prof else None,
+            "native_name": native,
+            "photo": _media("player", prof["id"]) if prof else None,
+        }
+
+    teams = []
+    for r in rows_:
+        members = [_member(m) for m in json.loads(r["members"] or "[]")]
+        teams.append({
+            "team_name": r["team_name"],
+            "team": _team_brief(r["team_id"]),
+            "coaches": [m for m in members if m["role"] == "c"],
+            "players": [m for m in members if m["role"] != "c"],
+        })
+
+    return {"tournament": t, "teams": teams}
+
+
 # ---------- 增量同步 ----------
 
 SYNC_STATUS_FILE = ROOT / "data" / "sync_status.json"
