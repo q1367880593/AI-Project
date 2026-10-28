@@ -203,10 +203,14 @@ def main() -> int:
             stages.client.invalidate(f"{scope}/{kind}/{stages.slug(page)}")
             fn(page, scope=scope)
 
-    # 3) 选手档案：只补库内没有的 Link（增量缓存批次）
+    # 3) 选手档案：只补缺档案的 Link（players 表里的占位行——只有 ID、
+    #    无 overview_page/真名——也视为缺档案，需一并补采）
     existing: set[str] = set()
     conn = sqlite3.connect(config.DB_PATH)
-    existing |= {r[0] for r in conn.execute("SELECT player_id FROM players")}
+    existing |= {r[0] for r in conn.execute(
+        "SELECT player_id FROM players WHERE overview_page IS NOT NULL "
+        "OR native_name IS NOT NULL OR name_full IS NOT NULL"
+    )}
     existing |= {r[0] for r in conn.execute("SELECT alias FROM player_aliases")}
     conn.close()
     links = stages.collect_links_from_raw()

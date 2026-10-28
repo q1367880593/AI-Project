@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.loli.net" crossorigin>
 <link href="https://fonts.loli.net/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.loli.net/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="/app.css">
+<link rel="stylesheet" href="/app.css?v=20261023b">
 </head>
 <body>
 <div id="errBanner" class="err-banner" hidden></div>
@@ -143,6 +143,34 @@
   </div>
 </section>
 
+<section class="rank-view" id="rosterView" hidden>
+  <div class="rank-head">
+    <button class="back-btn" id="btnRosterBack">← 返回赛程</button>
+    <h2>赛段阵容</h2>
+    <span class="rank-total" id="rosterTotal"></span>
+  </div>
+  <div class="rank-tools">
+    <label class="field">
+      <span>联赛</span>
+      <select id="rosterScope">
+        <option value="">全部</option>
+        <option value="LPL">LPL</option>
+        <option value="LCK">LCK</option>
+        <option value="LEC">LEC</option>
+        <option value="LCS">LCS</option>
+        <option value="intl">国际赛</option>
+      </select>
+    </label>
+    <label class="field grow">
+      <span>赛段</span>
+      <select id="rosterTournament"><option value="">选择赛段…</option></select>
+    </label>
+  </div>
+  <div class="rost-scroll" id="rosterGrid">
+    <div class="empty">先选择一个赛段<br>查看各队选手与教练阵容</div>
+  </div>
+</section>
+
 <div class="modal-backdrop" id="modalBackdrop" hidden>
   <div class="modal glass" id="modalBox" role="dialog" aria-modal="true"></div>
 </div>
@@ -154,6 +182,6 @@
   <span class="foot-date" id="footDate">数据更新至 —</span>
 </div>
 
-<script src="/app.js"></script>
+<script src="/app.js?v=20261023b"></script>
 </body>
 </html>

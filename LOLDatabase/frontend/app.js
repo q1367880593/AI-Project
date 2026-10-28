@@ -70,8 +70,11 @@ function loadOverview() {
       ["系列", o.series, ""],
       ["小局", o.games, ""],
       ["选手", o.players, "rank-entry"],
+      ["阵容", o.tournaments, "rank-entry"],
     ].map(function (c) {
-      return '<span class="chip ' + c[2] + '"' + (c[0] === "选手" ? ' id="chipPlayers" title="选手数据排行"' : "") + ">" +
+      var id = c[0] === "选手" ? ' id="chipPlayers"' : (c[0] === "阵容" ? ' id="chipRosters"' : "");
+      return '<span class="chip ' + c[2] + '"' + id +
+        (c[2] ? ' title="' + (c[0] === "选手" ? "选手数据排行" : "赛段阵容") + '"' : "") + ">" +
         c[0] + " <b>" + c[1].toLocaleString() + "</b></span>";
     }).join("");
 
@@ -79,6 +82,11 @@ function loadOverview() {
 
     var chipP = $("#chipPlayers");
     if (chipP) chipP.addEventListener("click", openRankView);
+    var chipR = $("#chipRosters");
+    if (chipR) chipR.addEventListener("click", function () {
+      setHash(buildRosterHash());
+      openRosterView();
+    });
 
     var sel = $("#selYear");
     sel.innerHTML = '<option value="">全部年份</option>' + (o.years || []).map(function (y) {
@@ -710,7 +718,187 @@ function loadRank(page) {
   $("#rankNext").addEventListener("click", function () { loadRank(rankState.page + 1); });
 })();
 
-/* ---------- 选手弹窗 ---------- */
+/* ---------- 赛段阵容 ---------- */
+
+var rosterState = { scope: "", tournament: "" };
+
+/* ---------- 赛段阵容：hash 路由（#/rosters[/联赛[/赛段ID]]） ---------- */
+
+function rosterHash(v) {
+  var parts = (v || "").replace(/^#\/?/, "").split("/");
+  if (parts[0] !== "rosters") return null;
+  return {
+    scope: decodeURIComponent(parts[1] || ""),
+    t: decodeURIComponent(parts[2] || ""),
+  };
+}
+
+function buildRosterHash() {
+  var seg = ["#/rosters"];
+  if (rosterState.scope) seg.push(encodeURIComponent(rosterState.scope));
+  if (rosterState.tournament) seg.push(encodeURIComponent(rosterState.tournament));
+  return seg.join("/");
+}
+
+function setHash(h) {
+  if (location.hash === h) return;
+  if (h) history.pushState(null, "", h);
+  else history.pushState(null, "", location.pathname + location.search);
+}
+
+function applyRosterHash() {
+  var r = rosterHash(location.hash);
+  if (r) {
+    rosterState.scope = r.scope;
+    rosterState.tournament = r.t;
+    openRosterView();
+  } else if (!$("#rosterView").hidden) {
+    closeRosterView();
+  }
+}
+window.addEventListener("hashchange", applyRosterHash);
+
+function openRosterView() {
+  $(".filters").hidden = true;
+  $(".layout").hidden = true;
+  $("#rankView").hidden = true;
+  $("#rosterView").hidden = false;
+  loadRosterTournaments().then(function () {
+    if (rosterState.tournament) loadRosters(rosterState.tournament);
+  });
+}
+
+function closeRosterView() {
+  $("#rosterView").hidden = true;
+  $(".filters").hidden = false;
+  $(".layout").hidden = false;
+}
+
+function loadRosterTournaments() {
+  var scope = rosterState.scope || "";
+  if ($("#rosterScope").value !== scope) $("#rosterScope").value = scope;
+  var qs = scope ? "?scope=" + encodeURIComponent(scope) : "";
+  return api("/api/tournaments" + qs).then(function (list) {
+    var sel = $("#rosterTournament");
+    var opts = list.filter(function (t) { return t.series_count > 0 || t.games_count > 0; })
+      .sort(function (a, b) {  // 赛段时间倒序（新赛段在前）
+        var d = String(b.date_start || "").localeCompare(String(a.date_start || ""));
+        return d || (b.id - a.id);
+      });
+    sel.innerHTML = '<option value="">选择赛段…</option>' + opts.map(function (t) {
+      return '<option value="' + t.id + '">[' + t.year + "] " +
+        esc(t.name_cn || t.name) + "（" + t.series_count + " 场）</option>";
+    }).join("");
+    if (rosterState.tournament) sel.value = String(rosterState.tournament);
+  });
+}
+
+function rosterMemberBlock(p, tag) {
+  var flag = p.flag_cn ? esc(p.flag_cn) : "";
+  var flagCode = p.flag ? esc(p.flag.toUpperCase()) : "";
+  var name = p.real_name || p.native_name || "";
+  return '<div class="rpl' + (p.player_id ? " clickable" : "") + '" data-key="' +
+    (p.player_id || "") + '"' + (p.player_id ? ' role="button" tabindex="0"' : "") + ">" +
+    (p.photo
+      ? '<img class="pp" src="' + esc(p.photo) + '" alt="" loading="lazy">'
+      : '<span class="pp no">' + esc((p.id || "?").charAt(0)) + "</span>") +
+    '<div class="rpl-txt"><b>' + esc(p.id) + "</b>" +
+      (name ? "<small>" + esc(name) + "</small>" : "") + "</div>" +
+    '<span class="rpl-flag" title="' + flag + " " + flagCode + '">' +
+      (flag ? esc(flag) : flagCode) + "</span>" +
+    (tag ? '<span class="rpl-tag">' + esc(tag) + "</span>" : "") + "</div>";
+}
+
+function renderRosters(d) {
+  var t = d.tournament;
+  $("#rosterTotal").textContent = esc(t.name_cn || t.name) + " · " + d.teams.length + " 支队伍";
+  var g = $("#rosterGrid");
+  if (!d.teams.length) {
+    g.innerHTML = '<div class="empty">该赛段 wiki 未收录阵容数据</div>';
+    return;
+  }
+  var roleOrder = [["t", "上单"], ["j", "打野"], ["m", "中单"], ["a", "下路"], ["s", "辅助"]];
+  var body = d.teams.map(function (tm, ti) {
+    var tname = tm.team ? (tm.team.short_name || tm.team.name) : tm.team_name;
+    var full = tm.team && tm.team.name && tm.team.name !== tname ? tm.team.name : "";
+    var logo = tm.team && tm.team.logo
+      ? '<img class="rlogo" src="' + esc(tm.team.logo) + '" alt="">'
+      : '<span class="rlogo no">' + esc((tname || "?").charAt(0)) + "</span>";
+    var teamCell = '<div class="rt-teamcell">' + logo +
+      '<div class="roster-tname"><b>' + esc(tname) + "</b>" +
+      (full ? "<small>" + esc(full) + "</small>" : "") + "</div></div>";
+
+    var starters = roleOrder.map(function (ro) {
+      var pls = tm.players.filter(function (p) { return p.role === ro[0]; });
+      if (!pls.length) return '<td class="rt-none">—</td>';
+      return "<td>" + rosterMemberBlock(pls[0], "") + "</td>";
+    }).join("");
+
+    var subs = [];
+    roleOrder.forEach(function (ro) {
+      var rest = tm.players.filter(function (p) { return p.role === ro[0]; }).slice(1);
+      rest.forEach(function (p) { subs.push([ro[1], p]); });
+    });
+    var subCell = subs.length
+      ? '<div class="rt-stack">' + subs.map(function (sp) {
+          return rosterMemberBlock(sp[1], "替补·" + sp[0]).replace('<div class="rpl', '<div class="rpl sm');
+        }).join("") + "</div>"
+      : '<span class="rt-none">—</span>';
+
+    var headCoach = tm.coaches[0];
+    var coachCell = headCoach
+      ? '<div class="rt-stack">' +
+        rosterMemberBlock(headCoach, "主教练").replace('<div class="rpl', '<div class="rpl coach head') +
+        "</div>"
+      : '<span class="rt-none">—</span>';
+
+    return '<tr style="animation-delay:' + Math.min(ti * 30, 360) + 'ms">' +
+      '<td class="rt-team">' + teamCell + "</td>" + starters +
+      '<td class="rt-subs">' + subCell + "</td>" +
+      '<td class="rt-coach">' + coachCell + "</td></tr>";
+  }).join("");
+
+  var head = '<thead><tr><th class="rt-team">队伍</th>' +
+    roleOrder.map(function (ro) { return "<th>" + ro[1] + "</th>"; }).join("") +
+    '<th class="rt-subs">替补</th><th class="rt-coach">主教练</th></tr></thead>';
+  g.innerHTML = '<div class="rost-wrap"><table class="rost-table">' + head +
+    "<tbody>" + body + "</tbody></table></div>";
+
+  $$(".rpl.clickable", g).forEach(function (el) {
+    var key = el.getAttribute("data-key");
+    function open() { if (key) openPlayerModalByKey(key); }
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter") open(); });
+  });
+}
+
+function loadRosters(tid) {
+  $("#rosterGrid").innerHTML = '<div class="empty">加载中…</div>';
+  api("/api/tournament-rosters?tournament_id=" + encodeURIComponent(tid)).then(renderRosters)
+    .catch(function (err) { showError(err.message); });
+}
+
+(function initRoster() {
+  $("#btnRosterBack").addEventListener("click", function () {
+    setHash("");
+    closeRosterView();
+  });
+  $("#rosterScope").addEventListener("change", function (e) {
+    rosterState.scope = e.target.value;
+    rosterState.tournament = "";
+    setHash(buildRosterHash());
+    loadRosterTournaments();
+  });
+  $("#rosterTournament").addEventListener("change", function (e) {
+    rosterState.tournament = e.target.value;
+    setHash(buildRosterHash());
+    if (rosterState.tournament) loadRosters(rosterState.tournament);
+  });
+  // 支持带 hash 直达（如 #/rosters/LPL/123）
+  applyRosterHash();
+})();
+
+/* ---------- 选手档案弹窗 ---------- */
 
 function openPlayerModalByKey(key) {
   openPlayerModal(encodeURIComponent(key));

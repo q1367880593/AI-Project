@@ -178,6 +178,23 @@ def init_db(db_path: Path | None = None) -> sqlite3.Connection:
             "ALTER TABLE leagues ADD COLUMN is_international INTEGER DEFAULT 0"
         )
         print("  schema 迁移: leagues.is_international 已添加", flush=True)
+    # 迁移：tournament_rosters（赛段阵容：选手+教练，members 存 JSON 行）
+    has_rosters = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='tournament_rosters'"
+    ).fetchone()
+    if not has_rosters:
+        conn.execute(
+            """CREATE TABLE tournament_rosters (
+                id            INTEGER PRIMARY KEY,
+                tournament_id INTEGER NOT NULL REFERENCES tournaments(id),
+                overview_page TEXT NOT NULL,
+                team_name     TEXT NOT NULL,
+                team_id       INTEGER REFERENCES teams(id),
+                members       TEXT NOT NULL,
+                UNIQUE(overview_page, team_name)
+            )"""
+        )
+        print("  schema 迁移: tournament_rosters 已添加", flush=True)
     # 迁移：picks_bans.slot 需为可空（补录数据可能无 BP 顺序）
     slot_notnull = conn.execute(
         "SELECT \"notnull\" FROM pragma_table_info('picks_bans') "
@@ -501,6 +518,164 @@ class Loader:
         ).fetchone()
         return row[0] if row else None
 
+    # -- 赛段阵容（roster） --
+
+    # wiki roster 模板里的队伍名 → 库里标准队名（个别队伍的 roster 写法与
+    # teams 表不一致，或历史队名/赛区后缀）
+    ROSTER_TEAM_ALIASES = {
+        "TSTW": "Team Secret Whales",
+        "LOS": "Los Ratones",
+        "LYON24": "LYON",
+        "LYON 2024": "LYON",
+        "Dplus": "Dplus Kia",
+        "DPLUS": "Dplus Kia",
+        "DWG": "DAMWON Gaming",
+        "KCORP": "Karmine Corp",
+        "Team SoloMid": "TSM",
+        "Secret Whales": "Team Secret Whales",
+        "Cloud 9": "Cloud9",
+        "100": "100 Thieves",
+        "Team Dignitas": "Dignitas",
+        "TT (Chinese Team)": "ThunderTalk Gaming",
+        "Suning Gaming": "Suning",
+        "SNG": "Suning",
+        "KDF": "Kwangdong Freecs",
+        "AF": "Afreeca Freecs",
+        "OK BRO": "OKSavingsBank BRION",
+        "SBG": "SANDBOX Gaming",
+        "SB": "SANDBOX Gaming",
+        "PSGT": "PSG Talon",
+        "NIP.CN": "Ninjas in Pyjamas",
+        "HRTS": "Team Heretics",
+        "HTICS": "Team Heretics",
+        "GGS": "Golden Guardians",
+        "Shopify": "Shopify Rebellion",
+        "UOL.CIS": "Unicorns of Love.CIS",
+        "FC Schalke 04": "FC Schalke 04 Esports",
+        "Misfits": "Misfits Gaming",
+        "MADL LEC": "MAD Lions",
+        "MADL KOI": "MAD Lions KOI",
+        "MR7": "Movistar R7",
+        "ep.hk": "Energy Pacemaker.HK",
+        "EG.EU": "Evil Geniuses.EU",
+        "Quantic": "Quantic Gaming",
+        "quantic": "Quantic Gaming",
+        "Legacy": "Legacy Esports",
+        "Curse Gaming": "Team Curse",
+        "curse": "Team Curse",
+        "crs acad": "Curse Academy",
+        "eg.na": "Evil Geniuses",
+        "AFs": "Afreeca Freecs",
+        "Weibo": "Weibo Gaming",
+        "Vitality": "Team Vitality",
+        "Gravity Gaming": "Gravity",
+        "Gambit.CIS": "Gambit Esports",
+        "TOP": "Top Esports",
+        "Qiao Gu": "Qiao Gu Reapers",
+        "SSO": "Samsung Ozone",
+        "SHRC": "Star Horn Royal Club",
+        "SHR": "Star Horn Royal Club",
+        "KONGDOO": "Kongdoo Monster",
+        "Machi": "Machi Esports",
+        "machi": "Machi Esports",
+        "Seorabeol": "Seorabeol Gaming",
+        "Dynamics": "Team Dynamics",
+        "APK": "APK Prince",
+        "Isurus Gaming": "Isurus",
+        "1907 Fenerbahçe": "Fenerbahçe Esports",
+        "1907 Fenerbahce": "Fenerbahçe Esports",
+        "Rare": "Rare Atom",
+        "RY": "Royal Youth",
+        "EVOS": "EVOS Esports",
+        "Fredit": "Fredit BRION",
+        "SANDBOX": "SANDBOX Gaming",
+        "Schalke": "FC Schalke 04 Esports",
+        "Schalke 04": "FC Schalke 04 Esports",
+        "KaBuM": "KaBuM! Esports",
+        "SBENU": "SBENU Korea",
+        "DNF": "DN Freecs",
+        "EP.Carries": "Energy Pacemaker.Carries",
+    }
+
+    def _build_team_norm(self) -> None:
+        """teams 全表的「规范化名」（去非字母数字小写）→ id，活跃队优先。"""
+        norms: dict[str, tuple] = {}
+        for tid, name, short, page, disbanded in self.conn.execute(
+            "SELECT id, name, short_name, overview_page, is_disbanded FROM teams"
+        ):
+            key = (1 if disbanded else 0, tid)
+            for v in (name, short, page):
+                n = norm_champ(v)
+                if not n:
+                    continue
+                cur = norms.get(n)
+                if cur is None or key < cur[0]:
+                    norms[n] = (key, tid)
+        self._team_norms = norms
+
+    def _team_id_by_roster_name(self, team_name: str) -> int | None:
+        """wiki roster 里的队伍名 → teams.id（别名 → 大小写不敏感精确/短名/页面名
+        → 规范化兜底 → 剥赛区后缀重试）。"""
+        cands = [self.ROSTER_TEAM_ALIASES.get(team_name, team_name)]
+        m = re.match(r"^(.*?)\s+[A-Z]{2,4}$", team_name)
+        if m:
+            cands.append(m.group(1))
+        if not hasattr(self, "_team_norms"):
+            self._build_team_norm()
+        for cand in cands:
+            row = self.conn.execute(
+                "SELECT id FROM teams WHERE overview_page=? COLLATE NOCASE "
+                "OR name=? COLLATE NOCASE OR short_name=? COLLATE NOCASE "
+                "ORDER BY COALESCE(is_disbanded, 1), id LIMIT 1",
+                (cand, cand, cand),
+            ).fetchone()
+            if row:
+                return row[0]
+            hit = self._team_norms.get(norm_champ(cand))
+            if hit:
+                return hit[1]
+        return None
+
+    def load_rosters(self) -> int:
+        n = 0
+        root = config.RAW_DIR / "rosters" / "pages"
+        if not root.exists():
+            print("  tournament_rosters: 无 roster 缓存，跳过", flush=True)
+            return 0
+        for pf in sorted(root.glob("*.json")):
+            try:
+                doc = json.loads(pf.read_text(encoding="utf-8"))
+            except ValueError:
+                continue
+            if not isinstance(doc, dict):
+                # 旧版缓存（纯数组，无 page 字段）不可逆推页面，跳过待重采
+                print(f"  ! 跳过旧格式 roster 缓存: {pf.name}", flush=True)
+                continue
+            page = doc.get("page") or ""
+            tid = self._tournament_id(page)
+            if not tid:
+                continue
+            for t in doc.get("rosters") or []:
+                team_name = s(t.get("team"))
+                if not team_name:
+                    continue
+                upsert(
+                    self.conn, "tournament_rosters",
+                    ["overview_page", "team_name"],
+                    {
+                        "tournament_id": tid,
+                        "overview_page": page,
+                        "team_name": team_name,
+                        "team_id": self._team_id_by_roster_name(team_name),
+                        "members": json.dumps(
+                            t.get("members") or [], ensure_ascii=False
+                        ),
+                    },
+                )
+                n += 1
+        print(f"  tournament_rosters: {n} 行", flush=True)
+        return n
+
     # -- 选手 --
 
     def player_id_by_link(self, link: str) -> int:
@@ -652,6 +827,22 @@ class Loader:
                 )
             self.conn.execute(
                 "UPDATE player_aliases SET player_id=? WHERE player_id=?", (tid, ph_id)
+            )
+            # 头像资产一并迁移（目标已有同 kind+year 条目时保留目标的）
+            for mrow in self.conn.execute(
+                "SELECT kind, year, local_path, source_url, sha256, "
+                "fetched_at, is_active FROM media_assets "
+                "WHERE entity_type='player' AND entity_id=?", (ph_id,)
+            ).fetchall():
+                self.conn.execute(
+                    "INSERT OR IGNORE INTO media_assets"
+                    "(entity_type, entity_id, kind, year, local_path, source_url, "
+                    "sha256, fetched_at, is_active) VALUES('player', ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (tid, mrow[0], mrow[1], mrow[2], mrow[3], mrow[4], mrow[5], mrow[6]),
+                )
+            self.conn.execute(
+                "DELETE FROM media_assets WHERE entity_type='player' AND entity_id=?",
+                (ph_id,),
             )
             self.conn.execute("DELETE FROM players WHERE id=?", (ph_id,))
             merged += 1
@@ -1147,6 +1338,7 @@ def run() -> dict:
         counts["champions"] = loader.load_champions()
         counts["leagues_tournaments"] = loader.load_leagues_tournaments()
         counts["series"] = loader.load_series()
+        counts["rosters"] = loader.load_rosters()
         n_g, n_pb, n_ts = loader.load_games()
         counts.update(games=n_g, picks_bans=n_pb, game_team_stats=n_ts)
         counts["data_fixes"] = apply_data_fixes(loader)
@@ -1159,7 +1351,7 @@ def run() -> dict:
 def summary(conn: sqlite3.Connection) -> str:
     tables = [
         "leagues", "tournaments", "teams", "players", "player_aliases",
-        "series", "games", "picks_bans", "game_team_stats",
+        "series", "tournament_rosters", "games", "picks_bans", "game_team_stats",
         "game_player_stats", "champions", "media_assets", "source_refs",
     ]
     lines = []
